@@ -161,6 +161,10 @@
       "region": "Spine",
       "description": "The fifth lumbar vertebra (L5), the largest vertebra, with a wedge-shaped body. It joins the sacrum at the lumbosacral joint, a common site of back problems."
     },
+    "coccyx": {
+      "region": "Spine",
+      "description": "The tailbone: three to five small vertebrae, usually fused, at the very bottom of the spine. It bears weight when sitting and anchors pelvic floor muscles, tendons and ligaments."
+    },
     "sacrum": {
       "region": "Spine",
       "description": "A triangular bone made of five fused vertebrae at the base of the spine. It locks between the hip bones at the sacroiliac joints to form the back of the pelvis."

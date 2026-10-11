@@ -24,6 +24,14 @@ const viewer = new Viewer($('stage'), {
   },
 });
 
+if (import.meta.env.DEV) window.viewer = viewer; // handy for debugging in the console
+
+// Bottom panels on phones sit just above the credit line, whatever its height.
+const credit = document.querySelector('.credit');
+new ResizeObserver(() => {
+  document.documentElement.style.setProperty('--credit-height', `${credit.offsetHeight}px`);
+}).observe(credit);
+
 $('info-close').addEventListener('click', () => viewer.select(null));
 $('reset-view').addEventListener('click', () => viewer.resetView());
 

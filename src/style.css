@@ -315,7 +315,7 @@ body {
     top: auto;
     left: var(--gutter);
     right: var(--gutter);
-    bottom: calc(max(10px, env(safe-area-inset-bottom)) + 34px);
+    bottom: calc(max(10px, env(safe-area-inset-bottom)) + var(--credit-height, 40px) + 8px);
     width: auto;
     padding: 10px 12px;
   }
@@ -341,7 +341,7 @@ body {
     left: var(--gutter);
     right: var(--gutter);
     width: auto;
-    bottom: calc(max(10px, env(safe-area-inset-bottom)) + 34px);
+    bottom: calc(max(10px, env(safe-area-inset-bottom)) + var(--credit-height, 40px) + 8px);
     z-index: 2;
   }
 

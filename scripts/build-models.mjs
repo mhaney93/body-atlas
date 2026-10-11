@@ -37,9 +37,16 @@ const NAME_OVERRIDES = {
   FJ3376: 'Lateral sesamoid bone of right big toe',
 };
 
+// Bones BodyParts3D lacks, taken from Z-Anatomy (CC BY-SA 4.0) by
+// scripts/extract-z-anatomy.py. Each is translated so its recorded anchor
+// (e.g. the sacrum's apex in Z-Anatomy) lands on the same point of the named
+// BodyParts3D element; the two models share BodyParts3D's scale.
+const Z_ANATOMY_DIR = join(ROOT, 'data-sources', 'z-anatomy');
+const Z_ANATOMY_ANCHORS = { Sacrum: 'FJ3393' };
+
 const ASSETS = [
   { file: 'skin.glb', elements: [SKIN], ratio: 0.35 },
-  { file: 'skeletal.glb', elements: range(3152, 3395), ratio: 0.5 },
+  { file: 'skeletal.glb', elements: range(3152, 3395), extras: ['coccyx.obj'], ratio: 0.5 },
 ];
 
 function parseObj(path) {
@@ -47,6 +54,7 @@ function parseObj(path) {
   const id = /^# File ID : (\S+)$/m.exec(text)?.[1];
   const name = NAME_OVERRIDES[id] ?? /^# English name : (.+)$/m.exec(text)?.[1].trim();
   const fma = /^# Concept ID : (\S+)$/m.exec(text)?.[1];
+  const anchor = /^# Anchor : (\S+) (\S+) (\S+) (\S+) (\S+)$/m.exec(text);
   const positions = [];
   const indices = [];
   for (const line of text.split('\n')) {
@@ -59,7 +67,35 @@ function parseObj(path) {
       for (let i = 1; i + 1 < v.length; i++) indices.push(v[0], v[i], v[i + 1]);
     }
   }
-  return { name, fma, positions, indices };
+  return {
+    id,
+    name,
+    fma,
+    positions,
+    indices,
+    anchor: anchor && { element: anchor[1], rule: anchor[2], point: anchor.slice(3).map(Number) },
+  };
+}
+
+// Centroid of the lowest 2% of vertices (by Z); must match extract-z-anatomy.py.
+function lowestAnchor(positions) {
+  const zs = [];
+  for (let i = 0; i < positions.length; i += 3) zs.push(i);
+  zs.sort((a, b) => positions[a + 2] - positions[b + 2]);
+  const n = Math.max(1, Math.floor(zs.length / 50));
+  const c = [0, 0, 0];
+  for (const i of zs.slice(0, n)) for (let k = 0; k < 3; k++) c[k] += positions[i + k] / n;
+  return c;
+}
+
+/** Loads a Z-Anatomy OBJ and moves it (metres → mm) onto the BodyParts3D skeleton. */
+function parseZAnatomyObj(file) {
+  const obj = parseObj(join(Z_ANATOMY_DIR, file));
+  if (obj.anchor?.rule !== 'lowest') throw new Error(`${file}: unsupported anchor`);
+  const target = lowestAnchor(parseObj(join(OBJ_DIR, `${Z_ANATOMY_ANCHORS[obj.anchor.element]}.obj`)).positions);
+  const offset = target.map((t, k) => t - obj.anchor.point[k] * 1000);
+  obj.positions = obj.positions.map((v, i) => v * 1000 + offset[i % 3]);
+  return { ...obj, id: file, source: 'z-anatomy' };
 }
 
 function boundsOf(positions) {
@@ -130,8 +166,12 @@ for (const asset of ASSETS) {
   const material = doc.createMaterial('default');
   const elements = asset.elements.filter((id) => available.has(id));
 
-  for (const id of elements) {
-    const obj = parseObj(join(OBJ_DIR, `${id}.obj`));
+  const objs = [
+    ...elements.map((id) => parseObj(join(OBJ_DIR, `${id}.obj`))),
+    ...(asset.extras ?? []).map(parseZAnatomyObj),
+  ];
+
+  for (const obj of objs) {
     const pos = transform(obj.positions);
     const idx = new Uint32Array(obj.indices);
     const prim = doc
@@ -140,7 +180,13 @@ for (const asset of ASSETS) {
       .setIndices(doc.createAccessor().setType('SCALAR').setArray(idx).setBuffer(buffer))
       .setMaterial(material);
     const mesh = doc.createMesh(obj.name).addPrimitive(prim);
-    scene.addChild(doc.createNode(obj.name).setMesh(mesh).setExtras({ name: obj.name, fma: obj.fma, bp3d: id }));
+    scene.addChild(
+      doc.createNode(obj.name).setMesh(mesh).setExtras(
+        obj.source === 'z-anatomy'
+          ? { name: obj.name, source: 'Z-Anatomy' }
+          : { name: obj.name, fma: obj.fma, bp3d: obj.id },
+      ),
+    );
   }
 
   await doc.transform(
@@ -171,7 +217,7 @@ for (const asset of ASSETS) {
     .reduce((n, p) => n + p.getIndices().getCount() / 3, 0);
   const missing = asset.elements.length - elements.length;
   console.log(
-    `${asset.file}: ${elements.length} meshes${missing ? ` (${missing} ids absent from dataset)` : ''}, ` +
+    `${asset.file}: ${objs.length} meshes${missing ? ` (${missing} ids absent from dataset)` : ''}, ` +
       `${Math.round(tris).toLocaleString()} triangles, ${(readFileSync(path).length / 1e6).toFixed(2)} MB`,
   );
 }
