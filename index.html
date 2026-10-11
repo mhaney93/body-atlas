@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Body Atlas — interactive 3D human anatomy</title>
+    <meta
+      name="description"
+      content="A free, interactive 3D atlas of the male human body. Rotate a glass body and light up each body system to learn its parts."
+    />
+    <meta name="theme-color" content="#0b0f14" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div id="stage" aria-label="3D model of the human body. Drag to rotate, scroll or pinch to zoom."></div>
+
+    <header class="brand">
+      <h1>Body Atlas</h1>
+      <p>Interactive 3D human anatomy</p>
+    </header>
+
+    <aside class="panel filters" aria-labelledby="filters-title">
+      <h2 id="filters-title">Body systems</h2>
+      <ul id="layer-list"></ul>
+      <p id="layer-summary" class="summary" hidden></p>
+      <p class="more">More systems are on the way.</p>
+      <button id="reset-view" class="link-button" type="button">Reset view</button>
+    </aside>
+
+    <aside id="info" class="panel info" aria-live="polite" hidden>
+      <button id="info-close" class="close" type="button" aria-label="Close">×</button>
+      <p id="info-kicker" class="kicker"></p>
+      <h2 id="info-name"></h2>
+      <p id="info-description"></p>
+    </aside>
+
+    <p id="hint" class="hint">Drag to rotate · scroll or pinch to zoom · right-drag or two fingers to pan</p>
+
+    <footer class="credit">
+      3D anatomy from
+      <a href="https://dbarchive.biosciencedbc.jp/en/bodyparts3d/" target="_blank" rel="noopener">BodyParts3D</a>,
+      © The Database Center for Life Science, licensed under
+      <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>
+      (converted and simplified). For education only, not medical advice.
+    </footer>
+
+    <div id="loading" class="loading" role="status">
+      <div class="spinner" aria-hidden="true"></div>
+      <p id="loading-text">Loading body…</p>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

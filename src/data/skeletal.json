@@ -1,0 +1,609 @@
+{
+  "id": "skeletal",
+  "name": "Skeletal",
+  "color": "#ffc861",
+  "asset": "models/skeletal.glb",
+  "summary": "The adult skeleton has about 206 bones. It supports and shapes the body, protects organs such as the brain, heart and lungs, anchors the muscles that move us, stores minerals and makes blood cells in the marrow.",
+  "parts": {
+    "frontal bone": {
+      "region": "Skull",
+      "description": "The forehead bone. It forms the front of the skull and the roofs of the eye sockets, and contains the frontal sinuses."
+    },
+    "parietal bone": {
+      "region": "Skull",
+      "description": "One of a pair of curved plates forming the top and upper sides of the skull. The two meet along the midline at the sagittal suture."
+    },
+    "occipital bone": {
+      "region": "Skull",
+      "description": "The back and base of the skull. The spinal cord passes through its large opening, the foramen magnum, and its condyles rest on the atlas."
+    },
+    "temporal bone": {
+      "region": "Skull",
+      "description": "Forms the lower side of the skull around the ear. It houses the middle and inner ear and forms the jaw joint with the mandible."
+    },
+    "sphenoid bone": {
+      "region": "Skull",
+      "description": "A butterfly-shaped bone in the middle of the skull base that links the other cranial bones. A saddle-shaped hollow on top, the sella turcica, cradles the pituitary gland."
+    },
+    "ethmoid bone": {
+      "region": "Skull",
+      "description": "A light, spongy bone between the eye sockets that forms the roof and side walls of the nasal cavity. Smell nerves pass through its sieve-like cribriform plate."
+    },
+    "maxilla": {
+      "region": "Skull",
+      "description": "One half of the upper jaw. It holds the upper teeth, forms most of the hard palate and the floor of the eye socket, and contains the large maxillary sinus."
+    },
+    "zygomatic bone": {
+      "region": "Skull",
+      "description": "The cheekbone. It shapes the prominence of the cheek and the outer rim and floor of the eye socket."
+    },
+    "nasal bone": {
+      "region": "Skull",
+      "description": "One of two small oblong bones that meet in the midline to form the bony bridge of the nose."
+    },
+    "lacrimal bone": {
+      "region": "Skull",
+      "description": "The smallest and most fragile facial bone, on the inner wall of the eye socket. It carries the groove that drains tears into the nose."
+    },
+    "palatine bone": {
+      "region": "Skull",
+      "description": "An L-shaped bone behind the maxilla. It forms the back of the hard palate and part of the nasal cavity walls and eye socket floor."
+    },
+    "inferior nasal concha": {
+      "region": "Skull",
+      "description": "A thin, scroll-shaped bone on the side wall of the nasal cavity. Covered in mucous membrane, it warms and humidifies the air we breathe in."
+    },
+    "vomer": {
+      "region": "Skull",
+      "description": "A thin, plough-shaped bone in the midline of the nasal cavity. It forms the lower back part of the nasal septum."
+    },
+    "mandible": {
+      "region": "Skull",
+      "description": "The lower jaw, the largest and strongest bone of the face. It holds the lower teeth and is the only skull bone that moves freely."
+    },
+    "hyoid bone": {
+      "region": "Neck",
+      "description": "A U-shaped bone in the front of the neck, below the jaw. It joins no other bone and anchors the tongue and the muscles used in swallowing and speech."
+    },
+    "atlas": {
+      "region": "Spine",
+      "description": "The first cervical vertebra (C1). It is a ring without a body that cradles the skull and allows the nodding \"yes\" movement."
+    },
+    "axis": {
+      "region": "Spine",
+      "description": "The second cervical vertebra (C2). Its upward peg, the dens, acts as a pivot that lets the atlas and head turn side to side."
+    },
+    "third cervical vertebra": {
+      "region": "Spine",
+      "description": "The third cervical vertebra (C3), a typical neck vertebra with a small body and holes in its transverse processes that carry the vertebral arteries toward the brain."
+    },
+    "fourth cervical vertebra": {
+      "region": "Spine",
+      "description": "The fourth cervical vertebra (C4), a typical neck vertebra lying at about the level of the Adam's apple. Nerve roots at this level help form the phrenic nerve that drives the diaphragm."
+    },
+    "fifth cervical vertebra": {
+      "region": "Spine",
+      "description": "The fifth cervical vertebra (C5), a typical neck vertebra. The fifth cervical nerve, which powers the shoulder muscles and biceps, exits just above it."
+    },
+    "sixth cervical vertebra": {
+      "region": "Spine",
+      "description": "The sixth cervical vertebra (C6). A prominent bump on its transverse process, the carotid tubercle, lies just behind the common carotid artery."
+    },
+    "seventh cervical vertebra": {
+      "region": "Spine",
+      "description": "The seventh cervical vertebra (C7), called the vertebra prominens. Its long spinous process makes the bump you can feel at the base of the neck."
+    },
+    "first thoracic vertebra": {
+      "region": "Spine",
+      "description": "The first thoracic vertebra (T1), where the neck meets the chest. It carries a full joint surface for the head of the first rib."
+    },
+    "second thoracic vertebra": {
+      "region": "Spine",
+      "description": "The second thoracic vertebra (T2). It lies at about the level of the notch at the top of the breastbone and joins the second ribs."
+    },
+    "third thoracic vertebra": {
+      "region": "Spine",
+      "description": "The third thoracic vertebra (T3), roughly level with the spine of the shoulder blade. Like other thoracic vertebrae, it has a heart-shaped body and joins a pair of ribs."
+    },
+    "fourth thoracic vertebra": {
+      "region": "Spine",
+      "description": "The fourth thoracic vertebra (T4). The windpipe divides into the two main bronchi at about the level of the disc below it."
+    },
+    "fifth thoracic vertebra": {
+      "region": "Spine",
+      "description": "The fifth thoracic vertebra (T5), a typical mid-back vertebra. Its long spinous process slopes down and overlaps the vertebra below."
+    },
+    "sixth thoracic vertebra": {
+      "region": "Spine",
+      "description": "The sixth thoracic vertebra (T6), a typical vertebra in the middle of the chest's curve. It joins the sixth pair of ribs."
+    },
+    "seventh thoracic vertebra": {
+      "region": "Spine",
+      "description": "The seventh thoracic vertebra (T7), roughly level with the lower tip of the shoulder blade when the arms hang down."
+    },
+    "eighth thoracic vertebra": {
+      "region": "Spine",
+      "description": "The eighth thoracic vertebra (T8). The inferior vena cava passes through the diaphragm at about this level."
+    },
+    "ninth thoracic vertebra": {
+      "region": "Spine",
+      "description": "The ninth thoracic vertebra (T9), a lower chest vertebra lying at about the level of the tip of the breastbone."
+    },
+    "tenth thoracic vertebra": {
+      "region": "Spine",
+      "description": "The tenth thoracic vertebra (T10). The oesophagus passes through the diaphragm at about this level."
+    },
+    "eleventh thoracic vertebra": {
+      "region": "Spine",
+      "description": "The eleventh thoracic vertebra (T11). It joins a floating rib with a single full facet and, like T12, has no rib joint on its transverse process."
+    },
+    "twelfth thoracic vertebra": {
+      "region": "Spine",
+      "description": "The twelfth thoracic vertebra (T12), a transitional vertebra between the chest and lower back. The aorta passes behind the diaphragm at about this level."
+    },
+    "first lumbar vertebra": {
+      "region": "Spine",
+      "description": "The first lumbar vertebra (L1), with a large, kidney-shaped body. The adult spinal cord usually ends near the bottom of this vertebra."
+    },
+    "second lumbar vertebra": {
+      "region": "Spine",
+      "description": "The second lumbar vertebra (L2). Below about this level only the bundle of nerve roots called the cauda equina continues down the spinal canal."
+    },
+    "third lumbar vertebra": {
+      "region": "Spine",
+      "description": "The third lumbar vertebra (L3), usually at the peak of the lower back's forward curve. The navel lies at about the level of the L3–L4 disc."
+    },
+    "fourth lumbar vertebra": {
+      "region": "Spine",
+      "description": "The fourth lumbar vertebra (L4), level with the tops of the iliac crests. This line is a landmark for lumbar punctures, and the aorta divides at about this level."
+    },
+    "fifth lumbar vertebra": {
+      "region": "Spine",
+      "description": "The fifth lumbar vertebra (L5), the largest vertebra, with a wedge-shaped body. It joins the sacrum at the lumbosacral joint, a common site of back problems."
+    },
+    "sacrum": {
+      "region": "Spine",
+      "description": "A triangular bone made of five fused vertebrae at the base of the spine. It locks between the hip bones at the sacroiliac joints to form the back of the pelvis."
+    },
+    "intervertebral disk of axis": {
+      "region": "Spine",
+      "description": "The intervertebral disc between the C2 and C3 vertebrae. Its gel-like core and tough fibrous outer ring absorb shock and let the spine bend; discs are cartilage, not bone."
+    },
+    "intervertebral disk of third cervical vertebra": {
+      "region": "Spine",
+      "description": "The intervertebral disc between the C3 and C4 vertebrae. Its gel-like core and tough fibrous outer ring absorb shock and let the spine bend; discs are cartilage, not bone."
+    },
+    "intervertebral disk of fourth cervical vertebra": {
+      "region": "Spine",
+      "description": "The intervertebral disc between the C4 and C5 vertebrae. Its gel-like core and tough fibrous outer ring absorb shock and let the spine bend; discs are cartilage, not bone."
+    },
+    "intervertebral disk of fifth cervical vertebra": {
+      "region": "Spine",
+      "description": "The intervertebral disc between the C5 and C6 vertebrae. Its gel-like core and tough fibrous outer ring absorb shock and let the spine bend; discs are cartilage, not bone."
+    },
+    "intervertebral disk of sixth cervical vertebra": {
+      "region": "Spine",
+      "description": "The intervertebral disc between the C6 and C7 vertebrae. Its gel-like core and tough fibrous outer ring absorb shock and let the spine bend; discs are cartilage, not bone."
+    },
+    "intervertebral disk of seventh cervical vertebra": {
+      "region": "Spine",
+      "description": "The intervertebral disc between the C7 and T1 vertebrae. Its gel-like core and tough fibrous outer ring absorb shock and let the spine bend; discs are cartilage, not bone."
+    },
+    "intervertebral disk of first thoracic vertebra": {
+      "region": "Spine",
+      "description": "The intervertebral disc between the T1 and T2 vertebrae. Its gel-like core and tough fibrous outer ring absorb shock and let the spine bend; discs are cartilage, not bone."
+    },
+    "intervertebral disk of second thoracic vertebra": {
+      "region": "Spine",
+      "description": "The intervertebral disc between the T2 and T3 vertebrae. Its gel-like core and tough fibrous outer ring absorb shock and let the spine bend; discs are cartilage, not bone."
+    },
+    "intervertebral disk of third thoracic vertebra": {
+      "region": "Spine",
+      "description": "The intervertebral disc between the T3 and T4 vertebrae. Its gel-like core and tough fibrous outer ring absorb shock and let the spine bend; discs are cartilage, not bone."
+    },
+    "intervertebral disk of fourth thoracic vertebra": {
+      "region": "Spine",
+      "description": "The intervertebral disc between the T4 and T5 vertebrae. Its gel-like core and tough fibrous outer ring absorb shock and let the spine bend; discs are cartilage, not bone."
+    },
+    "intervertebral disk of fifth thoracic vertebra": {
+      "region": "Spine",
+      "description": "The intervertebral disc between the T5 and T6 vertebrae. Its gel-like core and tough fibrous outer ring absorb shock and let the spine bend; discs are cartilage, not bone."
+    },
+    "intervertebral disk of sixth thoracic vertebra": {
+      "region": "Spine",
+      "description": "The intervertebral disc between the T6 and T7 vertebrae. Its gel-like core and tough fibrous outer ring absorb shock and let the spine bend; discs are cartilage, not bone."
+    },
+    "intervertebral disk of seventh thoracic vertebra": {
+      "region": "Spine",
+      "description": "The intervertebral disc between the T7 and T8 vertebrae. Its gel-like core and tough fibrous outer ring absorb shock and let the spine bend; discs are cartilage, not bone."
+    },
+    "intervertebral disk of eighth thoracic vertebra": {
+      "region": "Spine",
+      "description": "The intervertebral disc between the T8 and T9 vertebrae. Its gel-like core and tough fibrous outer ring absorb shock and let the spine bend; discs are cartilage, not bone."
+    },
+    "intervertebral disk of ninth thoracic vertebra": {
+      "region": "Spine",
+      "description": "The intervertebral disc between the T9 and T10 vertebrae. Its gel-like core and tough fibrous outer ring absorb shock and let the spine bend; discs are cartilage, not bone."
+    },
+    "intervertebral disk of tenth thoracic vertebra": {
+      "region": "Spine",
+      "description": "The intervertebral disc between the T10 and T11 vertebrae. Its gel-like core and tough fibrous outer ring absorb shock and let the spine bend; discs are cartilage, not bone."
+    },
+    "intervertebral disk of eleventh thoracic vertebra": {
+      "region": "Spine",
+      "description": "The intervertebral disc between the T11 and T12 vertebrae. Its gel-like core and tough fibrous outer ring absorb shock and let the spine bend; discs are cartilage, not bone."
+    },
+    "intervertebral disk of twelfth thoracic vertebra": {
+      "region": "Spine",
+      "description": "The intervertebral disc between the T12 and L1 vertebrae. Its gel-like core and tough fibrous outer ring absorb shock and let the spine bend; discs are cartilage, not bone."
+    },
+    "intervertebral disk of first lumbar vertebra": {
+      "region": "Spine",
+      "description": "The intervertebral disc between the L1 and L2 vertebrae. Its gel-like core and tough fibrous outer ring absorb shock and let the spine bend; discs are cartilage, not bone."
+    },
+    "intervertebral disk of second lumbar vertebra": {
+      "region": "Spine",
+      "description": "The intervertebral disc between the L2 and L3 vertebrae. Its gel-like core and tough fibrous outer ring absorb shock and let the spine bend; discs are cartilage, not bone."
+    },
+    "intervertebral disk of third lumbar vertebra": {
+      "region": "Spine",
+      "description": "The intervertebral disc between the L3 and L4 vertebrae. Its gel-like core and tough fibrous outer ring absorb shock and let the spine bend; discs are cartilage, not bone."
+    },
+    "intervertebral disk of fourth lumbar vertebra": {
+      "region": "Spine",
+      "description": "The intervertebral disc between the L4 and L5 vertebrae. Its gel-like core and tough fibrous outer ring absorb shock and let the spine bend; discs are cartilage, not bone."
+    },
+    "intervertebral disk of fifth lumbar vertebra": {
+      "region": "Spine",
+      "description": "The intervertebral disc between the L5 and S1 vertebrae. Its gel-like core and tough fibrous outer ring absorb shock and let the spine bend; discs are cartilage, not bone."
+    },
+    "manubrium": {
+      "region": "Chest",
+      "description": "The upper part of the sternum (breastbone). The clavicles and first ribs attach to it, and its upper edge forms the notch at the base of the neck."
+    },
+    "body of sternum": {
+      "region": "Chest",
+      "description": "The long middle part of the breastbone. It meets the manubrium at the sternal angle, and ribs two to seven attach to its sides through their cartilages."
+    },
+    "xiphoid process": {
+      "region": "Chest",
+      "description": "The small lower tip of the sternum. It begins as cartilage, slowly turns to bone in adulthood, and anchors part of the diaphragm."
+    },
+    "first rib": {
+      "region": "Chest",
+      "description": "The first rib, the shortest, broadest and most curved rib. It sits under the clavicle, and the subclavian artery and vein cross its upper surface."
+    },
+    "second rib": {
+      "region": "Chest",
+      "description": "The second rib, a true rib that joins the sternum at the sternal angle. This makes it the usual starting point for counting ribs by touch."
+    },
+    "third rib": {
+      "region": "Chest",
+      "description": "The third rib, a typical true rib. A groove under its lower edge shelters the intercostal nerve, artery and vein."
+    },
+    "fourth rib": {
+      "region": "Chest",
+      "description": "The fourth rib, a typical true rib. In men the nipple usually lies over the space just below it."
+    },
+    "fifth rib": {
+      "region": "Chest",
+      "description": "The fifth rib, a typical true rib. The apex of the heart lies behind the space just below it, on the left."
+    },
+    "sixth rib": {
+      "region": "Chest",
+      "description": "The sixth rib, a true rib whose cartilage joins the lower sternum. In front, the lower edges of the lungs run roughly along it."
+    },
+    "seventh rib": {
+      "region": "Chest",
+      "description": "The seventh rib, usually the longest rib and the last true rib. Its cartilage reaches the sternum near the xiphoid process."
+    },
+    "eighth rib": {
+      "region": "Chest",
+      "description": "The eighth rib, the first false rib. Its cartilage joins the cartilage of the seventh rib instead of reaching the sternum."
+    },
+    "ninth rib": {
+      "region": "Chest",
+      "description": "The ninth rib, a false rib. Its cartilage joins the one above, helping form the lower edge of the rib cage (the costal margin)."
+    },
+    "tenth rib": {
+      "region": "Chest",
+      "description": "The tenth rib, the last false rib. Its head usually has a single facet that joins only the tenth thoracic vertebra."
+    },
+    "eleventh rib": {
+      "region": "Chest",
+      "description": "The eleventh rib, a floating rib. It is short, attaches only to the spine, and ends freely in the muscles of the abdominal wall."
+    },
+    "twelfth rib": {
+      "region": "Chest",
+      "description": "The twelfth rib, the shortest floating rib. It lies over the back of the kidney, and its length varies a lot between people."
+    },
+    "first costal cartilage": {
+      "region": "Chest",
+      "description": "The cartilage joining the first rib to the manubrium. Unlike the others, this joint does not move, which keeps the top of the rib cage stable."
+    },
+    "second costal cartilage": {
+      "region": "Chest",
+      "description": "The cartilage joining the second rib to the sternum at the sternal angle, where the manubrium meets the body of the sternum."
+    },
+    "third costal cartilage": {
+      "region": "Chest",
+      "description": "The cartilage joining the third rib to the body of the sternum. Like all costal cartilages, its flexibility lets the chest expand when we breathe."
+    },
+    "fourth costal cartilage": {
+      "region": "Chest",
+      "description": "The cartilage joining the fourth rib to the body of the sternum. Its springiness helps the rib cage absorb blows to the chest."
+    },
+    "fifth costal cartilage": {
+      "region": "Chest",
+      "description": "The cartilage joining the fifth rib to the body of the sternum. Costal cartilages slowly calcify with age, making the chest stiffer."
+    },
+    "sixth costal cartilage": {
+      "region": "Chest",
+      "description": "The cartilage joining the sixth rib to the lower body of the sternum. It also helps form the lower border of the rib cage."
+    },
+    "seventh costal cartilage": {
+      "region": "Chest",
+      "description": "The cartilage joining the seventh rib to the sternum near the xiphoid process, the longest of the cartilages that reach the sternum."
+    },
+    "clavicle": {
+      "region": "Shoulder and arm",
+      "description": "The collarbone. It acts as a strut between the sternum and the shoulder blade, holding the arm out from the body, and is one of the most commonly broken bones."
+    },
+    "scapula": {
+      "region": "Shoulder and arm",
+      "description": "The shoulder blade, a flat triangular bone on the upper back. Its shallow socket, the glenoid cavity, forms the shoulder joint with the humerus."
+    },
+    "humerus": {
+      "region": "Shoulder and arm",
+      "description": "The upper arm bone, from the shoulder to the elbow. The radial nerve winds around its shaft in a spiral groove."
+    },
+    "radius": {
+      "region": "Shoulder and arm",
+      "description": "The forearm bone on the thumb side. It rotates around the ulna to turn the palm up or down and carries most of the wrist joint."
+    },
+    "ulna": {
+      "region": "Shoulder and arm",
+      "description": "The forearm bone on the little-finger side. Its hooked upper end, the olecranon, forms the point of the elbow."
+    },
+    "scaphoid": {
+      "region": "Wrist and hand",
+      "description": "A boat-shaped carpal bone, the largest in the wrist's first row, on the thumb side. It is the most commonly fractured wrist bone, often after a fall on an outstretched hand."
+    },
+    "lunate": {
+      "region": "Wrist and hand",
+      "description": "A crescent-moon-shaped carpal bone in the middle of the wrist's first row. It is the carpal bone most often dislocated."
+    },
+    "triquetral": {
+      "region": "Wrist and hand",
+      "description": "A pyramid-shaped carpal bone on the little-finger side of the wrist's first row. The pisiform rests on its front surface."
+    },
+    "pisiform": {
+      "region": "Wrist and hand",
+      "description": "A small, pea-shaped carpal bone that sits inside the tendon of the flexor carpi ulnaris. You can feel it at the base of the palm on the little-finger side."
+    },
+    "trapezium": {
+      "region": "Wrist and hand",
+      "description": "A carpal bone at the base of the thumb. Its saddle-shaped joint with the first metacarpal lets the thumb swing across the palm to touch the other fingers."
+    },
+    "trapezoid": {
+      "region": "Wrist and hand",
+      "description": "The smallest carpal bone of the wrist's second row, wedge-shaped. It locks into the base of the second (index finger) metacarpal."
+    },
+    "capitate": {
+      "region": "Wrist and hand",
+      "description": "The largest carpal bone, in the centre of the wrist. It joins the third (middle finger) metacarpal and is the keystone of the wrist."
+    },
+    "hamate": {
+      "region": "Wrist and hand",
+      "description": "A wedge-shaped carpal bone on the little-finger side with a hook (the hamulus) that forms an edge of the carpal tunnel. It joins the fourth and fifth metacarpals."
+    },
+    "first metacarpal bone": {
+      "region": "Wrist and hand",
+      "description": "The metacarpal of the thumb, the shortest and thickest. Its saddle joint with the trapezium gives the thumb its wide range of motion."
+    },
+    "second metacarpal bone": {
+      "region": "Wrist and hand",
+      "description": "The metacarpal of the index finger, usually the longest. Its notched base locks firmly into the trapezoid, making it the most stable."
+    },
+    "third metacarpal bone": {
+      "region": "Wrist and hand",
+      "description": "The metacarpal of the middle finger. A small projection at its base, the styloid process, braces it against the capitate."
+    },
+    "fourth metacarpal bone": {
+      "region": "Wrist and hand",
+      "description": "The metacarpal of the ring finger, thinner than those beside it. It can move slightly, which helps the hand cup."
+    },
+    "fifth metacarpal bone": {
+      "region": "Wrist and hand",
+      "description": "The metacarpal of the little finger, the most mobile one. Its neck is often broken by punching (a \"boxer's fracture\")."
+    },
+    "proximal phalanx of thumb": {
+      "region": "Wrist and hand",
+      "description": "The base bone of the thumb, which has only two phalanges. It joins the first metacarpal at the thumb's knuckle."
+    },
+    "distal phalanx of thumb": {
+      "region": "Wrist and hand",
+      "description": "The tip bone of the thumb. Its flattened, roughened tip supports the thumbnail and the sensitive pad of the thumb."
+    },
+    "proximal phalanx of index finger": {
+      "region": "Wrist and hand",
+      "description": "The base bone of the index finger, the longest of its three phalanges. It hinges on the second metacarpal at the knuckle."
+    },
+    "middle phalanx of index finger": {
+      "region": "Wrist and hand",
+      "description": "The middle of the three bones of the index finger. Hinge joints at each end let the finger curl."
+    },
+    "distal phalanx of index finger": {
+      "region": "Wrist and hand",
+      "description": "The fingertip bone of the index finger. Its flattened, roughened tip supports the nail and the sensitive fingertip pad."
+    },
+    "proximal phalanx of middle finger": {
+      "region": "Wrist and hand",
+      "description": "The base bone of the middle finger, the longest of its three phalanges. It hinges on the third metacarpal at the knuckle."
+    },
+    "middle phalanx of middle finger": {
+      "region": "Wrist and hand",
+      "description": "The middle of the three bones of the middle finger. Hinge joints at each end let the finger curl."
+    },
+    "distal phalanx of middle finger": {
+      "region": "Wrist and hand",
+      "description": "The fingertip bone of the middle finger. Its flattened, roughened tip supports the nail and the sensitive fingertip pad."
+    },
+    "proximal phalanx of ring finger": {
+      "region": "Wrist and hand",
+      "description": "The base bone of the ring finger, the longest of its three phalanges. It hinges on the fourth metacarpal at the knuckle."
+    },
+    "middle phalanx of ring finger": {
+      "region": "Wrist and hand",
+      "description": "The middle of the three bones of the ring finger. Hinge joints at each end let the finger curl."
+    },
+    "distal phalanx of ring finger": {
+      "region": "Wrist and hand",
+      "description": "The fingertip bone of the ring finger. Its flattened, roughened tip supports the nail and the sensitive fingertip pad."
+    },
+    "proximal phalanx of little finger": {
+      "region": "Wrist and hand",
+      "description": "The base bone of the little finger, the longest of its three phalanges. It hinges on the fifth metacarpal at the knuckle."
+    },
+    "middle phalanx of little finger": {
+      "region": "Wrist and hand",
+      "description": "The middle of the three bones of the little finger. Hinge joints at each end let the finger curl."
+    },
+    "distal phalanx of little finger": {
+      "region": "Wrist and hand",
+      "description": "The fingertip bone of the little finger. Its flattened, roughened tip supports the nail and the sensitive fingertip pad."
+    },
+    "hip bone": {
+      "region": "Pelvis",
+      "description": "The large pelvic bone formed by the fused ilium, ischium and pubis. Its deep socket, the acetabulum, holds the head of the femur."
+    },
+    "femur": {
+      "region": "Leg",
+      "description": "The thigh bone, the longest and strongest bone in the body. Its rounded head fits into the hip socket and its lower end forms the top of the knee."
+    },
+    "patella": {
+      "region": "Leg",
+      "description": "The kneecap, the largest sesamoid bone, inside the quadriceps tendon. It shields the knee joint and gives the thigh muscles extra leverage."
+    },
+    "tibia": {
+      "region": "Leg",
+      "description": "The shinbone, the larger of the two lower-leg bones. It carries most of the body's weight from the knee to the ankle and forms the inner ankle bump."
+    },
+    "fibula": {
+      "region": "Leg",
+      "description": "The slender outer bone of the lower leg. It bears little weight, anchors muscles, and forms the outer ankle bump."
+    },
+    "talus": {
+      "region": "Ankle and foot",
+      "description": "The ankle bone that connects the leg to the foot. It passes the body's weight from the tibia to the heel and forefoot, and no muscles attach to it."
+    },
+    "calcaneus": {
+      "region": "Ankle and foot",
+      "description": "The heel bone, the largest bone of the foot. The Achilles tendon attaches to its back, and it takes the first impact of each step."
+    },
+    "navicular bone of foot": {
+      "region": "Ankle and foot",
+      "description": "A boat-shaped tarsal bone on the inner side of the foot. It is the keystone of the inner arch and an attachment point for the tibialis posterior tendon."
+    },
+    "cuboid bone": {
+      "region": "Ankle and foot",
+      "description": "A cube-shaped tarsal bone on the outer side of the foot. A groove beneath it carries the tendon of the fibularis (peroneus) longus."
+    },
+    "medial cuneiform bone": {
+      "region": "Ankle and foot",
+      "description": "The largest of the three wedge-shaped cuneiform bones, on the inner side of the foot. It joins the first (big toe) metatarsal and anchors the tibialis anterior tendon."
+    },
+    "intermediate cuneiform bone": {
+      "region": "Ankle and foot",
+      "description": "The smallest cuneiform bone, between the other two. It joins the second metatarsal, whose base is locked in place by the cuneiforms."
+    },
+    "lateral cuneiform bone": {
+      "region": "Ankle and foot",
+      "description": "The cuneiform bone on the outer side, next to the cuboid. It joins the third metatarsal and helps shape the foot's transverse arch."
+    },
+    "first metatarsal bone": {
+      "region": "Ankle and foot",
+      "description": "The metatarsal of the big toe, the shortest and thickest. It carries much of the body's weight as the foot pushes off when walking."
+    },
+    "second metatarsal bone": {
+      "region": "Ankle and foot",
+      "description": "The metatarsal of the second toe, usually the longest. It is the most common site of stress (\"march\") fractures."
+    },
+    "third metatarsal bone": {
+      "region": "Ankle and foot",
+      "description": "The metatarsal of the third toe. It joins the lateral cuneiform and, like the second, is a frequent site of stress fractures."
+    },
+    "fourth metatarsal bone": {
+      "region": "Ankle and foot",
+      "description": "The metatarsal of the fourth toe. Its base joins the cuboid bone on the outer side of the foot."
+    },
+    "fifth metatarsal bone": {
+      "region": "Ankle and foot",
+      "description": "The metatarsal of the little toe. The bump at its base, where the fibularis brevis tendon attaches, can be felt on the outer edge of the foot."
+    },
+    "proximal phalanx of big toe": {
+      "region": "Ankle and foot",
+      "description": "The base bone of the big toe, which has only two phalanges. It joins the first metatarsal at the ball of the foot, a common site of bunions."
+    },
+    "distal phalanx of big toe": {
+      "region": "Ankle and foot",
+      "description": "The tip bone of the big toe. Its broad tip supports the toenail and the pad that pushes off the ground."
+    },
+    "proximal phalanx of second toe": {
+      "region": "Ankle and foot",
+      "description": "The base bone of the second toe. It joins the second metatarsal at the ball of the foot."
+    },
+    "middle phalanx of second toe": {
+      "region": "Ankle and foot",
+      "description": "The short middle bone of the second toe, between the proximal and distal phalanges."
+    },
+    "distal phalanx of second toe": {
+      "region": "Ankle and foot",
+      "description": "The tip bone of the second toe. Its small, flattened tip supports the toenail."
+    },
+    "proximal phalanx of third toe": {
+      "region": "Ankle and foot",
+      "description": "The base bone of the third toe. It joins the third metatarsal at the ball of the foot."
+    },
+    "middle phalanx of third toe": {
+      "region": "Ankle and foot",
+      "description": "The short middle bone of the third toe, between the proximal and distal phalanges."
+    },
+    "distal phalanx of third toe": {
+      "region": "Ankle and foot",
+      "description": "The tip bone of the third toe. Its small, flattened tip supports the toenail."
+    },
+    "proximal phalanx of fourth toe": {
+      "region": "Ankle and foot",
+      "description": "The base bone of the fourth toe. It joins the fourth metatarsal at the ball of the foot."
+    },
+    "middle phalanx of fourth toe": {
+      "region": "Ankle and foot",
+      "description": "The short middle bone of the fourth toe, between the proximal and distal phalanges."
+    },
+    "distal phalanx of fourth toe": {
+      "region": "Ankle and foot",
+      "description": "The tip bone of the fourth toe. Its small, flattened tip supports the toenail."
+    },
+    "proximal phalanx of little toe": {
+      "region": "Ankle and foot",
+      "description": "The base bone of the little toe. It joins the fifth metatarsal at the ball of the foot."
+    },
+    "middle phalanx of little toe": {
+      "region": "Ankle and foot",
+      "description": "The short middle bone of the little toe, between the proximal and distal phalanges. In many people it is fused with the distal phalanx."
+    },
+    "distal phalanx of little toe": {
+      "region": "Ankle and foot",
+      "description": "The tip bone of the little toe. Its small, flattened tip supports the toenail."
+    },
+    "medial sesamoid bone of big toe": {
+      "region": "Ankle and foot",
+      "description": "The inner (tibial) of two pea-sized bones embedded in the tendon of flexor hallucis brevis under the ball of the big toe. It takes much of the load at push-off and is the one more often injured."
+    },
+    "lateral sesamoid bone of big toe": {
+      "region": "Ankle and foot",
+      "description": "The outer (fibular) of two pea-sized bones embedded in the tendon of flexor hallucis brevis under the ball of the big toe. Like a pulley, it improves the tendon's leverage as the toe bends."
+    }
+  }
+}
