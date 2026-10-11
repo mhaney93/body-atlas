@@ -1,0 +1,25 @@
+{
+  "name": "body-atlas",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Free interactive 3D atlas of the human body with per-system highlighting.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "fetch-data": "node scripts/fetch-bodyparts3d.mjs",
+    "build-models": "node scripts/build-models.mjs"
+  },
+  "dependencies": {
+    "three": "^0.186.1"
+  },
+  "devDependencies": {
+    "@gltf-transform/core": "^4.5.1",
+    "@gltf-transform/extensions": "^4.5.1",
+    "@gltf-transform/functions": "^4.5.1",
+    "fflate": "^0.8.3",
+    "meshoptimizer": "^1.3.0",
+    "vite": "^8.3.4"
+  }
+}

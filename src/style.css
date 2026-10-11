@@ -1,0 +1,358 @@
+:root {
+  --bg: #0b0f14;
+  --panel: rgba(16, 22, 30, 0.78);
+  --panel-border: rgba(160, 200, 255, 0.14);
+  --text: #e6edf5;
+  --muted: #93a1b3;
+  --accent: #9fd8ff;
+  --radius: 14px;
+  --gutter: 16px;
+  color-scheme: dark;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+#stage {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 40%, #16202c 0%, var(--bg) 70%);
+}
+
+#stage canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  outline: none;
+}
+
+.brand {
+  position: fixed;
+  top: max(var(--gutter), env(safe-area-inset-top));
+  left: var(--gutter);
+  pointer-events: none;
+}
+
+.brand h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+}
+
+.brand p {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.panel {
+  position: fixed;
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 14px 16px;
+}
+
+.panel h2 {
+  margin: 0 0 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.filters {
+  top: 92px;
+  left: var(--gutter);
+  width: 260px;
+}
+
+.filters ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.layer-toggle {
+  --layer-color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--panel-border);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.layer-toggle:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.layer-toggle:focus-visible {
+  outline: 2px solid var(--layer-color);
+  outline-offset: 2px;
+}
+
+.layer-toggle .swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--layer-color);
+  flex: none;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.layer-toggle .label {
+  flex: 1;
+  text-align: left;
+}
+
+.layer-toggle .state {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.layer-toggle[aria-pressed='true'] {
+  border-color: var(--layer-color);
+  box-shadow: 0 0 18px -6px var(--layer-color);
+}
+
+.layer-toggle[aria-pressed='true'] .swatch {
+  background: var(--layer-color);
+  box-shadow: 0 0 10px var(--layer-color);
+}
+
+.layer-toggle.busy .state::after {
+  content: '';
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--muted);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.summary {
+  margin: 12px 0 0;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: var(--text);
+}
+
+.more {
+  margin: 10px 0 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.link-button {
+  margin-top: 10px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.info {
+  top: var(--gutter);
+  right: var(--gutter);
+  width: 320px;
+  padding-right: 40px;
+}
+
+.info .kicker {
+  margin: 0 0 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.info h2 {
+  margin: 0 0 8px;
+  font-size: 1.25rem;
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--text);
+}
+
+.info p {
+  margin: 0;
+  line-height: 1.5;
+  font-size: 0.92rem;
+}
+
+.close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.close:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+}
+
+.hint {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+  text-align: center;
+  pointer-events: none;
+  width: max-content;
+  max-width: calc(100% - 2 * var(--gutter));
+}
+
+.credit {
+  position: fixed;
+  bottom: max(10px, env(safe-area-inset-bottom));
+  left: var(--gutter);
+  right: var(--gutter);
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.72rem;
+  text-align: center;
+}
+
+.credit a {
+  color: var(--accent);
+}
+
+.loading {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 14px;
+  background: var(--bg);
+  color: var(--muted);
+  transition: opacity 0.4s;
+}
+
+.loading[hidden] {
+  display: none;
+}
+
+.loading p {
+  margin: 0;
+  padding: 0 var(--gutter);
+  text-align: center;
+}
+
+.loading.error .spinner {
+  display: none;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(159, 216, 255, 0.2);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+[hidden] {
+  display: none !important;
+}
+
+/* Phones: filters become a compact bar at the bottom, info a sheet above it. */
+@media (max-width: 700px) {
+  .brand h1 {
+    font-size: 1.2rem;
+  }
+
+  .filters {
+    top: auto;
+    left: var(--gutter);
+    right: var(--gutter);
+    bottom: calc(max(10px, env(safe-area-inset-bottom)) + var(--credit-height, 40px) + 8px);
+    width: auto;
+    padding: 10px 12px;
+  }
+
+  .filters h2,
+  .filters .more {
+    display: none;
+  }
+
+  .summary {
+    font-size: 0.8rem;
+    max-height: 4.4em;
+    overflow-y: auto;
+  }
+
+  /* The info sheet takes the filter bar's place while it is open. */
+  body:has(#info:not([hidden])) .filters {
+    display: none;
+  }
+
+  .info {
+    top: auto;
+    left: var(--gutter);
+    right: var(--gutter);
+    width: auto;
+    bottom: calc(max(10px, env(safe-area-inset-bottom)) + var(--credit-height, 40px) + 8px);
+    z-index: 2;
+  }
+
+  .hint {
+    top: 70px;
+    bottom: auto;
+    font-size: 0.75rem;
+    white-space: normal;
+  }
+
+  .credit {
+    font-size: 0.65rem;
+  }
+}
