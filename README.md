@@ -2,11 +2,13 @@
 
 Free interactive 3D atlas of the human body with per-system highlighting.
 
+**Live site:** https://body-atlas-hd.vercel.app
+
 The page shows a see-through glass model of an adult male body that you can rotate, zoom and pan with a mouse or with touch. Turning on a body system in the filter panel lights up its parts in color. Clicking or tapping a part shows its name and a short description.
 
 This first version ships the **Skeletal** system. Every bone in the model is a separate, clickable part with its own name and description.
 
-It is a static site with no backend, so it costs nothing to host. Vercel builds every push: pull requests get preview deployments, and `main` deploys to production.
+It is a static site with no backend, so it costs nothing to host. Vercel builds every push: pull requests get preview deployments, and `main` deploys to production at https://body-atlas-hd.vercel.app.
 
 ## Development
 
@@ -51,7 +53,7 @@ The 3D anatomy comes from **[BodyParts3D](https://dbarchive.biosciencedbc.jp/en/
 
 The **coccyx**, which BodyParts3D lacks, comes from **[Z-Anatomy](https://www.z-anatomy.com)** ([source repository](https://github.com/Z-Anatomy/Models-of-human-anatomy)), "Z-Anatomy - The libre 3D atlas of anatomy", licensed [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Z-Anatomy is itself derived from BodyParts3D and shares its scale. `scripts/extract-z-anatomy.py` extracts the mesh from Z-Anatomy's Blender template into `data-sources/z-anatomy/coccyx.obj`. The build then moves it so that it sits under the BodyParts3D sacrum.
 
-Because of that ShareAlike part, **`public/models/skeletal.glb` and `data-sources/z-anatomy/` are distributed under CC BY-SA 4.0**. `public/models/skin.glb` is under CC BY 4.0. The site credits both sources in its footer.
+Because of that ShareAlike part, **`public/models/skeletal.glb` and `data-sources/z-anatomy/` are distributed under CC BY-SA 4.0**. `public/models/skin.glb` is under CC BY 4.0. The site credits both sources in its footer, notes that the coccyx was modified, and states that the skeletal model is CC BY-SA 4.0.
 
 The bone descriptions in `src/data/` are original text written for this project.
 

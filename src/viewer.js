@@ -209,14 +209,21 @@ export class Viewer {
   #bindPointer(el) {
     let down = null;
     let pending = null;
+    const active = new Set();
     el.addEventListener('pointerdown', (e) => {
-      down = { x: e.clientX, y: e.clientY, id: e.pointerId };
+      active.add(e.pointerId);
+      down = active.size === 1 ? { x: e.clientX, y: e.clientY, id: e.pointerId } : null;
     });
     el.addEventListener('pointerup', (e) => {
+      active.delete(e.pointerId);
       if (!down || down.id !== e.pointerId) return;
       const moved = Math.hypot(e.clientX - down.x, e.clientY - down.y);
       down = null;
       if (moved <= CLICK_SLOP_PX) this.select(this.#pick(e.clientX, e.clientY));
+    });
+    el.addEventListener('pointercancel', (e) => {
+      active.delete(e.pointerId);
+      down = null;
     });
     el.addEventListener('pointermove', (e) => {
       if (e.pointerType !== 'mouse' || down) return;
