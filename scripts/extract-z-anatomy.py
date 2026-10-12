@@ -1,5 +1,5 @@
 # Extracts bones that BodyParts3D lacks from the Z-Anatomy Blender template
-# (CC BY-SA 4.0) into data-sources/z-anatomy/ as OBJ files, which
+# into data-sources/z-anatomy/ as OBJ files (licenses: README "Anatomy model"), which
 # scripts/build-models.mjs then aligns onto the BodyParts3D skeleton.
 #
 # Usage (Blender 4.x; see README "Rebuilding the models"):
