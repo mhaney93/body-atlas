@@ -6,6 +6,7 @@ import { EFFECTS } from './effects.js';
 
 const BODY_HEIGHT = 1.72; // metres, roughly; the models stand on y = 0
 const CLICK_SLOP_PX = 6;
+const SEE_THROUGH_DEPTH = 0.08; // metres; about the depth of the heart
 
 /** Fresnel "glass" shading: nearly clear face-on, glowing at grazing angles. */
 function glassMaterial() {
@@ -35,8 +36,64 @@ function glassMaterial() {
   });
 }
 
-function layerMaterials(hex) {
+/**
+ * Decorative "haze": a soft, mottled glow laid over a surface, pulsing gently
+ * like a heartbeat. It is an illustrative effect, not modeled anatomy, and the
+ * UI must label it as such. `time` is a shared { value: seconds } uniform.
+ */
+function hazeMaterial(hex, time) {
+  return new THREE.ShaderMaterial({
+    uniforms: { uColor: { value: new THREE.Color(hex) }, uTime: time },
+    vertexShader: /* glsl */ `
+      varying vec3 vNormal;
+      varying vec3 vView;
+      varying vec3 vPos;
+      void main() {
+        vec4 mv = modelViewMatrix * vec4(position, 1.0);
+        vNormal = normalize(normalMatrix * normal);
+        vView = normalize(-mv.xyz);
+        vPos = position;
+        gl_Position = projectionMatrix * mv;
+      }`,
+    fragmentShader: /* glsl */ `
+      uniform vec3 uColor;
+      uniform float uTime;
+      varying vec3 vNormal;
+      varying vec3 vView;
+      varying vec3 vPos;
+      float hash(vec3 p) {
+        p = fract(p * 0.3183099 + 0.1);
+        p *= 17.0;
+        return fract(p.x * p.y * p.z * (p.x + p.y + p.z));
+      }
+      float noise(vec3 x) {
+        vec3 i = floor(x);
+        vec3 f = fract(x);
+        f = f * f * (3.0 - 2.0 * f);
+        return mix(
+          mix(mix(hash(i), hash(i + vec3(1, 0, 0)), f.x), mix(hash(i + vec3(0, 1, 0)), hash(i + vec3(1, 1, 0)), f.x), f.y),
+          mix(mix(hash(i + vec3(0, 0, 1)), hash(i + vec3(1, 0, 1)), f.x), mix(hash(i + vec3(0, 1, 1)), hash(i + vec3(1, 1, 1)), f.x), f.y),
+          f.z);
+      }
+      void main() {
+        // Fine branching mottling: sharpened noise ridges at two scales.
+        float coarse = noise(vPos * 45.0);
+        float fine = 1.0 - abs(2.0 * noise(vPos * 160.0) - 1.0);
+        float mottle = 0.35 + 0.65 * coarse * pow(fine, 3.0);
+        float facing = abs(dot(normalize(vNormal), normalize(vView)));
+        float beat = 0.8 + 0.2 * pow(0.5 + 0.5 * sin(uTime * 6.2832 * 1.1), 6.0);
+        gl_FragColor = vec4(uColor * mottle * (0.12 + 0.38 * facing) * beat, 1.0);
+      }`,
+    transparent: true,
+    depthWrite: false,
+    side: THREE.FrontSide,
+    blending: THREE.AdditiveBlending,
+  });
+}
+
+function layerMaterials(hex, opacity = 1) {
   const color = new THREE.Color(hex);
+  const translucent = opacity < 1;
   const make = (emissive, intensity) =>
     new THREE.MeshStandardMaterial({
       color,
@@ -44,6 +101,7 @@ function layerMaterials(hex) {
       emissiveIntensity: intensity,
       roughness: 0.55,
       metalness: 0.0,
+      ...(translucent && { transparent: true, opacity, depthWrite: false }),
     });
   return {
     base: make(color, 0.45),
@@ -74,6 +132,11 @@ export class Viewer {
     this.shell = null;
     this.hovered = null;
     this.selected = null;
+    /** @type {THREE.Mesh[]} */
+    this.shellMeshes = [];
+    /** @type {Map<string, {material: THREE.ShaderMaterial, overlays: THREE.Mesh[]}>} haze effects by id */
+    this.hazes = new Map();
+    this.time = { value: 0 };
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -113,11 +176,12 @@ export class Viewer {
 
     new ResizeObserver(() => this.#resize()).observe(container);
     this.#resize();
-    const clock = new THREE.Clock();
+    const timer = new THREE.Timer();
     renderer.setAnimationLoop(() => {
+      timer.update();
+      this.time.value = timer.getElapsed();
       controls.update();
-      const time = clock.getElapsedTime();
-      for (const fx of this.effects.values()) if (fx.object.visible) fx.update(time, camera, renderer);
+      for (const fx of this.effects.values()) if (fx.object.visible) fx.update(this.time.value, camera, renderer);
       renderer.render(scene, camera);
     });
   }
@@ -133,20 +197,25 @@ export class Viewer {
         o.material = material;
         o.renderOrder = 10; // after opaque layers so they show through
         o.raycast = () => {}; // the shell never blocks picking
+        this.shellMeshes.push(o);
       }
     });
     this.scene.add(gltf.scene);
     this.shell = gltf.scene;
+    this.#applyHazes();
   }
 
   /** Starts downloading a layer's asset (hidden) and returns a promise for it. */
   preloadLayer(layer) {
     let entry = this.layers.get(layer.id);
     if (entry) return entry.promise;
+    // Materials are shared per colour: a part's own colour, else its sub-group's
+    // (e.g. arteries and veins, tagged via the `group` node extra), else the layer's.
     const byColor = new Map();
-    const materialsFor = (color) => {
-      if (!byColor.has(color)) byColor.set(color, layerMaterials(color));
-      return byColor.get(color);
+    const materialsFor = (color, opacity) => {
+      const key = `${color}/${opacity ?? 1}`;
+      if (!byColor.has(key)) byColor.set(key, layerMaterials(color, opacity));
+      return byColor.get(key);
     };
     entry = { layer, group: null, promise: null };
     // A layer may ship extra files (e.g. parts under a different license).
@@ -157,13 +226,15 @@ export class Viewer {
       group.visible = false;
       group.traverse((o) => {
         if (o.isMesh) {
-          o.userData.materials = materialsFor(this.partColor(layer, o.userData.name ?? o.name) ?? layer.color);
+          const g = layer.groups?.[o.userData.group];
+          o.userData.materials = materialsFor(this.partColor(layer, o.userData.name ?? o.name) ?? g?.color ?? layer.color, g?.opacity);
           o.material = o.userData.materials.base;
           o.userData.layerId = layer.id;
         }
       });
       this.scene.add(group);
       entry.group = group;
+      if (layer.hazeSurface) this.#applyHazes();
       return group;
     });
     entry.promise.catch(() => this.layers.delete(layer.id));
@@ -209,6 +280,40 @@ export class Viewer {
     this.onSelect(mesh ? { layer: entry.layer, mesh } : null);
   }
 
+  /**
+   * Shows (with a CSS colour) or hides (with null) a decorative haze overlay
+   * on the skin and on any loaded layer whose data sets `hazeSurface: true`.
+   * Several hazes may be shown at once, keyed by id.
+   */
+  setHaze(id, color) {
+    const prev = this.hazes.get(id);
+    if (prev) {
+      for (const m of prev.overlays) m.removeFromParent();
+      prev.material.dispose();
+      this.hazes.delete(id);
+    }
+    if (color) this.hazes.set(id, { material: hazeMaterial(color, this.time), overlays: [] });
+    this.#applyHazes();
+  }
+
+  /** (Re)builds every haze's overlay meshes over the current haze surfaces. */
+  #applyHazes() {
+    const surfaces = [...this.shellMeshes];
+    for (const { layer, group } of this.layers.values()) {
+      if (layer.hazeSurface) group?.traverse((o) => o.isMesh && surfaces.push(o));
+    }
+    for (const haze of this.hazes.values()) {
+      for (const m of haze.overlays) m.removeFromParent();
+      haze.overlays = surfaces.map((surface) => {
+        const overlay = new THREE.Mesh(surface.geometry, haze.material);
+        overlay.renderOrder = 11; // over the glass shell
+        overlay.raycast = () => {};
+        surface.add(overlay); // follows its surface's visibility
+        return overlay;
+      });
+    }
+  }
+
   resetView() {
     this.camera.position.copy(this.home.position);
     this.controls.target.copy(this.home.target);
@@ -237,7 +342,11 @@ export class Viewer {
     const rect = this.renderer.domElement.getBoundingClientRect();
     this.pointer.set(((clientX - rect.left) / rect.width) * 2 - 1, -((clientY - rect.top) / rect.height) * 2 + 1);
     this.raycaster.setFromCamera(this.pointer, this.camera);
-    const hit = this.raycaster.intersectObjects(targets, true).find((h) => h.object.isMesh);
+    const hits = this.raycaster.intersectObjects(targets, true).filter((h) => h.object.isMesh);
+    // See-through parts (e.g. the heart wall) yield to more opaque parts just
+    // behind them (e.g. the valves inside), but not to anything farther back.
+    const near = hits.filter((h) => h.distance - hits[0].distance < SEE_THROUGH_DEPTH);
+    const hit = near.reduce((best, h) => (h.object.material.opacity > best.object.material.opacity ? h : best), near[0]);
     return hit?.object ?? null;
   }
 

@@ -1,0 +1,1943 @@
+{
+  "id": "circulatory",
+  "name": "Circulatory",
+  "color": "#ec3d48",
+  "asset": "models/circulatory.glb",
+  "flowLabel": "Blood flow",
+  "summary": "The heart pumps about 5 litres of blood a minute. Arteries (red) carry it away from the heart and veins (blue) bring it back. Shown are the heart's chambers and valves and every named artery and vein in the model; the capillaries that link them are far too small to model one by one.",
+  "groups": {
+    "artery": {
+      "label": "Arteries",
+      "color": "#ec3d48",
+      "flow": "Away from the heart"
+    },
+    "vein": {
+      "label": "Veins",
+      "color": "#4b86ff",
+      "flow": "Toward the heart"
+    },
+    "chamber": {
+      "label": "Heart chambers",
+      "color": "#ff7f9e",
+      "opacity": 0.3
+    },
+    "wall": {
+      "label": "Heart wall",
+      "color": "#ff9db3",
+      "opacity": 0.25,
+      "legend": false
+    },
+    "valve": {
+      "label": "Valves",
+      "color": "#c79bff"
+    }
+  },
+  "effects": [
+    {
+      "id": "capillary-glow",
+      "type": "haze",
+      "label": "Capillary glow",
+      "color": "#ff4a5e",
+      "note": "A decorative visual effect, not modeled anatomy: a soft, pulsing glow hinting at the capillary beds in the skin."
+    }
+  ],
+  "parts": {
+    "abdominal aorta": {
+      "region": "Abdomen",
+      "description": "The aorta below the diaphragm. It feeds the gut, kidneys and abdominal wall, then splits into the two common iliac arteries at about the level of the navel."
+    },
+    "accessory hemiazygos vein": {
+      "region": "Thorax",
+      "description": "A vein on the left side of the upper spine that drains the upper left intercostal spaces into the azygos system."
+    },
+    "accessory subsuperior branch of posterior basal segmental artery": {
+      "region": "Lungs",
+      "description": "A small, variable branch of the posterior basal segmental artery supplying a subsuperior segment just below the superior segment.",
+      "flow": "Away from the heart, carrying oxygen-poor blood to the lungs"
+    },
+    "acromial branch of thoraco-acromial artery": {
+      "region": "Upper limb",
+      "description": "A branch of the thoraco-acromial artery to the tip of the shoulder (acromion)."
+    },
+    "anterior basal segmental artery": {
+      "region": "Lungs",
+      "description": "A pulmonary artery branch to the anterior basal segment at the front of the lung's base.",
+      "flow": "Away from the heart, carrying oxygen-poor blood to the lungs"
+    },
+    "anterior basal segmental vein": {
+      "region": "Lungs",
+      "description": "Drains the front of the lung's base toward the inferior pulmonary vein.",
+      "flow": "Toward the heart, carrying oxygen-rich blood from the lungs"
+    },
+    "anterior branch of anterior segmental artery": {
+      "region": "Lungs",
+      "description": "A subdivision of the anterior segmental artery to the front of the anterior segment of the upper lobe.",
+      "flow": "Away from the heart, carrying oxygen-poor blood to the lungs"
+    },
+    "anterior branch of lateral segmental artery": {
+      "region": "Lungs",
+      "description": "A subdivision of the artery to the lateral segment of the right middle lobe, supplying its front part.",
+      "flow": "Away from the heart, carrying oxygen-poor blood to the lungs"
+    },
+    "anterior cardiac vein": {
+      "region": "Heart",
+      "description": "One of several small veins on the front of the right ventricle that open directly into the right atrium."
+    },
+    "anterior cecal artery": {
+      "region": "Abdomen",
+      "description": "A branch of the ileocolic artery to the front of the cecum, the pouch where the large intestine begins."
+    },
+    "anterior cerebral artery": {
+      "region": "Brain",
+      "description": "A branch of the internal carotid artery that curves over the corpus callosum to supply the inner surface of the frontal and parietal lobes, including areas for the leg and foot."
+    },
+    "anterior choroidal artery": {
+      "region": "Brain",
+      "description": "A thin branch of the internal carotid artery that supplies the choroid plexus (which makes cerebrospinal fluid), parts of the internal capsule, and visual pathways."
+    },
+    "anterior circumflex humeral artery": {
+      "region": "Upper limb",
+      "description": "A small artery that wraps around the front of the neck of the upper-arm bone (humerus) to supply the shoulder joint."
+    },
+    "anterior circumflex humeral vein": {
+      "region": "Upper limb",
+      "description": "Drains the front of the shoulder joint into the axillary vein."
+    },
+    "anterior communicating artery": {
+      "region": "Brain",
+      "description": "A short vessel joining the two anterior cerebral arteries, closing the front of the circle of Willis. It is a common site of brain aneurysms."
+    },
+    "anterior cusp of aortic valve": {
+      "region": "Heart",
+      "description": "One of the three pocket-shaped cusps of the aortic valve, also called the right coronary cusp because the right coronary artery opens just above it.",
+      "flow": "One way only, from left ventricle to aorta"
+    },
+    "anterior division of renal artery": {
+      "region": "Kidney",
+      "description": "The front division of the renal artery, which gives most of the segmental arteries to the kidney."
+    },
+    "anterior inferior cerebellar artery": {
+      "region": "Brain",
+      "description": "A branch of the basilar artery that supplies the front underside of the cerebellum and parts of the pons."
+    },
+    "anterior inferior pancreaticoduodenal artery": {
+      "region": "Abdomen",
+      "description": "A branch of the inferior pancreaticoduodenal artery that joins the anterior superior one in a loop around the front of the pancreatic head."
+    },
+    "anterior inferior segmental branch of portal vein": {
+      "region": "Liver",
+      "description": "Carries portal blood into the lower front segment of the right liver (segment V).",
+      "flow": "Toward the liver through the portal vein; the liver then returns it to the heart"
+    },
+    "anterior inferior segmental hepatic artery": {
+      "region": "Liver",
+      "description": "Supplies the lower front segment of the right lobe of the liver (segment V)."
+    },
+    "anterior inferior segmental tributary of middle hepatic vein": {
+      "region": "Liver",
+      "description": "Drains the lower front segment of the right liver (segment V) into the middle hepatic vein."
+    },
+    "anterior interosseous artery": {
+      "region": "Upper limb",
+      "description": "Runs down the front of the membrane between the forearm bones, supplying the deep forearm muscles."
+    },
+    "anterior interventricular vein": {
+      "region": "Heart",
+      "description": "The first part of the great cardiac vein, running up the front groove between the ventricles alongside the LAD artery."
+    },
+    "anterior leaflet of mitral valve": {
+      "region": "Heart",
+      "description": "The larger of the two flaps of the mitral valve, between the left atrium and left ventricle. It opens to let blood into the ventricle and seals shut when the ventricle contracts.",
+      "flow": "One way only, from left atrium to left ventricle"
+    },
+    "anterior leaflet of tricuspid valve": {
+      "region": "Heart",
+      "description": "The largest of the three flaps of the tricuspid valve, between the right atrium and right ventricle. Cords tie it to papillary muscles so it cannot flip back.",
+      "flow": "One way only, from right atrium to right ventricle"
+    },
+    "anterior papillary muscle of right ventricle": {
+      "region": "Heart",
+      "description": "The largest muscle column in the right ventricle. Its tendon cords (chordae tendineae) hold the tricuspid valve leaflets so they don't turn inside out when the ventricle squeezes.",
+      "flow": "Holds the tricuspid valve shut so blood cannot leak back into the right atrium"
+    },
+    "anterior parietal artery": {
+      "region": "Brain",
+      "description": "A branch of the middle cerebral artery to the front of the parietal lobe."
+    },
+    "anterior part of apical segmental artery": {
+      "region": "Lungs",
+      "description": "A subdivision of the apical segmental artery that supplies the front of the lung's apical segment.",
+      "flow": "Away from the heart, carrying oxygen-poor blood to the lungs"
+    },
+    "anterior part of apical segmental vein": {
+      "region": "Lungs",
+      "description": "A tributary draining the front of the apical segment into the apical segmental vein.",
+      "flow": "Toward the heart, carrying oxygen-rich blood from the lungs"
+    },
+    "anterior part of lateral segmental vein": {
+      "region": "Lungs",
+      "description": "Drains the front of the lateral segment of the right middle lobe toward the right superior pulmonary vein.",
+      "flow": "Toward the heart, carrying oxygen-rich blood from the lungs"
+    },
+    "anterior segmental artery": {
+      "region": "Lungs",
+      "description": "A pulmonary artery branch to the anterior segment of the upper lobe, at the front of the upper lung.",
+      "flow": "Away from the heart, carrying oxygen-poor blood to the lungs"
+    },
+    "anterior segmental vein": {
+      "region": "Lungs",
+      "description": "Drains the anterior segment of the upper lobe toward the superior pulmonary vein.",
+      "flow": "Toward the heart, carrying oxygen-rich blood from the lungs"
+    },
+    "anterior spinal artery": {
+      "region": "Brain",
+      "description": "Formed from small branches of both vertebral arteries, it runs down the front of the spinal cord and supplies its front two-thirds."
+    },
+    "anterior superior pancreaticoduodenal artery": {
+      "region": "Abdomen",
+      "description": "A branch of the gastroduodenal artery that supplies the front of the head of the pancreas and the duodenum."
+    },
+    "anterior superior segmental branch of portal vein": {
+      "region": "Liver",
+      "description": "Carries portal blood into the upper front segment of the right liver (segment VIII).",
+      "flow": "Toward the liver through the portal vein; the liver then returns it to the heart"
+    },
+    "anterior superior segmental hepatic artery": {
+      "region": "Liver",
+      "description": "Supplies the upper front segment of the right lobe of the liver (segment VIII)."
+    },
+    "anterior superior segmental tributary of hepatic vein": {
+      "region": "Liver",
+      "description": "Drains the upper front segment of the right liver (segment VIII) into the right hepatic vein."
+    },
+    "anterior temporal artery": {
+      "region": "Brain",
+      "description": "A branch of the middle cerebral artery to the front of the temporal lobe."
+    },
+    "anterior temporal branch of lateral occipital artery": {
+      "region": "Brain",
+      "description": "A branch of the lateral occipital artery to the front underside of the temporal lobe."
+    },
+    "anterior tibial artery": {
+      "region": "Lower limb",
+      "description": "Passes forward between the shin bones and runs down the front of the leg, becoming the dorsalis pedis artery at the ankle."
+    },
+    "anterior tibial recurrent artery": {
+      "region": "Lower limb",
+      "description": "Runs back up from the anterior tibial artery to the front of the knee."
+    },
+    "anterior tibial vein": {
+      "region": "Lower limb",
+      "description": "One of the paired deep veins alongside the anterior tibial artery at the front of the leg."
+    },
+    "anterior ulnar recurrent artery": {
+      "region": "Upper limb",
+      "description": "Runs back up from the ulnar artery in front of the inner elbow."
+    },
+    "anterolateral central branch of middle cerebral artery": {
+      "region": "Brain",
+      "description": "One of the lenticulostriate arteries: small vessels from the middle cerebral artery to the basal ganglia and internal capsule. They are a common site of stroke."
+    },
+    "anterolateral head of lateral papillary muscle of left ventricle": {
+      "region": "Heart",
+      "description": "The front head of a papillary muscle in the left ventricle. It anchors tendon cords from both mitral valve leaflets.",
+      "flow": "Holds the mitral valve shut so blood cannot leak back into the left atrium"
+    },
+    "apical part of apical segmental artery": {
+      "region": "Lungs",
+      "description": "A subdivision of the apical segmental artery that reaches the uppermost tip of the lung.",
+      "flow": "Away from the heart, carrying oxygen-poor blood to the lungs"
+    },
+    "apical part of apical segmental vein": {
+      "region": "Lungs",
+      "description": "A tributary draining the uppermost tip of the lung into the apical segmental vein.",
+      "flow": "Toward the heart, carrying oxygen-rich blood from the lungs"
+    },
+    "apical part of posterior segmental artery": {
+      "region": "Lungs",
+      "description": "A subdivision of the posterior segmental artery that supplies the upper part of the posterior segment.",
+      "flow": "Away from the heart, carrying oxygen-poor blood to the lungs"
+    },
+    "apical segmental artery": {
+      "region": "Lungs",
+      "description": "A pulmonary artery branch to the apical segment at the very top of the upper lobe of the lung.",
+      "flow": "Away from the heart, carrying oxygen-poor blood to the lungs"
+    },
+    "apical segmental vein": {
+      "region": "Lungs",
+      "description": "Drains oxygen-rich blood from the apical segment at the top of the upper lobe toward the superior pulmonary vein.",
+      "flow": "Toward the heart, carrying oxygen-rich blood from the lungs"
+    },
+    "appendicular artery": {
+      "region": "Abdomen",
+      "description": "The small artery to the appendix, usually from the ileocolic artery. It runs in the appendix's own fold of mesentery."
+    },
+    "arch of aorta": {
+      "region": "Thorax",
+      "description": "The curve of the aorta above the heart. It gives off the brachiocephalic artery, left common carotid artery and left subclavian artery, which supply the head, neck and arms."
+    },
+    "arcuate artery": {
+      "region": "Lower limb",
+      "description": "Arches across the top of the foot from the dorsalis pedis artery and gives off arteries to the toes."
+    },
+    "arteria princeps pollicis": {
+      "region": "Upper limb",
+      "description": "The main artery of the thumb, from the radial artery deep in the palm."
+    },
+    "arteria radialis indicis": {
+      "region": "Upper limb",
+      "description": "An artery from the radial artery that runs along the thumb side of the index finger."
+    },
+    "artery of central sulcus": {
+      "region": "Brain",
+      "description": "A branch of the middle cerebral artery running in the central sulcus, between the areas for movement and touch."
+    },
+    "artery of postcentral sulcus": {
+      "region": "Brain",
+      "description": "A branch of the middle cerebral artery running in the postcentral sulcus, behind the sensory cortex."
+    },
+    "artery of precentral sulcus": {
+      "region": "Brain",
+      "description": "A branch of the middle cerebral artery running in the precentral sulcus, in front of the motor cortex."
+    },
+    "ascending aorta": {
+      "region": "Thorax",
+      "description": "The first part of the aorta, rising from the left ventricle. The two coronary arteries, which feed the heart muscle itself, branch from its base."
+    },
+    "ascending branch of colic artery": {
+      "region": "Abdomen",
+      "description": "The upward branch of the left colic artery, supplying the upper descending colon and the left end of the transverse colon."
+    },
+    "ascending branch of inferior branch of ileocolic artery": {
+      "region": "Abdomen",
+      "description": "A branch of the ileocolic artery that runs up the ascending colon to join the right colic artery."
+    },
+    "ascending lumbar vein": {
+      "region": "Abdomen",
+      "description": "A vertical vein beside the lumbar spine that links the lumbar veins and continues up into the azygos (right) or hemiazygos (left) vein."
+    },
+    "axillary artery": {
+      "region": "Upper limb",
+      "description": "Continues the subclavian artery through the armpit, giving branches to the chest wall and shoulder, and becomes the brachial artery."
+    },
+    "axillary vein": {
+      "region": "Upper limb",
+      "description": "The large vein of the armpit, formed by the brachial and basilic veins. It becomes the subclavian vein at the first rib."
+    },
+    "azygos vein": {
+      "region": "Thorax",
+      "description": "A vein running up the right side of the spine that collects blood from the back of the chest wall and drains into the superior vena cava. It links the upper and lower venous systems."
+    },
+    "basal branch of anterior basal segmental artery": {
+      "region": "Lungs",
+      "description": "A subdivision of the anterior basal segmental artery that runs down toward the diaphragm.",
+      "flow": "Away from the heart, carrying oxygen-poor blood to the lungs"
+    },
+    "basilar artery": {
+      "region": "Brain",
+      "description": "Formed by the two vertebral arteries joining on the front of the brainstem. It feeds the brainstem and cerebellum and splits into the two posterior cerebral arteries."
+    },
+    "basilic vein": {
+      "region": "Upper limb",
+      "description": "A large surface vein running up the little-finger side of the forearm and arm. It dives deep halfway up the arm to join the brachial veins."
+    },
+    "brachial artery": {
+      "region": "Upper limb",
+      "description": "The main artery of the upper arm, running down its inner side. Blood pressure is measured over it, and it splits into the radial and ulnar arteries below the elbow."
+    },
+    "brachiocephalic artery": {
+      "region": "Thorax",
+      "description": "The first and largest branch of the aortic arch, found only on the right. It divides into the right common carotid and right subclavian arteries."
+    },
+    "brachiocephalic vein": {
+      "region": "Thorax",
+      "description": "Formed behind each collarbone where the internal jugular and subclavian veins meet. The left one is longer and crosses the chest; the two join to form the superior vena cava."
+    },
+    "branch of left anterior choroidal artery to posterior limb of left internal capsule": {
+      "region": "Brain",
+      "description": "A small branch of the anterior choroidal artery to the internal capsule, the band of nerve fibres carrying movement signals from the cortex."
+    },
+    "branch of left middle cerebral artery to left angular gyrus": {
+      "region": "Brain",
+      "description": "A terminal branch of the middle cerebral artery to the angular gyrus, an area involved in language and reading."
+    },
+    "branch of right anterior choroidal artery to posterior limb of right internal capsule": {
+      "region": "Brain",
+      "description": "A small branch of the anterior choroidal artery to the internal capsule, the band of nerve fibres carrying movement signals from the cortex."
+    },
+    "branch of right middle cerebral artery to right angular gyrus": {
+      "region": "Brain",
+      "description": "A terminal branch of the middle cerebral artery to the angular gyrus of the parietal lobe."
+    },
+    "bronchial artery": {
+      "region": "Thorax",
+      "description": "Feeds the airways and lung tissue itself with oxygen-rich blood, separate from the pulmonary circulation."
+    },
+    "bronchial branch of arch of aorta": {
+      "region": "Thorax",
+      "description": "A bronchial artery arising from the aorta, supplying the walls of the bronchi."
+    },
+    "callosomarginal artery": {
+      "region": "Brain",
+      "description": "A major branch of the anterior cerebral artery running in the cingulate sulcus on the inner surface of the frontal lobe."
+    },
+    "caudal pancreatic artery": {
+      "region": "Abdomen",
+      "description": "A branch of the splenic artery to the tail of the pancreas, near the spleen."
+    },
+    "caudate lobe branch of hepatic artery": {
+      "region": "Liver",
+      "description": "A small branch of a hepatic artery to the caudate lobe, a small lobe at the back of the liver beside the inferior vena cava."
+    },
+    "caudate lobe branch of portal vein": {
+      "region": "Liver",
+      "description": "A small branch of the portal vein to the caudate lobe at the back of the liver.",
+      "flow": "Toward the liver through the portal vein; the liver then returns it to the heart"
+    },
+    "cavity of left atrium": {
+      "region": "Heart",
+      "description": "The left upper chamber of the heart. It receives oxygen-rich blood from the lungs through the four pulmonary veins.",
+      "flow": "Receives blood from the lungs and passes it to the left ventricle"
+    },
+    "cavity of left ventricle": {
+      "region": "Heart",
+      "description": "The left lower chamber and the heart's main pump. Its thick muscular wall drives oxygen-rich blood through the aortic valve into the aorta and on to the whole body.",
+      "flow": "Receives blood from the left atrium and pumps it to the body"
+    },
+    "cavity of right atrium": {
+      "region": "Heart",
+      "description": "The right upper chamber of the heart. It collects oxygen-poor blood returning from the body through the superior and inferior venae cavae and the coronary sinus.",
+      "flow": "Receives blood from the body and passes it to the right ventricle"
+    },
+    "cavity of right ventricle": {
+      "region": "Heart",
+      "description": "The right lower chamber of the heart. It pumps oxygen-poor blood through the pulmonary valve into the pulmonary trunk, toward the lungs.",
+      "flow": "Receives blood from the right atrium and pumps it to the lungs"
+    },
+    "celiac artery": {
+      "region": "Abdomen",
+      "description": "Another name for the celiac trunk: the short, thick artery from the aorta that feeds the stomach, liver, spleen and upper duodenum."
+    },
+    "celiac trunk": {
+      "region": "Abdomen",
+      "description": "The first major branch of the abdominal aorta, just below the diaphragm. It splits into the left gastric, common hepatic and splenic arteries to supply the stomach, liver, spleen and pancreas."
+    },
+    "cephalic vein": {
+      "region": "Upper limb",
+      "description": "A large surface vein running up the thumb side of the forearm and arm into the axillary vein. It is often used for drips and blood draws."
+    },
+    "circumflex branch of coronary artery": {
+      "region": "Heart",
+      "description": "A branch of the left coronary artery that curves around the left side of the heart in the groove between atrium and ventricle, supplying the left atrium and the side and back of the left ventricle."
+    },
+    "circumflex scapular artery": {
+      "region": "Upper limb",
+      "description": "Winds around the outer edge of the shoulder blade to the muscles on its back."
+    },
+    "circumflex scapular vein": {
+      "region": "Upper limb",
+      "description": "Drains the muscles on the back of the shoulder blade into the subscapular vein."
+    },
+    "common carotid artery": {
+      "region": "Head and neck",
+      "description": "The main artery up each side of the neck, where its pulse can be felt. It splits into the internal carotid (to the brain) and external carotid (to the face and scalp); the left one rises from the aortic arch, the right from the brachiocephalic artery."
+    },
+    "common hepatic artery": {
+      "region": "Abdomen",
+      "description": "A branch of the celiac trunk that runs right toward the liver. It gives off the gastroduodenal artery and continues as the hepatic artery proper."
+    },
+    "common iliac artery": {
+      "region": "Pelvis",
+      "description": "One of the two terminal branches of the aorta, splitting at the pelvic rim into the external iliac (to the leg) and internal iliac (to the pelvis) arteries."
+    },
+    "common iliac vein": {
+      "region": "Pelvis",
+      "description": "Formed by the external and internal iliac veins. The two common iliac veins join to form the inferior vena cava."
+    },
+    "common interosseous artery": {
+      "region": "Upper limb",
+      "description": "A short branch of the ulnar artery that splits into the anterior and posterior interosseous arteries."
+    },
+    "common palmar digital vein": {
+      "region": "Upper limb",
+      "description": "Drains blood from the fingers into the palmar venous arch."
+    },
+    "conus artery": {
+      "region": "Heart",
+      "description": "A small branch of the right coronary artery that supplies the outflow tract (conus) of the right ventricle."
+    },
+    "conus branch of anterior interventricular branch of coronary artery": {
+      "region": "Heart",
+      "description": "A small branch of the LAD artery that supplies the outflow tract (conus) of the right ventricle below the pulmonary valve."
+    },
+    "coronary sinus": {
+      "region": "Heart",
+      "description": "A wide vein in the groove at the back of the heart that collects blood from most cardiac veins and empties it into the right atrium."
+    },
+    "costocervical trunk": {
+      "region": "Head and neck",
+      "description": "A short branch of the subclavian artery that splits into the deep cervical and superior intercostal arteries."
+    },
+    "deep brachial artery": {
+      "region": "Upper limb",
+      "description": "A large branch of the brachial artery that spirals around the back of the humerus with the radial nerve, supplying the triceps."
+    },
+    "deep cervical artery": {
+      "region": "Head and neck",
+      "description": "A branch of the costocervical trunk to the deep muscles at the back of the neck."
+    },
+    "deep dorsal vein of penis": {
+      "region": "Pelvis",
+      "description": "Runs along the top of the penis under its deep fascia and drains the erectile tissue into the prostatic venous plexus."
+    },
+    "deep femoral vein": {
+      "region": "Lower limb",
+      "description": "Drains the deep thigh muscles alongside the deep femoral artery into the femoral vein."
+    },
+    "deep palmar arch": {
+      "region": "Upper limb",
+      "description": "An arch of artery deep in the palm, formed mainly by the radial artery, lying over the bases of the metacarpal bones."
+    },
+    "deep palmar venous arch": {
+      "region": "Upper limb",
+      "description": "A venous arch alongside the deep palmar arterial arch, deep in the palm."
+    },
+    "deep plantar artery": {
+      "region": "Lower limb",
+      "description": "Dives from the dorsalis pedis artery between the first two metatarsals to join the plantar arch in the sole."
+    },
+    "deltoid branch of thoraco-acromial artery": {
+      "region": "Upper limb",
+      "description": "A branch of the thoraco-acromial artery to the deltoid and pectoralis major muscles."
+    },
+    "descending aorta": {
+      "region": "Thorax",
+      "description": "The part of the aorta that runs down through the chest and abdomen after the arch, giving branches to the body wall and organs."
+    },
+    "descending branch of colic artery": {
+      "region": "Abdomen",
+      "description": "The downward branch of the left colic artery, supplying the lower descending colon."
+    },
+    "descending branch of lateral circumflex femoral artery": {
+      "region": "Lower limb",
+      "description": "Runs down the outer thigh within the quadriceps toward the knee."
+    },
+    "descending genicular artery": {
+      "region": "Lower limb",
+      "description": "A branch of the femoral artery just above the knee, contributing to the network around the knee joint."
+    },
+    "descending thoracic aorta": {
+      "region": "Thorax",
+      "description": "The aorta as it descends through the chest beside the spine. It supplies the ribs' intercostal spaces, esophagus and bronchi before passing through the diaphragm."
+    },
+    "diagonal branch of anterior descending branch of coronary artery": {
+      "region": "Heart",
+      "description": "A branch of the LAD artery that runs diagonally across the front of the left ventricle."
+    },
+    "distal perforating artery": {
+      "region": "Lower limb",
+      "description": "The last perforating branch, the end of the deep femoral artery."
+    },
+    "dorsal artery of penis": {
+      "region": "Pelvis",
+      "description": "A branch of the internal pudendal artery that runs along the top of the penis, supplying its skin and glans."
+    },
+    "dorsal carpal branch of radial artery": {
+      "region": "Upper limb",
+      "description": "A branch of the radial artery to the network of vessels on the back of the wrist."
+    },
+    "dorsal carpal branch of ulnar artery": {
+      "region": "Upper limb",
+      "description": "A branch of the ulnar artery to the network of vessels on the back of the wrist."
+    },
+    "dorsal digital artery of foot": {
+      "region": "Lower limb",
+      "description": "A small artery along the top of a toe."
+    },
+    "dorsal metatarsal vein": {
+      "region": "Lower limb",
+      "description": "A vein on the top of the foot running between the metatarsal bones into the dorsal venous arch."
+    },
+    "dorsal pancreatic artery": {
+      "region": "Abdomen",
+      "description": "A branch, usually of the splenic artery, that runs down behind the neck of the pancreas."
+    },
+    "dorsal scapular artery": {
+      "region": "Upper limb",
+      "description": "Runs along the inner edge of the shoulder blade to supply the rhomboid and levator scapulae muscles."
+    },
+    "dorsal venous arch of foot": {
+      "region": "Lower limb",
+      "description": "An arch of surface veins across the top of the foot that feeds the great and small saphenous veins."
+    },
+    "dorsal venous network of hand": {
+      "region": "Upper limb",
+      "description": "The web of surface veins on the back of the hand, easy to see under the skin. It drains into the cephalic and basilic veins."
+    },
+    "dorsalis pedis artery": {
+      "region": "Lower limb",
+      "description": "Continues the anterior tibial artery over the top of the foot, where its pulse can be felt."
+    },
+    "esophageal artery": {
+      "region": "Thorax",
+      "description": "A small branch of the thoracic aorta to the esophagus."
+    },
+    "external iliac artery": {
+      "region": "Pelvis",
+      "description": "Runs along the pelvic brim and passes under the groin ligament to become the femoral artery."
+    },
+    "external iliac vein": {
+      "region": "Pelvis",
+      "description": "Continues the femoral vein from the groin up along the pelvic brim."
+    },
+    "femoral artery": {
+      "region": "Lower limb",
+      "description": "The main artery of the thigh, continuing the external iliac artery below the groin, where its pulse can be felt. It becomes the popliteal artery behind the knee."
+    },
+    "femoral vein": {
+      "region": "Lower limb",
+      "description": "The main deep vein of the thigh, running beside the femoral artery and becoming the external iliac vein at the groin."
+    },
+    "fibular vein": {
+      "region": "Lower limb",
+      "description": "One of the paired deep veins in the calf alongside the fibular (peroneal) artery; they join the posterior tibial veins."
+    },
+    "first anterior ventricular branch of coronary artery": {
+      "region": "Heart",
+      "description": "A branch of the right coronary artery to the front wall of the right ventricle."
+    },
+    "first common palmar digital artery": {
+      "region": "Upper limb",
+      "description": "Runs from the superficial palmar arch toward the thumb and index finger, then divides into finger arteries."
+    },
+    "first posterior intercostal artery": {
+      "region": "Thorax",
+      "description": "Runs below the first rib and supplies the first intercostal space."
+    },
+    "first posterior ventricular branch of coronary artery": {
+      "region": "Heart",
+      "description": "A branch of the right coronary artery to the back wall of the right ventricle."
+    },
+    "first right anterior branch of anterior interventricular branch of coronary artery": {
+      "region": "Heart",
+      "description": "A small branch of the LAD artery to the front wall of the right ventricle."
+    },
+    "first septal branch of posterior interventricular artery": {
+      "region": "Heart",
+      "description": "A branch of the posterior descending artery that enters the back of the septum between the ventricles."
+    },
+    "fourth common palmar digital artery": {
+      "region": "Upper limb",
+      "description": "Runs from the superficial palmar arch to the space between the ring and little fingers, then divides into the arteries along those fingers."
+    },
+    "genicular vein": {
+      "region": "Lower limb",
+      "description": "One of the veins around the knee joint that drain into the popliteal vein."
+    },
+    "great cardiac vein": {
+      "region": "Heart",
+      "description": "Runs up beside the LAD artery and around the left side of the heart to become the coronary sinus. It drains the front of both ventricles."
+    },
+    "great pancreatic artery": {
+      "region": "Abdomen",
+      "description": "The largest branch of the splenic artery to the body of the pancreas."
+    },
+    "great saphenous vein": {
+      "region": "Lower limb",
+      "description": "The body's longest vein, running just under the skin from the inner ankle up the inside of the leg to the groin. It is often harvested for heart bypass grafts."
+    },
+    "hemiazygos vein": {
+      "region": "Thorax",
+      "description": "A vein on the left side of the lower spine that drains the lower left intercostal spaces and crosses to the right to join the azygos vein."
+    },
+    "hepatic artery proper": {
+      "region": "Liver",
+      "description": "Carries oxygen-rich blood into the liver alongside the portal vein and bile duct, then splits into right and left hepatic arteries."
+    },
+    "hepatic portal vein": {
+      "region": "Liver",
+      "description": "Carries nutrient-rich blood from the stomach, intestines, pancreas and spleen into the liver, which processes it before it returns to the heart.",
+      "flow": "Toward the liver through the portal vein; the liver then returns it to the heart"
+    },
+    "hepatic vein": {
+      "region": "Liver",
+      "description": "One of the large veins that drain blood out of the liver directly into the inferior vena cava, just below the heart."
+    },
+    "hypothalamic branch of posterior communicating artery": {
+      "region": "Brain",
+      "description": "A small branch of the posterior communicating artery that supplies the hypothalamus."
+    },
+    "ileal artery": {
+      "region": "Abdomen",
+      "description": "One of the many branches of the superior mesenteric artery that form arcades in the mesentery to supply the ileum, the last part of the small intestine."
+    },
+    "ileal branch of inferior branch of ileocolic artery": {
+      "region": "Abdomen",
+      "description": "A branch of the ileocolic artery that runs back along the final part of the ileum."
+    },
+    "ileal vein": {
+      "region": "Abdomen",
+      "description": "Drains the ileum, the last part of the small intestine, into the superior mesenteric vein.",
+      "flow": "Toward the liver through the portal vein; the liver then returns it to the heart"
+    },
+    "ileocolic artery": {
+      "region": "Abdomen",
+      "description": "The last branch of the superior mesenteric artery. It supplies the end of the ileum, the cecum, the appendix and the start of the ascending colon."
+    },
+    "ileocolic vein": {
+      "region": "Abdomen",
+      "description": "Drains the end of the ileum, the cecum and appendix into the superior mesenteric vein.",
+      "flow": "Toward the liver through the portal vein; the liver then returns it to the heart"
+    },
+    "iliolumbar vein": {
+      "region": "Pelvis",
+      "description": "Drains the lower back muscles and the inside of the hip bone into the common iliac vein."
+    },
+    "inferior branch of medial segmental artery": {
+      "region": "Lungs",
+      "description": "A subdivision of the artery to the medial segment of the right middle lobe, supplying its lower part.",
+      "flow": "Away from the heart, carrying oxygen-poor blood to the lungs"
+    },
+    "inferior epigastric artery": {
+      "region": "Abdomen",
+      "description": "A branch of the external iliac artery that climbs inside the rectus abdominis muscle to meet the superior epigastric artery."
+    },
+    "inferior epigastric vein": {
+      "region": "Abdomen",
+      "description": "Drains the lower front abdominal wall into the external iliac vein."
+    },
+    "inferior gluteal vein": {
+      "region": "Pelvis",
+      "description": "Drains the lower buttock and back of the thigh into the internal iliac vein."
+    },
+    "inferior lateral genicular artery": {
+      "region": "Lower limb",
+      "description": "A branch of the popliteal artery around the outer side of the knee, below the joint."
+    },
+    "inferior lingular artery": {
+      "region": "Lungs",
+      "description": "A pulmonary artery branch to the lower part of the lingula of the left upper lobe.",
+      "flow": "Away from the heart, carrying oxygen-poor blood to the lungs"
+    },
+    "inferior lingular vein": {
+      "region": "Lungs",
+      "description": "Drains the lower part of the lingula of the left upper lobe into the left superior pulmonary vein.",
+      "flow": "Toward the heart, carrying oxygen-rich blood from the lungs"
+    },
+    "inferior medial genicular artery": {
+      "region": "Lower limb",
+      "description": "A branch of the popliteal artery around the inner side of the knee, below the joint."
+    },
+    "inferior mesenteric artery": {
+      "region": "Abdomen",
+      "description": "The lowest of the three gut arteries from the aorta. It supplies the left third of the transverse colon, the descending and sigmoid colon, and the upper rectum."
+    },
+    "inferior mesenteric vein": {
+      "region": "Abdomen",
+      "description": "Drains the descending and sigmoid colon and upper rectum. It usually ends in the splenic vein.",
+      "flow": "Toward the liver through the portal vein; the liver then returns it to the heart"
+    },
+    "inferior pancreatic artery": {
+      "region": "Abdomen",
+      "description": "Runs along the lower edge of the body and tail of the pancreas, supplying them."
+    },
+    "inferior pancreaticoduodenal artery": {
+      "region": "Abdomen",
+      "description": "A branch of the superior mesenteric artery that supplies the head of the pancreas and duodenum from below."
+    },
+    "inferior part of anterior segmental vein": {
+      "region": "Lungs",
+      "description": "A tributary draining the lower part of the anterior segment of the upper lobe.",
+      "flow": "Toward the heart, carrying oxygen-rich blood from the lungs"
+    },
+    "inferior part of medial segmental vein": {
+      "region": "Lungs",
+      "description": "Drains the lower part of the medial segment of the right middle lobe toward the right superior pulmonary vein.",
+      "flow": "Toward the heart, carrying oxygen-rich blood from the lungs"
+    },
+    "inferior phrenic artery": {
+      "region": "Abdomen",
+      "description": "Usually the first branch of the abdominal aorta. It supplies the underside of the diaphragm and gives small branches to the adrenal gland."
+    },
+    "inferior phrenic vein": {
+      "region": "Abdomen",
+      "description": "Drains the underside of the diaphragm into the inferior vena cava (or on the left, often into the suprarenal or renal vein)."
+    },
+    "inferior pulmonary vein": {
+      "region": "Lungs",
+      "description": "Carries oxygen-rich blood from the lower lobe of a lung into the left atrium.",
+      "flow": "Toward the heart, carrying oxygen-rich blood from the lungs"
+    },
+    "inferior segmental branch of renal artery": {
+      "region": "Kidney",
+      "description": "Supplies the lower pole (bottom) segment of the kidney."
+    },
+    "inferior suprarenal artery": {
+      "region": "Abdomen",
+      "description": "A branch of the renal artery to the lower part of the adrenal gland."
+    },
+    "inferior thyroid artery": {
+      "region": "Head and neck",
+      "description": "A branch of the thyrocervical trunk that loops up and inward behind the carotid to supply the thyroid and parathyroid glands."
+    },
+    "inferior ulnar collateral artery": {
+      "region": "Upper limb",
+      "description": "A branch of the brachial artery just above the elbow that joins the network of vessels around the elbow joint."
+    },
+    "inferior vena cava": {
+      "region": "Abdomen",
+      "description": "The body's largest vein. It runs up beside the aorta and carries blood from the legs, pelvis and abdomen into the right atrium."
+    },
+    "insular part of middle cerebral artery": {
+      "region": "Brain",
+      "description": "The part of the middle cerebral artery that runs over the insula, deep inside the lateral sulcus."
+    },
+    "intermediomedial branch of callosomarginal artery": {
+      "region": "Brain",
+      "description": "A branch of the callosomarginal artery to the middle part of the inner frontal lobe."
+    },
+    "internal carotid artery": {
+      "region": "Head and neck",
+      "description": "One of the two main arteries to the brain. It enters the skull and supplies most of the front of the brain and the eye."
+    },
+    "internal iliac artery": {
+      "region": "Pelvis",
+      "description": "Dives into the pelvis to supply the bladder, rectum, reproductive organs, buttock and inner thigh."
+    },
+    "internal iliac vein": {
+      "region": "Pelvis",
+      "description": "Drains the pelvic organs, buttock and pelvic wall into the common iliac vein."
+    },
+    "internal jugular vein": {
+      "region": "Head and neck",
+      "description": "The main vein draining the brain, face and neck. It runs down beside the carotid artery and joins the subclavian vein behind the collarbone."
+    },
+    "internal pudendal vein": {
+      "region": "Pelvis",
+      "description": "Drains the perineum and external genitals into the internal iliac vein."
+    },
+    "internal thoracic artery": {
+      "region": "Thorax",
+      "description": "Runs down inside the front of the chest wall beside the breastbone. Surgeons often use it as a bypass graft for blocked coronary arteries."
+    },
+    "internal thoracic vein": {
+      "region": "Thorax",
+      "description": "Accompanies the internal thoracic artery and drains the front chest wall into the brachiocephalic vein."
+    },
+    "lateral basal segmental artery": {
+      "region": "Lungs",
+      "description": "A pulmonary artery branch to the lateral basal segment at the outer side of the lung's base.",
+      "flow": "Away from the heart, carrying oxygen-poor blood to the lungs"
+    },
+    "lateral basal segmental vein": {
+      "region": "Lungs",
+      "description": "Drains the outer side of the lung's base toward the inferior pulmonary vein.",
+      "flow": "Toward the heart, carrying oxygen-rich blood from the lungs"
+    },
+    "lateral branch of anterior basal segmental artery": {
+      "region": "Lungs",
+      "description": "A subdivision of the anterior basal segmental artery to the outer part of the anterior basal segment.",
+      "flow": "Away from the heart, carrying oxygen-poor blood to the lungs"
+    },
+    "lateral branch of lateral basal segmental artery": {
+      "region": "Lungs",
+      "description": "A subdivision of the lateral basal segmental artery to the outer part of its segment.",
+      "flow": "Away from the heart, carrying oxygen-poor blood to the lungs"
+    },
+    "lateral branch of pontine artery": {
+      "region": "Brain",
+      "description": "One of the small branches from the basilar artery that wrap around the side of the pons."
+    },
+    "lateral branch of superior cerebellar artery": {
+      "region": "Brain",
+      "description": "A branch of the superior cerebellar artery to the outer upper surface of the cerebellum."
+    },
+    "lateral branch of superior segmental artery": {
+      "region": "Lungs",
+      "description": "A subdivision of the superior segmental artery to the outer part of the lower lobe's superior segment.",
+      "flow": "Away from the heart, carrying oxygen-poor blood to the lungs"
+    },
+    "lateral circumflex femoral artery": {
+      "region": "Lower limb",
+      "description": "Wraps around the outer side of the thigh bone to supply the hip and the front thigh muscles."
+    },
+    "lateral circumflex femoral vein": {
+      "region": "Lower limb",
+      "description": "Drains the outer thigh and hip into the femoral or deep femoral vein."
+    },
+    "lateral frontobasal artery": {
+      "region": "Brain",
+      "description": "A branch of the middle cerebral artery to the outer underside of the frontal lobe."
+    },
+    "lateral inferior segmental branch of portal vein": {
+      "region": "Liver",
+      "description": "Carries portal blood into the lower lateral segment of the left lobe (segment III).",
+      "flow": "Toward the liver through the portal vein; the liver then returns it to the heart"
+    },
+    "lateral inferior segmental hepatic artery": {
+      "region": "Liver",
+      "description": "Supplies the lower lateral segment of the left lobe of the liver (segment III)."
+    },
+    "lateral inferior segmental tributary of hepatic vein": {
+      "region": "Liver",
+      "description": "Drains the lower lateral segment of the left lobe (segment III) into the left hepatic vein."
+    },
+    "lateral occipital artery": {
+      "region": "Brain",
+      "description": "A branch of the posterior cerebral artery to the underside of the temporal lobe and the occipital lobe."
+    },
+    "lateral papillary muscle of left ventricle": {
+      "region": "Heart",
+      "description": "A large muscle column in the left ventricle whose tendon cords hold the mitral valve leaflets shut while the ventricle contracts.",
+      "flow": "Holds the mitral valve shut so blood cannot leak back into the left atrium"
+    },
+    "lateral plantar artery": {
+      "region": "Lower limb",
+      "description": "The larger end branch of the posterior tibial artery, crossing the sole to form the plantar arch."
+    },
+    "lateral proper palmar digital artery of little finger": {
+      "region": "Upper limb",
+      "description": "Runs along the side of the little finger nearer the ring finger, toward the fingertip."
+    },
+    "lateral proper palmar digital artery of middle finger": {
+      "region": "Upper limb",
+      "description": "Runs along one side of the middle finger toward the fingertip."
+    },
+    "lateral proper palmar digital artery of ring finger": {
+      "region": "Upper limb",
+      "description": "Runs along one side of the ring finger toward the fingertip."
+    },
+    "lateral sacral vein": {
+      "region": "Pelvis",
+      "description": "Runs on the front of the sacrum and drains into the internal iliac vein."
+    },
+    "lateral superior genicular artery": {
+      "region": "Lower limb",
+      "description": "A branch of the popliteal artery around the outer side of the knee, above the joint."
+    },
+    "lateral superior segmental branch of portal vein": {
+      "region": "Liver",
+      "description": "Carries portal blood into the upper lateral segment of the left lobe (segment II).",
+      "flow": "Toward the liver through the portal vein; the liver then returns it to the heart"
+    },
+    "lateral superior segmental hepatic artery": {
+      "region": "Liver",
+      "description": "Supplies the upper lateral segment of the left lobe of the liver (segment II)."
+    },
+    "lateral superior segmental tributary of hepatic vein": {
+      "region": "Liver",
+      "description": "Drains the upper lateral segment of the left lobe (segment II) into the left hepatic vein."
+    },
+    "lateral tarsal artery": {
+      "region": "Lower limb",
+      "description": "A branch of the dorsalis pedis artery to the outer top of the foot."
+    },
+    "lateral thoracic artery": {
+      "region": "Thorax",
+      "description": "A branch of the axillary artery that runs down the side of the chest, supplying serratus anterior and the side of the breast."
+    },
+    "lateral thoracic vein": {
+      "region": "Thorax",
+      "description": "Drains the side of the chest wall into the axillary vein."
+    },
+    "laterobasal branch of posterior basal segmental artery": {
+      "region": "Lungs",
+      "description": "A subdivision of the posterior basal segmental artery toward the outer side of the lung's base.",
+      "flow": "Away from the heart, carrying oxygen-poor blood to the lungs"
+    },
+    "left anterior cusp of pulmonary valve": {
+      "region": "Heart",
+      "description": "One of the three pocket-shaped cusps of the pulmonary valve at the exit of the right ventricle. When the ventricle relaxes the cusps fill and close, stopping backflow.",
+      "flow": "One way only, from right ventricle to pulmonary trunk"
+    },
+    "left colic artery": {
+      "region": "Abdomen",
+      "description": "A branch of the inferior mesenteric artery to the descending colon."
+    },
+    "left colic vein": {
+      "region": "Abdomen",
+      "description": "Drains the descending colon into the inferior mesenteric vein.",
+      "flow": "Toward the liver through the portal vein; the liver then returns it to the heart"
+    },
+    "left gastric artery": {
+      "region": "Abdomen",
+      "description": "The smallest branch of the celiac trunk. It runs along the upper (lesser) curve of the stomach and sends branches to the lower esophagus."
+    },
+    "left gastric vein": {
+      "region": "Abdomen",
+      "description": "Drains the lesser curve of the stomach and lower esophagus into the portal vein. It links with esophageal veins, which is why liver disease can cause esophageal varices.",
+      "flow": "Toward the liver through the portal vein; the liver then returns it to the heart"
+    },
+    "left gastro-epiploic artery": {
+      "region": "Abdomen",
+      "description": "A branch of the splenic artery that runs along the lower (greater) curve of the stomach from the left, supplying it and the greater omentum."
+    },
+    "left gastroepiploic vein": {
+      "region": "Abdomen",
+      "description": "Drains the greater curve of the stomach into the splenic vein.",
+      "flow": "Toward the liver through the portal vein; the liver then returns it to the heart"
+    },
+    "left portal vein": {
+      "region": "Liver",
+      "description": "The left branch of the portal vein, which carries gut blood into the left lobe and caudate lobe of the liver.",
+      "flow": "Toward the liver through the portal vein; the liver then returns it to the heart"
+    },
+    "left posterior cusp of aortic valve": {
+      "region": "Heart",
+      "description": "One of the three cusps of the aortic valve, also called the left coronary cusp because the left coronary artery opens just above it.",
+      "flow": "One way only, from left ventricle to aorta"
+    },
+    "left renal vein": {
+      "region": "Kidney",
+      "description": "Drains the left kidney into the inferior vena cava. It is long, crossing in front of the aorta, and also receives the left testicular and left suprarenal veins."
+    },
+    "left suprarenal vein": {
+      "region": "Abdomen",
+      "description": "Drains the left adrenal gland into the left renal vein."
+    },
+    "left testicular vein": {
+      "region": "Abdomen",
+      "description": "Drains the left testis up through the spermatic cord into the left renal vein. Its long course is one reason varicoceles are commoner on the left."
+    },
+    "lobe branch of hepatic artery": {
+      "region": "Liver",
+      "description": "A branch of a hepatic artery that supplies one lobe of the liver."
+    },
+    "lumbar artery": {
+      "region": "Abdomen",
+      "description": "One of the paired arteries from the back of the abdominal aorta that wrap around the lumbar vertebrae to supply the back muscles, spine and abdominal wall."
+    },
+    "lumbar vein": {
+      "region": "Abdomen",
+      "description": "One of the paired veins from the lower back and abdominal wall that drain into the inferior vena cava or ascending lumbar vein."
+    },
+    "marginal artery of colon": {
+      "region": "Abdomen",
+      "description": "A continuous chain of arteries along the inner edge of the colon, linking the branches of the superior and inferior mesenteric arteries."
+    },
+    "marginal branch of coronary artery": {
+      "region": "Heart",
+      "description": "The acute marginal artery, a branch of the right coronary artery that runs along the lower right edge of the heart."
+    },
+    "marginal colic artery": {
+      "region": "Abdomen",
+      "description": "A small branch of the ileocolic artery running along the edge of the colon near the cecum."
+    },
+    "marginal vein": {
+      "region": "Heart",
+      "description": "A cardiac vein running along the edge of a ventricle. The left marginal vein joins the great cardiac vein; the right one drains toward the small cardiac vein or right atrium."
+    },
+    "medial basal segmental artery": {
+      "region": "Lungs",
+      "description": "A pulmonary artery branch to the medial basal segment, the inner part of the lung's base beside the heart.",
+      "flow": "Away from the heart, carrying oxygen-poor blood to the lungs"
+    },
+    "medial basal segmental vein": {
+      "region": "Lungs",
+      "description": "Drains the inner part of the lung's base toward the inferior pulmonary vein.",
+      "flow": "Toward the heart, carrying oxygen-rich blood from the lungs"
+    },
+    "medial brachial vein": {
+      "region": "Upper limb",
+      "description": "One of the paired deep veins alongside the brachial artery in the upper arm."
+    },
+    "medial branch of pontine artery": {
+      "region": "Brain",
+      "description": "One of the small branches from the basilar artery that pierce straight into the middle of the pons."
+    },
+    "medial branch of superior cerebellar artery": {
+      "region": "Brain",
+      "description": "A branch of the superior cerebellar artery to the inner upper surface of the cerebellum and the vermis."
+    },
+    "medial branch of superior segmental artery": {
+      "region": "Lungs",
+      "description": "A subdivision of the superior segmental artery to the inner part of the lower lobe's superior segment.",
+      "flow": "Away from the heart, carrying oxygen-poor blood to the lungs"
+    },
+    "medial circumflex femoral vein": {
+      "region": "Lower limb",
+      "description": "Drains the inner thigh and hip joint into the femoral or deep femoral vein."
+    },
+    "medial frontobasal artery": {
+      "region": "Brain",
+      "description": "A branch of the anterior cerebral artery to the inner underside of the frontal lobe, above the eye sockets."
+    },
+    "medial inferior segmental branch of portal vein": {
+      "region": "Liver",
+      "description": "Carries portal blood into the lower medial segment of the left liver (segment IVb).",
+      "flow": "Toward the liver through the portal vein; the liver then returns it to the heart"
+    },
+    "medial inferior segmental hepatic artery": {
+      "region": "Liver",
+      "description": "Supplies the lower part of the medial segment of the left liver (segment IVb), near the gallbladder."
+    },
+    "medial inferior segmental tributary of middle hepatic vein": {
+      "region": "Liver",
+      "description": "Drains the lower medial segment of the left liver (segment IVb) into the middle hepatic vein."
+    },
+    "medial occipital artery": {
+      "region": "Brain",
+      "description": "A branch of the posterior cerebral artery to the inner surface of the occipital lobe, home of the visual cortex."
+    },
+    "medial plantar artery": {
+      "region": "Lower limb",
+      "description": "The smaller end branch of the posterior tibial artery, along the inner side of the sole."
+    },
+    "medial proper palmar digital artery of index finger": {
+      "region": "Upper limb",
+      "description": "Runs along the side of the index finger nearer the middle finger, toward the fingertip."
+    },
+    "medial proper palmar digital artery of middle finger": {
+      "region": "Upper limb",
+      "description": "Runs along one side of the middle finger toward the fingertip."
+    },
+    "medial proper palmar digital artery of ring finger": {
+      "region": "Upper limb",
+      "description": "Runs along one side of the ring finger toward the fingertip."
+    },
+    "medial superior genicular artery": {
+      "region": "Lower limb",
+      "description": "A branch of the popliteal artery around the inner side of the knee, above the joint."
+    },
+    "medial superior segmental branch of portal vein": {
+      "region": "Liver",
+      "description": "Carries portal blood into the upper medial segment of the left liver (segment IVa).",
+      "flow": "Toward the liver through the portal vein; the liver then returns it to the heart"
+    },
+    "medial superior segmental hepatic artery": {
+      "region": "Liver",
+      "description": "Supplies the upper part of the medial segment of the left liver (segment IVa)."
+    },
+    "medial superior segmental tributary of hepatic vein": {
+      "region": "Liver",
+      "description": "Drains the upper medial segment of the left liver (segment IVa) into the left hepatic vein."
+    },
+    "median antebrachial vein": {
+      "region": "Upper limb",
+      "description": "A surface vein running up the middle of the front of the forearm into the basilic or median cubital vein."
+    },
+    "median cubital vein": {
+      "region": "Upper limb",
+      "description": "Crosses the front of the elbow to link the cephalic and basilic veins. It is the most common site for taking blood."
+    },
+    "median sacral vein": {
+      "region": "Pelvis",
+      "description": "Runs down the middle of the sacrum and drains into the left common iliac vein."
+    },
+    "mediobasal branch of posterior basal segmental artery": {
+      "region": "Lungs",
+      "description": "A subdivision of the posterior basal segmental artery toward the inner side of the lung's base.",
+      "flow": "Away from the heart, carrying oxygen-poor blood to the lungs"
+    },
+    "middle cardiac vein": {
+      "region": "Heart",
+      "description": "Runs in the groove on the underside of the heart beside the posterior descending artery and drains into the coronary sinus."
+    },
+    "middle colic artery": {
+      "region": "Abdomen",
+      "description": "A branch of the superior mesenteric artery that supplies the transverse colon."
+    },
+    "middle colic vein": {
+      "region": "Abdomen",
+      "description": "Drains the transverse colon into the superior mesenteric vein.",
+      "flow": "Toward the liver through the portal vein; the liver then returns it to the heart"
+    },
+    "middle collateral branch of deep brachial artery": {
+      "region": "Upper limb",
+      "description": "A branch of the deep brachial artery that runs down the back of the arm to the elbow."
+    },
+    "middle genicular artery": {
+      "region": "Lower limb",
+      "description": "A branch of the popliteal artery that pierces the back of the knee capsule to supply the cruciate ligaments."
+    },
+    "middle hepatic vein": {
+      "region": "Liver",
+      "description": "Runs between the right and left halves of the liver and drains into the inferior vena cava, usually together with the left hepatic vein."
+    },
+    "middle suprarenal artery": {
+      "region": "Abdomen",
+      "description": "A small branch straight from the aorta to the adrenal (suprarenal) gland on top of the kidney."
+    },
+    "middle temporal branch of lateral occipital artery": {
+      "region": "Brain",
+      "description": "A branch of the lateral occipital artery to the middle underside of the temporal lobe."
+    },
+    "middle temporal branch of middle cerebral artery": {
+      "region": "Brain",
+      "description": "A branch of the middle cerebral artery to the middle of the temporal lobe."
+    },
+    "musculophrenic artery": {
+      "region": "Thorax",
+      "description": "An end branch of the internal thoracic artery that runs along the rib margin to the diaphragm and lower intercostal spaces."
+    },
+    "musculophrenic vein": {
+      "region": "Thorax",
+      "description": "Drains the diaphragm and lower front chest wall into the internal thoracic vein."
+    },
+    "obturator vein": {
+      "region": "Pelvis",
+      "description": "Drains the inner thigh muscles through the obturator canal of the hip bone into the internal iliac vein."
+    },
+    "ophthalmic artery": {
+      "region": "Head and neck",
+      "description": "The first branch of the internal carotid artery inside the skull. It enters the eye socket to supply the eye, including the retina, and nearby structures."
+    },
+    "palmar metacarpal artery": {
+      "region": "Upper limb",
+      "description": "One of the small arteries from the deep palmar arch running along the metacarpal bones."
+    },
+    "palmar metacarpal vein": {
+      "region": "Upper limb",
+      "description": "One of the small veins running along the metacarpal bones into the deep palmar venous arch."
+    },
+    "pancreaticoduodenal vein": {
+      "region": "Abdomen",
+      "description": "Drains the head of the pancreas and the duodenum into the superior mesenteric or portal vein.",
+      "flow": "Toward the liver through the portal vein; the liver then returns it to the heart"
+    },
+    "paracentral branch of callosomarginal artery": {
+      "region": "Brain",
+      "description": "A branch of the callosomarginal artery to the paracentral lobule, which controls movement and sensation of the leg."
+    },
+    "pectoral branch of thoraco-acromial artery": {
+      "region": "Upper limb",
+      "description": "A branch of the thoraco-acromial artery to the chest muscles."
+    },
+    "pericallosal artery": {
+      "region": "Brain",
+      "description": "The continuation of the anterior cerebral artery, running along the top of the corpus callosum."
+    },
+    "plantar arch": {
+      "region": "Lower limb",
+      "description": "An arch of artery deep in the sole, formed by the lateral plantar artery and joined by the deep plantar artery."
+    },
+    "plantar metatarsal artery": {
+      "region": "Lower limb",
+      "description": "One of the arteries from the plantar arch running between the metatarsal bones toward the toes."
+    },
+    "plantar metatarsal vein": {
+      "region": "Lower limb",
+      "description": "One of the veins running between the metatarsal bones in the sole into the plantar venous arch."
+    },
+    "plantar venous arch of foot": {
+      "region": "Lower limb",
+      "description": "A deep arch of veins in the sole alongside the plantar arterial arch."
+    },
+    "polar temporal artery": {
+      "region": "Brain",
+      "description": "A branch of the middle cerebral artery to the tip (pole) of the temporal lobe."
+    },
+    "popliteal artery": {
+      "region": "Lower limb",
+      "description": "Continues the femoral artery behind the knee. It supplies the knee and splits into the anterior and posterior tibial arteries."
+    },
+    "popliteal vein": {
+      "region": "Lower limb",
+      "description": "The deep vein behind the knee, formed by the tibial veins; it becomes the femoral vein."
+    },
+    "postcommunicating part of posterior cerebral artery": {
+      "region": "Brain",
+      "description": "The part of the posterior cerebral artery beyond the circle of Willis, curving around the midbrain toward the occipital lobe."
+    },
+    "posterior basal segmental artery": {
+      "region": "Lungs",
+      "description": "A pulmonary artery branch to the posterior basal segment, the lowest back part of the lung.",
+      "flow": "Away from the heart, carrying oxygen-poor blood to the lungs"
+    },
+    "posterior basal segmental vein": {
+      "region": "Lungs",
+      "description": "Drains the lowest back part of the lung toward the inferior pulmonary vein.",
+      "flow": "Toward the heart, carrying oxygen-rich blood from the lungs"
+    },
+    "posterior branch of anterior segmental artery": {
+      "region": "Lungs",
+      "description": "A subdivision of the anterior segmental artery to the back part of the anterior segment of the upper lobe.",
+      "flow": "Away from the heart, carrying oxygen-poor blood to the lungs"
+    },
+    "posterior branch of lateral segmental artery": {
+      "region": "Lungs",
+      "description": "A subdivision of the artery to the lateral segment of the right middle lobe, supplying its back part.",
+      "flow": "Away from the heart, carrying oxygen-poor blood to the lungs"
+    },
+    "posterior cecal artery": {
+      "region": "Abdomen",
+      "description": "A branch of the ileocolic artery to the back of the cecum."
+    },
+    "posterior circumflex humeral artery": {
+      "region": "Upper limb",
+      "description": "Wraps around the back of the neck of the humerus with the axillary nerve to supply the deltoid and shoulder joint."
+    },
+    "posterior communicating artery": {
+      "region": "Brain",
+      "description": "Links the internal carotid artery to the posterior cerebral artery, forming the sides of the arterial circle at the base of the brain (circle of Willis)."
+    },
+    "posterior cusp of pulmonary valve": {
+      "region": "Heart",
+      "description": "One of the three cusps of the pulmonary valve. The cusps meet in the middle to seal the valve between heartbeats.",
+      "flow": "One way only, from right ventricle to pulmonary trunk"
+    },
+    "posterior division of renal artery": {
+      "region": "Kidney",
+      "description": "The back division of the renal artery, which supplies the posterior segment of the kidney."
+    },
+    "posterior inferior cerebellar artery": {
+      "region": "Brain",
+      "description": "The largest branch of the vertebral artery. It supplies the underside of the cerebellum and the side of the medulla."
+    },
+    "posterior inferior pancreaticoduodenal artery": {
+      "region": "Abdomen",
+      "description": "A branch of the inferior pancreaticoduodenal artery that joins the posterior superior one in a loop behind the pancreatic head."
+    },
+    "posterior inferior segmental branch of portal vein": {
+      "region": "Liver",
+      "description": "Carries portal blood into the lower back segment of the right liver (segment VI).",
+      "flow": "Toward the liver through the portal vein; the liver then returns it to the heart"
+    },
+    "posterior inferior segmental hepatic artery": {
+      "region": "Liver",
+      "description": "Supplies the lower back segment of the right lobe of the liver (segment VI)."
+    },
+    "posterior inferior segmental tributary of hepatic vein": {
+      "region": "Liver",
+      "description": "Drains the lower back segment of the right liver (segment VI) into the right hepatic vein."
+    },
+    "posterior intercostal arteries": {
+      "region": "Thorax",
+      "description": "The arteries that run from the thoracic aorta along the lower edge of each rib, supplying the muscles and skin of the chest wall."
+    },
+    "posterior interventricular branch of coronary artery": {
+      "region": "Heart",
+      "description": "The posterior descending artery, which runs in the groove between the ventricles on the underside of the heart. It usually arises from the right coronary artery."
+    },
+    "posterior leaflet of mitral valve": {
+      "region": "Heart",
+      "description": "The smaller, crescent-shaped flap of the mitral valve. Together with the anterior leaflet it stops blood leaking back into the left atrium.",
+      "flow": "One way only, from left atrium to left ventricle"
+    },
+    "posterior leaflet of tricuspid valve": {
+      "region": "Heart",
+      "description": "One of the three flaps of the tricuspid valve, on the back and lower side of the right atrioventricular opening.",
+      "flow": "One way only, from right atrium to right ventricle"
+    },
+    "posterior medial choroidal artery": {
+      "region": "Brain",
+      "description": "A branch of the posterior cerebral artery to the choroid plexus of the third ventricle and the upper thalamus."
+    },
+    "posterior papillary muscle of right ventricle": {
+      "region": "Heart",
+      "description": "A muscle column on the lower wall of the right ventricle whose tendon cords anchor the posterior and septal leaflets of the tricuspid valve.",
+      "flow": "Holds the tricuspid valve shut so blood cannot leak back into the right atrium"
+    },
+    "posterior parietal artery": {
+      "region": "Brain",
+      "description": "A branch of the middle cerebral artery to the back of the parietal lobe."
+    },
+    "posterior part of lateral segmental vein": {
+      "region": "Lungs",
+      "description": "Drains the back of the lateral segment of the right middle lobe toward the right superior pulmonary vein.",
+      "flow": "Toward the heart, carrying oxygen-rich blood from the lungs"
+    },
+    "posterior part of posterior segmental artery": {
+      "region": "Lungs",
+      "description": "A subdivision of the posterior segmental artery that supplies the back of the posterior segment.",
+      "flow": "Away from the heart, carrying oxygen-poor blood to the lungs"
+    },
+    "posterior segmental artery": {
+      "region": "Lungs",
+      "description": "A pulmonary artery branch to the posterior segment of the upper lobe, at the back of the upper lung.",
+      "flow": "Away from the heart, carrying oxygen-poor blood to the lungs"
+    },
+    "posterior segmental branch of renal artery": {
+      "region": "Kidney",
+      "description": "Supplies the posterior segment at the back of the kidney."
+    },
+    "posterior segmental vein": {
+      "region": "Lungs",
+      "description": "Drains the posterior segment of the upper lobe toward the superior pulmonary vein.",
+      "flow": "Toward the heart, carrying oxygen-rich blood from the lungs"
+    },
+    "posterior superior pancreaticoduodenal artery": {
+      "region": "Abdomen",
+      "description": "A branch of the gastroduodenal artery that supplies the back of the head of the pancreas and the duodenum."
+    },
+    "posterior superior segmental branch of portal vein": {
+      "region": "Liver",
+      "description": "Carries portal blood into the upper back segment of the right liver (segment VII).",
+      "flow": "Toward the liver through the portal vein; the liver then returns it to the heart"
+    },
+    "posterior superior segmental hepatic artery": {
+      "region": "Liver",
+      "description": "Supplies the upper back segment of the right lobe of the liver (segment VII)."
+    },
+    "posterior superior segmental tributary of hepatic vein": {
+      "region": "Liver",
+      "description": "Drains the upper back segment of the right liver (segment VII) into the right hepatic vein."
+    },
+    "posterior temporal branch of middle cerebral artery": {
+      "region": "Brain",
+      "description": "A branch of the middle cerebral artery to the back of the temporal lobe."
+    },
+    "posterior tibial artery": {
+      "region": "Lower limb",
+      "description": "Runs down the back of the leg deep in the calf and behind the inner ankle bone, where its pulse can be felt, into the sole."
+    },
+    "posterior tibial vein": {
+      "region": "Lower limb",
+      "description": "One of the paired deep veins alongside the posterior tibial artery in the calf."
+    },
+    "posterior ulnar recurrent artery": {
+      "region": "Upper limb",
+      "description": "Runs back up from the ulnar artery behind the inner elbow, beside the ulnar nerve."
+    },
+    "posterior vein of ventricle": {
+      "region": "Heart",
+      "description": "Drains the back wall of the left ventricle into the coronary sinus."
+    },
+    "posteromedial branch of callosomarginal artery": {
+      "region": "Brain",
+      "description": "A branch of the callosomarginal artery to the back part of the inner frontal lobe."
+    },
+    "posteromedial central branch of posterior cerebral artery": {
+      "region": "Brain",
+      "description": "One of the small arteries from the posterior cerebral artery that pierce the base of the brain to supply the thalamus and midbrain."
+    },
+    "pre-hepatic portal vein": {
+      "region": "Liver",
+      "description": "The portal vein before it enters the liver, formed behind the pancreas by the splenic and superior mesenteric veins.",
+      "flow": "Toward the liver through the portal vein; the liver then returns it to the heart"
+    },
+    "precommunicating part of posterior cerebral artery": {
+      "region": "Brain",
+      "description": "The first part of the posterior cerebral artery, from the top of the basilar artery to where the posterior communicating artery joins."
+    },
+    "precuneal branch of pericallosal artery": {
+      "region": "Brain",
+      "description": "A branch of the pericallosal artery to the precuneus on the inner surface of the parietal lobe."
+    },
+    "prefrontal artery": {
+      "region": "Brain",
+      "description": "A branch of the middle cerebral artery to the front of the frontal lobe."
+    },
+    "proper palmar digital vein of index finger": {
+      "region": "Upper limb",
+      "description": "A small vein along the palm side of the index finger."
+    },
+    "proper palmar digital vein of little finger": {
+      "region": "Upper limb",
+      "description": "A small vein along the palm side of the little finger."
+    },
+    "proper palmar digital vein of middle finger": {
+      "region": "Upper limb",
+      "description": "A small vein along the palm side of the middle finger."
+    },
+    "proper palmar digital vein of ring finger": {
+      "region": "Upper limb",
+      "description": "A small vein along the palm side of the ring finger."
+    },
+    "pulmonary artery": {
+      "region": "Lungs",
+      "description": "Carries blood from the pulmonary trunk into one lung, where it branches alongside the airways. Unlike other arteries, it carries oxygen-poor blood.",
+      "flow": "Away from the heart, carrying oxygen-poor blood to the lungs"
+    },
+    "pulmonary trunk": {
+      "region": "Thorax",
+      "description": "The short, wide vessel leaving the right ventricle. It divides into the left and right pulmonary arteries.",
+      "flow": "Away from the heart, carrying oxygen-poor blood to the lungs"
+    },
+    "radial artery": {
+      "region": "Upper limb",
+      "description": "Runs down the thumb side of the forearm. Its pulse is the one usually felt at the wrist."
+    },
+    "radial collateral branch of deep brachial artery": {
+      "region": "Upper limb",
+      "description": "A branch of the deep brachial artery that runs to the outer side of the elbow."
+    },
+    "radial recurrent artery": {
+      "region": "Upper limb",
+      "description": "Runs back up from the radial artery to the outer side of the elbow."
+    },
+    "radial vein": {
+      "region": "Upper limb",
+      "description": "One of the paired deep veins alongside the radial artery in the forearm."
+    },
+    "recurrent interosseous artery": {
+      "region": "Upper limb",
+      "description": "Runs back up from the posterior interosseous artery to the back of the elbow."
+    },
+    "renal artery": {
+      "region": "Kidney",
+      "description": "Carries about a fifth of the heart's output from the aorta to a kidney for filtering. The right one is longer and passes behind the inferior vena cava."
+    },
+    "right anterior cusp of pulmonary valve": {
+      "region": "Heart",
+      "description": "One of the three cusps of the pulmonary valve, which guards the opening from the right ventricle into the pulmonary trunk.",
+      "flow": "One way only, from right ventricle to pulmonary trunk"
+    },
+    "right colic artery": {
+      "region": "Abdomen",
+      "description": "A branch of the superior mesenteric artery to the ascending colon."
+    },
+    "right colic vein": {
+      "region": "Abdomen",
+      "description": "Drains the ascending colon into the superior mesenteric vein.",
+      "flow": "Toward the liver through the portal vein; the liver then returns it to the heart"
+    },
+    "right gastric artery": {
+      "region": "Abdomen",
+      "description": "A branch of the hepatic artery that runs along the lesser curve of the stomach from the right, joining the left gastric artery."
+    },
+    "right gastric vein": {
+      "region": "Abdomen",
+      "description": "Drains the lesser curve of the stomach near the pylorus into the portal vein.",
+      "flow": "Toward the liver through the portal vein; the liver then returns it to the heart"
+    },
+    "right gastro-epiploic artery": {
+      "region": "Abdomen",
+      "description": "A branch of the gastroduodenal artery that runs along the greater curve of the stomach from the right, supplying it and the greater omentum."
+    },
+    "right gastroepiploic vein": {
+      "region": "Abdomen",
+      "description": "Drains the greater curve of the stomach into the superior mesenteric vein.",
+      "flow": "Toward the liver through the portal vein; the liver then returns it to the heart"
+    },
+    "right portal vein": {
+      "region": "Liver",
+      "description": "The right branch of the portal vein, which carries gut blood into the right lobe of the liver.",
+      "flow": "Toward the liver through the portal vein; the liver then returns it to the heart"
+    },
+    "right posterior cusp of aortic valve": {
+      "region": "Heart",
+      "description": "One of the three cusps of the aortic valve, also called the non-coronary cusp because no coronary artery arises above it.",
+      "flow": "One way only, from left ventricle to aorta"
+    },
+    "right renal vein": {
+      "region": "Kidney",
+      "description": "A short vein draining the right kidney directly into the inferior vena cava."
+    },
+    "right suprarenal vein": {
+      "region": "Abdomen",
+      "description": "A very short vein draining the right adrenal gland directly into the inferior vena cava."
+    },
+    "right testicular vein": {
+      "region": "Abdomen",
+      "description": "Drains the right testis up through the spermatic cord directly into the inferior vena cava."
+    },
+    "second common palmar digital artery": {
+      "region": "Upper limb",
+      "description": "Runs from the superficial palmar arch to the space between the index and middle fingers, then divides into the arteries along those fingers."
+    },
+    "second posterior intercostal artery": {
+      "region": "Thorax",
+      "description": "Runs below the second rib and supplies the second intercostal space."
+    },
+    "second right anterior branch of anterior interventricular branch of coronary artery": {
+      "region": "Heart",
+      "description": "A small branch of the LAD artery to the front wall of the right ventricle."
+    },
+    "second septal branch of posterior interventricular artery": {
+      "region": "Heart",
+      "description": "A branch of the posterior descending artery that enters the back of the septum between the ventricles."
+    },
+    "septal branch of anterior interventricular artery": {
+      "region": "Heart",
+      "description": "One of the branches that dive from the LAD artery into the septum between the ventricles, supplying the heart's conduction pathways."
+    },
+    "septal leaflet of tricuspid valve": {
+      "region": "Heart",
+      "description": "The flap of the tricuspid valve attached along the wall (septum) between the two ventricles.",
+      "flow": "One way only, from right atrium to right ventricle"
+    },
+    "septal papillary muscle of right ventricle": {
+      "region": "Heart",
+      "description": "Small muscle bundles on the septum of the right ventricle that anchor the septal leaflet of the tricuspid valve.",
+      "flow": "Holds the tricuspid valve shut so blood cannot leak back into the right atrium"
+    },
+    "set of anterior intercostal veins": {
+      "region": "Thorax",
+      "description": "Small veins along the front of the intercostal spaces that drain into the internal thoracic and musculophrenic veins."
+    },
+    "set of calcaneal branches of posterior tibial artery": {
+      "region": "Lower limb",
+      "description": "Small branches of the posterior tibial artery to the heel."
+    },
+    "set of common plantar digital arteries": {
+      "region": "Lower limb",
+      "description": "Arteries running toward the toes from the plantar metatarsal arteries in the sole."
+    },
+    "set of dorsal digital arteries of foot": {
+      "region": "Lower limb",
+      "description": "Small arteries along the tops of the toes."
+    },
+    "set of dorsal digital arteries of hand": {
+      "region": "Upper limb",
+      "description": "Small arteries along the backs of the fingers."
+    },
+    "set of dorsal digital veins of foot": {
+      "region": "Lower limb",
+      "description": "Small veins along the tops of the toes that drain into the dorsal venous arch."
+    },
+    "set of dorsal metacarpal arteries": {
+      "region": "Upper limb",
+      "description": "Small arteries on the back of the hand, running between the metacarpal bones toward the fingers."
+    },
+    "set of oesophageal branches of thoracic aorta": {
+      "region": "Thorax",
+      "description": "Small branches of the thoracic aorta that supply the middle part of the esophagus."
+    },
+    "set of perforating arteries": {
+      "region": "Lower limb",
+      "description": "Branches of the deep femoral artery that pierce the thigh's adductor muscles to reach the hamstrings at the back."
+    },
+    "set of perforating veins": {
+      "region": "Lower limb",
+      "description": "Veins accompanying the perforating arteries through the back of the thigh into the deep femoral vein."
+    },
+    "set of perforating veins of foot": {
+      "region": "Lower limb",
+      "description": "Veins that link the surface and deep veins of the foot. Their valves direct blood inward to the deep veins."
+    },
+    "set of plantar digital arteries proper": {
+      "region": "Lower limb",
+      "description": "The small arteries along the undersides of the toes."
+    },
+    "set of plantar digital veins": {
+      "region": "Lower limb",
+      "description": "Small veins along the undersides of the toes."
+    },
+    "set of posterior temporal branches of lateral occipital artery": {
+      "region": "Brain",
+      "description": "Branches of the lateral occipital artery to the back underside of the temporal lobe."
+    },
+    "sigmoid artery": {
+      "region": "Abdomen",
+      "description": "One of the branches of the inferior mesenteric artery to the S-shaped sigmoid colon."
+    },
+    "sigmoid vein": {
+      "region": "Abdomen",
+      "description": "Drains the sigmoid colon into the inferior mesenteric vein.",
+      "flow": "Toward the liver through the portal vein; the liver then returns it to the heart"
+    },
+    "small cardiac vein": {
+      "region": "Heart",
+      "description": "Runs along the right side of the heart, near the right coronary artery, and drains into the coronary sinus."
+    },
+    "small saphenous vein": {
+      "region": "Lower limb",
+      "description": "A surface vein running up the back of the calf from the outer ankle to join the popliteal vein behind the knee."
+    },
+    "sphenoid part of middle cerebral artery": {
+      "region": "Brain",
+      "description": "The first, horizontal part of the middle cerebral artery, from which many tiny arteries dive into the deep brain."
+    },
+    "splenial artery": {
+      "region": "Brain",
+      "description": "A branch of the posterior cerebral artery to the splenium, the thick back end of the corpus callosum. (Not to be confused with the splenic artery to the spleen.)"
+    },
+    "splenic artery": {
+      "region": "Abdomen",
+      "description": "The largest branch of the celiac trunk. It winds along the top of the pancreas to the spleen, feeding both and part of the stomach."
+    },
+    "splenic vein": {
+      "region": "Abdomen",
+      "description": "Drains the spleen, pancreas and part of the stomach. It runs behind the pancreas and joins the superior mesenteric vein to form the portal vein.",
+      "flow": "Toward the liver through the portal vein; the liver then returns it to the heart"
+    },
+    "subclavian artery": {
+      "region": "Thorax",
+      "description": "The main artery to the arm, arching over the first rib under the collarbone. It also feeds the neck, brain (via the vertebral artery) and chest wall; the left one rises from the aortic arch, the right from the brachiocephalic artery."
+    },
+    "subclavian vein": {
+      "region": "Thorax",
+      "description": "Continues the axillary vein from the arm under the collarbone, then joins the internal jugular vein to form the brachiocephalic vein."
+    },
+    "subcostal artery": {
+      "region": "Thorax",
+      "description": "The last of the posterior intercostal series, running below the twelfth rib to supply the abdominal wall."
+    },
+    "subcostal vein": {
+      "region": "Thorax",
+      "description": "Drains the area below the twelfth rib into the azygos or hemiazygos vein."
+    },
+    "subscapular artery": {
+      "region": "Upper limb",
+      "description": "The largest branch of the axillary artery. It supplies the muscles on the front of the shoulder blade and splits into the circumflex scapular and thoracodorsal arteries."
+    },
+    "subscapular vein": {
+      "region": "Upper limb",
+      "description": "Drains the muscles around the shoulder blade into the axillary vein."
+    },
+    "superficial cervical artery": {
+      "region": "Head and neck",
+      "description": "A branch to the trapezius muscle across the side of the neck, often counted as part of the transverse cervical artery."
+    },
+    "superficial dorsal vein of penis": {
+      "region": "Pelvis",
+      "description": "Drains the skin of the penis into the external pudendal veins."
+    },
+    "superficial epigastric artery": {
+      "region": "Abdomen",
+      "description": "A small branch of the femoral artery that runs up in the fat of the lower abdominal wall."
+    },
+    "superficial epigastric vein": {
+      "region": "Abdomen",
+      "description": "Drains the skin and fat of the lower abdomen into the great saphenous vein."
+    },
+    "superficial medial plantar artery": {
+      "region": "Lower limb",
+      "description": "A surface branch of the medial plantar artery toward the big toe."
+    },
+    "superficial palmar arterial arch": {
+      "region": "Upper limb",
+      "description": "An arch of artery just under the skin of the palm, formed mainly by the ulnar artery. It gives the common arteries to the fingers."
+    },
+    "superficial palmar venous arch": {
+      "region": "Upper limb",
+      "description": "A venous arch alongside the superficial palmar arterial arch in the palm."
+    },
+    "superior branch of medial segmental artery": {
+      "region": "Lungs",
+      "description": "A subdivision of the artery to the medial segment of the right middle lobe, supplying its upper part.",
+      "flow": "Away from the heart, carrying oxygen-poor blood to the lungs"
+    },
+    "superior branch of superior segmental artery": {
+      "region": "Lungs",
+      "description": "A subdivision of the superior segmental artery to the upper part of the lower lobe's superior segment.",
+      "flow": "Away from the heart, carrying oxygen-poor blood to the lungs"
+    },
+    "superior cerebellar artery": {
+      "region": "Brain",
+      "description": "A branch near the top of the basilar artery that supplies the upper surface of the cerebellum and parts of the midbrain."
+    },
+    "superior epigastric artery": {
+      "region": "Abdomen",
+      "description": "A continuation of the internal thoracic artery that runs down inside the rectus abdominis (\"six-pack\") muscle."
+    },
+    "superior epigastric vein": {
+      "region": "Abdomen",
+      "description": "Drains the upper rectus abdominis muscle into the internal thoracic vein."
+    },
+    "superior gluteal vein": {
+      "region": "Pelvis",
+      "description": "Drains the upper buttock muscles into the internal iliac vein."
+    },
+    "superior intercostal artery": {
+      "region": "Thorax",
+      "description": "A branch of the costocervical trunk that supplies the first two intercostal spaces."
+    },
+    "superior intercostal vein": {
+      "region": "Thorax",
+      "description": "Drains the upper intercostal spaces into the brachiocephalic vein (left) or azygos vein (right)."
+    },
+    "superior lingular artery": {
+      "region": "Lungs",
+      "description": "A pulmonary artery branch to the upper part of the lingula, the tongue-shaped lower part of the left upper lobe.",
+      "flow": "Away from the heart, carrying oxygen-poor blood to the lungs"
+    },
+    "superior lingular vein": {
+      "region": "Lungs",
+      "description": "Drains the upper part of the lingula of the left upper lobe into the left superior pulmonary vein.",
+      "flow": "Toward the heart, carrying oxygen-rich blood from the lungs"
+    },
+    "superior mesenteric artery": {
+      "region": "Abdomen",
+      "description": "Arises from the aorta just below the celiac trunk and fans out through the mesentery to supply the small intestine and the right half of the colon."
+    },
+    "superior mesenteric vein": {
+      "region": "Abdomen",
+      "description": "Drains the small intestine and right colon. Behind the pancreas it joins the splenic vein to form the portal vein.",
+      "flow": "Toward the liver through the portal vein; the liver then returns it to the heart"
+    },
+    "superior part of anterior segmental vein": {
+      "region": "Lungs",
+      "description": "A tributary draining the upper part of the anterior segment of the upper lobe.",
+      "flow": "Toward the heart, carrying oxygen-rich blood from the lungs"
+    },
+    "superior part of medial segmental vein": {
+      "region": "Lungs",
+      "description": "Drains the upper part of the medial segment of the right middle lobe toward the right superior pulmonary vein.",
+      "flow": "Toward the heart, carrying oxygen-rich blood from the lungs"
+    },
+    "superior phrenic vein": {
+      "region": "Thorax",
+      "description": "A small vein from the upper surface of the diaphragm."
+    },
+    "superior pulmonary vein": {
+      "region": "Lungs",
+      "description": "Carries oxygen-rich blood from the upper part of a lung (the upper and, on the right, middle lobes) into the left atrium. Unlike other veins, it carries oxygen-rich blood.",
+      "flow": "Toward the heart, carrying oxygen-rich blood from the lungs"
+    },
+    "superior rectal artery": {
+      "region": "Pelvis",
+      "description": "The end branch of the inferior mesenteric artery. It descends into the pelvis to supply the upper rectum."
+    },
+    "superior rectal vein": {
+      "region": "Pelvis",
+      "description": "Drains the upper rectum into the inferior mesenteric vein, linking the gut's portal system with the veins of the pelvis.",
+      "flow": "Toward the liver through the portal vein; the liver then returns it to the heart"
+    },
+    "superior segmental artery": {
+      "region": "Lungs",
+      "description": "A pulmonary artery branch to the superior segment, the top part of the lower lobe of the lung.",
+      "flow": "Away from the heart, carrying oxygen-poor blood to the lungs"
+    },
+    "superior segmental branch of renal artery": {
+      "region": "Kidney",
+      "description": "Supplies the upper pole (top) segment of the kidney."
+    },
+    "superior segmental vein": {
+      "region": "Lungs",
+      "description": "Drains the superior segment of the lower lobe into the inferior pulmonary vein.",
+      "flow": "Toward the heart, carrying oxygen-rich blood from the lungs"
+    },
+    "superior ulnar collateral artery": {
+      "region": "Upper limb",
+      "description": "A branch of the brachial artery that follows the ulnar nerve to the back of the inner elbow."
+    },
+    "superior vena cava": {
+      "region": "Thorax",
+      "description": "The large vein that returns blood from the head, neck, arms and upper chest into the right atrium. It forms where the two brachiocephalic veins join."
+    },
+    "superior vermian branch of medial branch of superior cerebellar artery": {
+      "region": "Brain",
+      "description": "A small branch to the vermis, the narrow middle strip on top of the cerebellum."
+    },
+    "suprascapular artery": {
+      "region": "Upper limb",
+      "description": "Runs across the neck and over the top of the shoulder blade to the supraspinatus and infraspinatus muscles."
+    },
+    "suprascapular vein": {
+      "region": "Upper limb",
+      "description": "Drains the muscles on the back of the shoulder blade into the external jugular or subclavian vein."
+    },
+    "temporo-occipital branch of middle cerebral artery": {
+      "region": "Brain",
+      "description": "A branch of the middle cerebral artery to where the temporal and occipital lobes meet."
+    },
+    "testicular artery": {
+      "region": "Abdomen",
+      "description": "A long, thin artery from the aorta that runs down through the groin in the spermatic cord to the testis."
+    },
+    "thalamogeniculate artery": {
+      "region": "Brain",
+      "description": "A small branch of the posterior cerebral artery that supplies the back of the thalamus."
+    },
+    "thalamoperforating artery": {
+      "region": "Brain",
+      "description": "A small branch of the posterior cerebral artery that pierces the brain to supply the thalamus."
+    },
+    "third common palmar digital artery": {
+      "region": "Upper limb",
+      "description": "Runs from the superficial palmar arch to the space between the middle and ring fingers, then divides into the arteries along those fingers."
+    },
+    "third right anterior branch of anterior interventricular branch of coronary artery": {
+      "region": "Heart",
+      "description": "A small branch of the LAD artery to the front wall of the right ventricle, near the apex."
+    },
+    "thoracodorsal artery": {
+      "region": "Upper limb",
+      "description": "Continues the subscapular artery down to the latissimus dorsi muscle."
+    },
+    "thoracodorsal vein": {
+      "region": "Upper limb",
+      "description": "Drains the latissimus dorsi muscle into the subscapular vein."
+    },
+    "thyrocervical trunk": {
+      "region": "Head and neck",
+      "description": "A short branch of the subclavian artery that divides into arteries to the thyroid, neck and shoulder."
+    },
+    "transverse cervical artery": {
+      "region": "Head and neck",
+      "description": "Crosses the base of the neck to supply the trapezius and nearby shoulder muscles."
+    },
+    "tributary of middle hepatic vein": {
+      "region": "Liver",
+      "description": "A vein inside the liver that drains into the middle hepatic vein."
+    },
+    "tributary of plantar venous arch": {
+      "region": "Lower limb",
+      "description": "A vein draining into the deep plantar venous arch of the sole."
+    },
+    "trunk of anterior interventricular branch of coronary artery": {
+      "region": "Heart",
+      "description": "The left anterior descending (LAD) artery, running down the front groove between the ventricles. It feeds the front of both ventricles and most of the septum; its blockage causes major heart attacks."
+    },
+    "trunk of apical segmental vein": {
+      "region": "Lungs",
+      "description": "The main stem of the apical segmental vein before it joins the superior pulmonary vein.",
+      "flow": "Toward the heart, carrying oxygen-rich blood from the lungs"
+    },
+    "trunk of gastroduodenal artery": {
+      "region": "Abdomen",
+      "description": "A branch of the common hepatic artery that runs behind the first part of the duodenum. It feeds the pylorus, duodenum and head of the pancreas."
+    },
+    "trunk of hepatic artery": {
+      "region": "Liver",
+      "description": "The main stem of the right or left hepatic artery, which carries oxygen-rich blood to one side of the liver."
+    },
+    "trunk of inferior terminal branch of middle cerebral artery": {
+      "region": "Brain",
+      "description": "The lower of the main divisions of the middle cerebral artery, which feeds the temporal lobe."
+    },
+    "trunk of left coronary artery": {
+      "region": "Heart",
+      "description": "The short left main coronary artery, arising from the aorta just above the aortic valve. It splits into the anterior interventricular (LAD) and circumflex arteries, which feed most of the left ventricle."
+    },
+    "trunk of portal vein": {
+      "region": "Liver",
+      "description": "The main stem of the right or left branch of the portal vein inside the liver.",
+      "flow": "Toward the liver through the portal vein; the liver then returns it to the heart"
+    },
+    "trunk of renal artery": {
+      "region": "Kidney",
+      "description": "The main stem of the renal artery, from the aorta to where it divides near the kidney's hilum."
+    },
+    "trunk of right coronary artery": {
+      "region": "Heart",
+      "description": "Arises from the aorta just above the aortic valve and runs in the groove between the right atrium and ventricle. It supplies the right side of the heart and usually the heart's natural pacemaker."
+    },
+    "trunk of superior mesenteric artery": {
+      "region": "Abdomen",
+      "description": "The main stem of the superior mesenteric artery, which crosses in front of the duodenum before branching to the intestines."
+    },
+    "trunk of thoraco-acromial artery": {
+      "region": "Upper limb",
+      "description": "A short branch of the axillary artery that pierces the fascia below the collarbone and fans into four branches."
+    },
+    "ulnar artery": {
+      "region": "Upper limb",
+      "description": "The larger of the two forearm arteries, running down the little-finger side to form most of the superficial palmar arch."
+    },
+    "ulnar vein": {
+      "region": "Upper limb",
+      "description": "One of the paired deep veins alongside the ulnar artery in the forearm."
+    },
+    "upper lobar artery": {
+      "region": "Lungs",
+      "description": "The branch of the right pulmonary artery that supplies the upper lobe of the right lung.",
+      "flow": "Away from the heart, carrying oxygen-poor blood to the lungs"
+    },
+    "ureteric segment of renal artery": {
+      "region": "Kidney",
+      "description": "A small branch of the renal artery that supplies the upper ureter."
+    },
+    "vertebral artery": {
+      "region": "Head and neck",
+      "description": "A branch of the subclavian artery that climbs through holes in the neck vertebrae and enters the skull. The two vertebral arteries join to form the basilar artery."
+    },
+    "wall of left atrium": {
+      "region": "Heart",
+      "description": "The thin muscular wall of the left atrium. The four pulmonary veins open through it at the back of the heart.",
+      "flow": "Squeezes blood from the left atrium into the left ventricle"
+    },
+    "wall of right atrium": {
+      "region": "Heart",
+      "description": "The thin muscular wall of the right atrium. It contains the sinoatrial node, the natural pacemaker that starts each heartbeat.",
+      "flow": "Squeezes blood from the right atrium into the right ventricle"
+    },
+    "wall of ventricle": {
+      "region": "Heart",
+      "description": "The thick muscular wall (myocardium) of both ventricles, including the septum between them. Its contractions push blood out to the lungs and the body.",
+      "flow": "Squeezes blood out to the lungs (right) and the body (left)"
+    }
+  }
+}

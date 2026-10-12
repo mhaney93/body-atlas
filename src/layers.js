@@ -3,10 +3,11 @@
 // GLB, built by scripts/build-models.mjs) and listing it here.
 import skeletal from './data/skeletal.json';
 import nervous from './data/nervous.json';
+import circulatory from './data/circulatory.json';
 
 export const SHELL_ASSET = 'models/skin.glb';
 
-export const LAYERS = [skeletal, nervous];
+export const LAYERS = [skeletal, nervous, circulatory];
 
 /** Canonical form of a mesh name used to match part info, e.g. "Navicular bone of left foot" → "navicular bone of foot". */
 function canonical(meshName) {
@@ -16,8 +17,22 @@ function canonical(meshName) {
     .replace(/ of (left|right) /, ' of ');
 }
 
-/** Returns { name, region?, description?, color? } for a mesh in the given layer. */
-export function partInfo(layer, meshName) {
-  const part = layer.parts[canonical(meshName)];
-  return { name: meshName, region: part?.region, description: part?.description, color: part?.color };
+/**
+ * Returns { name, region?, description?, color?, group?, flow? } for a mesh in the
+ * given layer. Parts whose left and right sides differ (e.g. the heart's
+ * chambers) are keyed by their full lowercase name, which wins over the
+ * side-less one. `group` is the layer's sub-group (see `groups` in the layer
+ * data) that the model assigns the mesh to.
+ */
+export function partInfo(layer, meshName, groupId) {
+  const part = layer.parts[meshName.toLowerCase()] ?? layer.parts[canonical(meshName)];
+  const group = layer.groups?.[groupId];
+  return {
+    name: meshName,
+    region: part?.region,
+    description: part?.description,
+    color: part?.color,
+    group,
+    flow: part?.flow ?? group?.flow,
+  };
 }

@@ -4,7 +4,7 @@
 // BodyParts3D is in millimetres with +Z up, -Y anterior and +X patient-left.
 // Output is in metres, +Y up, +Z anterior (facing the default camera), with
 // the feet resting on y = 0 and the body centred on the vertical axis.
-import { mkdirSync, readFileSync, readdirSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { Document, NodeIO } from '@gltf-transform/core';
 import { EXTMeshoptCompression, KHRMeshQuantization } from '@gltf-transform/extensions';
@@ -35,6 +35,20 @@ const NAME_OVERRIDES = {
   FJ3266: 'Medial sesamoid bone of left big toe',
   FJ3270: 'Lateral sesamoid bone of left big toe',
   FJ3372: 'Medial sesamoid bone of right big toe',
+  // Vessel sets the dataset names without saying hand or foot; their bounds
+  // place them (two "Dorsal metacarpal vein" elements are in fact in the feet).
+  FJ2186: 'Dorsal metatarsal vein',
+  FJ2199: 'Dorsal metatarsal vein',
+  FJ2093: 'Set of dorsal digital arteries of foot',
+  FJ2197: 'Set of dorsal digital arteries of foot',
+  FJ2318: 'Set of dorsal digital arteries of hand',
+  FJ2346: 'Set of dorsal digital arteries of hand',
+  FJ2185: 'Set of dorsal digital veins of foot',
+  FJ2198: 'Set of dorsal digital veins of foot',
+  FJ2100: 'Set of perforating veins of foot',
+  FJ2119: 'Set of perforating veins of foot',
+  FJ2138: 'Set of perforating veins of foot',
+  FJ2174: 'Set of perforating veins of foot',
   FJ3376: 'Lateral sesamoid bone of right big toe',
 };
 
@@ -58,6 +72,46 @@ const INNER_EAR = /^(left |right )?(cochlear nerve|vestibular nerve|vestibulococ
 let nervousCache;
 const nervousParts = () => (nervousCache ??= loadNervous(join(Z_ANATOMY_DIR, 'nervous'), skeletalBones(), parseObj));
 
+const META_DIR = join(ROOT, '.cache', 'bodyparts3d');
+
+// Circulatory: every element the IS-A tree files under a segment of the
+// arterial or venous tree, the heart's own parts from the PART-OF tree (minus
+// its coronary vessels, which are arteries or veins), and the few vessels that
+// neither tree classifies, recognised by name (e.g. the pulmonary veins and
+// the "Set of perforating arteries"). Maps element id → group; the heart is
+// split into chamber cavities, walls, and the valve apparatus (cusps, leaflets
+// and papillary muscles) so each can be styled on its own.
+function heartGroup(name) {
+  if (/^wall /i.test(name)) return 'wall';
+  if (/cusp|leaflet|papillary/i.test(name)) return 'valve';
+  return 'chamber';
+}
+
+function circulatoryGroups() {
+  const elementsOf = (file, concept) =>
+    new Set(
+      readFileSync(join(META_DIR, file), 'utf8')
+        .split('\n')
+        .filter((line) => line.split('\t')[1] === concept)
+        .map((line) => line.split('\t')[2].trim()),
+    );
+  const arteries = elementsOf('isa_element_parts.txt', 'segment of arterial tree organ');
+  const veins = elementsOf('isa_element_parts.txt', 'segment of venous tree organ');
+  const heart = elementsOf('partof_element_parts.txt', 'heart');
+  heart.add('FJ2428'); // "Wall of ventricle" is filed under neither tree
+  const groups = new Map();
+  for (const file of readdirSync(OBJ_DIR)) {
+    const id = file.replace(/\.obj$/, '');
+    const name = englishName(id);
+    if (arteries.has(id)) groups.set(id, 'artery');
+    else if (veins.has(id)) groups.set(id, 'vein');
+    else if (heart.has(id)) groups.set(id, heartGroup(name));
+    else if (/\b(veins?|venous)\b/i.test(name)) groups.set(id, 'vein');
+    else if (/\b(arter|aort)|palmar arch/i.test(name)) groups.set(id, 'artery');
+  }
+  return groups;
+}
+
 const ASSETS = [
   { file: 'skin.glb', elements: [SKIN], ratio: 0.35 },
   { file: 'skeletal.glb', elements: range(3152, 3395), extras: ['coccyx.obj'], ratio: 0.5 },
@@ -66,6 +120,7 @@ const ASSETS = [
   // cortex, so the whole system comes from Z-Anatomy (see nervous-model.mjs).
   { file: 'nervous.glb', elements: [], load: () => nervousParts().filter((p) => !INNER_EAR.test(p.name)), ratio: 0.25 },
   { file: 'nervous-inner-ear.glb', elements: [], load: () => nervousParts().filter((p) => INNER_EAR.test(p.name)), ratio: 0.25 },
+  { file: 'circulatory.glb', groups: circulatoryGroups(), mergeByName: true, ratio: 0.2, error: 0.002 },
 ];
 
 /** BodyParts3D bone positions (mm) by English name, for nervous-model.mjs. */
@@ -78,10 +133,64 @@ function skeletalBones() {
   return bones;
 }
 
+const SIDE_SPLIT_MM = 20;
+
+/**
+ * Joins elements that share a name (e.g. the 14 segments of the middle
+ * cardiac vein) into one part. A name without "left"/"right" that occurs on
+ * both sides of the body (e.g. "Lumbar artery") is split by side instead,
+ * with "Left "/"Right " prepended (BodyParts3D's +X is the patient's left).
+ */
+function mergeByName(objs) {
+  const centreX = (o) => {
+    let sum = 0;
+    for (let i = 0; i < o.positions.length; i += 3) sum += o.positions[i];
+    return sum / (o.positions.length / 3) - center[0];
+  };
+  const xsByName = new Map();
+  for (const o of objs) xsByName.set(o.name, [...(xsByName.get(o.name) ?? []), centreX(o)]);
+  const merged = new Map();
+  for (const o of objs) {
+    const xs = xsByName.get(o.name);
+    const bilateral =
+      !/\b(left|right)\b/i.test(o.name) &&
+      Math.max(...xs) > SIDE_SPLIT_MM &&
+      Math.min(...xs) < -SIDE_SPLIT_MM;
+    const x = centreX(o);
+    const name =
+      bilateral && Math.abs(x) > SIDE_SPLIT_MM
+        ? `${x > 0 ? 'Left' : 'Right'} ${o.name[0].toLowerCase()}${o.name.slice(1)}`
+        : o.name;
+    const into = merged.get(name);
+    if (!into) {
+      merged.set(name, { ...o, name, ids: [o.id] });
+      continue;
+    }
+    const base = into.positions.length / 3;
+    into.positions = into.positions.concat(o.positions);
+    into.indices = into.indices.concat(o.indices.map((i) => i + base));
+    into.ids.push(o.id);
+  }
+  return [...merged.values()];
+}
+
+function nameIn(text) {
+  return /^# English name : (.*)$/m.exec(text)?.[1].trim() ?? '';
+}
+
+/**
+ * A few elements (e.g. FJ1656, the right anterior inferior cerebellar artery)
+ * have an empty name; their mirror-image twin "<id>M" carries it.
+ */
+function englishName(id, text = readFileSync(join(OBJ_DIR, `${id}.obj`), 'utf8')) {
+  const mirror = join(OBJ_DIR, `${id}M.obj`);
+  return nameIn(text) || (existsSync(mirror) ? nameIn(readFileSync(mirror, 'utf8')) : '');
+}
+
 function parseObj(path) {
   const text = readFileSync(path, 'utf8');
   const id = /^# File ID : (\S+)$/m.exec(text)?.[1];
-  const name = NAME_OVERRIDES[id] ?? /^# English name : (.+)$/m.exec(text)?.[1].trim();
+  const name = NAME_OVERRIDES[id] ?? englishName(id, text);
   const fma = /^# Concept ID : (\S+)$/m.exec(text)?.[1];
   const anchor = /^# Anchor : (.+) (\S+) (\S+) (\S+) (\S+)$/m.exec(text);
   const positions = [];
@@ -203,13 +312,15 @@ for (const asset of ASSETS) {
   const buffer = doc.createBuffer();
   const scene = doc.createScene(asset.file.replace(/\.glb$/, ''));
   const material = doc.createMaterial('default');
-  const elements = asset.elements.filter((id) => available.has(id));
+  const wanted = asset.elements ?? [...asset.groups.keys()].sort();
+  const elements = wanted.filter((id) => available.has(id));
 
-  const objs = [
-    ...elements.map((id) => parseObj(join(OBJ_DIR, `${id}.obj`))),
+  let objs = [
+    ...elements.map((id) => ({ ...parseObj(join(OBJ_DIR, `${id}.obj`)), group: asset.groups?.get(id) })),
     ...(asset.extras ?? []).map(parseZAnatomyObj),
     ...(asset.load?.() ?? []),
   ];
+  if (asset.mergeByName) objs = mergeByName(objs);
 
   const addNode = (obj) => {
     const pos = transform(obj.positions);
@@ -224,7 +335,7 @@ for (const asset of ASSETS) {
       doc.createNode(obj.name).setMesh(mesh).setExtras(
         obj.source === 'z-anatomy'
           ? { name: obj.name, source: 'Z-Anatomy' }
-          : { name: obj.name, fma: obj.fma, bp3d: obj.id },
+          : { name: obj.name, fma: obj.fma, bp3d: obj.ids?.join(' ') ?? obj.id, ...(obj.group && { group: obj.group }) },
       ),
     );
   };
@@ -233,7 +344,7 @@ for (const asset of ASSETS) {
   objs.filter((o) => o.simplify !== false).forEach(addNode);
   await doc.transform(
     weld(),
-    simplify({ simplifier: MeshoptSimplifier, ratio: asset.ratio, error: 0.0005 }),
+    simplify({ simplifier: MeshoptSimplifier, ratio: asset.ratio, error: asset.error ?? 0.0005 }),
   );
   objs.filter((o) => o.simplify === false).forEach(addNode);
 
@@ -258,7 +369,7 @@ for (const asset of ASSETS) {
     .listMeshes()
     .flatMap((m) => m.listPrimitives())
     .reduce((n, p) => n + p.getIndices().getCount() / 3, 0);
-  const missing = asset.elements.length - elements.length;
+  const missing = wanted.length - elements.length;
   console.log(
     `${asset.file}: ${objs.length} meshes${missing ? ` (${missing} ids absent from dataset)` : ''}, ` +
       `${Math.round(tris).toLocaleString()} triangles, ${(readFileSync(path).length / 1e6).toFixed(2)} MB`,
