@@ -42,11 +42,17 @@ const NAME_OVERRIDES = {
 // (e.g. the sacrum's apex in Z-Anatomy) lands on the same point of the named
 // BodyParts3D element; the two models share BodyParts3D's scale.
 const Z_ANATOMY_DIR = join(ROOT, 'data-sources', 'z-anatomy');
-const Z_ANATOMY_ANCHORS = { Sacrum: 'FJ3393' };
+const Z_ANATOMY_ANCHORS = { Sacrum: 'FJ3393', 'Temporal bone.l': 'FJ3281', 'Temporal bone.r': 'FJ3386' };
+
+// The auditory ossicles are CC BY-NC-SA 4.0 (Z-Anatomy adapted them from the
+// University of Dundee), so they ship as their own file rather than inside
+// skeletal.glb; the Skeletal layer lists it under `extraAssets`.
+const OSSICLES = ['malleus', 'incus', 'stapes'].flatMap((b) => [`ossicles/${b}-left.obj`, `ossicles/${b}-right.obj`]);
 
 const ASSETS = [
   { file: 'skin.glb', elements: [SKIN], ratio: 0.35 },
   { file: 'skeletal.glb', elements: range(3152, 3395), extras: ['coccyx.obj'], ratio: 0.5 },
+  { file: 'skeletal-ossicles.glb', elements: [], extras: OSSICLES, ratio: 0.5 },
 ];
 
 function parseObj(path) {
@@ -54,7 +60,7 @@ function parseObj(path) {
   const id = /^# File ID : (\S+)$/m.exec(text)?.[1];
   const name = NAME_OVERRIDES[id] ?? /^# English name : (.+)$/m.exec(text)?.[1].trim();
   const fma = /^# Concept ID : (\S+)$/m.exec(text)?.[1];
-  const anchor = /^# Anchor : (\S+) (\S+) (\S+) (\S+) (\S+)$/m.exec(text);
+  const anchor = /^# Anchor : (.+) (\S+) (\S+) (\S+) (\S+)$/m.exec(text);
   const positions = [];
   const indices = [];
   for (const line of text.split('\n')) {
@@ -77,22 +83,32 @@ function parseObj(path) {
   };
 }
 
-// Centroid of the lowest 2% of vertices (by Z); must match extract-z-anatomy.py.
-function lowestAnchor(positions) {
-  const zs = [];
-  for (let i = 0; i < positions.length; i += 3) zs.push(i);
-  zs.sort((a, b) => positions[a + 2] - positions[b + 2]);
-  const n = Math.max(1, Math.floor(zs.length / 50));
-  const c = [0, 0, 0];
-  for (const i of zs.slice(0, n)) for (let k = 0; k < 3; k++) c[k] += positions[i + k] / n;
-  return c;
-}
+// Anchor rules; each must match anchor() in extract-z-anatomy.py.
+const ANCHOR_RULES = {
+  // Centroid of the lowest 2% of vertices (by Z).
+  lowest(positions) {
+    const zs = [];
+    for (let i = 0; i < positions.length; i += 3) zs.push(i);
+    zs.sort((a, b) => positions[a + 2] - positions[b + 2]);
+    const n = Math.max(1, Math.floor(zs.length / 50));
+    const c = [0, 0, 0];
+    for (const i of zs.slice(0, n)) for (let k = 0; k < 3; k++) c[k] += positions[i + k] / n;
+    return c;
+  },
+  // Centre of the bounding box.
+  center(positions) {
+    const { min, max } = boundsOf(positions);
+    return min.map((m, k) => (m + max[k]) / 2);
+  },
+};
 
 /** Loads a Z-Anatomy OBJ and moves it (metres → mm) onto the BodyParts3D skeleton. */
 function parseZAnatomyObj(file) {
   const obj = parseObj(join(Z_ANATOMY_DIR, file));
-  if (obj.anchor?.rule !== 'lowest') throw new Error(`${file}: unsupported anchor`);
-  const target = lowestAnchor(parseObj(join(OBJ_DIR, `${Z_ANATOMY_ANCHORS[obj.anchor.element]}.obj`)).positions);
+  const rule = ANCHOR_RULES[obj.anchor?.rule];
+  const element = Z_ANATOMY_ANCHORS[obj.anchor?.element];
+  if (!rule || !element) throw new Error(`${file}: unsupported anchor`);
+  const target = rule(parseObj(join(OBJ_DIR, `${element}.obj`)).positions);
   const offset = target.map((t, k) => t - obj.anchor.point[k] * 1000);
   obj.positions = obj.positions.map((v, i) => v * 1000 + offset[i % 3]);
   return { ...obj, id: file, source: 'z-anatomy' };

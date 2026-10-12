@@ -133,8 +133,11 @@ export class Viewer {
     if (entry) return entry.promise;
     const materials = layerMaterials(layer.color);
     entry = { layer, group: null, materials, promise: null };
-    entry.promise = this.loader.loadAsync(layer.asset).then((gltf) => {
-      const group = gltf.scene;
+    // A layer may ship extra files (e.g. parts under a different license).
+    const urls = [layer.asset, ...(layer.extraAssets ?? [])];
+    entry.promise = Promise.all(urls.map((url) => this.loader.loadAsync(url))).then((gltfs) => {
+      const group = new THREE.Group();
+      group.add(...gltfs.map((gltf) => gltf.scene));
       group.visible = false;
       group.traverse((o) => {
         if (o.isMesh) {

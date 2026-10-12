@@ -233,7 +233,7 @@ body {
 
 .hint {
   position: fixed;
-  bottom: 40px;
+  bottom: calc(max(10px, env(safe-area-inset-bottom)) + var(--credit-height, 30px) + 6px);
   left: 50%;
   transform: translateX(-50%);
   margin: 0;
