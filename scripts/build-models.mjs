@@ -50,13 +50,22 @@ const Z_ANATOMY_ANCHORS = { Sacrum: 'FJ3393', 'Temporal bone.l': 'FJ3281', 'Temp
 // skeletal.glb; the Skeletal layer lists it under `extraAssets`.
 const OSSICLES = ['malleus', 'incus', 'stapes'].flatMap((b) => [`ossicles/${b}-left.obj`, `ossicles/${b}-right.obj`]);
 
+// Inner-ear nerves Z-Anatomy may have adapted from the University of Dundee's
+// CC BY-NC-SA 4.0 "Anatomy of the Inner Ear", so they ship as their own file
+// rather than inside nervous.glb; the Nervous layer lists it under `extraAssets`.
+const INNER_EAR = /^(left |right )?(cochlear nerve|vestibular nerve|vestibulocochlear nerve \(viii\)|chorda tympani)$/i;
+
+let nervousCache;
+const nervousParts = () => (nervousCache ??= loadNervous(join(Z_ANATOMY_DIR, 'nervous'), skeletalBones(), parseObj));
+
 const ASSETS = [
   { file: 'skin.glb', elements: [SKIN], ratio: 0.35 },
   { file: 'skeletal.glb', elements: range(3152, 3395), extras: ['coccyx.obj'], ratio: 0.5 },
   { file: 'skeletal-ossicles.glb', elements: [], extras: OSSICLES, ratio: 0.5 },
   // BodyParts3D has no spinal cord or peripheral nerves and only part of the
   // cortex, so the whole system comes from Z-Anatomy (see nervous-model.mjs).
-  { file: 'nervous.glb', elements: [], load: () => loadNervous(join(Z_ANATOMY_DIR, 'nervous'), skeletalBones(), parseObj), ratio: 0.25 },
+  { file: 'nervous.glb', elements: [], load: () => nervousParts().filter((p) => !INNER_EAR.test(p.name)), ratio: 0.25 },
+  { file: 'nervous-inner-ear.glb', elements: [], load: () => nervousParts().filter((p) => INNER_EAR.test(p.name)), ratio: 0.25 },
 ];
 
 /** BodyParts3D bone positions (mm) by English name, for nervous-model.mjs. */

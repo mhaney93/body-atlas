@@ -43,7 +43,7 @@ Each system is a data-driven layer, so adding Circulatory, Nervous or another sy
 2. Add `src/data/<system>.json` with the same shape as `skeletal.json`: `id`, `name`, `color`, `asset`, `summary`, plus `parts` keyed by the part's name with any "left"/"right" removed.
 3. Import it and append it to `LAYERS` in `src/layers.js`.
 
-A layer can also list more GLB files in `extraAssets`. They load together with `asset` and act as one layer. Skeletal uses this to keep the ossicles, which have a different license, in a file of their own.
+A layer can also list more GLB files in `extraAssets`. They load together with `asset` and act as one layer. Skeletal and Nervous use this to keep the ossicles and the inner-ear nerves, which have a different license, in files of their own.
 
 A part that has no entry in `parts` still shows its name when clicked. A part entry can also set its own `color` (the Nervous layer colors each brain region this way).
 
@@ -66,9 +66,11 @@ So that the restriction stays with those files only, the ossicles ship separatel
 
 The whole **nervous system** also comes from Z-Anatomy, because BodyParts3D has no spinal cord or peripheral nerves. The extract script exports the brain regions (each lobe is Z-Anatomy's gyri and sulci for it merged into one mesh), the spinal cord, ganglia and optic pathway as meshes, and the nerves, which Z-Anatomy draws as curves, as sampled polylines. `scripts/nervous-model.mjs` then fits it onto the BodyParts3D skeleton, bone by bone, and turns each nerve into a thickened tube so it reads as a glowing thread.
 
-Z-Anatomy lists these models as used for reference or included and adapted, so parts of its brain and cranial nerves may derive from them: "Brainder" and "White matter" from the University of Washington; "Cranial Nerves and Foramina" by the University of Dundee, CAHID (CC BY 4.0); and "Anatomy of the Inner Ear" by the University of Dundee School of Medicine (CC BY-NC-SA 4.0, non-commercial; this site is free and non-commercial).
+Z-Anatomy lists these models as used for reference or included and adapted, so parts of its brain and cranial nerves may derive from them: "Brainder" and "White matter" from the University of Washington; and "Cranial Nerves and Foramina" by the University of Dundee, CAHID (CC BY 4.0).
 
 Because of that ShareAlike part, **`public/models/skeletal.glb`, `public/models/nervous.glb` and `data-sources/z-anatomy/` (apart from `ossicles/`) are distributed under CC BY-SA 4.0**. `public/models/skin.glb` is under CC BY 4.0. The site credits both sources in its footer, notes that the Z-Anatomy parts were modified, and states that the skeletal and nervous models are CC BY-SA 4.0.
+
+The **inner-ear nerves** (the cochlear, vestibular and vestibulocochlear (VIII) nerves and the chorda tympani of each side) also come from Z-Anatomy, which may have adapted them from **[“Anatomy of the Inner Ear”](https://sketchfab.com/3d-models/anatomy-of-the-inner-ear-f80bda64666c4b8aaac8f63b7b82a0a0)** by Annie Campbell, University of Dundee School of Medicine. That model is itself a derivative of “3D Ear” by W. Robert J. Funnell, PhD, Sam Daniel, MD, CM and Daren Nicolson, MD, CM at McGill University. It is licensed [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/), which allows **non-commercial use only**. So that the restriction stays with those parts only, they ship separately: **`public/models/nervous-inner-ear.glb` is distributed under CC BY-NC-SA 4.0 and may not be used commercially.** Body Atlas is a free, non-commercial site. The footer credits Dundee, McGill and Z-Anatomy, notes the changes and states that the inner-ear nerve model is non-commercial.
 
 The part descriptions in `src/data/` are original text written for this project.
 
@@ -76,7 +78,7 @@ The part descriptions in `src/data/` are original text written for this project.
 
 ```sh
 npm run fetch-data     # downloads ~140 MB into .cache/ (gitignored) and checks its SHA-256
-npm run build-models   # writes public/models/skin.glb, skeletal.glb, skeletal-ossicles.glb and nervous.glb
+npm run build-models   # writes public/models/skin.glb, skeletal.glb, skeletal-ossicles.glb, nervous.glb and nervous-inner-ear.glb
 ```
 
 The generated GLB files come to about 6 MB in total; each system's file downloads only when its filter is first turned on. They are committed, so a normal build does not need the source data.
