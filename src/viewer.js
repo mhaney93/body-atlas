@@ -343,11 +343,14 @@ export class Viewer {
     this.pointer.set(((clientX - rect.left) / rect.width) * 2 - 1, -((clientY - rect.top) / rect.height) * 2 + 1);
     this.raycaster.setFromCamera(this.pointer, this.camera);
     const hits = this.raycaster.intersectObjects(targets, true).filter((h) => h.object.isMesh);
-    // See-through parts (e.g. the heart wall) yield to more opaque parts just
-    // behind them (e.g. the valves inside), but not to anything farther back.
-    const near = hits.filter((h) => h.distance - hits[0].distance < SEE_THROUGH_DEPTH);
-    const hit = near.reduce((best, h) => (h.object.material.opacity > best.object.material.opacity ? h : best), near[0]);
-    return hit?.object ?? null;
+    // A see-through part (e.g. the heart wall) yields only to an opaque part
+    // just behind it (e.g. a valve inside), not to other see-through parts.
+    const [nearest] = hits;
+    if (!nearest) return null;
+    const solid =
+      nearest.object.material.opacity < 1 &&
+      hits.find((h) => h.distance - nearest.distance < SEE_THROUGH_DEPTH && h.object.material.opacity >= 1);
+    return (solid || nearest).object;
   }
 
   #bindPointer(el) {

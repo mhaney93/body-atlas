@@ -143,8 +143,10 @@ try {
   });
   $('loading').hidden = true;
   for (const layer of layers) applyEffects(layer); // effects are built from the shell, so apply any chosen while it loaded
-  // System models download only when their filter is first switched on, so
-  // phones never fetch systems nobody looks at.
+  // Layers marked `preload` download in the background so their toggle
+  // responds instantly; the rest wait until first switched on, so phones
+  // never fetch heavy systems nobody looks at.
+  for (const layer of layers) if (layer.preload) viewer.preloadLayer(layer).catch(() => {});
 } catch (err) {
   console.error(err);
   $('loading').classList.add('error');

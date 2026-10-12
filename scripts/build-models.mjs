@@ -140,6 +140,10 @@ const SIDE_SPLIT_MM = 20;
  * cardiac vein) into one part. A name without "left"/"right" that occurs on
  * both sides of the body (e.g. "Lumbar artery") is split by side instead,
  * with "Left "/"Right " prepended (BodyParts3D's +X is the patient's left).
+ * A bare name that also occurs as "Left …"/"Right …" never stays a third
+ * part: if its sides lie apart it joins the nearer one, and if every element
+ * sits on the midline (e.g. the superficial dorsal vein of the penis) they
+ * all become one unsided part.
  */
 function mergeByName(objs) {
   const centreX = (o) => {
@@ -147,20 +151,36 @@ function mergeByName(objs) {
     for (let i = 0; i < o.positions.length; i += 3) sum += o.positions[i];
     return sum / (o.positions.length / 3) - center[0];
   };
-  const xsByName = new Map();
-  for (const o of objs) xsByName.set(o.name, [...(xsByName.get(o.name) ?? []), centreX(o)]);
+  const sideOf = (name) => /^(left|right) /i.exec(name)?.[1].toLowerCase();
+  const keyOf = (name) => name.replace(/^(left|right) /i, '').toLowerCase();
+  const byKey = new Map();
+  for (const o of objs) byKey.set(keyOf(o.name), [...(byKey.get(keyOf(o.name)) ?? []), o]);
+  const mean = (xs) => xs.reduce((a, b) => a + b, 0) / xs.length;
+  const nameFor = new Map();
+  for (const group of byKey.values()) {
+    const bare = group.find((o) => !sideOf(o.name))?.name;
+    if (!bare) continue;
+    const xs = group.map(centreX);
+    const sideX = (side, fallback) => {
+      const own = group.filter((o) => sideOf(o.name) === side);
+      return own.length ? mean(own.map(centreX)) : fallback;
+    };
+    const left = sideX('left', SIDE_SPLIT_MM);
+    const right = sideX('right', -SIDE_SPLIT_MM);
+    const bilateral = group.some((o) => sideOf(o.name))
+      ? Math.abs(left - right) > SIDE_SPLIT_MM
+      : !/\b(left|right)\b/i.test(bare) && Math.max(...xs) > SIDE_SPLIT_MM && Math.min(...xs) < -SIDE_SPLIT_MM;
+    group.forEach((o, i) => {
+      if (!bilateral) nameFor.set(o, bare);
+      else if (!sideOf(o.name)) {
+        const side = Math.abs(xs[i] - left) < Math.abs(xs[i] - right) ? 'Left' : 'Right';
+        nameFor.set(o, `${side} ${bare[0].toLowerCase()}${bare.slice(1)}`);
+      }
+    });
+  }
   const merged = new Map();
   for (const o of objs) {
-    const xs = xsByName.get(o.name);
-    const bilateral =
-      !/\b(left|right)\b/i.test(o.name) &&
-      Math.max(...xs) > SIDE_SPLIT_MM &&
-      Math.min(...xs) < -SIDE_SPLIT_MM;
-    const x = centreX(o);
-    const name =
-      bilateral && Math.abs(x) > SIDE_SPLIT_MM
-        ? `${x > 0 ? 'Left' : 'Right'} ${o.name[0].toLowerCase()}${o.name.slice(1)}`
-        : o.name;
+    const name = nameFor.get(o) ?? o.name;
     const into = merged.get(name);
     if (!into) {
       merged.set(name, { ...o, name, ids: [o.id] });

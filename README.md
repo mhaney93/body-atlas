@@ -6,7 +6,7 @@ Free interactive 3D atlas of the human body with per-system highlighting.
 
 The page shows a see-through glass model of an adult male body that you can rotate, zoom and pan with a mouse or with touch. Turning on a body system in the filter panel lights up its parts in color. Clicking or tapping a part shows its name and a short description.
 
-It ships the **Skeletal**, **Nervous** and **Circulatory** systems. Every bone, brain region, named nerve, artery and vein in the model is a separate, clickable part with its own name and description. A system's model downloads only when its filter is first switched on.
+It ships the **Skeletal**, **Nervous** and **Circulatory** systems. Every bone, brain region, named nerve, artery and vein in the model is a separate, clickable part with its own name and description. A system's model downloads when its filter is first switched on, except Skeletal, which loads in the background at startup.
 
 It is a static site with no backend, so it costs nothing to host. Vercel builds every push: pull requests get preview deployments, and `main` deploys to production at https://body-atlas-hd.vercel.app.
 
@@ -53,6 +53,7 @@ A layer can list decorative `effects` (see `nervous.json` and `src/effects.js`).
 Optional layer fields, all generic (see `circulatory.json` for an example):
 
 - `groups`: sub-groups with their own `label`, `color`, optional `opacity`, and optional `flow` text. The build tags each mesh with a group (`groups` in its `ASSETS` entry, stored as the `group` node extra), and the filter panel shows them as a colour key.
+- `preload: true`: download the model in the background at startup so the first toggle is instant. Leave it off for heavy models so phones only fetch them on demand.
 - `flowLabel`, plus `flow` on a group or a part: an extra line in the info panel (e.g. "Blood flow: Away from the heart").
 - `effects`: optional toggles shown under the layer's button. `type: "haze"` lays a decorative glow over the skin (and over any layer with `hazeSurface: true`). The UI badges every effect as "Illustrative", so describe it in `note` as a visual effect, never as modeled anatomy.
 - A part whose left and right sides differ can be keyed by its full lowercase name (e.g. `"left ventricle"`), which wins over the side-less key.
