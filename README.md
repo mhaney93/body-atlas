@@ -83,4 +83,4 @@ blender -b --factory-startup --disable-autoexec Z-Anatomy/Startup.blend \
 
 The Skeletal layer covers all 206 bones of the standard adult count, including the 6 auditory ossicles. It also includes the 4 sesamoid bones under the big toes, the costal cartilages and the intervertebral discs. The sternum is shown as its three parts: manubrium, body and xiphoid process.
 
-The ossicles sit inside the temporal bone, in the middle ear. To see them, zoom in on the ear: they can be seen through the ear canal.
+The ossicles sit inside the temporal bone, in the middle ear. Only the malleus can be seen through the ear canal. The incus and stapes sit deeper inside the temporal bone; to click them, zoom into the middle ear.
