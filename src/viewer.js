@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
+import { EFFECTS } from './effects.js';
 
 const BODY_HEIGHT = 1.72; // metres, roughly; the models stand on y = 0
 const CLICK_SLOP_PX = 6;
@@ -54,16 +55,23 @@ function layerMaterials(hex) {
 export class Viewer {
   /**
    * @param {HTMLElement} container
-   * @param {{ onSelect?: (sel: {layer: object, mesh: THREE.Mesh} | null) => void }} [options]
+   * @param {{
+   *   onSelect?: (sel: {layer: object, mesh: THREE.Mesh} | null) => void,
+   *   partColor?: (layer: object, meshName: string) => string | undefined,
+   * }} [options] `partColor` can give a part its own highlight color instead of the layer's.
    */
-  constructor(container, { onSelect } = {}) {
+  constructor(container, { onSelect, partColor } = {}) {
     this.container = container;
     this.onSelect = onSelect ?? (() => {});
+    this.partColor = partColor ?? (() => undefined);
     this.loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
-    /** @type {Map<string, {layer: object, group: THREE.Group | null, promise: Promise<THREE.Group>, materials: object}>} */
+    /** @type {Map<string, {layer: object, group: THREE.Group | null, promise: Promise<THREE.Group>}>} */
     this.layers = new Map();
     /** @type {Map<string, boolean>} latest requested visibility per layer id */
     this.wanted = new Map();
+    /** @type {Map<string, {object: THREE.Object3D, update: Function}>} decorative effects by id */
+    this.effects = new Map();
+    this.shell = null;
     this.hovered = null;
     this.selected = null;
 
@@ -105,8 +113,11 @@ export class Viewer {
 
     new ResizeObserver(() => this.#resize()).observe(container);
     this.#resize();
+    const clock = new THREE.Clock();
     renderer.setAnimationLoop(() => {
       controls.update();
+      const time = clock.getElapsedTime();
+      for (const fx of this.effects.values()) if (fx.object.visible) fx.update(time, camera, renderer);
       renderer.render(scene, camera);
     });
   }
@@ -125,14 +136,19 @@ export class Viewer {
       }
     });
     this.scene.add(gltf.scene);
+    this.shell = gltf.scene;
   }
 
   /** Starts downloading a layer's asset (hidden) and returns a promise for it. */
   preloadLayer(layer) {
     let entry = this.layers.get(layer.id);
     if (entry) return entry.promise;
-    const materials = layerMaterials(layer.color);
-    entry = { layer, group: null, materials, promise: null };
+    const byColor = new Map();
+    const materialsFor = (color) => {
+      if (!byColor.has(color)) byColor.set(color, layerMaterials(color));
+      return byColor.get(color);
+    };
+    entry = { layer, group: null, promise: null };
     // A layer may ship extra files (e.g. parts under a different license).
     const urls = [layer.asset, ...(layer.extraAssets ?? [])];
     entry.promise = Promise.all(urls.map((url) => this.loader.loadAsync(url))).then((gltfs) => {
@@ -141,7 +157,8 @@ export class Viewer {
       group.visible = false;
       group.traverse((o) => {
         if (o.isMesh) {
-          o.material = materials.base;
+          o.userData.materials = materialsFor(this.partColor(layer, o.userData.name ?? o.name) ?? layer.color);
+          o.material = o.userData.materials.base;
           o.userData.layerId = layer.id;
         }
       });
@@ -166,6 +183,21 @@ export class Viewer {
     }
   }
 
+  /**
+   * Shows or hides a decorative effect, e.g. { id, type: 'skin-haze', color, ... }
+   * (see effects.js). It is built from the shell the first time it is shown.
+   */
+  setEffectVisible(effect, visible) {
+    let fx = this.effects.get(effect.id);
+    if (!fx) {
+      if (!visible || !this.shell) return;
+      fx = EFFECTS[effect.type](this.shell, effect);
+      this.scene.add(fx.object);
+      this.effects.set(effect.id, fx);
+    }
+    fx.object.visible = visible;
+  }
+
   /** Selects a mesh (or clears the selection with null). */
   select(mesh) {
     if (mesh === this.selected) return;
@@ -184,7 +216,7 @@ export class Viewer {
   }
 
   #restyle(mesh) {
-    const { materials } = this.layers.get(mesh.userData.layerId);
+    const { materials } = mesh.userData;
     mesh.material =
       mesh === this.selected ? materials.selected : mesh === this.hovered ? materials.hover : materials.base;
   }
