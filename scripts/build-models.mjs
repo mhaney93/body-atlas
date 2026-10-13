@@ -69,8 +69,13 @@ const OSSICLES = ['malleus', 'incus', 'stapes'].flatMap((b) => [`ossicles/${b}-l
 // rather than inside nervous.glb; the Nervous layer lists it under `extraAssets`.
 const INNER_EAR = /^(left |right )?(cochlear nerve|vestibular nerve|vestibulocochlear nerve \(viii\)|chorda tympani)$/i;
 
+// Nerves are kept beneath the skin and out of bone as skin.glb and
+// skeletal.glb show them: simplifying the skin moves it inward by up to ~3 mm
+// at the fingertips. Each is set once that asset is built (they come first).
+const shown = new Map();
 let nervousCache;
-const nervousParts = () => (nervousCache ??= loadNervous(join(Z_ANATOMY_DIR, 'nervous'), skeletalBones(), parseObj));
+const nervousParts = () =>
+  (nervousCache ??= loadNervous(join(Z_ANATOMY_DIR, 'nervous'), skeletalBones(), shown.get('skin.glb')[0], shown.get('skeletal.glb'), parseObj));
 
 const META_DIR = join(ROOT, '.cache', 'bodyparts3d');
 
@@ -123,12 +128,12 @@ const ASSETS = [
   { file: 'circulatory.glb', groups: circulatoryGroups(), mergeByName: true, ratio: 0.2, error: 0.002 },
 ];
 
-/** BodyParts3D bone positions (mm) by English name, for nervous-model.mjs. */
+/** BodyParts3D bone meshes (mm) by English name, for nervous-model.mjs. */
 function skeletalBones() {
   const bones = new Map();
   for (const id of range(3152, 3395).filter((i) => available.has(i))) {
     const obj = parseObj(join(OBJ_DIR, `${id}.obj`));
-    bones.set(obj.name, obj.positions);
+    bones.set(obj.name, obj);
   }
   return bones;
 }
@@ -307,6 +312,17 @@ const center = [
   skinBounds.min[2],
 ];
 
+// The inverse of transform(): m, Y-up → BodyParts3D mm, Z-up.
+function untransform(positions) {
+  const out = new Array(positions.length);
+  for (let i = 0; i < positions.length; i += 3) {
+    out[i] = positions[i] * 1000 + center[0];
+    out[i + 1] = -positions[i + 2] * 1000 + center[1];
+    out[i + 2] = positions[i + 1] * 1000 + center[2];
+  }
+  return out;
+}
+
 // mm, Z-up → m, Y-up, anterior toward +Z.
 function transform(positions) {
   const out = new Float32Array(positions.length);
@@ -366,6 +382,15 @@ for (const asset of ASSETS) {
     weld(),
     simplify({ simplifier: MeshoptSimplifier, ratio: asset.ratio, error: asset.error ?? 0.0005 }),
   );
+  if (asset.file === 'skin.glb' || asset.file === 'skeletal.glb') {
+    shown.set(
+      asset.file,
+      doc.getRoot().listMeshes().map((mesh) => {
+        const prim = mesh.listPrimitives()[0];
+        return { name: mesh.getName(), positions: untransform(prim.getAttribute('POSITION').getArray()), indices: prim.getIndices().getArray() };
+      }),
+    );
+  }
   objs.filter((o) => o.simplify === false).forEach(addNode);
 
   // Smooth normals after simplification so shading matches the reduced mesh.

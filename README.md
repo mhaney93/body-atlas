@@ -88,6 +88,7 @@ The part descriptions in `src/data/` are original text written for this project.
 ```sh
 npm run fetch-data     # downloads ~140 MB into .cache/ (gitignored) and checks its SHA-256
 npm run build-models   # writes public/models/skin.glb, skeletal.glb, skeletal-ossicles.glb, nervous.glb, nervous-inner-ear.glb and circulatory.glb
+npm run check-nerves   # fails if a nerve lies outside the skin, or runs through solid bone away from a real foramen or canal
 ```
 
 The generated GLB files come to about 10.7 MB in total (circulatory.glb is about 4.7 MB); each system's file downloads only when its filter is first turned on. They are committed, so a normal build does not need the source data.
