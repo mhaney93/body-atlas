@@ -10,6 +10,7 @@ import { Document, NodeIO } from '@gltf-transform/core';
 import { EXTMeshoptCompression, KHRMeshQuantization } from '@gltf-transform/extensions';
 import { meshopt, simplify, weld } from '@gltf-transform/functions';
 import { MeshoptEncoder, MeshoptSimplifier } from 'meshoptimizer';
+import { loadNervous } from './nervous-model.mjs';
 
 const ROOT = join(import.meta.dirname, '..');
 const OBJ_DIR = join(ROOT, '.cache', 'bodyparts3d', 'obj');
@@ -49,11 +50,33 @@ const Z_ANATOMY_ANCHORS = { Sacrum: 'FJ3393', 'Temporal bone.l': 'FJ3281', 'Temp
 // skeletal.glb; the Skeletal layer lists it under `extraAssets`.
 const OSSICLES = ['malleus', 'incus', 'stapes'].flatMap((b) => [`ossicles/${b}-left.obj`, `ossicles/${b}-right.obj`]);
 
+// Inner-ear nerves Z-Anatomy may have adapted from the University of Dundee's
+// CC BY-NC-SA 4.0 "Anatomy of the Inner Ear", so they ship as their own file
+// rather than inside nervous.glb; the Nervous layer lists it under `extraAssets`.
+const INNER_EAR = /^(left |right )?(cochlear nerve|vestibular nerve|vestibulocochlear nerve \(viii\)|chorda tympani)$/i;
+
+let nervousCache;
+const nervousParts = () => (nervousCache ??= loadNervous(join(Z_ANATOMY_DIR, 'nervous'), skeletalBones(), parseObj));
+
 const ASSETS = [
   { file: 'skin.glb', elements: [SKIN], ratio: 0.35 },
   { file: 'skeletal.glb', elements: range(3152, 3395), extras: ['coccyx.obj'], ratio: 0.5 },
   { file: 'skeletal-ossicles.glb', elements: [], extras: OSSICLES, ratio: 0.5 },
+  // BodyParts3D has no spinal cord or peripheral nerves and only part of the
+  // cortex, so the whole system comes from Z-Anatomy (see nervous-model.mjs).
+  { file: 'nervous.glb', elements: [], load: () => nervousParts().filter((p) => !INNER_EAR.test(p.name)), ratio: 0.25 },
+  { file: 'nervous-inner-ear.glb', elements: [], load: () => nervousParts().filter((p) => INNER_EAR.test(p.name)), ratio: 0.25 },
 ];
+
+/** BodyParts3D bone positions (mm) by English name, for nervous-model.mjs. */
+function skeletalBones() {
+  const bones = new Map();
+  for (const id of range(3152, 3395).filter((i) => available.has(i))) {
+    const obj = parseObj(join(OBJ_DIR, `${id}.obj`));
+    bones.set(obj.name, obj.positions);
+  }
+  return bones;
+}
 
 function parseObj(path) {
   const text = readFileSync(path, 'utf8');
@@ -185,9 +208,10 @@ for (const asset of ASSETS) {
   const objs = [
     ...elements.map((id) => parseObj(join(OBJ_DIR, `${id}.obj`))),
     ...(asset.extras ?? []).map(parseZAnatomyObj),
+    ...(asset.load?.() ?? []),
   ];
 
-  for (const obj of objs) {
+  const addNode = (obj) => {
     const pos = transform(obj.positions);
     const idx = new Uint32Array(obj.indices);
     const prim = doc
@@ -203,12 +227,15 @@ for (const asset of ASSETS) {
           : { name: obj.name, fma: obj.fma, bp3d: obj.id },
       ),
     );
-  }
+  };
 
+  // Parts marked `simplify: false` (generated nerve tubes) skip simplification.
+  objs.filter((o) => o.simplify !== false).forEach(addNode);
   await doc.transform(
     weld(),
     simplify({ simplifier: MeshoptSimplifier, ratio: asset.ratio, error: 0.0005 }),
   );
+  objs.filter((o) => o.simplify === false).forEach(addNode);
 
   // Smooth normals after simplification so shading matches the reduced mesh.
   for (const mesh of doc.getRoot().listMeshes()) {

@@ -1,0 +1,585 @@
+{
+  "id": "nervous",
+  "name": "Nervous",
+  "color": "#b58cff",
+  "asset": "models/nervous.glb",
+  "extraAssets": ["models/nervous-inner-ear.glb"],
+  "summary": "The nervous system is the body's control and messaging network. The brain and spinal cord process information, and the nerves branching from them carry signals to and from every muscle, organ and patch of skin.",
+  "effects": [
+    {
+      "id": "nerve-ending-haze",
+      "type": "skin-haze",
+      "label": "Nerve-ending haze",
+      "note": "Illustrative effect, not modeled anatomy. Brighter where the skin has more sensory endings, such as the fingertips, lips and soles.",
+      "color": "#d9b8ff",
+      "count": 7000,
+      "hotspots": [
+        { "at": [0.29, 0.76, 0.07], "radius": 0.06, "weight": 25 },
+        { "at": [-0.29, 0.76, 0.07], "radius": 0.06, "weight": 25 },
+        { "at": [0, 1.52, 0.07], "radius": 0.04, "weight": 25 },
+        { "at": [0, 1.58, 0.07], "radius": 0.08, "weight": 6 },
+        { "at": [0.11, 0.01, 0.11], "radius": 0.06, "weight": 12 },
+        { "at": [-0.11, 0.01, 0.11], "radius": 0.06, "weight": 12 }
+      ]
+    }
+  ],
+  "parts": {
+    "frontal lobe": {
+      "region": "Brain",
+      "color": "#ff8fab",
+      "description": "The front of each cerebral hemisphere. It plans and controls voluntary movement and handles reasoning, decision-making, personality and, usually on the left, speech production."
+    },
+    "parietal lobe": {
+      "region": "Brain",
+      "color": "#7fd1ff",
+      "description": "The upper middle part of each hemisphere, behind the central sulcus. It processes touch, pain, temperature and body position and helps judge space and distance."
+    },
+    "temporal lobe": {
+      "region": "Brain",
+      "color": "#8ef0b0",
+      "description": "The lower side of each hemisphere, beneath the temples. It handles hearing and, usually on the left, understanding language, and works with the limbic system on memory."
+    },
+    "occipital lobe": {
+      "region": "Brain",
+      "color": "#ffb36b",
+      "description": "The back of each hemisphere. It contains the visual cortex, which turns signals from the eyes into what we see."
+    },
+    "insula": {
+      "region": "Brain",
+      "color": "#ff6f91",
+      "description": "A fold of cortex hidden deep in the groove between the frontal and temporal lobes. It senses the body's internal state, such as heartbeat and hunger, and is involved in taste and emotion."
+    },
+    "limbic lobe": {
+      "region": "Brain",
+      "color": "#f7e07a",
+      "description": "The inner rim of each hemisphere, wrapped around the brainstem, including the cingulate and parahippocampal gyri. It is part of the limbic system, which links emotion, motivation and memory."
+    },
+    "cerebellum": {
+      "region": "Brain",
+      "color": "#e38cff",
+      "description": "The 'little brain' tucked under the back of the cerebrum. It coordinates movement, balance and posture and helps learn motor skills."
+    },
+    "brainstem": {
+      "region": "Brain",
+      "color": "#b8a2ff",
+      "description": "The stalk connecting the brain to the spinal cord, made up of the midbrain, pons and medulla oblongata. It controls breathing, heart rate and other vital functions and is where most cranial nerves attach."
+    },
+    "optic chiasm": {
+      "region": "Brain",
+      "description": "The X-shaped crossing under the brain where the two optic nerves meet. Fibres from the inner half of each retina cross here, so each side of the brain sees the opposite half of the visual field."
+    },
+    "optic tract": {
+      "region": "Brain",
+      "description": "The continuation of the visual pathway behind the optic chiasm. Each tract carries signals for the opposite half of the visual field back towards the thalamus and visual cortex."
+    },
+    "spinal cord": {
+      "region": "Spinal cord",
+      "color": "#d6c2ff",
+      "description": "The cable of nerve tissue running down the spinal canal from the brainstem to about the first lumbar vertebra. It relays messages between brain and body and handles reflexes on its own."
+    },
+    "cauda equina": {
+      "region": "Spinal cord",
+      "description": "The 'horse's tail' of nerve roots that continues down the spinal canal below the end of the spinal cord. The roots leave the spine as the lower lumbar, sacral and coccygeal nerves."
+    },
+    "anterior root of spinal nerve": {
+      "region": "Spinal nerves",
+      "description": "The front (ventral) roots leaving the spinal cord. They carry motor signals out to the muscles and, at some levels, autonomic signals to organs."
+    },
+    "posterior root of spinal nerve": {
+      "region": "Spinal nerves",
+      "description": "The back (dorsal) roots entering the spinal cord. They bring sensory signals in from the skin, muscles and organs."
+    },
+    "spinal ganglia": {
+      "region": "Spinal nerves",
+      "description": "Small swellings on the posterior roots (dorsal root ganglia). They hold the cell bodies of the sensory neurons that report touch, pain and position."
+    },
+    "olfactory nerve (i)": {
+      "region": "Cranial nerves",
+      "description": "Cranial nerve I, the nerve of smell. Fine filaments pass from the nose's lining through the roof of the nasal cavity to the olfactory bulb under the brain."
+    },
+    "optic nerve (ii)": {
+      "region": "Cranial nerves",
+      "description": "Cranial nerve II, which carries visual signals from the retina of each eye to the optic chiasm."
+    },
+    "oculomotor nerve (iii)": {
+      "region": "Cranial nerves",
+      "description": "Cranial nerve III. It moves most of the eye muscles and lifts the upper eyelid, and it narrows the pupil and focuses the lens."
+    },
+    "trochlear nerve (iv)": {
+      "region": "Cranial nerves",
+      "description": "Cranial nerve IV, the thinnest cranial nerve. It supplies the superior oblique muscle, which turns the eye down and inward."
+    },
+    "trigeminal nerve (v)": {
+      "region": "Cranial nerves",
+      "description": "Cranial nerve V, the main sensory nerve of the face. Its three divisions (ophthalmic, maxillary and mandibular) carry feeling from the face, mouth and teeth, and it also works the chewing muscles."
+    },
+    "ophthalmic nerve": {
+      "region": "Cranial nerves",
+      "description": "The first division of the trigeminal nerve. It carries sensation from the forehead, scalp, upper eyelid, eye surface and nose."
+    },
+    "maxillary nerve": {
+      "region": "Cranial nerves",
+      "description": "The second division of the trigeminal nerve. It carries sensation from the cheek, upper lip, upper teeth, palate and side of the nose."
+    },
+    "meningeal branch of maxillary nerve": {
+      "region": "Cranial nerves",
+      "description": "A small early branch of the maxillary nerve that supplies sensation to the dura mater, the tough membrane lining the skull."
+    },
+    "anterior division of mandibular nerve": {
+      "region": "Cranial nerves",
+      "description": "The smaller front division of the trigeminal nerve's mandibular branch. It is mainly motor, supplying the chewing muscles, and also gives off the buccal nerve."
+    },
+    "posterior division of mandibular nerve": {
+      "region": "Cranial nerves",
+      "description": "The larger rear division of the trigeminal nerve's mandibular branch. It is mainly sensory, giving rise to the lingual and inferior alveolar nerves."
+    },
+    "buccal nerve": {
+      "region": "Cranial nerves",
+      "description": "A sensory branch of the mandibular nerve. It supplies the skin and lining of the cheek and the outer gums of the lower back teeth."
+    },
+    "lingual nerve": {
+      "region": "Cranial nerves",
+      "description": "A branch of the mandibular nerve that carries touch, pain and temperature from the front two-thirds of the tongue and floor of the mouth."
+    },
+    "inferior alveolar nerve": {
+      "region": "Cranial nerves",
+      "description": "A branch of the mandibular nerve that runs through a canal inside the lower jaw, supplying the lower teeth. It is the nerve dentists numb for lower fillings."
+    },
+    "mental nerve": {
+      "region": "Cranial nerves",
+      "description": "The end branch of the inferior alveolar nerve. It exits the jaw through the mental foramen to supply the skin of the chin and lower lip."
+    },
+    "nerve to mylohyoid muscle": {
+      "region": "Cranial nerves",
+      "description": "A motor branch of the inferior alveolar nerve that supplies the mylohyoid, which forms the floor of the mouth, and the front belly of the digastric muscle."
+    },
+    "abducens nerve (vi)": {
+      "region": "Cranial nerves",
+      "description": "Cranial nerve VI. It supplies the lateral rectus muscle, which turns the eye outward."
+    },
+    "facial nerve (vii)": {
+      "region": "Cranial nerves",
+      "description": "Cranial nerve VII. It controls the muscles of facial expression and also carries taste from the front of the tongue and drives the tear and salivary glands."
+    },
+    "chorda tympani": {
+      "region": "Cranial nerves",
+      "description": "A branch of the facial nerve that crosses the middle ear. It carries taste from the front two-thirds of the tongue and signals to two salivary glands."
+    },
+    "vestibulocochlear nerve (viii)": {
+      "region": "Cranial nerves",
+      "description": "Cranial nerve VIII, which carries hearing and balance signals from the inner ear to the brainstem."
+    },
+    "cochlear nerve": {
+      "region": "Cranial nerves",
+      "description": "The hearing part of the vestibulocochlear nerve. It carries sound signals from the cochlea of the inner ear."
+    },
+    "vestibular nerve": {
+      "region": "Cranial nerves",
+      "description": "The balance part of the vestibulocochlear nerve. It carries signals about head movement and position from the inner ear's vestibular organs."
+    },
+    "glossopharyngeal nerve (ix)": {
+      "region": "Cranial nerves",
+      "description": "Cranial nerve IX. It carries taste and sensation from the back of the tongue and throat, helps with swallowing and monitors blood pressure in the carotid artery."
+    },
+    "vagus nerve (x)": {
+      "region": "Cranial nerves",
+      "description": "Cranial nerve X, the longest cranial nerve. It wanders from the brainstem down through the neck, chest and abdomen, slowing the heart, aiding digestion and supplying the larynx."
+    },
+    "accessory nerve (xi)": {
+      "region": "Cranial nerves",
+      "description": "Cranial nerve XI. It supplies the sternocleidomastoid and trapezius muscles, which turn the head and shrug the shoulders."
+    },
+    "hypoglossal nerve (xii)": {
+      "region": "Cranial nerves",
+      "description": "Cranial nerve XII, which moves the tongue for speech, chewing and swallowing."
+    },
+    "roots of brachial plexus": {
+      "region": "Brachial plexus",
+      "description": "The front branches of spinal nerves C5 to T1 as they emerge in the neck. They are the starting point of the brachial plexus, the network that supplies the arm."
+    },
+    "superior trunk of brachial plexus": {
+      "region": "Brachial plexus",
+      "description": "Formed by the C5 and C6 roots joining in the neck. Its fibres mainly serve the shoulder and the front of the arm."
+    },
+    "middle trunk of brachial plexus": {
+      "region": "Brachial plexus",
+      "description": "The continuation of the C7 root in the neck, one of the brachial plexus's three trunks."
+    },
+    "inferior trunk of brachial plexus": {
+      "region": "Brachial plexus",
+      "description": "Formed by the C8 and T1 roots joining above the first rib. Its fibres mainly serve the forearm and the small muscles of the hand."
+    },
+    "anterior division of superior trunk of brachial plexus": {
+      "region": "Brachial plexus",
+      "description": "The front split of the superior trunk behind the collarbone. It joins the middle trunk's front division to form the lateral cord, which serves the flexor muscles."
+    },
+    "posterior division of superior trunk of brachial plexus": {
+      "region": "Brachial plexus",
+      "description": "The back split of the superior trunk behind the collarbone. It helps form the posterior cord, which serves the extensor muscles."
+    },
+    "anterior division of middle trunk of brachial plexus": {
+      "region": "Brachial plexus",
+      "description": "The front split of the middle trunk. It joins the superior trunk's front division to form the lateral cord."
+    },
+    "posterior division of middle trunk of brachial plexus": {
+      "region": "Brachial plexus",
+      "description": "The back split of the middle trunk. It helps form the posterior cord, which serves the extensor muscles."
+    },
+    "anterior division of inferior trunk of brachial plexus": {
+      "region": "Brachial plexus",
+      "description": "The front split of the inferior trunk. It continues alone as the medial cord, the source of the ulnar nerve."
+    },
+    "posterior division of inferior trunk of brachial plexus": {
+      "region": "Brachial plexus",
+      "description": "The back split of the inferior trunk. It helps form the posterior cord, which serves the extensor muscles."
+    },
+    "posterior cord of brachial plexus": {
+      "region": "Brachial plexus",
+      "description": "The cord formed by all three posterior divisions, lying behind the axillary artery. It gives rise to the axillary and radial nerves, which serve the muscles that extend the arm."
+    },
+    "dorsal scapular nerve": {
+      "region": "Brachial plexus",
+      "description": "A branch from the C5 root that supplies the rhomboid and levator scapulae muscles, which pull the shoulder blade up and in."
+    },
+    "long thoracic nerve": {
+      "region": "Brachial plexus",
+      "description": "A nerve running down the side of the chest wall to the serratus anterior, the muscle that holds the shoulder blade against the ribs. Damage to it causes a 'winged' scapula."
+    },
+    "subclavian nerve": {
+      "region": "Brachial plexus",
+      "description": "A small branch of the superior trunk that supplies the subclavius, a muscle under the collarbone."
+    },
+    "suprascapular nerve": {
+      "region": "Brachial plexus",
+      "description": "A branch of the superior trunk that passes over the shoulder blade to supply the supraspinatus and infraspinatus, two rotator cuff muscles."
+    },
+    "lateral pectoral nerve": {
+      "region": "Brachial plexus",
+      "description": "A branch of the lateral cord that supplies the pectoralis major, the large chest muscle."
+    },
+    "medial pectoral nerve": {
+      "region": "Brachial plexus",
+      "description": "A branch of the medial cord that supplies the pectoralis minor and part of the pectoralis major."
+    },
+    "superior subscapular nerve": {
+      "region": "Brachial plexus",
+      "description": "A branch of the posterior cord that supplies the upper part of the subscapularis, a rotator cuff muscle on the front of the shoulder blade."
+    },
+    "inferior subscapular nerve": {
+      "region": "Brachial plexus",
+      "description": "A branch of the posterior cord that supplies the lower subscapularis and the teres major, which rotate the arm inward."
+    },
+    "thoracodorsal nerve": {
+      "region": "Brachial plexus",
+      "description": "A branch of the posterior cord that supplies the latissimus dorsi, the broad back muscle that pulls the arm down and back."
+    },
+    "axillary nerve": {
+      "region": "Arm and hand",
+      "description": "A branch of the posterior cord that wraps around the neck of the humerus. It supplies the deltoid and teres minor and the skin over the shoulder."
+    },
+    "muscular branches of axillary nerve": {
+      "region": "Arm and hand",
+      "description": "Motor branches of the axillary nerve to the deltoid, which lifts the arm, and the teres minor, which rotates it outward."
+    },
+    "superior lateral brachial cutaneous nerve": {
+      "region": "Arm and hand",
+      "description": "The skin branch of the axillary nerve. It supplies the skin over the lower deltoid on the outer shoulder."
+    },
+    "musculocutaneous nerve": {
+      "region": "Arm and hand",
+      "description": "A branch of the lateral cord that supplies the biceps, brachialis and coracobrachialis, the muscles that bend the elbow."
+    },
+    "lateral antebrachial cutaneous nerve": {
+      "region": "Arm and hand",
+      "description": "The skin branch that continues from the musculocutaneous nerve, supplying the thumb side of the forearm."
+    },
+    "medial brachial cutaneous nerve": {
+      "region": "Arm and hand",
+      "description": "A branch of the medial cord that supplies the skin on the inner side of the upper arm."
+    },
+    "medial antebrachial cutaneous nerve": {
+      "region": "Arm and hand",
+      "description": "A branch of the medial cord that supplies the skin on the inner (little-finger) side of the forearm."
+    },
+    "anterior branch of medial antebrachial cutaneous nerve": {
+      "region": "Arm and hand",
+      "description": "The front branch of the medial antebrachial cutaneous nerve, supplying skin on the front of the inner forearm."
+    },
+    "posterior branch of medial antebrachial cutaneous nerve": {
+      "region": "Arm and hand",
+      "description": "The back branch of the medial antebrachial cutaneous nerve, supplying skin on the back of the inner forearm."
+    },
+    "radial nerve": {
+      "region": "Arm and hand",
+      "description": "The largest branch of the posterior cord. It spirals around the back of the humerus and supplies the muscles that straighten the elbow, wrist and fingers."
+    },
+    "muscular branches of radial nerve": {
+      "region": "Arm and hand",
+      "description": "Motor branches of the radial nerve to the triceps and the extensor muscles of the forearm."
+    },
+    "inferior lateral brachial cutaneous nerve": {
+      "region": "Arm and hand",
+      "description": "A skin branch of the radial nerve supplying the outer side of the upper arm below the deltoid."
+    },
+    "posterior antebrachial cutaneous nerve": {
+      "region": "Arm and hand",
+      "description": "A skin branch of the radial nerve supplying the back of the forearm."
+    },
+    "deep branch of radial nerve": {
+      "region": "Arm and hand",
+      "description": "The motor branch the radial nerve splits into at the elbow. It winds through the supinator muscle to supply the extensors of the wrist and fingers."
+    },
+    "posterior interosseous nerve of forearm": {
+      "region": "Arm and hand",
+      "description": "The continuation of the radial nerve's deep branch along the back of the forearm, supplying the muscles that straighten the fingers and thumb."
+    },
+    "superficial branch of radial nerve": {
+      "region": "Arm and hand",
+      "description": "The sensory branch of the radial nerve. It runs down the forearm to supply the skin on the back of the hand on the thumb side."
+    },
+    "dorsal digital branches of radial nerve": {
+      "region": "Arm and hand",
+      "description": "The end branches of the radial nerve's superficial branch, supplying the skin on the back of the thumb, index and middle fingers."
+    },
+    "median nerve": {
+      "region": "Arm and hand",
+      "description": "Formed from the lateral and medial cords, it runs down the middle of the arm and through the carpal tunnel. It supplies most forearm flexors, the thumb's muscles and feeling in the thumb-side fingers."
+    },
+    "muscular branches of median nerve": {
+      "region": "Arm and hand",
+      "description": "Motor branches of the median nerve to the forearm muscles that bend the wrist and fingers and turn the palm down."
+    },
+    "anterior interosseous nerve of forearm": {
+      "region": "Arm and hand",
+      "description": "A deep motor branch of the median nerve that supplies the long flexors of the thumb and index finger, which make the 'OK' sign."
+    },
+    "palmar branch of median nerve": {
+      "region": "Arm and hand",
+      "description": "A skin branch that leaves the median nerve above the wrist, outside the carpal tunnel, to supply the central palm."
+    },
+    "common palmar digital branches of median nerve": {
+      "region": "Arm and hand",
+      "description": "Branches of the median nerve in the palm that run toward the gaps between the thumb, index, middle and ring fingers."
+    },
+    "proper palmar digital branches of median nerve": {
+      "region": "Arm and hand",
+      "description": "Fine nerves along the sides of the thumb, index, middle and half the ring finger. They supply the fingertips, among the most sensitive skin in the body."
+    },
+    "communicating branch of median nerve with ulnar nerve": {
+      "region": "Arm and hand",
+      "description": "A small connecting branch in the palm that links the median and ulnar nerves, letting fibres pass between them."
+    },
+    "ulnar nerve": {
+      "region": "Arm and hand",
+      "description": "The main branch of the medial cord. It passes behind the elbow (the 'funny bone') and supplies most small muscles of the hand and the little-finger side of the hand."
+    },
+    "muscular branches of ulnar nerve": {
+      "region": "Arm and hand",
+      "description": "Motor branches of the ulnar nerve to the forearm muscles that bend the wrist and the ring and little fingers."
+    },
+    "palmar branch of ulnar nerve": {
+      "region": "Arm and hand",
+      "description": "A skin branch of the ulnar nerve that supplies the palm on the little-finger side."
+    },
+    "dorsal branch of ulnar nerve": {
+      "region": "Arm and hand",
+      "description": "A skin branch of the ulnar nerve that winds around the wrist to supply the back of the hand on the little-finger side."
+    },
+    "dorsal digital branches of ulnar nerve": {
+      "region": "Arm and hand",
+      "description": "End branches of the ulnar nerve's dorsal branch supplying the skin on the back of the little finger and half the ring finger."
+    },
+    "superficial branch of ulnar nerve": {
+      "region": "Arm and hand",
+      "description": "The sensory branch the ulnar nerve splits into at the wrist, supplying the palm side of the little and ring fingers."
+    },
+    "deep branch of ulnar nerve": {
+      "region": "Arm and hand",
+      "description": "The motor branch the ulnar nerve splits into at the wrist. It curves across the palm to supply most of the small muscles that make fine finger movements."
+    },
+    "common palmar digital branches of ulnar nerve": {
+      "region": "Arm and hand",
+      "description": "Branches of the ulnar nerve in the palm running toward the gap between the ring and little fingers."
+    },
+    "proper palmar digital branches of ulnar nerve": {
+      "region": "Arm and hand",
+      "description": "Fine nerves along the sides of the little finger and the little-finger half of the ring finger, supplying their palm-side skin and fingertips."
+    },
+    "intercostal nerves": {
+      "region": "Trunk",
+      "description": "The front branches of the thoracic spinal nerves, running in the grooves under each rib. They supply the muscles between the ribs and the skin of the chest and abdomen."
+    },
+    "iliohypogastric nerve": {
+      "region": "Lumbar plexus",
+      "description": "A branch of the first lumbar nerve that supplies the lower abdominal muscles and the skin over the hip and above the pubis."
+    },
+    "ilio-inguinal nerve": {
+      "region": "Lumbar plexus",
+      "description": "A branch of the first lumbar nerve that runs through the inguinal canal, supplying skin at the top of the inner thigh and the groin."
+    },
+    "genitofemoral nerve": {
+      "region": "Lumbar plexus",
+      "description": "A nerve from L1 and L2 that runs down the front of the psoas muscle and splits into a genital and a femoral branch."
+    },
+    "genital branch of genitofemoral nerve": {
+      "region": "Lumbar plexus",
+      "description": "The branch of the genitofemoral nerve that passes through the inguinal canal to supply the cremaster muscle and the skin of the scrotum."
+    },
+    "femoral branch of genitofemoral nerve": {
+      "region": "Lumbar plexus",
+      "description": "The branch of the genitofemoral nerve that supplies a small patch of skin on the upper front of the thigh."
+    },
+    "lateral femoral cutaneous nerve": {
+      "region": "Lumbar plexus",
+      "description": "A sensory nerve from L2 and L3 that passes near the hip bone's front point to supply the skin of the outer thigh."
+    },
+    "femoral nerve": {
+      "region": "Lumbar plexus",
+      "description": "The largest branch of the lumbar plexus. It runs under the groin ligament to supply the quadriceps, which straighten the knee, and the skin of the front of the thigh."
+    },
+    "anterior cutaneous branches of femoral nerve": {
+      "region": "Leg and foot",
+      "description": "Skin branches of the femoral nerve supplying the front and inner side of the thigh."
+    },
+    "saphenous nerve": {
+      "region": "Leg and foot",
+      "description": "The longest branch of the femoral nerve. It runs down the inner leg alongside the great saphenous vein to supply skin on the inner leg and foot."
+    },
+    "infrapatellar branch of saphenous nerve": {
+      "region": "Leg and foot",
+      "description": "A branch of the saphenous nerve that supplies the skin over the front of the knee, below the kneecap."
+    },
+    "medial crural cutaneous branches of saphenous nerve": {
+      "region": "Leg and foot",
+      "description": "Skin branches of the saphenous nerve supplying the inner side of the lower leg."
+    },
+    "obturator nerve": {
+      "region": "Lumbar plexus",
+      "description": "A nerve from L2 to L4 that passes through the obturator foramen of the hip bone to supply the adductor muscles, which pull the thigh inward."
+    },
+    "anterior branch of obturator nerve": {
+      "region": "Leg and foot",
+      "description": "The front branch of the obturator nerve, supplying the adductor longus, adductor brevis and gracilis and skin on the inner thigh."
+    },
+    "posterior branch of obturator nerve": {
+      "region": "Leg and foot",
+      "description": "The back branch of the obturator nerve, supplying the obturator externus and part of the adductor magnus."
+    },
+    "sciatic nerve": {
+      "region": "Sacral plexus",
+      "description": "The body's largest nerve, formed from L4 to S3. It runs down the back of the thigh, supplying the hamstrings, and divides above the knee into the tibial and common fibular nerves."
+    },
+    "superior gluteal nerve": {
+      "region": "Sacral plexus",
+      "description": "A nerve leaving the pelvis above the piriformis to supply the gluteus medius and minimus, which keep the pelvis level when walking."
+    },
+    "nerve to piriformis muscle": {
+      "region": "Sacral plexus",
+      "description": "A small branch of the sacral plexus that supplies the piriformis, a deep hip muscle that turns the thigh outward."
+    },
+    "nerve to quadratus femoris muscle": {
+      "region": "Sacral plexus",
+      "description": "A branch of the sacral plexus that supplies the quadratus femoris and inferior gemellus, deep hip rotators."
+    },
+    "posterior femoral cutaneous nerve": {
+      "region": "Sacral plexus",
+      "description": "A sensory nerve from S1 to S3 that supplies the skin of the buttock's lower edge and the back of the thigh."
+    },
+    "anterior root of posterior femoral cutaneous nerve": {
+      "region": "Sacral plexus",
+      "description": "Root fibres from the front divisions of the sacral nerves that join to form the posterior femoral cutaneous nerve."
+    },
+    "posterior root of posterior femoral cutaneous nerve": {
+      "region": "Sacral plexus",
+      "description": "Root fibres from the back divisions of the sacral nerves that join to form the posterior femoral cutaneous nerve."
+    },
+    "pudendal nerve": {
+      "region": "Sacral plexus",
+      "description": "A nerve from S2 to S4 that supplies the skin and muscles of the perineum, including the external sphincters that control the bladder and bowel."
+    },
+    "tibial nerve": {
+      "region": "Leg and foot",
+      "description": "The larger division of the sciatic nerve. It runs down the back of the leg to supply the calf muscles and, through its plantar branches, the sole of the foot."
+    },
+    "medial sural cutaneous nerve": {
+      "region": "Leg and foot",
+      "description": "A skin branch of the tibial nerve behind the knee that helps form the sural nerve."
+    },
+    "sural nerve": {
+      "region": "Leg and foot",
+      "description": "A sensory nerve running down the back of the calf and behind the outer ankle, supplying the outer side of the foot. Surgeons often take pieces of it for nerve grafts."
+    },
+    "medial plantar nerve": {
+      "region": "Leg and foot",
+      "description": "The larger end branch of the tibial nerve in the sole. It supplies a few small foot muscles and the skin of the inner sole and inner three and a half toes."
+    },
+    "lateral plantar nerve": {
+      "region": "Leg and foot",
+      "description": "The smaller end branch of the tibial nerve in the sole. It supplies most of the small muscles of the foot and the skin of the outer sole."
+    },
+    "common plantar digital branches of medial plantar nerve": {
+      "region": "Leg and foot",
+      "description": "Branches of the medial plantar nerve in the sole that run toward the gaps between the first four toes."
+    },
+    "proper plantar digital branches of medial plantar nerve": {
+      "region": "Leg and foot",
+      "description": "Fine nerves along the sides of the big toe and the next two and a half toes, supplying their undersides and tips."
+    },
+    "common plantar digital branches of lateral plantar nerve": {
+      "region": "Leg and foot",
+      "description": "Branches of the lateral plantar nerve in the sole running toward the gap between the fourth and little toes."
+    },
+    "proper plantar digital branches of lateral plantar nerve": {
+      "region": "Leg and foot",
+      "description": "Fine nerves along the little toe and half the fourth toe, supplying their undersides and tips."
+    },
+    "common fibular nerve": {
+      "region": "Leg and foot",
+      "description": "The smaller division of the sciatic nerve. It wraps around the head of the fibula just below the knee, where it is easily injured, and splits into deep and superficial branches."
+    },
+    "sural communicating branch of common fibular nerve": {
+      "region": "Leg and foot",
+      "description": "A branch of the common fibular nerve that joins the medial sural cutaneous nerve to form the sural nerve."
+    },
+    "deep fibular nerve": {
+      "region": "Leg and foot",
+      "description": "A branch of the common fibular nerve that supplies the muscles at the front of the shin, which lift the foot and toes. Damage to it causes foot drop."
+    },
+    "muscular branches of deep fibular nerve": {
+      "region": "Leg and foot",
+      "description": "Motor branches of the deep fibular nerve to the tibialis anterior and the long extensors of the toes."
+    },
+    "dorsal digital branches of deep fibular nerve": {
+      "region": "Leg and foot",
+      "description": "End branches of the deep fibular nerve supplying the small patch of skin between the big toe and second toe."
+    },
+    "superficial fibular nerve": {
+      "region": "Leg and foot",
+      "description": "A branch of the common fibular nerve that supplies the fibularis muscles on the outer leg, which turn the sole outward, and most of the skin on the top of the foot."
+    },
+    "medial dorsal cutaneous nerve of foot": {
+      "region": "Leg and foot",
+      "description": "A branch of the superficial fibular nerve that supplies the skin on the inner part of the top of the foot."
+    },
+    "intermediate dorsal cutaneous nerve of foot": {
+      "region": "Leg and foot",
+      "description": "A branch of the superficial fibular nerve that supplies the skin on the middle and outer parts of the top of the foot."
+    },
+    "dorsal digital branches of superficial fibular nerve": {
+      "region": "Leg and foot",
+      "description": "End branches of the superficial fibular nerve supplying the skin on the top of most toes."
+    },
+    "sympathetic trunk": {
+      "region": "Autonomic",
+      "description": "A chain of nerve fibres and ganglia running down each side of the spine. It is the backbone of the sympathetic 'fight or flight' system, which speeds the heart and diverts blood to the muscles."
+    },
+    "ganglia of sympathetic trunk": {
+      "region": "Autonomic",
+      "description": "The bead-like swellings along the sympathetic trunk. They hold the neurons that relay sympathetic signals out to organs, blood vessels and sweat glands."
+    },
+    "sympathetic nerves": {
+      "region": "Autonomic",
+      "description": "Branches of the sympathetic trunk, such as the splanchnic nerves, that carry 'fight or flight' signals to the heart, lungs and abdominal organs."
+    }
+  }
+}

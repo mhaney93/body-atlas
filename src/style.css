@@ -158,6 +158,31 @@ body {
   animation: spin 0.8s linear infinite;
 }
 
+.effect-toggle {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 6px 0 0 14px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.effect-toggle[hidden] {
+  display: none;
+}
+
+.effect-toggle input {
+  accent-color: var(--layer-color);
+  margin: 2px 0 0;
+}
+
+.effect-toggle .note {
+  display: block;
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.35;
+}
+
 .summary {
   margin: 12px 0 0;
   font-size: 0.85rem;
