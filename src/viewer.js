@@ -6,7 +6,6 @@ import { EFFECTS } from './effects.js';
 
 const BODY_HEIGHT = 1.72; // metres, roughly; the models stand on y = 0
 const CLICK_SLOP_PX = 6;
-const SEE_THROUGH_DEPTH = 0.08; // metres; about the depth of the heart
 
 /** Fresnel "glass" shading: nearly clear face-on, glowing at grazing angles. */
 function glassMaterial() {
@@ -300,12 +299,13 @@ export class Viewer {
   #applyHazes() {
     const surfaces = [...this.shellMeshes];
     for (const { layer, group } of this.layers.values()) {
-      if (layer.hazeSurface) group?.traverse((o) => o.isMesh && surfaces.push(o));
+      if (layer.hazeSurface) group?.traverse((o) => o.isMesh && !o.userData.haze && surfaces.push(o));
     }
     for (const haze of this.hazes.values()) {
       for (const m of haze.overlays) m.removeFromParent();
       haze.overlays = surfaces.map((surface) => {
         const overlay = new THREE.Mesh(surface.geometry, haze.material);
+        overlay.userData.haze = true;
         overlay.renderOrder = 11; // over the glass shell
         overlay.raycast = () => {};
         surface.add(overlay); // follows its surface's visibility
@@ -344,13 +344,23 @@ export class Viewer {
     this.raycaster.setFromCamera(this.pointer, this.camera);
     const hits = this.raycaster.intersectObjects(targets, true).filter((h) => h.object.isMesh);
     // A see-through part (e.g. the heart wall) yields only to an opaque part
-    // just behind it (e.g. a valve inside), not to other see-through parts.
+    // inside it (e.g. a valve), i.e. one hit before the ray leaves it.
     const [nearest] = hits;
-    if (!nearest) return null;
-    const solid =
-      nearest.object.material.opacity < 1 &&
-      hits.find((h) => h.distance - nearest.distance < SEE_THROUGH_DEPTH && h.object.material.opacity >= 1);
+    if (!nearest || nearest.object.material.opacity >= 1) return nearest?.object ?? null;
+    const exit = this.#exitDistance(nearest.object);
+    const solid = hits.find((h) => h.distance < exit && h.object.material.opacity >= 1);
     return (solid || nearest).object;
+  }
+
+  /** Distance along the current pick ray to the last surface of `mesh`, back faces included. */
+  #exitDistance(mesh) {
+    const { material } = mesh;
+    const { side } = material;
+    const hits = [];
+    material.side = THREE.DoubleSide;
+    mesh.raycast(this.raycaster, hits);
+    material.side = side;
+    return Math.max(...hits.map((h) => h.distance));
   }
 
   #bindPointer(el) {
