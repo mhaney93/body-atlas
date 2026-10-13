@@ -188,7 +188,6 @@ export class Viewer {
     controls.maxDistance = 6;
     controls.zoomToCursor = true;
     controls.addEventListener('change', () => this.#clampTarget());
-    controls.addEventListener('start', () => this.#reachTarget());
     this.controls = controls;
     this.home = { position: camera.position.clone(), target: controls.target.clone() };
 
@@ -411,7 +410,9 @@ export class Viewer {
     el.addEventListener('pointerdown', (e) => {
       active.add(e.pointerId);
       down = active.size === 1 ? { x: e.clientX, y: e.clientY, id: e.pointerId } : null;
+      if (active.size === 2) this.#reachTarget();
     });
+    el.addEventListener('wheel', () => this.#reachTarget(), { capture: true, passive: true });
     el.addEventListener('pointerup', (e) => {
       active.delete(e.pointerId);
       if (!down || down.id !== e.pointerId) return;
