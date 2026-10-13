@@ -90,7 +90,7 @@ npm run fetch-data     # downloads ~140 MB into .cache/ (gitignored) and checks 
 npm run build-models   # writes public/models/skin.glb, skeletal.glb, skeletal-ossicles.glb, nervous.glb, nervous-inner-ear.glb and circulatory.glb
 ```
 
-The generated GLB files come to about 10.5 MB in total (circulatory.glb is about 4.7 MB); each system's file downloads only when its filter is first turned on. They are committed, so a normal build does not need the source data.
+The generated GLB files come to about 10.7 MB in total (circulatory.glb is about 4.7 MB); each system's file downloads only when its filter is first turned on. They are committed, so a normal build does not need the source data.
 
 `data-sources/z-anatomy/` is committed too. To regenerate it, download `Z-Anatomy.zip` from the Z-Anatomy repository, unzip it, and run its `Startup.blend` through Blender 4.x:
 
