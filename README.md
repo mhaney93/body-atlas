@@ -37,7 +37,7 @@ npm run preview   # serve dist/ locally
 
 ### Adding a body system
 
-Each system is a data-driven layer, so adding Circulatory, Nervous or another system does not touch the viewer:
+Each system is a data-driven layer, so adding Circulatory or another system does not touch the viewer:
 
 1. In `scripts/build-models.mjs`, add an entry to `ASSETS` that lists its BodyParts3D element files (or a `load` function for parts from another source, as the Nervous entry does). Then rebuild the models (see below).
 2. Add `src/data/<system>.json` with the same shape as `skeletal.json`: `id`, `name`, `color`, `asset`, `summary`, plus `parts` keyed by the part's name with any "left"/"right" removed.
