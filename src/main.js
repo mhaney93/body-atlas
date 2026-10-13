@@ -4,7 +4,11 @@ import { Viewer } from './viewer.js';
 const $ = (id) => document.getElementById(id);
 // Asset paths in layer data are relative to the site root.
 const asset = (path) => import.meta.env.BASE_URL + path;
-const layers = LAYERS.map((layer) => ({ ...layer, asset: asset(layer.asset) }));
+const layers = LAYERS.map((layer) => ({
+  ...layer,
+  asset: asset(layer.asset),
+  extraAssets: layer.extraAssets?.map(asset),
+}));
 
 const info = $('info');
 const viewer = new Viewer($('stage'), {
@@ -26,7 +30,7 @@ const viewer = new Viewer($('stage'), {
 
 if (import.meta.env.DEV) window.viewer = viewer; // handy for debugging in the console
 
-// Bottom panels on phones sit just above the credit line, whatever its height.
+// The hint and, on phones, the bottom panels sit just above the credit line, whatever its height.
 const credit = document.querySelector('.credit');
 new ResizeObserver(() => {
   document.documentElement.style.setProperty('--credit-height', `${credit.offsetHeight}px`);

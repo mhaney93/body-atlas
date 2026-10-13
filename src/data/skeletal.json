@@ -3,6 +3,7 @@
   "name": "Skeletal",
   "color": "#ffc861",
   "asset": "models/skeletal.glb",
+  "extraAssets": ["models/skeletal-ossicles.glb"],
   "summary": "The adult skeleton has about 206 bones. It supports and shapes the body, protects organs such as the brain, heart and lungs, anchors the muscles that move us, stores minerals and makes blood cells in the marrow.",
   "parts": {
     "frontal bone": {
@@ -20,6 +21,18 @@
     "temporal bone": {
       "region": "Skull",
       "description": "Forms the lower side of the skull around the ear. It houses the middle and inner ear and forms the jaw joint with the mandible."
+    },
+    "malleus": {
+      "region": "Middle ear",
+      "description": "The hammer, the first and largest of the three auditory ossicles. Its handle is attached to the eardrum, so it picks up the drum's vibrations and passes them to the incus."
+    },
+    "incus": {
+      "region": "Middle ear",
+      "description": "The anvil, the middle auditory ossicle. It links the malleus to the stapes and carries sound vibrations between them."
+    },
+    "stapes": {
+      "region": "Middle ear",
+      "description": "The stirrup, the innermost auditory ossicle and the smallest bone in the body, about 3 mm long. Its footplate fits into the oval window and pushes sound vibrations into the fluid of the inner ear."
     },
     "sphenoid bone": {
       "region": "Skull",
