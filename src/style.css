@@ -158,29 +158,64 @@ body {
   animation: spin 0.8s linear infinite;
 }
 
-.effect-toggle {
+/* Colour key and effect toggles under an active layer's button. */
+.layer-extras {
+  padding: 8px 4px 2px;
+}
+
+.filters .legend {
   display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  margin: 6px 0 0 14px;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.legend li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend li::before,
+.flow .dot {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--group-color);
+  box-shadow: 0 0 6px var(--group-color);
+}
+
+.effect {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  margin-top: 8px;
   font-size: 0.85rem;
   cursor: pointer;
 }
 
-.effect-toggle[hidden] {
-  display: none;
+.effect input {
+  margin: 0;
+  accent-color: var(--accent);
 }
 
-.effect-toggle input {
-  accent-color: var(--layer-color);
-  margin: 2px 0 0;
+.effect-badge {
+  padding: 1px 6px;
+  border: 1px dashed var(--muted);
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.72rem;
 }
 
-.effect-toggle .note {
-  display: block;
+.effect-note {
+  flex-basis: 100%;
   color: var(--muted);
   font-size: 0.75rem;
-  line-height: 1.35;
+  line-height: 1.4;
 }
 
 .summary {
@@ -234,6 +269,19 @@ body {
   margin: 0;
   line-height: 1.5;
   font-size: 0.92rem;
+}
+
+.info .flow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.info .flow .value {
+  color: var(--text);
 }
 
 .close {
@@ -348,6 +396,10 @@ body {
   .filters h2,
   .filters .more {
     display: none;
+  }
+
+  .effect-note {
+    display: none; /* the "Illustrative" badge still says it */
   }
 
   .summary {
