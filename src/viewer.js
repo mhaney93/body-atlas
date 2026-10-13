@@ -6,6 +6,14 @@ import { EFFECTS } from './effects.js';
 
 const BODY_HEIGHT = 1.72; // metres, roughly; the models stand on y = 0
 const CLICK_SLOP_PX = 6;
+// Close-up cutaway: once zoomed in closer than CUT_START, layer geometry in a
+// bubble around the camera is hidden (and unclickable), so zooming further
+// pushes through outer bone to buried parts such as the ear ossicles.
+const CUT_START = 0.25; // orbit distance (m) where the bubble starts to grow
+const CUT_FULL = 0.15; // orbit distance (m) where it reaches CUT_RADIUS
+const CUT_RADIUS = 0.03; // metres
+const UNCUT_SIZE = 0.015; // parts smaller than this (bounding-box diagonal, m) are never cut
+const cutUniform = { value: 0 };
 
 /** Fresnel "glass" shading: nearly clear face-on, glowing at grazing angles. */
 function glassMaterial() {
@@ -90,11 +98,23 @@ function hazeMaterial(hex, time) {
   });
 }
 
-function layerMaterials(hex, opacity = 1) {
+/** Makes a material discard fragments closer to the camera than the cutaway radius. */
+function withCutaway(material) {
+  material.onBeforeCompile = (shader) => {
+    shader.uniforms.uCut = cutUniform;
+    shader.fragmentShader = shader.fragmentShader.replace(
+      'void main() {',
+      'uniform float uCut;\nvoid main() {\n  if (length(vViewPosition) < uCut) discard;',
+    );
+  };
+  return material;
+}
+
+function layerMaterials(hex, opacity = 1, cutaway = false) {
   const color = new THREE.Color(hex);
   const translucent = opacity < 1;
-  const make = (emissive, intensity) =>
-    new THREE.MeshStandardMaterial({
+  const make = (emissive, intensity) => {
+    const material = new THREE.MeshStandardMaterial({
       color,
       emissive,
       emissiveIntensity: intensity,
@@ -102,6 +122,8 @@ function layerMaterials(hex, opacity = 1) {
       metalness: 0.0,
       ...(translucent && { transparent: true, opacity, depthWrite: false }),
     });
+    return cutaway ? withCutaway(material) : material;
+  };
   return {
     base: make(color, 0.45),
     hover: make(new THREE.Color('#ffffff').lerp(color, 0.4), 0.7),
@@ -162,7 +184,7 @@ export class Viewer {
     controls.target.set(0, BODY_HEIGHT * 0.53, 0);
     controls.enableDamping = true;
     controls.dampingFactor = 0.08;
-    controls.minDistance = 0.25;
+    controls.minDistance = 0.01;
     controls.maxDistance = 6;
     controls.zoomToCursor = true;
     controls.addEventListener('change', () => this.#clampTarget());
@@ -180,6 +202,8 @@ export class Viewer {
       timer.update();
       this.time.value = timer.getElapsed();
       controls.update();
+      const distance = camera.position.distanceTo(controls.target);
+      cutUniform.value = CUT_RADIUS * THREE.MathUtils.smoothstep(CUT_START - distance, 0, CUT_START - CUT_FULL);
       for (const fx of this.effects.values()) if (fx.object.visible) fx.update(this.time.value, camera, renderer);
       renderer.render(scene, camera);
     });
@@ -211,9 +235,9 @@ export class Viewer {
     // Materials are shared per colour: a part's own colour, else its sub-group's
     // (e.g. arteries and veins, tagged via the `group` node extra), else the layer's.
     const byColor = new Map();
-    const materialsFor = (color, opacity) => {
-      const key = `${color}/${opacity ?? 1}`;
-      if (!byColor.has(key)) byColor.set(key, layerMaterials(color, opacity));
+    const materialsFor = (color, opacity, cutaway) => {
+      const key = `${color}/${opacity ?? 1}/${cutaway}`;
+      if (!byColor.has(key)) byColor.set(key, layerMaterials(color, opacity, cutaway));
       return byColor.get(key);
     };
     entry = { layer, group: null, promise: null };
@@ -223,10 +247,15 @@ export class Viewer {
       const group = new THREE.Group();
       group.add(...gltfs.map((gltf) => gltf.scene));
       group.visible = false;
+      group.updateMatrixWorld(true);
+      const box = new THREE.Box3();
       group.traverse((o) => {
         if (o.isMesh) {
+          // Small parts stay whole in the cutaway so they don't vanish as you close in on them.
+          o.userData.uncut = box.setFromObject(o).getSize(new THREE.Vector3()).length() < UNCUT_SIZE;
           const g = layer.groups?.[o.userData.group];
-          o.userData.materials = materialsFor(this.partColor(layer, o.userData.name ?? o.name) ?? g?.color ?? layer.color, g?.opacity);
+          const color = this.partColor(layer, o.userData.name ?? o.name) ?? g?.color ?? layer.color;
+          o.userData.materials = materialsFor(color, g?.opacity, !o.userData.uncut);
           o.material = o.userData.materials.base;
           o.userData.layerId = layer.id;
         }
@@ -336,13 +365,10 @@ export class Viewer {
   }
 
   #pick(clientX, clientY) {
-    const targets = [];
-    for (const { group } of this.layers.values()) if (group?.visible) targets.push(group);
-    if (!targets.length) return null;
     const rect = this.renderer.domElement.getBoundingClientRect();
     this.pointer.set(((clientX - rect.left) / rect.width) * 2 - 1, -((clientY - rect.top) / rect.height) * 2 + 1);
     this.raycaster.setFromCamera(this.pointer, this.camera);
-    const hits = this.raycaster.intersectObjects(targets, true).filter((h) => h.object.isMesh);
+    const hits = this.#hits();
     // A see-through part (e.g. the heart wall) yields only to an opaque part
     // inside it (e.g. a valve), i.e. one hit before the ray leaves it.
     const [nearest] = hits;
@@ -350,6 +376,20 @@ export class Viewer {
     const exit = this.#exitDistance(nearest.object);
     const solid = hits.find((h) => h.distance < exit && h.object.material.opacity >= 1);
     return (solid || nearest).object;
+  }
+
+  /** Visible layer mesh hits along this.raycaster, nearest first, skipping anything cut away near the camera. */
+  #hits() {
+    const targets = [];
+    for (const { group } of this.layers.values()) if (group?.visible) targets.push(group);
+    return this.raycaster
+      .intersectObjects(targets, true)
+      .filter((h) => h.object.isMesh && (h.distance >= cutUniform.value || h.object.userData.uncut));
+  }
+
+  /** First visible layer mesh hit by this.raycaster, skipping anything cut away near the camera. */
+  #firstHit() {
+    return this.#hits()[0];
   }
 
   /** Distance along the current pick ray to the last surface of `mesh`, back faces included. */
@@ -370,7 +410,9 @@ export class Viewer {
     el.addEventListener('pointerdown', (e) => {
       active.add(e.pointerId);
       down = active.size === 1 ? { x: e.clientX, y: e.clientY, id: e.pointerId } : null;
+      if (active.size === 2) this.#reachTarget();
     });
+    el.addEventListener('wheel', () => this.#reachTarget(), { capture: true, passive: true });
     el.addEventListener('pointerup', (e) => {
       active.delete(e.pointerId);
       if (!down || down.id !== e.pointerId) return;
@@ -392,6 +434,21 @@ export class Viewer {
       });
     });
     el.addEventListener('pointerleave', () => this.#setHovered(null));
+  }
+
+  /**
+   * Close up, zooming stalls once the camera reaches minDistance from the orbit
+   * target. If the target sits short of the part in view, slide it along the
+   * view axis onto that part (the view itself doesn't move) so zooming can
+   * carry on into the cutaway.
+   */
+  #reachTarget() {
+    const { camera, controls } = this;
+    const distance = camera.position.distanceTo(controls.target);
+    if (distance >= CUT_START) return;
+    this.raycaster.set(camera.position, camera.getWorldDirection(new THREE.Vector3()));
+    const hit = this.#firstHit();
+    if (hit && hit.distance > distance) controls.target.copy(this.raycaster.ray.at(hit.distance, new THREE.Vector3()));
   }
 
   #clampTarget() {

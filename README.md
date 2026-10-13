@@ -4,7 +4,7 @@ Free interactive 3D atlas of the human body with per-system highlighting.
 
 **Live site:** https://body-atlas-hd.vercel.app
 
-The page shows a see-through glass model of an adult male body that you can rotate, zoom and pan with a mouse or with touch. Turning on a body system in the filter panel lights up its parts in color. Clicking or tapping a part shows its name and a short description.
+The page shows a see-through glass model of an adult male body that you can rotate, zoom and pan with a mouse or with touch. Turning on a body system in the filter panel lights up its parts in color. Clicking or tapping a part shows its name and a short description. Zoom in very close and parts near the camera are cut away, so you can see into bone to buried parts; parts smaller than about 1.5 cm stay whole.
 
 It ships the **Skeletal**, **Nervous** and **Circulatory** systems. Every bone, brain region, named nerve, artery and vein in the model is a separate, clickable part with its own name and description. A system's model downloads when its filter is first switched on, except Skeletal, which loads in the background at startup.
 
@@ -103,7 +103,7 @@ blender -b --factory-startup --disable-autoexec Z-Anatomy/Startup.blend \
 
 The Skeletal layer covers all 206 bones of the standard adult count, including the 6 auditory ossicles. It also includes the 4 sesamoid bones under the big toes, the costal cartilages and the intervertebral discs. The sternum is shown as its three parts: manubrium, body and xiphoid process.
 
-The ossicles sit inside the temporal bone, in the middle ear. Only the malleus can be seen through the ear canal. The incus and stapes sit deeper inside the temporal bone; to click them, zoom into the middle ear.
+The ossicles sit inside the temporal bone, in the middle ear. Only the malleus can be seen through the ear canal. The incus and stapes sit deeper inside the temporal bone. To see them, zoom toward the ear until the bone in front is cut away.
 
 ### Nervous coverage
 
