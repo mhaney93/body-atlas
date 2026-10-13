@@ -38,7 +38,7 @@ npm run preview   # serve dist/ locally
 
 ### Adding a body system
 
-Each system is a data-driven layer, so adding Circulatory or another system does not touch the viewer:
+Each system is a data-driven layer, so adding another system (Muscular, say) does not touch the viewer:
 
 1. In `scripts/build-models.mjs`, add an entry to `ASSETS` that lists its BodyParts3D element files (or a `load` function for parts from another source, as the Nervous entry does). Then rebuild the models (see below).
 2. Add `src/data/<system>.json` with the same shape as `skeletal.json`: `id`, `name`, `color`, `asset`, `summary`, plus `parts` keyed by the part's name with any "left"/"right" removed.
@@ -115,7 +115,7 @@ The optional **nerve-ending haze** is a decorative effect, not anatomy: twinklin
 
 ### Circulatory coverage
 
-The Circulatory layer shows every artery and vein that BodyParts3D models as its own named element: 438 artery parts and 227 vein parts after merging same-named segments, from the aorta down to the digital arteries of the fingers and toes. Each part's info panel says whether it carries blood toward or away from the heart (and, for the pulmonary vessels, that their oxygen levels are the reverse of the rest of the body's). Arteries are red and veins blue.
+The Circulatory layer shows every artery and vein that BodyParts3D models as its own named element: 438 artery parts and 224 vein parts after merging same-named segments, from the aorta down to the digital arteries of the fingers and toes. Each part's info panel says whether it carries blood toward or away from the heart (and, for the pulmonary vessels, that their oxygen levels are the reverse of the rest of the body's). Arteries are red and veins blue.
 
 The heart is split into its four chambers (the blood-filled cavities), the walls of the atria and ventricles, and the valve apparatus: the cusps of the aortic and pulmonary valves, the leaflets of the mitral and tricuspid valves, and the papillary muscles. The walls and chambers are see-through so the valves show inside.
 
