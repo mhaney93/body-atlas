@@ -1,0 +1,1213 @@
+{
+  "id": "joints",
+  "name": "Joints & connective tissue",
+  "color": "#5fe0c3",
+  "asset": "models/joints.glb",
+  "summary": "Ligaments tie bone to bone and hold joints together. Cartilage pads and discs cushion them, capsules seal them, and sheets of fascia wrap and separate the muscles.",
+  "groupToggles": true,
+  "groups": {
+    "ligaments": {
+      "label": "Ligaments",
+      "color": "#5fe0c3"
+    },
+    "cartilage": {
+      "label": "Cartilage & discs",
+      "color": "#bdf3ff"
+    },
+    "capsules": {
+      "label": "Capsules",
+      "color": "#3fc7a0",
+      "opacity": 0.5
+    },
+    "fascia": {
+      "label": "Fascia",
+      "color": "#a6e88a",
+      "opacity": 0.3,
+      "visible": false
+    }
+  },
+  "shared": [
+    {
+      "layer": "skeletal",
+      "match": "^(intervertebral disk|\\w+ costal cartilage$)",
+      "group": "cartilage"
+    }
+  ],
+  "parts": {
+    "acetabular labrum": {
+      "region": "Hip",
+      "group": "cartilage",
+      "description": "A ring of fibrocartilage around the rim of the hip socket (acetabulum). It deepens the socket and seals the joint to help keep the head of the femur in place."
+    },
+    "acromioclavicular ligament": {
+      "region": "Shoulder",
+      "group": "ligaments",
+      "description": "Reinforces the top of the acromioclavicular joint, where the outer end of the collarbone meets the acromion of the shoulder blade."
+    },
+    "annular ligament of radius": {
+      "region": "Elbow",
+      "group": "ligaments",
+      "description": "A strong ring that wraps the head of the radius and holds it against the ulna while the forearm rotates. In young children the head can slip out of it (\"pulled elbow\")."
+    },
+    "antebrachial fascia": {
+      "region": "Forearm",
+      "group": "fascia",
+      "description": "The deep fascia enclosing the forearm muscles. Near the wrist it thickens into the extensor retinaculum and, at the front, blends into the flexor retinaculum."
+    },
+    "anterior cruciate ligament": {
+      "region": "Knee",
+      "group": "ligaments",
+      "description": "A ligament inside the knee that runs from the front of the tibia up to the back of the femur. It stops the tibia from sliding forward and twisting, and is often torn in sports (an ACL tear)."
+    },
+    "anterior intermuscular septum of leg": {
+      "region": "Leg",
+      "group": "fascia",
+      "description": "A sheet from the crural fascia to the fibula that separates the front (extensor) and outer (fibular) muscle compartments of the leg."
+    },
+    "anterior layer of thoracolumbar fascia": {
+      "region": "Back",
+      "group": "fascia",
+      "description": "The deepest layer of the thoracolumbar fascia, covering the front of the quadratus lumborum muscle in the lower back."
+    },
+    "anterior ligament of fibular head": {
+      "region": "Leg",
+      "group": "ligaments",
+      "description": "Reinforces the front of the joint between the head of the fibula and the tibia."
+    },
+    "anterior longitudinal ligament": {
+      "region": "Spine",
+      "group": "ligaments",
+      "description": "A broad band running down the front of the vertebral bodies and discs from the skull to the sacrum. It limits bending backwards."
+    },
+    "anterior meniscotibial ligament (lateral meniscus)": {
+      "region": "Knee",
+      "group": "ligaments",
+      "description": "Anchors the front horn of the lateral meniscus to the tibia."
+    },
+    "anterior meniscotibial ligament (medial meniscus)": {
+      "region": "Knee",
+      "group": "ligaments",
+      "description": "Anchors the front horn of the medial meniscus to the tibia."
+    },
+    "anterior sacro-iliac ligament": {
+      "region": "Pelvis",
+      "group": "ligaments",
+      "description": "A thin sheet across the front of the sacroiliac joint, between the sacrum and the hip bone."
+    },
+    "anterior sternoclavicular ligament": {
+      "region": "Shoulder",
+      "group": "ligaments",
+      "description": "Reinforces the front of the sternoclavicular joint between the collarbone and the breastbone, the only bony joint linking the arm to the trunk."
+    },
+    "anterior talocalcaneal ligament": {
+      "region": "Foot",
+      "group": "ligaments",
+      "description": "Joins the neck of the talus to the calcaneus at the front of the subtalar joint."
+    },
+    "anterior talofibular ligament": {
+      "region": "Ankle",
+      "group": "ligaments",
+      "description": "A flat band from the front of the lateral malleolus (outer ankle bone) to the talus. It is the most commonly sprained ligament in the body, torn by rolling the ankle inwards."
+    },
+    "anterior tibiofibular ligament": {
+      "region": "Ankle",
+      "group": "ligaments",
+      "description": "Joins the lower ends of the tibia and fibula at the front of the ankle. It is torn in a \"high ankle sprain\"."
+    },
+    "arcuate popliteal ligament": {
+      "region": "Knee",
+      "group": "ligaments",
+      "description": "A Y-shaped band at the back outer corner of the knee capsule, arching over the popliteus muscle from the head of the fibula."
+    },
+    "articular capsule of acromioclavicular joint": {
+      "region": "Shoulder",
+      "group": "capsules",
+      "description": "The thin fibrous capsule around the small acromioclavicular joint at the top of the shoulder."
+    },
+    "articular capsule of elbow joint": {
+      "region": "Elbow",
+      "group": "capsules",
+      "description": "The fibrous capsule enclosing the elbow, where the humerus meets the radius and ulna. It is thin in front and behind, where the elbow bends, and thickened at the sides by the collateral ligaments."
+    },
+    "articular capsule of glenohumeral joint": {
+      "region": "Shoulder",
+      "group": "capsules",
+      "description": "The loose fibrous capsule of the shoulder joint, from the rim of the glenoid to the neck of the humerus. Its slack lets the shoulder move more freely than any other joint."
+    },
+    "articular capsule of hip joint": {
+      "region": "Hip",
+      "group": "capsules",
+      "description": "The strong, dense capsule of the hip joint, from the rim of the acetabulum to the neck of the femur. It is reinforced by three of the strongest ligaments in the body."
+    },
+    "articular capsule of interphalangeal joint of great toe": {
+      "region": "Foot",
+      "group": "capsules",
+      "description": "The fibrous capsule of the single joint of the big toe."
+    },
+    "articular capsule of knee joint": {
+      "region": "Knee",
+      "group": "capsules",
+      "description": "The fibrous capsule that encloses the knee joint. It is thin in places and strengthened by surrounding ligaments and by the tendons of the thigh muscles."
+    },
+    "articular capsule of radiocarpal joint": {
+      "region": "Wrist",
+      "group": "capsules",
+      "description": "The fibrous capsule enclosing the wrist joint between the radius and the first row of wrist bones."
+    },
+    "articular capsule of sternoclavicular joint": {
+      "region": "Shoulder",
+      "group": "capsules",
+      "description": "The fibrous capsule enclosing the joint between the inner end of the collarbone, the breastbone and the first costal cartilage."
+    },
+    "articular capsule of superior tibiofibular joint": {
+      "region": "Leg",
+      "group": "capsules",
+      "description": "The capsule of the small joint between the head of the fibula and the tibia, just below the knee."
+    },
+    "articular capsule of temporomandibular joint": {
+      "region": "Jaw",
+      "group": "capsules",
+      "description": "The fibrous sleeve that encloses the jaw joint, running from the temporal bone to the neck of the mandible. Its loose upper part lets the jaw glide forward when the mouth opens wide."
+    },
+    "articular capsules of distal interphalangeal joints": {
+      "region": "Hand",
+      "group": "capsules",
+      "description": "The fibrous capsules of the end joints of the fingers, between the second and third finger bones."
+    },
+    "articular capsules of distal interphalangeal joints of foot": {
+      "region": "Foot",
+      "group": "capsules",
+      "description": "The fibrous capsules of the end joints of the second to fifth toes."
+    },
+    "articular capsules of metacarpophalangeal joints": {
+      "region": "Hand",
+      "group": "capsules",
+      "description": "The fibrous capsules of the knuckle joints between the metacarpals and the first finger bones."
+    },
+    "articular capsules of metatarsophalangeal joints": {
+      "region": "Foot",
+      "group": "capsules",
+      "description": "The fibrous capsules of the joints at the ball of the foot, between the metatarsals and the toes."
+    },
+    "articular capsules of proximal interphalangeal joints": {
+      "region": "Hand",
+      "group": "capsules",
+      "description": "The fibrous capsules of the middle finger joints, between the first and second finger bones."
+    },
+    "articular capsules of proximal interphalangeal joints of foot": {
+      "region": "Foot",
+      "group": "capsules",
+      "description": "The fibrous capsules of the first joints of the second to fifth toes."
+    },
+    "articular disc of acromioclavicular joint": {
+      "region": "Shoulder",
+      "group": "cartilage",
+      "description": "A small, often incomplete wedge of fibrocartilage inside the acromioclavicular joint."
+    },
+    "articular disc of distal radio-ulnar joint": {
+      "region": "Wrist",
+      "group": "cartilage",
+      "description": "A triangular disc of fibrocartilage between the end of the ulna and the wrist bones. It cushions the inner side of the wrist and binds the radius and ulna together."
+    },
+    "articular disc of sternoclavicular joint": {
+      "region": "Shoulder",
+      "group": "cartilage",
+      "description": "A disc of fibrocartilage inside the sternoclavicular joint. It cushions the joint and stops the collarbone from riding up over the breastbone."
+    },
+    "articular disc of temporomandibular joint": {
+      "region": "Jaw",
+      "group": "cartilage",
+      "description": "A thin oval plate of fibrocartilage between the mandible and the temporal bone. It splits the jaw joint into upper and lower compartments so the jaw can both hinge and slide."
+    },
+    "brachial fascia": {
+      "region": "Arm",
+      "group": "fascia",
+      "description": "The deep fascia that sheathes the upper arm. It continues into the shoulder above and the forearm below."
+    },
+    "calcaneocuboid ligament": {
+      "region": "Foot",
+      "group": "ligaments",
+      "description": "The outer part of the Y-shaped bifurcate ligament on top of the foot, joining the calcaneus to the cuboid."
+    },
+    "calcaneofibular ligament": {
+      "region": "Ankle",
+      "group": "ligaments",
+      "description": "A cord from the tip of the lateral malleolus to the side of the calcaneus (heel bone). It is often injured along with the anterior talofibular ligament."
+    },
+    "calcaneonavicular ligament": {
+      "region": "Foot",
+      "group": "ligaments",
+      "description": "The inner part of the Y-shaped bifurcate ligament on top of the foot, joining the calcaneus to the navicular."
+    },
+    "capitohamate interosseous ligament": {
+      "region": "Wrist",
+      "group": "ligaments",
+      "description": "A short ligament between the facing surfaces of the capitate and hamate."
+    },
+    "clavipectoral fascia": {
+      "region": "Chest",
+      "group": "fascia",
+      "description": "A sheet under pectoralis major, stretching from the collarbone around pectoralis minor. Vessels and nerves to the chest wall pierce it."
+    },
+    "collateral interphalangeal ligaments of foot": {
+      "region": "Foot",
+      "group": "ligaments",
+      "description": "Cords on each side of the toe joints that keep them working as hinges."
+    },
+    "collateral interphalangeal ligaments of hand": {
+      "region": "Hand",
+      "group": "ligaments",
+      "description": "Cords on each side of the finger joints that keep them working as hinges. A \"jammed\" finger often sprains one of them."
+    },
+    "collateral metacarpophalangeal ligaments": {
+      "region": "Hand",
+      "group": "ligaments",
+      "description": "Strong cords on each side of the knuckle joints. They tighten when the fingers bend, which keeps the bent knuckles stable."
+    },
+    "collateral metatarsophalangeal ligaments": {
+      "region": "Foot",
+      "group": "ligaments",
+      "description": "Cords on each side of the joints at the ball of the foot."
+    },
+    "conoid ligament": {
+      "region": "Shoulder",
+      "group": "ligaments",
+      "description": "The cone-shaped inner part of the coracoclavicular ligament, from the coracoid process up to the underside of the collarbone. It holds the collarbone and shoulder blade together."
+    },
+    "coraco-acromial ligament": {
+      "region": "Shoulder",
+      "group": "ligaments",
+      "description": "A strong triangular band between the coracoid process and the acromion. With them it forms an arch over the shoulder joint that stops the humerus from moving upwards."
+    },
+    "coracohumeral ligament": {
+      "region": "Shoulder",
+      "group": "ligaments",
+      "description": "A broad band from the coracoid process to the top of the humerus. It strengthens the top of the shoulder capsule."
+    },
+    "costoclavicular ligament": {
+      "region": "Shoulder",
+      "group": "ligaments",
+      "description": "A short, strong band from the first rib and its cartilage to the underside of the collarbone. It is the main stabiliser of the sternoclavicular joint."
+    },
+    "costotransverse ligament": {
+      "region": "Thorax",
+      "group": "ligaments",
+      "description": "Ligaments binding the neck and tubercle of each rib to the transverse process of its vertebra. They steady the costotransverse joints, where the ribs swing during breathing."
+    },
+    "cricopharyngeal ligament": {
+      "region": "Larynx",
+      "group": "ligaments",
+      "description": "Ties the corniculate cartilages at the back of the larynx to the cricoid cartilage and the wall of the pharynx behind it."
+    },
+    "crural fascia": {
+      "region": "Leg",
+      "group": "fascia",
+      "description": "The deep fascia enclosing the muscles of the lower leg. It is tight, which helps the calf muscles pump blood back up the veins."
+    },
+    "cuneocuboid interosseous ligament": {
+      "region": "Foot",
+      "group": "ligaments",
+      "description": "A short, strong band between the facing surfaces of the lateral cuneiform and the cuboid."
+    },
+    "cuneometatarsal interosseous ligaments": {
+      "region": "Foot",
+      "group": "ligaments",
+      "description": "Bands between the cuneiforms and the metatarsal bases. The strongest, from the medial cuneiform to the second metatarsal (Lisfranc's ligament), is injured in a Lisfranc sprain."
+    },
+    "deep part of tibial collateral ligament": {
+      "region": "Knee",
+      "group": "ligaments",
+      "description": "The short inner layer of the medial collateral ligament, a thickening of the capsule that is attached to the medial meniscus."
+    },
+    "deep transverse metacarpal ligament": {
+      "region": "Hand",
+      "group": "ligaments",
+      "description": "Ties the palmar plates of the second to fifth knuckle joints together, so the metacarpal heads can't spread apart."
+    },
+    "deep transverse metatarsal ligament": {
+      "region": "Foot",
+      "group": "ligaments",
+      "description": "Ties the plantar plates of all five joints at the ball of the foot together, so the metatarsal heads stay in a row."
+    },
+    "deltoid fascia": {
+      "region": "Shoulder",
+      "group": "fascia",
+      "description": "The deep fascia covering the deltoid muscle that caps the shoulder. It sends partitions in between the muscle's bundles."
+    },
+    "descending part of iliofemoral ligament": {
+      "region": "Hip",
+      "group": "ligaments",
+      "description": "The lower limb of the Y-shaped iliofemoral ligament, running down the front of the hip to the femur. It lets you stand upright with little muscle effort."
+    },
+    "diaphragmatic fascia": {
+      "region": "Thorax",
+      "group": "fascia",
+      "description": "The thin layer of fascia covering the diaphragm, the dome-shaped muscle that separates the chest from the abdomen and drives breathing."
+    },
+    "dorsal calcaneocuboid ligament": {
+      "region": "Foot",
+      "group": "ligaments",
+      "description": "A thin band on top of the foot joining the calcaneus to the cuboid."
+    },
+    "dorsal carpometacarpal ligaments": {
+      "region": "Hand",
+      "group": "ligaments",
+      "description": "Join the second row of wrist bones to the bases of the metacarpals on the back of the hand."
+    },
+    "dorsal cuboideonavicular ligament": {
+      "region": "Foot",
+      "group": "ligaments",
+      "description": "Joins the cuboid to the navicular on the top of the foot."
+    },
+    "dorsal cuneocuboid ligament": {
+      "region": "Foot",
+      "group": "ligaments",
+      "description": "Joins the lateral cuneiform to the cuboid on the top of the foot."
+    },
+    "dorsal cuneonavicular ligaments": {
+      "region": "Foot",
+      "group": "ligaments",
+      "description": "Join the navicular to the three cuneiform bones on the top of the foot."
+    },
+    "dorsal fascia of hand": {
+      "region": "Hand",
+      "group": "fascia",
+      "description": "The thin deep fascia on the back of the hand, covering the extensor tendons."
+    },
+    "dorsal intercarpal ligaments": {
+      "region": "Wrist",
+      "group": "ligaments",
+      "description": "Bands across the back of the wrist that tie neighbouring carpal bones to one another."
+    },
+    "dorsal intercuneiform ligaments": {
+      "region": "Foot",
+      "group": "ligaments",
+      "description": "Join neighbouring cuneiform bones on the top of the foot."
+    },
+    "dorsal metacarpal ligaments": {
+      "region": "Hand",
+      "group": "ligaments",
+      "description": "Short transverse bands joining the bases of neighbouring metacarpals on the back of the hand."
+    },
+    "dorsal metatarsal ligaments": {
+      "region": "Foot",
+      "group": "ligaments",
+      "description": "Short transverse bands joining the bases of neighbouring metatarsals on the top of the foot."
+    },
+    "dorsal radio-ulnar ligament": {
+      "region": "Wrist",
+      "group": "ligaments",
+      "description": "Joins the back edges of the radius and ulna at the wrist. With its palmar partner it holds the distal radio-ulnar joint together as the forearm turns."
+    },
+    "dorsal radiocarpal ligament": {
+      "region": "Wrist",
+      "group": "ligaments",
+      "description": "Runs obliquely from the back of the radius to the wrist bones, mainly the triquetrum. It keeps the hand from sliding off the forearm toward the palm."
+    },
+    "dorsal scaphotriquetral ligament": {
+      "region": "Wrist",
+      "group": "ligaments",
+      "description": "Runs across the back of the wrist from the scaphoid to the triquetrum."
+    },
+    "dorsal tarsometatarsal ligaments": {
+      "region": "Foot",
+      "group": "ligaments",
+      "description": "Join the cuneiforms and cuboid to the bases of the metatarsals on the top of the foot."
+    },
+    "dorsal ulnocarpal ligament": {
+      "region": "Wrist",
+      "group": "ligaments",
+      "description": "A band on the back of the wrist from the ulnar side of the forearm to the wrist bones."
+    },
+    "extensor retinaculum of wrist": {
+      "region": "Wrist",
+      "group": "fascia",
+      "description": "A band across the back of the wrist that holds the extensor tendons in place. Partitions beneath it divide the tendons into six tunnels."
+    },
+    "external intercostal membrane": {
+      "region": "Thorax",
+      "group": "ligaments",
+      "description": "A thin membrane that replaces the external intercostal muscle between the ribs near the breastbone. It runs on to the costal cartilages."
+    },
+    "fascia lata": {
+      "region": "Thigh",
+      "group": "fascia",
+      "description": "The deep fascia that encloses the thigh muscles like a stocking. It is thickened on the outer side to form the iliotibial tract."
+    },
+    "fibular collateral ligament": {
+      "region": "Knee",
+      "group": "ligaments",
+      "description": "The lateral collateral ligament (LCL): a rounded cord on the outer side of the knee, from the femur to the head of the fibula. It resists forces that push the knee outwards."
+    },
+    "flexor retinaculum of ankle": {
+      "region": "Ankle",
+      "group": "fascia",
+      "description": "A band behind the inner ankle bone that holds the tendons, vessels and tibial nerve in place as they pass into the sole (the tarsal tunnel)."
+    },
+    "flexor retinaculum of wrist": {
+      "region": "Wrist",
+      "group": "fascia",
+      "description": "A strong band across the front of the wrist bones that forms the roof of the carpal tunnel. The median nerve and finger flexor tendons pass beneath it."
+    },
+    "frenula capsulae": {
+      "region": "Hip",
+      "group": "capsules",
+      "description": "Folds of the hip capsule's lining that run along the neck of the femur. They carry small blood vessels to the head of the femur."
+    },
+    "glenoid labrum": {
+      "region": "Shoulder",
+      "group": "cartilage",
+      "description": "A ring of fibrocartilage around the rim of the shallow glenoid socket. It deepens the socket to help hold the head of the humerus in place."
+    },
+    "hyo-epiglottic ligament": {
+      "region": "Larynx",
+      "group": "ligaments",
+      "description": "A short elastic band that ties the front of the epiglottis to the hyoid bone. It helps the epiglottis tip back over the airway when you swallow."
+    },
+    "iliolumbar ligament": {
+      "region": "Pelvis",
+      "group": "ligaments",
+      "description": "Joins the transverse processes of the fifth lumbar vertebra to the back of the iliac crest. It holds the lowest lumbar vertebra firmly on the pelvis."
+    },
+    "iliopectineal arch": {
+      "region": "Pelvis",
+      "group": "fascia",
+      "description": "A thickened band of iliopsoas fascia from the inguinal ligament to the pelvis. It divides the space under the inguinal ligament into a part for muscle and nerve and a part for the femoral vessels."
+    },
+    "iliopsoas fascia": {
+      "region": "Pelvis",
+      "group": "fascia",
+      "description": "The fascia covering the iliacus and psoas muscles, which run from the lumbar spine and pelvis to the thigh and bend the hip."
+    },
+    "iliotibial tract": {
+      "region": "Thigh",
+      "group": "fascia",
+      "description": "A thick band of fascia running down the outside of the thigh from the hip to the tibia, just below the knee. It steadies the hip and knee; when irritated it causes iliotibial band syndrome in runners."
+    },
+    "inferior extensor retinaculum of ankle": {
+      "region": "Ankle",
+      "group": "fascia",
+      "description": "A Y-shaped band across the front of the ankle that keeps the extensor tendons from bowstringing when the foot is pulled up."
+    },
+    "inferior fibular retinaculum": {
+      "region": "Ankle",
+      "group": "fascia",
+      "description": "Holds the fibularis tendons against the outer side of the calcaneus."
+    },
+    "inferior glenohumeral ligament": {
+      "region": "Shoulder",
+      "group": "ligaments",
+      "description": "The strongest thickening of the shoulder capsule, slung under the joint like a hammock. It is the main restraint against dislocation when the arm is raised and turned outwards."
+    },
+    "inferior pubic ligament": {
+      "region": "Pelvis",
+      "group": "ligaments",
+      "description": "An arch-shaped ligament along the underside of the pubic symphysis. It is the strongest ligament of the joint."
+    },
+    "inferior transverse scapular ligament": {
+      "region": "Shoulder",
+      "group": "ligaments",
+      "description": "A thin band at the back of the shoulder blade, between the spine of the scapula and the edge of the glenoid. The suprascapular vessels and nerve pass beneath it."
+    },
+    "infrapatellar fat pad": {
+      "region": "Knee",
+      "group": "capsules",
+      "description": "A pad of fat inside the knee capsule, below the kneecap and behind the patellar ligament. It cushions the front of the knee; inflammation of it is called Hoffa's disease."
+    },
+    "inguinal ligament": {
+      "region": "Pelvis",
+      "group": "ligaments",
+      "description": "A band running from the front point of the hip bone (anterior superior iliac spine) to the pubic tubercle. It is the rolled-under lower edge of the outer abdominal muscle sheet and marks the crease between the abdomen and the thigh."
+    },
+    "interclavicular ligament": {
+      "region": "Shoulder",
+      "group": "ligaments",
+      "description": "A band across the top of the breastbone joining the inner ends of the two collarbones."
+    },
+    "intercornual ligament": {
+      "region": "Pelvis",
+      "group": "ligaments",
+      "description": "Joins the small horns (cornua) of the sacrum and the coccyx at the back of the sacrococcygeal joint."
+    },
+    "intercuneiform interosseous ligaments": {
+      "region": "Foot",
+      "group": "ligaments",
+      "description": "Short, strong bands between the facing surfaces of the cuneiform bones."
+    },
+    "internal intercostal membrane": {
+      "region": "Thorax",
+      "group": "ligaments",
+      "description": "A thin membrane that replaces the internal intercostal muscle between the ribs near the spine."
+    },
+    "interosseous membrane of forearm": {
+      "region": "Forearm",
+      "group": "ligaments",
+      "description": "A strong fibrous sheet joining the radius and ulna along their length. It holds the two bones together, passes force from the wrist to the elbow and anchors forearm muscles."
+    },
+    "interosseous membrane of leg": {
+      "region": "Leg",
+      "group": "ligaments",
+      "description": "A tough sheet joining the tibia and fibula along their length. It separates the front and back muscle compartments of the leg and anchors muscles."
+    },
+    "interosseous metacarpal ligaments": {
+      "region": "Hand",
+      "group": "ligaments",
+      "description": "Bind the facing sides of the bases of neighbouring metacarpals."
+    },
+    "interosseous sacro-iliac ligament": {
+      "region": "Pelvis",
+      "group": "ligaments",
+      "description": "Very strong short fibres filling the gap behind the sacroiliac joint. They are the main bond between the spine and the pelvis."
+    },
+    "interpubic disc": {
+      "region": "Pelvis",
+      "group": "cartilage",
+      "description": "A disc of fibrocartilage joining the two pubic bones at the front of the pelvis (the pubic symphysis). It allows a slight give, especially in walking."
+    },
+    "intersesamoid ligament": {
+      "region": "Foot",
+      "group": "ligaments",
+      "description": "Joins the two small sesamoid bones under the head of the first metatarsal."
+    },
+    "interspinous ligaments": {
+      "region": "Spine",
+      "group": "ligaments",
+      "description": "Thin sheets that join the spinous processes of neighbouring vertebrae. They help limit bending forwards."
+    },
+    "intertransverse ligaments": {
+      "region": "Spine",
+      "group": "ligaments",
+      "description": "Thin bands between the transverse processes of neighbouring vertebrae. They resist bending to the opposite side."
+    },
+    "intra-articular ligament of head of rib": {
+      "region": "Thorax",
+      "group": "ligaments",
+      "description": "A short band inside the joint of a rib head, tying the crest of the rib head to the intervertebral disc. It splits the joint into two small cavities."
+    },
+    "investing abdominal fascia": {
+      "region": "Abdomen",
+      "group": "fascia",
+      "description": "The thin deep fascia covering the outer surface of the abdominal wall muscles."
+    },
+    "ischiofemoral ligament": {
+      "region": "Hip",
+      "group": "ligaments",
+      "description": "Spirals around the back of the hip capsule from the ischium to the femur. It limits turning the leg inwards."
+    },
+    "lateral femoral intermuscular septum": {
+      "region": "Thigh",
+      "group": "fascia",
+      "description": "A strong sheet from the fascia lata to the outer side of the femur. It separates the front (quadriceps) and back (hamstring) muscle compartments of the thigh."
+    },
+    "lateral intermuscular septum of arm": {
+      "region": "Arm",
+      "group": "fascia",
+      "description": "A sheet of fascia from the outer edge of the humerus to the brachial fascia, dividing the arm's front and back muscle compartments."
+    },
+    "lateral meniscus": {
+      "region": "Knee",
+      "group": "cartilage",
+      "description": "A nearly circular wedge of fibrocartilage on the outer half of the tibia. It cushions and steadies the knee and is more mobile than the medial meniscus."
+    },
+    "lateral patellar retinaculum": {
+      "region": "Knee",
+      "group": "fascia",
+      "description": "A sheet of fibres on the outer side of the kneecap that helps guide it as the knee bends."
+    },
+    "lateral talocalcaneal ligament": {
+      "region": "Foot",
+      "group": "ligaments",
+      "description": "Joins the talus to the calcaneus on the outer side of the subtalar joint."
+    },
+    "lateral temporomandibular ligament": {
+      "region": "Jaw",
+      "group": "ligaments",
+      "description": "The thickened outer wall of the jaw joint capsule. It stops the mandible from slipping too far back or out of the joint."
+    },
+    "lateral thyrohyoid ligament": {
+      "region": "Larynx",
+      "group": "ligaments",
+      "description": "The rounded back edge of the thyrohyoid membrane, running from the upper horn of the thyroid cartilage to the hyoid bone. It often holds a tiny nodule of cartilage."
+    },
+    "ligament of head of femur": {
+      "region": "Hip",
+      "group": "ligaments",
+      "description": "A flattened band inside the hip joint from the head of the femur to the socket. It carries a small artery to the femoral head, important in childhood."
+    },
+    "ligamenta flava": {
+      "region": "Spine",
+      "group": "ligaments",
+      "description": "Yellow elastic ligaments that join the laminae of neighbouring vertebrae and form part of the back wall of the spinal canal. Their elasticity helps straighten the spine after bending."
+    },
+    "long plantar ligament": {
+      "region": "Foot",
+      "group": "ligaments",
+      "description": "The longest ligament of the sole, from the underside of the calcaneus to the cuboid and the bases of the metatarsals. It helps hold up the arches."
+    },
+    "lunotriquetral interosseous ligament": {
+      "region": "Wrist",
+      "group": "ligaments",
+      "description": "Binds the lunate to the triquetrum within the first row of wrist bones."
+    },
+    "masseteric fascia": {
+      "region": "Head",
+      "group": "fascia",
+      "description": "The fascia covering the masseter, the main chewing muscle at the angle of the jaw. It blends with the capsule of the parotid salivary gland."
+    },
+    "medial femoral intermuscular septum": {
+      "region": "Thigh",
+      "group": "fascia",
+      "description": "A sheet from the fascia lata to the inner side of the femur, separating the front muscle compartment of the thigh from the inner (adductor) compartment."
+    },
+    "medial intermuscular septum of arm": {
+      "region": "Arm",
+      "group": "fascia",
+      "description": "A sheet of fascia from the inner edge of the humerus to the brachial fascia. It separates the front (flexor) and back (extensor) muscle compartments of the arm."
+    },
+    "medial meniscus": {
+      "region": "Knee",
+      "group": "cartilage",
+      "description": "A C-shaped wedge of fibrocartilage on the inner half of the tibia. It deepens the joint and spreads the load, and is fixed to the medial collateral ligament, which makes it more easily torn."
+    },
+    "medial patellar retinaculum": {
+      "region": "Knee",
+      "group": "fascia",
+      "description": "A sheet of fibres on the inner side of the kneecap, from the quadriceps to the tibia and femur. It helps keep the kneecap centred in its groove."
+    },
+    "medial talocalcaneal ligament": {
+      "region": "Foot",
+      "group": "ligaments",
+      "description": "Joins the talus to the calcaneus on the inner side of the subtalar joint."
+    },
+    "median cricothyroid ligament": {
+      "region": "Larynx",
+      "group": "ligaments",
+      "description": "The thick front part of the membrane between the thyroid and cricoid cartilages. It is the site of an emergency cricothyrotomy to open the airway."
+    },
+    "median thyrohyoid ligament": {
+      "region": "Larynx",
+      "group": "ligaments",
+      "description": "The thick middle part of the thyrohyoid membrane, joining the notch of the thyroid cartilage (Adam's apple) to the hyoid bone."
+    },
+    "meniscopatellar ligament": {
+      "region": "Knee",
+      "group": "ligaments",
+      "description": "A band from the edge of the kneecap to a meniscus, part of the knee capsule. It helps pull the meniscus forward as the knee straightens."
+    },
+    "metatarsal interosseous ligaments": {
+      "region": "Foot",
+      "group": "ligaments",
+      "description": "Bind the facing sides of the bases of neighbouring metatarsals."
+    },
+    "middle glenohumeral ligament": {
+      "region": "Shoulder",
+      "group": "ligaments",
+      "description": "The middle thickening of the front of the shoulder capsule. It limits turning the arm outwards."
+    },
+    "middle layer of thoracolumbar fascia": {
+      "region": "Back",
+      "group": "fascia",
+      "description": "The middle layer of the thoracolumbar fascia, between the quadratus lumborum and the back muscles, attached to the tips of the lumbar transverse processes."
+    },
+    "nuchal ligament": {
+      "region": "Neck",
+      "group": "ligaments",
+      "description": "A midline sheet at the back of the neck, from the base of the skull to the C7 spinous process. It helps hold the head up and anchors neck muscles."
+    },
+    "oblique cord": {
+      "region": "Forearm",
+      "group": "ligaments",
+      "description": "A small band from the ulna down to the radius, just below the elbow. It lies above the interosseous membrane."
+    },
+    "oblique popliteal ligament": {
+      "region": "Knee",
+      "group": "ligaments",
+      "description": "A broad band across the back of the knee capsule, an expansion of the semimembranosus tendon. It limits over-straightening of the knee."
+    },
+    "obturator membrane": {
+      "region": "Pelvis",
+      "group": "ligaments",
+      "description": "A fibrous sheet that almost closes the large obturator foramen of the hip bone, leaving a small canal for the obturator vessels and nerve. Muscles of the hip attach to both sides."
+    },
+    "palmar aponeurosis": {
+      "region": "Hand",
+      "group": "fascia",
+      "description": "A tough triangular sheet in the palm that protects the tendons, vessels and nerves beneath and anchors the skin for grip. Its thickening causes Dupuytren's contracture."
+    },
+    "palmar capitohamate ligament": {
+      "region": "Wrist",
+      "group": "ligaments",
+      "description": "A palmar band joining the capitate to the hamate."
+    },
+    "palmar carpometacarpal ligaments": {
+      "region": "Hand",
+      "group": "ligaments",
+      "description": "Join the second row of wrist bones to the bases of the metacarpals on the palm side."
+    },
+    "palmar interphalangeal ligaments": {
+      "region": "Hand",
+      "group": "ligaments",
+      "description": "The palmar plates: thick fibrocartilage pads on the palm side of the finger joints that stop the fingers from bending backwards."
+    },
+    "palmar lunotriquetral ligament": {
+      "region": "Wrist",
+      "group": "ligaments",
+      "description": "A palmar band joining the lunate to the triquetrum."
+    },
+    "palmar metacarpal ligaments": {
+      "region": "Hand",
+      "group": "ligaments",
+      "description": "Short transverse bands joining the bases of neighbouring metacarpals on the palm side."
+    },
+    "palmar radio-ulnar ligament": {
+      "region": "Wrist",
+      "group": "ligaments",
+      "description": "Joins the front edges of the radius and ulna at the wrist and stabilises the distal radio-ulnar joint."
+    },
+    "palmar scaphotriquetral ligament": {
+      "region": "Wrist",
+      "group": "ligaments",
+      "description": "Runs across the palm side of the wrist from the scaphoid to the triquetrum."
+    },
+    "palmar trapezoideocapitate ligament": {
+      "region": "Wrist",
+      "group": "ligaments",
+      "description": "A palmar band joining the trapezoid to the capitate."
+    },
+    "pectoral fascia": {
+      "region": "Chest",
+      "group": "fascia",
+      "description": "The thin deep fascia over the pectoralis major muscle. The breast lies on it, separated by a layer of loose tissue."
+    },
+    "piriformis fascia": {
+      "region": "Pelvis",
+      "group": "fascia",
+      "description": "The fascia covering the piriformis muscle on the inner wall of the pelvis."
+    },
+    "pisohamate ligament": {
+      "region": "Wrist",
+      "group": "ligaments",
+      "description": "Runs from the pisiform to the hook of the hamate. It continues the pull of the flexor carpi ulnaris tendon and roofs part of the ulnar canal."
+    },
+    "pisometacarpal ligament": {
+      "region": "Wrist",
+      "group": "ligaments",
+      "description": "Runs from the pisiform to the base of the fifth metacarpal, carrying the pull of the flexor carpi ulnaris on to the hand."
+    },
+    "pisotriquetral ligament": {
+      "region": "Wrist",
+      "group": "ligaments",
+      "description": "Part of the capsule of the small joint between the pisiform and the triquetrum."
+    },
+    "plantar aponeurosis": {
+      "region": "Foot",
+      "group": "fascia",
+      "description": "A thick, tough band in the sole from the heel to the toes. It supports the arch like a bowstring; inflammation where it meets the heel is plantar fasciitis."
+    },
+    "plantar calcaneocuboid ligament": {
+      "region": "Foot",
+      "group": "ligaments",
+      "description": "The \"short plantar ligament\": a wide, strong band under the foot from the calcaneus to the cuboid. It supports the outer arch."
+    },
+    "plantar calcaneonavicular ligament": {
+      "region": "Foot",
+      "group": "ligaments",
+      "description": "The \"spring ligament\" under the foot, from the calcaneus to the navicular. It cradles the head of the talus and supports the inner arch."
+    },
+    "plantar cuboideonavicular ligament": {
+      "region": "Foot",
+      "group": "ligaments",
+      "description": "Joins the cuboid to the navicular on the sole."
+    },
+    "plantar cuneocuboid ligament": {
+      "region": "Foot",
+      "group": "ligaments",
+      "description": "Joins the lateral cuneiform to the cuboid on the sole."
+    },
+    "plantar cuneonavicular ligaments": {
+      "region": "Foot",
+      "group": "ligaments",
+      "description": "Join the navicular to the three cuneiform bones on the sole."
+    },
+    "plantar intercuneiform ligaments": {
+      "region": "Foot",
+      "group": "ligaments",
+      "description": "Join neighbouring cuneiform bones on the sole."
+    },
+    "plantar interphalangeal ligaments": {
+      "region": "Foot",
+      "group": "ligaments",
+      "description": "Thick plates under the toe joints that limit bending the toes upwards."
+    },
+    "plantar metatarsal ligaments": {
+      "region": "Foot",
+      "group": "ligaments",
+      "description": "Short transverse bands joining the bases of neighbouring metatarsals on the sole."
+    },
+    "plantar metatarsophalangeal ligaments": {
+      "region": "Foot",
+      "group": "ligaments",
+      "description": "The plantar plates: thick pads under the joints at the ball of the foot that stop the toes from bending too far upwards."
+    },
+    "plantar tarsometatarsal ligaments": {
+      "region": "Foot",
+      "group": "ligaments",
+      "description": "Join the cuneiforms and cuboid to the bases of the metatarsals on the sole."
+    },
+    "popliteal fascia": {
+      "region": "Knee",
+      "group": "fascia",
+      "description": "The deep fascia that roofs the popliteal fossa, the hollow at the back of the knee."
+    },
+    "popliteofibular ligament": {
+      "region": "Knee",
+      "group": "ligaments",
+      "description": "Ties the popliteus tendon to the head of the fibula. It is a key stabiliser of the back outer corner of the knee."
+    },
+    "posterior cruciate ligament": {
+      "region": "Knee",
+      "group": "ligaments",
+      "description": "A thick ligament inside the knee that crosses behind the anterior cruciate. It stops the tibia from sliding backward under the femur."
+    },
+    "posterior intermuscular septum of leg": {
+      "region": "Leg",
+      "group": "fascia",
+      "description": "A sheet from the crural fascia to the fibula that separates the outer (fibular) and back (calf) muscle compartments of the leg."
+    },
+    "posterior layer of thoracolumbar fascia": {
+      "region": "Back",
+      "group": "fascia",
+      "description": "The large diamond-shaped sheet covering the deep back muscles of the lower back. Latissimus dorsi and other muscles pull on it, so it helps transfer force between the legs, trunk and arms."
+    },
+    "posterior ligament of fibular head": {
+      "region": "Leg",
+      "group": "ligaments",
+      "description": "Reinforces the back of the joint between the head of the fibula and the tibia."
+    },
+    "posterior longitudinal ligament": {
+      "region": "Spine",
+      "group": "ligaments",
+      "description": "Runs down the back of the vertebral bodies and discs, inside the spinal canal. It limits bending forwards and helps keep discs from bulging straight back."
+    },
+    "posterior meniscotibial ligament (lateral meniscus)": {
+      "region": "Knee",
+      "group": "ligaments",
+      "description": "Anchors the back horn of the lateral meniscus to the tibia."
+    },
+    "posterior meniscotibial ligament (medial meniscus)": {
+      "region": "Knee",
+      "group": "ligaments",
+      "description": "Anchors the back horn of the medial meniscus to the tibia."
+    },
+    "posterior sacro-iliac ligament": {
+      "region": "Pelvis",
+      "group": "ligaments",
+      "description": "Bands on the back of the sacroiliac joint, from the sacrum to the iliac crest and spine. They help carry the weight of the upper body on to the pelvis."
+    },
+    "posterior sternoclavicular ligament": {
+      "region": "Shoulder",
+      "group": "ligaments",
+      "description": "Reinforces the back of the sternoclavicular joint. It stops the inner end of the collarbone from being pushed backwards toward the large vessels in the neck."
+    },
+    "posterior talocalcaneal ligament": {
+      "region": "Foot",
+      "group": "ligaments",
+      "description": "Joins the back of the talus to the calcaneus."
+    },
+    "posterior talofibular ligament": {
+      "region": "Ankle",
+      "group": "ligaments",
+      "description": "A strong band from the back of the lateral malleolus to the talus. It is rarely torn."
+    },
+    "posterior tibiofibular ligament": {
+      "region": "Ankle",
+      "group": "ligaments",
+      "description": "Joins the lower ends of the tibia and fibula at the back of the ankle."
+    },
+    "posterior tibiotalar ligament": {
+      "region": "Ankle",
+      "group": "ligaments",
+      "description": "The back part of the deltoid ligament, from the medial malleolus to the talus. The deltoid ligament as a whole is very strong and resists the ankle rolling outwards."
+    },
+    "pterygospinous ligament": {
+      "region": "Skull",
+      "group": "ligaments",
+      "description": "A small band between the lateral pterygoid plate and the spine of the sphenoid bone. It sometimes turns to bone, forming an extra opening that nerves pass through."
+    },
+    "pubofemoral ligament": {
+      "region": "Hip",
+      "group": "ligaments",
+      "description": "Reinforces the lower front of the hip capsule, from the pubic bone to the femur. It limits spreading the leg out to the side."
+    },
+    "quadrangular membrane": {
+      "region": "Larynx",
+      "group": "ligaments",
+      "description": "A thin sheet of connective tissue in the upper larynx, running from the epiglottis to the arytenoid cartilages. Its free lower edge forms the vestibular (false) vocal fold."
+    },
+    "quadrate ligament": {
+      "region": "Elbow",
+      "group": "ligaments",
+      "description": "A short band from the lower edge of the radial notch of the ulna to the neck of the radius. It limits how far the forearm can rotate."
+    },
+    "radial collateral ligament": {
+      "region": "Elbow",
+      "group": "ligaments",
+      "description": "A fan-shaped ligament on the outer side of the elbow, from the lateral epicondyle of the humerus to the annular ligament."
+    },
+    "radial collateral ligament of wrist joint": {
+      "region": "Wrist",
+      "group": "ligaments",
+      "description": "Runs from the styloid process of the radius to the scaphoid on the thumb side of the wrist. It limits bending the hand toward the little finger."
+    },
+    "radiate carpal ligament": {
+      "region": "Wrist",
+      "group": "ligaments",
+      "description": "Fibres that fan out from the head of the capitate to the surrounding wrist bones on the palm side."
+    },
+    "radiate ligament of head of rib": {
+      "region": "Thorax",
+      "group": "ligaments",
+      "description": "A fan-shaped ligament joining the head of each rib to the bodies of the vertebrae above and below and to the disc between them."
+    },
+    "radiocapitate ligament": {
+      "region": "Wrist",
+      "group": "ligaments",
+      "description": "Part of the palmar radiocarpal ligament, from the front of the radius toward the capitate at the centre of the wrist."
+    },
+    "radioscaphocapitate ligament": {
+      "region": "Wrist",
+      "group": "ligaments",
+      "description": "A palmar wrist ligament from the radial styloid across the waist of the scaphoid to the capitate. It acts as a sling for the scaphoid."
+    },
+    "sacrococcygeal symphysis": {
+      "region": "Pelvis",
+      "group": "cartilage",
+      "description": "The joint of fibrocartilage and ligament between the sacrum and the coccyx. It allows the tailbone a little movement, for example when sitting."
+    },
+    "sacrospinous ligament": {
+      "region": "Pelvis",
+      "group": "ligaments",
+      "description": "A triangular ligament from the sacrum and coccyx to the ischial spine. With the sacrotuberous ligament it forms the greater and lesser sciatic foramina, through which the sciatic nerve and other structures leave the pelvis."
+    },
+    "sacrotuberous ligament": {
+      "region": "Pelvis",
+      "group": "ligaments",
+      "description": "A large ligament from the side of the sacrum and coccyx to the sitting bone (ischial tuberosity). It stops the sacrum from tipping forward under the weight of the trunk."
+    },
+    "scaphocapitate ligament": {
+      "region": "Wrist",
+      "group": "ligaments",
+      "description": "A palmar band joining the scaphoid to the capitate."
+    },
+    "scapholunate interosseous ligament": {
+      "region": "Wrist",
+      "group": "ligaments",
+      "description": "Binds the scaphoid and lunate tightly together. It is the most commonly injured wrist ligament; when torn, the two bones separate and the wrist becomes unstable."
+    },
+    "scaphotrapeziotrapezoidal ligament": {
+      "region": "Wrist",
+      "group": "ligaments",
+      "description": "Joins the scaphoid to the trapezium and trapezoid at the base of the thumb."
+    },
+    "sphenomandibular ligament": {
+      "region": "Jaw",
+      "group": "ligaments",
+      "description": "A thin band from the spine of the sphenoid bone down to the inside of the mandible, near the opening where the nerve to the lower teeth enters. It helps suspend the jaw as it opens."
+    },
+    "stylohyoid ligament": {
+      "region": "Neck",
+      "group": "ligaments",
+      "description": "A cord from the tip of the styloid process of the skull to the small horn of the hyoid bone. It helps suspend the hyoid, and sometimes partly turns to bone."
+    },
+    "stylomandibular ligament": {
+      "region": "Jaw",
+      "group": "ligaments",
+      "description": "A band from the styloid process of the temporal bone to the angle of the mandible. It limits how far the jaw can jut forward."
+    },
+    "superficial investing cervical fascia": {
+      "region": "Neck",
+      "group": "fascia",
+      "description": "The outermost layer of deep fascia in the neck. It wraps around the neck like a collar and splits to enclose the sternocleidomastoid and trapezius muscles."
+    },
+    "superficial layer of temporal fascia": {
+      "region": "Head",
+      "group": "fascia",
+      "description": "The outer layer of the tough sheet covering the temporalis muscle at the side of the head. Below, it attaches to the upper edge of the cheekbone arch."
+    },
+    "superficial part of tibial collateral ligament": {
+      "region": "Knee",
+      "group": "ligaments",
+      "description": "The long outer layer of the medial collateral ligament (MCL) on the inner side of the knee. It resists forces that push the knee inwards, and is one of the most commonly injured knee ligaments."
+    },
+    "superficial transverse metacarpal ligament": {
+      "region": "Hand",
+      "group": "ligaments",
+      "description": "Thin bands of the palmar aponeurosis that run across the palm at the bases of the fingers, in the webs between them. They help anchor the skin of the palm."
+    },
+    "superficial transverse metatarsal ligament": {
+      "region": "Foot",
+      "group": "ligaments",
+      "description": "Thin bands of fascia that run across the sole beneath the bases of the toes, in the webs between them. They help anchor the skin of the ball of the foot."
+    },
+    "superior extensor retinaculum of ankle": {
+      "region": "Ankle",
+      "group": "fascia",
+      "description": "A band across the front of the lower leg, just above the ankle, that holds the extensor tendons against the bones."
+    },
+    "superior fibular retinaculum": {
+      "region": "Ankle",
+      "group": "fascia",
+      "description": "Holds the fibularis (peroneal) tendons in their groove behind the outer ankle bone."
+    },
+    "superior glenohumeral ligament": {
+      "region": "Shoulder",
+      "group": "ligaments",
+      "description": "The upper of three thickenings in the front of the shoulder capsule. It helps stop the arm from slipping downward when it hangs at the side."
+    },
+    "superior pubic ligament": {
+      "region": "Pelvis",
+      "group": "ligaments",
+      "description": "Runs across the top of the pubic symphysis, joining the two pubic bones."
+    },
+    "superior transverse scapular ligament": {
+      "region": "Shoulder",
+      "group": "ligaments",
+      "description": "Bridges the notch in the top edge of the shoulder blade, turning it into a foramen for the suprascapular nerve."
+    },
+    "supraspinous ligament": {
+      "region": "Spine",
+      "group": "ligaments",
+      "description": "A strong cord along the tips of the spinous processes from C7 down to the sacrum. In the neck it continues as the nuchal ligament."
+    },
+    "talocalcaneal interosseous ligament": {
+      "region": "Foot",
+      "group": "ligaments",
+      "description": "A strong band in the tunnel between the talus and calcaneus (the sinus tarsi). It is the main bond of the subtalar joint."
+    },
+    "talonavicular ligament": {
+      "region": "Foot",
+      "group": "ligaments",
+      "description": "A broad band over the top of the foot from the neck of the talus to the navicular bone."
+    },
+    "thyro-epiglottic ligament": {
+      "region": "Larynx",
+      "group": "ligaments",
+      "description": "Anchors the narrow stalk of the epiglottis to the inside of the thyroid cartilage, just above the vocal cords."
+    },
+    "thyrohyoid membrane": {
+      "region": "Larynx",
+      "group": "ligaments",
+      "description": "A broad sheet that hangs the larynx from the hyoid bone. Vessels and a nerve to the inside of the larynx pierce it."
+    },
+    "tibiocalcaneal ligament": {
+      "region": "Ankle",
+      "group": "ligaments",
+      "description": "The middle part of the deltoid ligament, from the medial malleolus straight down to the calcaneus."
+    },
+    "tibionavicular ligament": {
+      "region": "Ankle",
+      "group": "ligaments",
+      "description": "The front part of the deltoid ligament on the inner side of the ankle, from the medial malleolus to the navicular bone."
+    },
+    "transversalis fascia": {
+      "region": "Abdomen",
+      "group": "fascia",
+      "description": "The fascia lining the inner surface of the abdominal wall, between the transversus abdominis muscle and the peritoneum. Hernias in the groin push through weak spots in it."
+    },
+    "transverse acetabular ligament": {
+      "region": "Hip",
+      "group": "ligaments",
+      "description": "Bridges the notch at the bottom of the hip socket, completing the ring of the acetabular labrum. Vessels pass beneath it into the joint."
+    },
+    "transverse humeral ligament": {
+      "region": "Shoulder",
+      "group": "ligaments",
+      "description": "Bridges the groove at the top of the humerus, holding the tendon of the long head of the biceps in place."
+    },
+    "transverse intermuscular septum of leg": {
+      "region": "Leg",
+      "group": "fascia",
+      "description": "A sheet that separates the superficial calf muscles from the deep calf muscles."
+    },
+    "transverse ligament of knee": {
+      "region": "Knee",
+      "group": "ligaments",
+      "description": "Joins the front edges of the two menisci across the front of the knee."
+    },
+    "transverse part of iliofemoral ligament": {
+      "region": "Hip",
+      "group": "ligaments",
+      "description": "The upper limb of the Y-shaped iliofemoral ligament at the front of the hip. The iliofemoral ligament is the strongest in the body and keeps the hip from over-extending when you stand."
+    },
+    "transverse tibiofibular ligament": {
+      "region": "Ankle",
+      "group": "ligaments",
+      "description": "The deep lower part of the posterior tibiofibular ligament. It deepens the back of the ankle socket."
+    },
+    "trapeziotrapezoidal interosseous ligament": {
+      "region": "Wrist",
+      "group": "ligaments",
+      "description": "A short ligament between the facing surfaces of the trapezium and trapezoid."
+    },
+    "trapezoid ligament": {
+      "region": "Shoulder",
+      "group": "ligaments",
+      "description": "The flat outer part of the coracoclavicular ligament. It is torn in a severe shoulder separation, letting the collarbone ride up."
+    },
+    "trapezoideocapitate interosseous ligament": {
+      "region": "Wrist",
+      "group": "ligaments",
+      "description": "A short ligament between the facing surfaces of the trapezoid and capitate."
+    },
+    "triquetrocapitate ligament": {
+      "region": "Wrist",
+      "group": "ligaments",
+      "description": "A palmar band joining the triquetrum to the capitate."
+    },
+    "triquetrohamate ligament": {
+      "region": "Wrist",
+      "group": "ligaments",
+      "description": "A palmar band joining the triquetrum to the hamate."
+    },
+    "ulnar collateral ligament": {
+      "region": "Elbow",
+      "group": "ligaments",
+      "description": "A triangular ligament on the inner side of the elbow, from the medial epicondyle of the humerus to the ulna. It resists forces that would bend the elbow outwards, and is often injured by throwing."
+    },
+    "ulnar collateral ligament of wrist joint": {
+      "region": "Wrist",
+      "group": "ligaments",
+      "description": "Runs from the styloid process of the ulna to the triquetrum and pisiform on the little-finger side of the wrist."
+    },
+    "ulnocapitate ligament": {
+      "region": "Wrist",
+      "group": "ligaments",
+      "description": "A palmar wrist ligament from the base of the ulnar styloid to the capitate."
+    },
+    "ulnolunate ligament": {
+      "region": "Wrist",
+      "group": "ligaments",
+      "description": "A palmar wrist ligament from the triangular fibrocartilage to the lunate."
+    },
+    "ulnopisiform ligament": {
+      "region": "Wrist",
+      "group": "ligaments",
+      "description": "A small band from the ulnar side of the wrist to the pisiform bone."
+    },
+    "ulnotriquetral ligament": {
+      "region": "Wrist",
+      "group": "ligaments",
+      "description": "A palmar wrist ligament from the triangular fibrocartilage to the triquetrum."
+    },
+    "vocal ligament": {
+      "region": "Larynx",
+      "group": "ligaments",
+      "description": "The elastic band inside each true vocal cord, stretched from the thyroid cartilage to an arytenoid cartilage. Its tension and vibration help set the pitch of the voice."
+    },
+    "zona orbicularis": {
+      "region": "Hip",
+      "group": "capsules",
+      "description": "Circular fibres deep in the hip capsule that ring the neck of the femur like a collar, helping hold the head of the femur in its socket."
+    }
+  }
+}

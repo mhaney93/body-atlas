@@ -6,6 +6,7 @@
 // the feet resting on y = 0 and the body centred on the vertical axis.
 import { existsSync, mkdirSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
+import { gunzipSync } from 'node:zlib';
 import { Document, NodeIO } from '@gltf-transform/core';
 import { EXTMeshoptCompression, KHRMeshQuantization } from '@gltf-transform/extensions';
 import { meshopt, simplify, weld } from '@gltf-transform/functions';
@@ -117,6 +118,23 @@ function circulatoryGroups() {
   return groups;
 }
 
+// The few ligaments, membranes and fascial bands BodyParts3D has (both sides
+// where it has two; the "M" files are the left-side mirrors). Z-Anatomy's
+// versions of these are left out by scripts/extract-z-anatomy.py.
+const CONNECTIVE_TISSUE = [
+  'FJ1392', 'FJ1392M', // interosseous membrane of leg
+  'FJ1476', 'FJ1476M', // interosseous membrane of forearm
+  'FJ1471', 'FJ1471M', // flexor retinaculum of wrist
+  'FJ1423', 'FJ1423M', // iliotibial tract
+  'FJ1424', 'FJ1424M', // long plantar ligament
+  'FJ2763', 'FJ2764', // stylohyoid ligaments
+  'FJ2771', 'FJ2807', // hyo-epiglottic and thyro-epiglottic ligaments
+  'FJ2779', 'FJ2797', 'FJ2790', // lateral and median thyrohyoid ligaments
+  'FJ2786', 'FJ2804', // thyrohyoid membrane
+  'FJ2787', 'FJ2805', // vocal ligaments
+  'FJ2789', // median cricothyroid ligament
+];
+
 const ASSETS = [
   { file: 'skin.glb', elements: [SKIN], ratio: 0.35 },
   { file: 'skeletal.glb', elements: range(3152, 3395), extras: ['coccyx.obj'], ratio: 0.5 },
@@ -126,6 +144,9 @@ const ASSETS = [
   { file: 'nervous.glb', elements: [], load: () => nervousParts().filter((p) => !INNER_EAR.test(p.name)), ratio: 0.25 },
   { file: 'nervous-inner-ear.glb', elements: [], load: () => nervousParts().filter((p) => INNER_EAR.test(p.name)), ratio: 0.25 },
   { file: 'circulatory.glb', groups: circulatoryGroups(), mergeByName: true, ratio: 0.2, error: 0.002 },
+  // Intervertebral discs and costal cartilages are shared from skeletal.glb
+  // at runtime (see "shared" in src/data/joints.json), not duplicated here.
+  { file: 'joints.glb', elements: CONNECTIVE_TISSUE, load: () => parseRegisteredObjs('connective-tissue.obj.gz'), ratio: 0.25, error: 0.01 },
 ];
 
 /** BodyParts3D bone meshes (mm) by English name, for nervous-model.mjs. */
@@ -269,6 +290,33 @@ function parseZAnatomyObj(file) {
   const offset = target.map((t, k) => t - obj.anchor.point[k] * 1000);
   obj.positions = obj.positions.map((v, i) => v * 1000 + offset[i % 3]);
   return { ...obj, id: file, source: 'z-anatomy' };
+}
+
+/**
+ * Loads a gzipped multi-object OBJ written by scripts/extract-z-anatomy.py
+ * whose parts are already registered onto BodyParts3D (millimetres).
+ */
+function parseRegisteredObjs(file) {
+  const text = gunzipSync(readFileSync(join(Z_ANATOMY_DIR, file))).toString('utf8');
+  const objs = [];
+  let obj = null;
+  let base = 0;
+  let seen = 0;
+  for (const line of text.split('\n')) {
+    if (line.startsWith('o ')) {
+      base = seen;
+      obj = { id: line.slice(2).trim(), name: null, positions: [], indices: [], source: 'z-anatomy' };
+      objs.push(obj);
+    } else if (line.startsWith('# English name : ')) {
+      obj.name = line.slice('# English name : '.length).trim();
+    } else if (line.startsWith('v ')) {
+      obj.positions.push(...line.trim().split(/\s+/).slice(1).map(Number));
+      seen++;
+    } else if (line.startsWith('f ')) {
+      obj.indices.push(...line.trim().split(/\s+/).slice(1).map((t) => parseInt(t, 10) - 1 - base));
+    }
+  }
+  return objs;
 }
 
 function boundsOf(positions) {

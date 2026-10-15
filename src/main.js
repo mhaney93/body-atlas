@@ -9,6 +9,10 @@ const layers = LAYERS.map((layer) => ({
   asset: asset(layer.asset),
   extraAssets: layer.extraAssets?.map(asset),
 }));
+// Point each shared-part entry at the layer object it borrows from.
+for (const layer of layers) {
+  layer.shared = layer.shared?.map((s) => ({ ...s, source: layers.find((l) => l.id === s.layer) }));
+}
 
 const info = $('info');
 const viewer = new Viewer($('stage'), {
@@ -20,7 +24,8 @@ const viewer = new Viewer($('stage'), {
     }
     const { layer, mesh } = selection;
     // three.js sanitises node names (spaces → underscores); the original lives in extras.
-    const part = partInfo(layer, mesh.userData.name ?? mesh.name, mesh.userData.group);
+    const source = layers.find((l) => l.id === mesh.userData.sourceId);
+    const part = partInfo(layer, mesh.userData.name ?? mesh.name, mesh.userData.group, source);
     $('info-kicker').textContent = part.region ? `${layer.name} · ${part.region}` : layer.name;
     $('info-kicker').style.color = part.color ?? layer.color;
     $('info-name').textContent = part.name;
@@ -61,15 +66,26 @@ function layerExtras(layer) {
   const extras = document.createElement('div');
   extras.className = 'layer-extras';
   extras.hidden = true;
-  const groups = Object.values(layer.groups ?? {}).filter((g) => g.legend !== false);
+  const groups = Object.entries(layer.groups ?? {}).filter(([, g]) => g.legend !== false);
   if (groups.length) {
     const legend = document.createElement('ul');
     legend.className = 'legend';
     legend.setAttribute('aria-label', `${layer.name} colour key`);
-    for (const g of groups) {
+    for (const [id, g] of groups) {
       const item = document.createElement('li');
       item.style.setProperty('--group-color', g.color);
-      item.textContent = g.label;
+      if (layer.groupToggles) {
+        // Each key entry doubles as a show/hide checkbox for its sub-group.
+        const label = document.createElement('label');
+        const box = document.createElement('input');
+        box.type = 'checkbox';
+        box.checked = g.visible ?? true;
+        box.addEventListener('change', () => viewer.setGroupVisible(layer, id, box.checked));
+        label.append(box, g.label);
+        item.append(label);
+      } else {
+        item.textContent = g.label;
+      }
       legend.append(item);
     }
     extras.append(legend);
