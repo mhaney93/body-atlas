@@ -2,6 +2,7 @@ import { LAYERS, SHELL_ASSET, partInfo } from './layers.js';
 import { tourControls } from './tour.js';
 import { Viewer } from './viewer.js';
 import { buildLayerControls } from './layer-controls.js';
+import { notShownPanel } from './not-shown.js';
 
 const $ = (id) => document.getElementById(id);
 // Asset paths in layer data are relative to the site root.
@@ -58,6 +59,12 @@ const effectsOn = new Set();
 /** Per-layer extra controls (layer-controls.js) by layer id. */
 const controls = new Map();
 const toggles = new Map();
+
+/** Lets a layer's extras name another layer and switch it on. */
+const layerHost = {
+  layerName: (id) => layers.find((l) => l.id === id)?.name,
+  showLayer: (id) => !active.has(id) && toggles.get(id)?.click(),
+};
 
 /** The selected part's role in its layer's chosen movement, if any. */
 function showRole(layer, mesh) {
@@ -117,9 +124,8 @@ function layerExtras(layer) {
     extras.append(label);
   }
   const extra = buildLayerControls(layer, viewer, {
-    layerName: (id) => layers.find((l) => l.id === id)?.name,
+    ...layerHost,
     isLayerOn: (id) => active.has(id),
-    showLayer: (id) => !active.has(id) && toggles.get(id)?.click(),
     movementChanged: () => {
       const mesh = viewer.selected;
       if (mesh?.userData.layerId === layer.id) showRole(layer, mesh);
@@ -156,6 +162,8 @@ for (const layer of layers) {
   const extras = layerExtras(layer);
   const tour = layer.tour && tourControls(viewer, layer);
   if (tour) extras.append(tour.element);
+  const notShown = notShownPanel(layer, layerHost);
+  if (notShown) extras.append(notShown);
   const sync = () => {
     const on = active.has(layer.id);
     if (!on) tour?.stop();

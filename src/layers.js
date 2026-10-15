@@ -69,3 +69,17 @@ export function partInfo(layer, meshName, groupId, source, of) {
     of,
   };
 }
+
+/**
+ * Why a part is missing from a layer, for its `notShown` list (README "Adding
+ * a body system"). Every layer lists what it leaves out, so the site hides
+ * nothing silently; a layer that leaves nothing out says so in `nothingLeftOut`.
+ */
+export const NOT_SHOWN_REASONS = {
+  'not-added': 'In a free model, not added yet',
+  'no-model': 'Not in the free models we use',
+  'too-small': 'Too small or too many to model',
+  'other-system': 'Belongs to another system',
+  license: 'License does not allow it here',
+  'not-in-adult': 'Not in an adult body',
+};

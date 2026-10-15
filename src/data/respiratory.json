@@ -40,6 +40,16 @@
       "count": 5000
     }
   ],
+  "notShown": [
+    { "name": "Maxillary sinuses", "reason": "no-model", "note": "The largest sinuses, in the cheekbones. Neither source model has them." },
+    { "name": "Pleura", "reason": "not-added", "note": "The double lining around each lung. Z-Anatomy has it." },
+    { "name": "Bronchioles and alveoli", "reason": "too-small", "note": "The airways below the segmental bronchi and the hundreds of millions of air sacs. The optional air-sac haze hints at them; it is illustrative, not anatomy." },
+    { "name": "Nasal conchae", "reason": "other-system", "layer": "skeletal", "note": "The inferior concha is its own bone; the middle and superior conchae are part of the ethmoid bone." },
+    { "name": "Vocal and other laryngeal ligaments", "reason": "other-system", "layer": "joints" },
+    { "name": "Muscles of the larynx and the intercostal muscles", "reason": "other-system", "layer": "muscular" },
+    { "name": "Phrenic nerve", "reason": "no-model", "note": "The nerve that drives the diaphragm. Neither source model has it." },
+    { "name": "Tonsils and adenoids", "reason": "other-system", "system": "lymphatic" }
+  ],
   "parts": {
     "nasal cavity": {
       "region": "Nose",

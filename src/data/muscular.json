@@ -342,6 +342,19 @@
       "note": "Illustrative effect, not modeled anatomy: glowing streaks that hint at muscle fibers. They run along each part's long axis, not its real fiber directions."
     }
   ],
+  "notShown": [
+    { "name": "Heart muscle", "reason": "other-system", "layer": "circulatory", "note": "Shown as the walls of the heart." },
+    { "name": "Smooth muscle of the organs and vessels", "reason": "other-system", "note": "It is part of the walls of the gut, airways and blood vessels: the Digestive, Respiratory and Circulatory layers show those organs." },
+    { "name": "Ligaments and fascia", "reason": "other-system", "layer": "joints" },
+    { "name": "Styloglossus, palatoglossus and the tongue’s own muscles", "reason": "no-model", "note": "The tongue is shown as one part in the Digestive layer." },
+    { "name": "Stapedius and tensor tympani", "reason": "no-model", "note": "The tiny muscles of the middle ear." },
+    { "name": "Auricular muscles", "reason": "no-model", "note": "The small muscles around the outer ear." },
+    { "name": "Muscles of the perineum and the cremaster", "reason": "no-model", "note": "Such as the bulbospongiosus, ischiocavernosus and transverse perineal muscles." },
+    { "name": "Subcostales, depressor supercilii and palmaris brevis", "reason": "no-model" },
+    { "name": "Articularis genus", "reason": "not-added", "note": "A small muscle above the knee that Z-Anatomy has." },
+    { "name": "Muscles inside the eye", "reason": "other-system", "system": "sense organs", "note": "The ciliary muscle and the muscles of the iris." },
+    { "name": "Arrector pili", "reason": "too-small", "note": "The tiny muscles that raise each hair." }
+  ],
   "parts": {
     "abdominal part of pectoralis major": {
       "region": "Chest",
