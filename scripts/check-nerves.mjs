@@ -1,7 +1,8 @@
 // Checks the built Nervous models against the skin and the skeleton:
 // - no nerve geometry may lie outside the skin shell;
 // - no nerve may pass through solid bone, except where a real nerve passes
-//   through an opening in that bone (nerve-passages.mjs).
+//   through an opening in that bone (nerve-passages.mjs), and then no deeper
+//   than that opening runs.
 // Every nerve triangle edge is sampled, so a straight tube segment that cuts
 // a corner is caught even when both of its ends are fine.
 //
@@ -68,6 +69,11 @@ function samples({ positions, indices }) {
   return out;
 }
 
+/** Whether a bone hit from measure() is a nerve in solid bone rather than in a real opening. */
+export function throughBone({ nerve, bone, depth }) {
+  return depth > (passage(nerve, bone)?.depth ?? BONE_TOLERANCE);
+}
+
 const fmt = (p) => p.map((v) => v.toFixed(0)).join(', ');
 
 /** Measures every nerve; returns { skin: [...], bone: [...] } offender lists. */
@@ -115,14 +121,13 @@ if (import.meta.main ?? process.argv[1] === import.meta.filename) {
   for (const h of all ? skin : skinBad)
     console.log(`  ${h.distance.toFixed(1).padStart(5)} mm  ${h.nerve}  (${h.count} samples, worst at ${fmt(h.at)})`);
 
-  const deep = bone.filter((h) => h.depth > BONE_TOLERANCE);
-  const boneBad = deep.filter((h) => !passage(h.nerve, h.bone));
-  console.log(`\nThrough solid bone (> ${BONE_TOLERANCE} mm deep, not an allowed passage): ${boneBad.length}`);
+  const boneBad = bone.filter(throughBone);
+  console.log(`\nThrough solid bone (> ${BONE_TOLERANCE} mm deep, or deeper than an allowed passage runs): ${boneBad.length}`);
   for (const h of all ? bone : boneBad) {
     const allowed = passage(h.nerve, h.bone);
     console.log(
       `  ${h.depth.toFixed(1).padStart(5)} mm  ${h.nerve} in ${h.bone}  (${h.count} samples, deepest at ${fmt(h.at)})` +
-        (allowed ? `  [allowed: ${allowed}]` : ''),
+        (allowed ? `  [${throughBone(h) ? 'deeper than' : 'allowed'}: ${allowed.opening}, ${allowed.depth} mm]` : ''),
     );
   }
   if (skinBad.length || boneBad.length) {
