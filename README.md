@@ -8,6 +8,8 @@ The page shows a see-through glass model of an adult male body that you can rota
 
 It ships the **Skeletal**, **Nervous**, **Circulatory**, **Joints & connective tissue**, **Digestive**, **Muscular** and **Respiratory** systems. Every bone, brain region, named nerve, artery, vein, ligament, joint capsule, cartilage pad, fascia, digestive organ, skeletal muscle and airway part in the model is a separate, clickable part with its own name and description. A system's model downloads when its filter is first switched on, except Skeletal, which loads in the background at startup.
 
+Every system also lists what it leaves out and why (not in the free models, too small to model, shown in another system, and so on) in a "Not shown" panel under its filter, so nothing is hidden silently.
+
 It is a static site with no backend, so it costs nothing to host. Vercel builds every push: pull requests get preview deployments, and `main` deploys to production at https://body-atlas-hd.vercel.app.
 
 ## Development
@@ -34,6 +36,7 @@ npm run preview   # serve dist/ locally
 | `src/tour.js` | A layer's guided tour: a glowing pulse that travels its parts in order, with a caption per stage |
 | `src/data/muscular.json` | Muscular layer: every muscle's description, action and depth, the tendon sub-group, the exercise presets for the movement view, and the fiber-haze effect |
 | `src/data/respiratory.json` | Respiratory layer: airway, bronchial tree, lung lobe and diaphragm descriptions in five sub-groups, and the air-sac haze |
+| `src/not-shown.js` | The collapsible "Not shown" panel built from each layer's `notShown` list |
 | `src/layer-controls.js` | Optional per-layer controls built from layer data: the peel-away depth slider and the movement picker |
 | `src/main.js`, `index.html`, `src/style.css` | UI: filter panel, info panel, loading indicator, credit |
 | `public/models/*.glb` | Generated, compressed models (committed) |
@@ -52,6 +55,7 @@ Each system is a data-driven layer, so adding another system (Muscular, say) doe
 1. In `scripts/build-models.mjs`, add an entry to `ASSETS` that lists its BodyParts3D element files (or a `load` function for parts from another source, as the Nervous entry does). Then rebuild the models (see below).
 2. Add `src/data/<system>.json` with the same shape as `skeletal.json`: `id`, `name`, `color`, `asset`, `summary`, plus `parts` keyed by the part's name with any "left"/"right" removed.
 3. Import it and append it to `LAYERS` in `src/layers.js`.
+4. Fill its `notShown` list: every part of the system the model leaves out, so the site never hides anything silently. Each entry is `{ name, reason, note? }`, with `reason` one of the ids in `NOT_SHOWN_REASONS` (`src/layers.js`): `not-added` (a free model has it, the layer doesn't yet), `no-model` (not in the free models we use), `too-small`, `other-system` (add `layer: "<id>"` when another layer shows it, or `system: "<name>"` for a system the site doesn't have yet), `license` or `not-in-adult`. Check the source models before choosing a reason. The filter panel lists the entries, grouped by reason, in a collapsible "Not shown" panel under the layer's toggle. If a layer truly leaves nothing out, give it an empty list and a `nothingLeftOut` sentence saying so; `npm test` fails for a layer without a list.
 
 A layer can also list more GLB files in `extraAssets`. They load together with `asset` and act as one layer. Skeletal and Nervous use this to keep the ossicles and the inner-ear nerves, which have a different license, in files of their own.
 
@@ -173,12 +177,7 @@ The layer has four groups, each in its own color with its own checkbox in the fi
 - **Capsules** (see-through): the fibrous capsules of the main joints, the hip's zona orbicularis and capsular folds, and the knee's infrapatellar fat pad.
 - **Fascia** (see-through): the deep fasciae, intermuscular septa, retinacula and the palmar and plantar aponeuroses.
 
-Not shown:
-
-- **Articular (hyaline) cartilage**, the thin layer that caps the bone ends inside joints. Neither BodyParts3D nor Z-Anatomy models it.
-- **Tendons and tendon sheaths**, which belong with the muscles, and **bursae**.
-- **Ligaments of the eye** (suspensory ligament of the lens, check ligaments) and of the ossicles.
-- The **triradiate cartilage** of the hip socket, a growth cartilage that has fused in an adult.
+The layer's "Not shown" panel lists what it leaves out, such as articular cartilage, bursae and tendon sheaths, and why.
 
 ### Digestive coverage
 

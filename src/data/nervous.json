@@ -23,6 +23,22 @@
       ]
     }
   ],
+  "notShown": [
+    { "name": "Thalamus and hypothalamus", "reason": "not-added", "note": "Deep brain structures. BodyParts3D and Z-Anatomy both have them; they are not in this layer yet." },
+    { "name": "Basal ganglia (caudate nucleus, putamen, globus pallidus)", "reason": "not-added" },
+    { "name": "Hippocampus and amygdala", "reason": "not-added" },
+    { "name": "Corpus callosum", "reason": "not-added", "note": "The thick band of nerve fibres joining the two hemispheres." },
+    { "name": "Ventricles and choroid plexus", "reason": "not-added", "note": "The fluid-filled spaces inside the brain and the tissue that makes their fluid." },
+    { "name": "Dura mater, falx cerebri and tentorium cerebelli", "reason": "not-added", "note": "The tough outer covering of the brain and spinal cord and its folds." },
+    { "name": "Arachnoid and pia mater", "reason": "no-model", "note": "The two thin inner coverings of the brain and spinal cord." },
+    { "name": "Branches of the ophthalmic nerve (frontal, lacrimal, nasociliary) and the ciliary ganglion", "reason": "not-added", "note": "BodyParts3D has them; the layer is built from Z-Anatomy, which does not." },
+    { "name": "Cervical plexus, including the phrenic nerve", "reason": "no-model", "note": "The nerves of the neck, and the phrenic nerve that drives the diaphragm." },
+    { "name": "Autonomic plexuses and the enteric nervous system", "reason": "no-model", "note": "The nerve networks around the heart, gut and other organs, and in the gut wall. Only the sympathetic trunks and their branches are shown." },
+    { "name": "Small unnamed nerve branches", "reason": "too-small" },
+    { "name": "Nerve endings and sensory receptors", "reason": "too-small", "note": "The optional nerve-ending haze hints at where they are densest; it is illustrative, not anatomy." },
+    { "name": "Pituitary and pineal glands", "reason": "other-system", "system": "endocrine" },
+    { "name": "Eyes and inner ears (retina, cochlea, semicircular canals)", "reason": "other-system", "system": "sense organs" }
+  ],
   "parts": {
     "frontal lobe": {
       "region": "Brain",

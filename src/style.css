@@ -383,6 +383,62 @@ body {
   opacity: 0.6;
 }
 
+/* A layer's "Not shown" list (`notShown` in its data; see src/not-shown.js). */
+.not-shown {
+  margin-top: 10px;
+  font-size: 0.8rem;
+}
+
+.not-shown summary {
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.not-shown summary:hover,
+.not-shown[open] summary {
+  color: var(--text);
+}
+
+.not-shown summary:focus-visible {
+  outline: 2px solid var(--layer-color, var(--accent));
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.not-shown > .control-note {
+  margin-top: 4px;
+}
+
+.not-shown h3 {
+  margin: 10px 0 4px;
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.filters .not-shown ul {
+  gap: 6px;
+}
+
+.not-shown li {
+  display: grid;
+  gap: 1px;
+  line-height: 1.35;
+}
+
+.not-shown-note {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.not-shown .link-button {
+  justify-self: start;
+  margin-top: 1px;
+  font-size: 0.75rem;
+}
+
 .info .role {
   margin-top: 8px;
   color: var(--muted);

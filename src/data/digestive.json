@@ -9,6 +9,19 @@
     "tract": { "label": "Digestive tract", "color": "#ff8a65" },
     "accessory": { "label": "Liver, gallbladder & pancreas", "color": "#e0a03c" }
   },
+  "notShown": [
+    { "name": "Wisdom teeth", "reason": "no-model", "note": "BodyParts3D has 28 teeth and no third molars." },
+    { "name": "Soft palate and uvula", "reason": "not-added", "note": "Z-Anatomy has them. The uvula’s muscle is in the Muscular layer." },
+    { "name": "Peritoneum, greater and lesser omentum", "reason": "not-added", "note": "The lining of the abdomen and the fatty aprons that hang from the stomach. Z-Anatomy has them." },
+    { "name": "Mesentery, transverse mesocolon and mesoappendix", "reason": "not-added", "note": "The folds that hold the intestines to the back wall of the abdomen. BodyParts3D has them." },
+    { "name": "Taeniae coli", "reason": "not-added", "note": "The three bands of muscle along the colon. Both source models have them." },
+    { "name": "Pancreatic duct", "reason": "not-added", "note": "BodyParts3D has it; the pancreas is shown as one solid part." },
+    { "name": "Anal canal and internal anal sphincter", "reason": "no-model", "note": "Only the external anal sphincter is modeled." },
+    { "name": "Villi and gut bacteria", "reason": "too-small", "note": "The optional hazes hint at them; they are illustrative, not anatomy." },
+    { "name": "Hard palate", "reason": "other-system", "layer": "skeletal", "note": "It is part of the maxilla and palatine bones." },
+    { "name": "Muscles of chewing and swallowing", "reason": "other-system", "layer": "muscular" },
+    { "name": "Palatine tonsils", "reason": "other-system", "system": "lymphatic" }
+  ],
   "parts": {
     "lips": {
       "region": "Mouth",

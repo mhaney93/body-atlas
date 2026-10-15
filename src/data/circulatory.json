@@ -41,6 +41,18 @@
       "note": "A decorative visual effect, not modeled anatomy: a soft, pulsing glow hinting at the capillary beds in the skin."
     }
   ],
+  "notShown": [
+    { "name": "Capillaries", "reason": "too-small", "note": "Billions of vessels about a hundredth of a millimetre wide. The optional capillary glow hints at them; it is illustrative, not anatomy." },
+    { "name": "Arterioles, venules and small unnamed vessels", "reason": "too-small" },
+    { "name": "Dural venous sinuses", "reason": "not-added", "note": "The veins inside the skull that drain the brain (superior sagittal, transverse, sigmoid and cavernous sinuses). Z-Anatomy has them." },
+    { "name": "External and anterior jugular, facial and retromandibular veins", "reason": "not-added", "note": "Veins of the head and neck that Z-Anatomy has but BodyParts3D, the source of this layer, does not." },
+    { "name": "Dorsal venous network of the hand", "reason": "not-added" },
+    { "name": "Pericardium", "reason": "no-model", "note": "The sac around the heart." },
+    { "name": "Chordae tendineae", "reason": "no-model", "note": "The cords that tie the mitral and tricuspid valve leaflets to the papillary muscles." },
+    { "name": "The heart's conduction system", "reason": "no-model", "note": "The sinoatrial and atrioventricular nodes and the bundle of His, which time each heartbeat." },
+    { "name": "Lymphatic vessels, lymph nodes and the thoracic duct", "reason": "other-system", "system": "lymphatic" },
+    { "name": "Spleen", "reason": "other-system", "system": "lymphatic" }
+  ],
   "parts": {
     "abdominal aorta": {
       "region": "Abdomen",

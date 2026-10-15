@@ -6,6 +6,14 @@
   "extraAssets": ["models/skeletal-ossicles.glb"],
   "preload": true,
   "summary": "The adult skeleton has about 206 bones. It supports and shapes the body, protects organs such as the brain, heart and lungs, anchors the muscles that move us, stores minerals and makes blood cells in the marrow.",
+  "notShown": [
+    { "name": "Sesamoid bones of the hand", "reason": "no-model", "note": "Small bones inside tendons at the thumb (and often other finger) joints. The model has only the two under each big toe." },
+    { "name": "Variable extra bones", "reason": "no-model", "note": "Bones only some people have, such as small sutural bones in the skull seams or a fabella behind the knee." },
+    { "name": "Bone marrow and spongy bone", "reason": "no-model", "note": "Each bone is modeled as its outer surface only, so the spongy bone and marrow inside are not there." },
+    { "name": "Articular cartilage", "reason": "no-model", "note": "The thin, smooth cartilage that caps bone ends inside joints." },
+    { "name": "Teeth", "reason": "other-system", "layer": "digestive" },
+    { "name": "Cartilages of the nose and larynx", "reason": "other-system", "layer": "respiratory" }
+  ],
   "parts": {
     "frontal bone": {
       "region": "Skull",
