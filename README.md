@@ -34,7 +34,8 @@ npm run preview   # serve dist/ locally
 | `scripts/fetch-bodyparts3d.mjs` | Downloads and checksums the BodyParts3D source meshes into `.cache/` |
 | `scripts/build-models.mjs` | Converts the OBJ meshes to meshopt-compressed GLB files |
 | `scripts/extract-z-anatomy.py`, `data-sources/z-anatomy/` | Blender script and its output: parts BodyParts3D lacks (the coccyx, the auditory ossicles in `ossicles/` and the nervous system in `nervous/`), taken from Z-Anatomy |
-| `scripts/nervous-model.mjs` | Fits the Z-Anatomy nervous system onto the BodyParts3D skeleton and turns nerve curves into tubes |
+| `scripts/nervous-model.mjs` | Fits the Z-Anatomy nervous system onto the BodyParts3D skeleton, keeps nerves under the skin and out of solid bone, and turns nerve curves into tubes |
+| `scripts/check-nerves.mjs`, `scripts/nerve-passages.mjs` | Checks the built nerves against the skin and bones; the list of real foramina and canals a nerve may pass through |
 
 ### Adding a body system
 
@@ -91,7 +92,7 @@ npm run build-models   # writes public/models/skin.glb, skeletal.glb, skeletal-o
 npm run check-nerves   # fails if a nerve lies outside the skin, or runs through solid bone away from a real foramen or canal
 ```
 
-The generated GLB files come to about 10.7 MB in total (circulatory.glb is about 4.7 MB); each system's file downloads only when its filter is first turned on. They are committed, so a normal build does not need the source data.
+The generated GLB files come to about 10.9 MB in total (circulatory.glb is about 4.7 MB); each system's file downloads only when its filter is first turned on. They are committed, so a normal build does not need the source data.
 
 `data-sources/z-anatomy/` is committed too. To regenerate it, download `Z-Anatomy.zip` from the Z-Anatomy repository, unzip it, and run its `Startup.blend` through Blender 4.x:
 
