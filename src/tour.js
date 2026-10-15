@@ -189,6 +189,7 @@ export function tourControls(viewer, layer) {
   button.type = 'button';
   button.style.setProperty('--layer-color', layer.color);
   let tour = null;
+  let starting = false;
 
   const show = (stage, index, part) => {
     caption.style.setProperty('--layer-color', layer.color);
@@ -208,6 +209,7 @@ export function tourControls(viewer, layer) {
     button.textContent = '↻ Replay';
   };
   const stop = () => {
+    starting = false;
     tour?.stop();
     if (caption.dataset.owner !== layer.id) return;
     caption.hidden = true;
@@ -218,7 +220,19 @@ export function tourControls(viewer, layer) {
   caption.querySelector('.close').addEventListener('click', () => caption.dataset.owner === layer.id && stop());
   button.addEventListener('click', async () => {
     if (tour?.running) return stop();
-    tour ??= new Tour(viewer, layer.tour, await viewer.preloadLayer(layer), { onStage: show, onEnd: finish });
+    if (starting) return;
+    starting = true;
+    let group;
+    try {
+      group = await viewer.preloadLayer(layer);
+    } catch (err) {
+      console.error(err);
+      starting = false;
+      return;
+    }
+    if (!starting) return;
+    starting = false;
+    tour ??= new Tour(viewer, layer.tour, group, { onStage: show, onEnd: finish });
     caption.dataset.owner = layer.id;
     viewer.select(null);
     tour.start();
