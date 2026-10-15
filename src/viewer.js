@@ -3,6 +3,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import { EFFECTS } from './effects.js';
+import { partGroupId, sharedEntry } from './layers.js';
 
 const BODY_HEIGHT = 1.72; // metres, roughly; the models stand on y = 0
 const CLICK_SLOP_PX = 6;
@@ -110,7 +111,12 @@ function withCutaway(material) {
   return material;
 }
 
-function layerMaterials(hex, opacity = 1, cutaway = false) {
+/**
+ * Base/hover/selected materials for a layer colour. `opacity` < 1 makes them
+ * see-through; `onTop` draws a part shared from another layer (see `shared` in
+ * the layer data) over that layer's own copy of the same mesh.
+ */
+function layerMaterials(hex, opacity = 1, cutaway = false, onTop = false) {
   const color = new THREE.Color(hex);
   const translucent = opacity < 1;
   const make = (emissive, intensity) => {
@@ -121,6 +127,7 @@ function layerMaterials(hex, opacity = 1, cutaway = false) {
       roughness: 0.55,
       metalness: 0.0,
       ...(translucent && { transparent: true, opacity, depthWrite: false }),
+      ...(onTop && { polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -4 }),
     });
     return cutaway ? withCutaway(material) : material;
   };
@@ -148,6 +155,8 @@ export class Viewer {
     this.layers = new Map();
     /** @type {Map<string, boolean>} latest requested visibility per layer id */
     this.wanted = new Map();
+    /** @type {Map<string, boolean>} visibility per "<layer id>/<group id>" set by setGroupVisible */
+    this.groupShown = new Map();
     /** @type {Map<string, {object: THREE.Object3D, update: Function}>} decorative effects by id */
     this.effects = new Map();
     this.shell = null;
@@ -228,24 +237,33 @@ export class Viewer {
     this.#applyHazes();
   }
 
-  /** Starts downloading a layer's asset (hidden) and returns a promise for it. */
+  /**
+   * Starts downloading a layer's asset (hidden) and returns a promise for it.
+   * A layer with `shared` entries also loads those layers and shows their
+   * matching meshes as its own too, reusing their geometry.
+   */
   preloadLayer(layer) {
     let entry = this.layers.get(layer.id);
     if (entry) return entry.promise;
     // Materials are shared per colour: a part's own colour, else its sub-group's
     // (e.g. arteries and veins, tagged via the `group` node extra), else the layer's.
     const byColor = new Map();
-    const materialsFor = (color, opacity, cutaway) => {
-      const key = `${color}/${opacity ?? 1}/${cutaway}`;
-      if (!byColor.has(key)) byColor.set(key, layerMaterials(color, opacity, cutaway));
+    const materialsFor = (color, opacity, cutaway, onTop) => {
+      const key = `${color}/${opacity ?? 1}/${cutaway}/${onTop}`;
+      if (!byColor.has(key)) byColor.set(key, layerMaterials(color, opacity, cutaway, onTop));
       return byColor.get(key);
     };
     entry = { layer, group: null, promise: null };
     // A layer may ship extra files (e.g. parts under a different license).
     const urls = [layer.asset, ...(layer.extraAssets ?? [])];
-    entry.promise = Promise.all(urls.map((url) => this.loader.loadAsync(url))).then((gltfs) => {
+    const sources = (layer.shared ?? []).map((s) => s.source).filter(Boolean);
+    entry.promise = Promise.all([
+      Promise.all(urls.map((url) => this.loader.loadAsync(url))),
+      ...sources.map((source) => this.preloadLayer(source)),
+    ]).then(([gltfs, ...sourceGroups]) => {
       const group = new THREE.Group();
       group.add(...gltfs.map((gltf) => gltf.scene));
+      sourceGroups.forEach((sourceGroup, i) => group.add(...this.#sharedCopies(layer, sources[i].id, sourceGroup)));
       group.visible = false;
       group.updateMatrixWorld(true);
       const box = new THREE.Box3();
@@ -253,11 +271,14 @@ export class Viewer {
         if (o.isMesh) {
           // Small parts stay whole in the cutaway so they don't vanish as you close in on them.
           o.userData.uncut = box.setFromObject(o).getSize(new THREE.Vector3()).length() < UNCUT_SIZE;
+          const name = o.userData.name ?? o.name;
+          o.userData.group ??= partGroupId(layer, name);
           const g = layer.groups?.[o.userData.group];
-          const color = this.partColor(layer, o.userData.name ?? o.name) ?? g?.color ?? layer.color;
-          o.userData.materials = materialsFor(color, g?.opacity, !o.userData.uncut);
+          const color = this.partColor(layer, name) ?? g?.color ?? layer.color;
+          o.userData.materials = materialsFor(color, g?.opacity, !o.userData.uncut, o.userData.sourceId !== undefined);
           o.material = o.userData.materials.base;
           o.userData.layerId = layer.id;
+          o.visible = this.groupShown.get(`${layer.id}/${o.userData.group}`) ?? g?.visible ?? true;
         }
       });
       this.scene.add(group);
@@ -268,6 +289,33 @@ export class Viewer {
     entry.promise.catch(() => this.layers.delete(layer.id));
     this.layers.set(layer.id, entry);
     return entry.promise;
+  }
+
+  /** Meshes of `sourceGroup` (layer `sourceId`) that `layer` shares, as new meshes on the same geometry. */
+  #sharedCopies(layer, sourceId, sourceGroup) {
+    const copies = [];
+    sourceGroup.updateMatrixWorld(true);
+    sourceGroup.traverse((o) => {
+      const entry = o.isMesh && sharedEntry(layer, sourceId, o.userData.name ?? o.name);
+      if (!entry) return;
+      const copy = new THREE.Mesh(o.geometry);
+      copy.name = o.name;
+      copy.userData = { name: o.userData.name, sourceId, group: entry.group };
+      o.matrixWorld.decompose(copy.position, copy.quaternion, copy.scale);
+      copies.push(copy);
+    });
+    return copies;
+  }
+
+  /** Shows or hides one of a layer's sub-groups (see `groups` in the layer data). */
+  setGroupVisible(layer, groupId, visible) {
+    this.groupShown.set(`${layer.id}/${groupId}`, visible);
+    this.layers.get(layer.id)?.group?.traverse((o) => {
+      if (!o.isMesh || o.userData.group !== groupId) return;
+      o.visible = visible;
+      if (!visible && o === this.hovered) this.#setHovered(null);
+      if (!visible && o === this.selected) this.select(null);
+    });
   }
 
   async setLayerVisible(layer, visible) {
@@ -369,6 +417,9 @@ export class Viewer {
     this.pointer.set(((clientX - rect.left) / rect.width) * 2 - 1, -((clientY - rect.top) / rect.height) * 2 + 1);
     this.raycaster.setFromCamera(this.pointer, this.camera);
     const hits = this.#hits();
+    // A part shared from another layer wins over that layer's own copy of it.
+    const twin = hits[0] && hits.find((h) => h.distance - hits[0].distance < 1e-5 && h.object.userData.sourceId);
+    if (twin) hits.unshift(twin);
     // A see-through part (e.g. the heart wall) yields only to an opaque part
     // inside it (e.g. a valve), i.e. one hit before the ray leaves it.
     const [nearest] = hits;
@@ -384,7 +435,7 @@ export class Viewer {
     for (const { group } of this.layers.values()) if (group?.visible) targets.push(group);
     return this.raycaster
       .intersectObjects(targets, true)
-      .filter((h) => h.object.isMesh && (h.distance >= cutUniform.value || h.object.userData.uncut));
+      .filter((h) => h.object.isMesh && h.object.visible && (h.distance >= cutUniform.value || h.object.userData.uncut));
   }
 
   /** First visible layer mesh hit by this.raycaster, skipping anything cut away near the camera. */
