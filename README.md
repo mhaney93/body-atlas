@@ -6,7 +6,7 @@ Free interactive 3D atlas of the human body with per-system highlighting.
 
 The page shows a see-through glass model of an adult male body that you can rotate, zoom and pan with a mouse or with touch. Turning on a body system in the filter panel lights up its parts in color. Clicking or tapping a part shows its name and a short description. Zoom in very close and parts near the camera are cut away, so you can see into bone to buried parts; parts smaller than about 1.5 cm stay whole.
 
-It ships the **Skeletal**, **Nervous**, **Circulatory**, **Joints & connective tissue**, **Digestive** and **Muscular** systems. Every bone, brain region, named nerve, artery, vein, ligament, joint capsule, cartilage pad, fascia, digestive organ and skeletal muscle in the model is a separate, clickable part with its own name and description. A system's model downloads when its filter is first switched on, except Skeletal, which loads in the background at startup.
+It ships the **Skeletal**, **Nervous**, **Circulatory**, **Joints & connective tissue**, **Digestive**, **Muscular** and **Respiratory** systems. Every bone, brain region, named nerve, artery, vein, ligament, joint capsule, cartilage pad, fascia, digestive organ, skeletal muscle and airway part in the model is a separate, clickable part with its own name and description. A system's model downloads when its filter is first switched on, except Skeletal, which loads in the background at startup.
 
 It is a static site with no backend, so it costs nothing to host. Vercel builds every push: pull requests get preview deployments, and `main` deploys to production at https://body-atlas-hd.vercel.app.
 
@@ -33,12 +33,13 @@ npm run preview   # serve dist/ locally
 | `src/data/digestive.json` | Digestive layer: as above, plus its two decorative hazes and the "Follow the food" tour |
 | `src/tour.js` | A layer's guided tour: a glowing pulse that travels its parts in order, with a caption per stage |
 | `src/data/muscular.json` | Muscular layer: every muscle's description, action and depth, the tendon sub-group, the exercise presets for the movement view, and the fiber-haze effect |
+| `src/data/respiratory.json` | Respiratory layer: airway, bronchial tree, lung lobe and diaphragm descriptions in five sub-groups, and the air-sac haze |
 | `src/layer-controls.js` | Optional per-layer controls built from layer data: the peel-away depth slider and the movement picker |
 | `src/main.js`, `index.html`, `src/style.css` | UI: filter panel, info panel, loading indicator, credit |
 | `public/models/*.glb` | Generated, compressed models (committed) |
 | `scripts/fetch-bodyparts3d.mjs` | Downloads and checksums the BodyParts3D source meshes into `.cache/` |
 | `scripts/build-models.mjs` | Converts the OBJ meshes to meshopt-compressed GLB files |
-| `scripts/extract-z-anatomy.py`, `data-sources/z-anatomy/` | Blender script and its output: parts BodyParts3D lacks (the coccyx, the auditory ossicles in `ossicles/`, the nervous system in `nervous/`, and most ligaments, joint capsules, menisci and fasciae in `connective-tissue.obj.gz`), taken from Z-Anatomy |
+| `scripts/extract-z-anatomy.py`, `data-sources/z-anatomy/` | Blender script and its output: parts BodyParts3D lacks (the coccyx, the auditory ossicles in `ossicles/`, the nervous system in `nervous/`, most ligaments, joint capsules, menisci and fasciae in `connective-tissue.obj.gz`, and the lung lobes, nasal cavity, sinuses and pharynx in `respiratory.obj.gz`), taken from Z-Anatomy |
 | `scripts/muscular-model.mjs` | Builds the muscles: BodyParts3D's plus the ones it lacks from Z-Anatomy (fitted onto the BodyParts3D skeleton), with each muscle's tendons split off as parts of their own |
 | `scripts/export-z-anatomy.py`, `data-sources/z-anatomy/muscular/` | Blender script that exports chosen Z-Anatomy objects as OBJ files, and the muscles it exported (listed in `objects.txt`) |
 | `scripts/nervous-model.mjs` | Fits the Z-Anatomy nervous system onto the BodyParts3D skeleton, keeps nerves under the skin and out of solid bone, and turns nerve curves into tubes |
