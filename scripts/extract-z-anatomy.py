@@ -9,9 +9,10 @@
 # Everything except the connective tissue is written in Z-Anatomy world space
 # (metres, +Z up, -Y anterior).
 #
-# - Bones (coccyx.obj, ossicles/): each OBJ header records an anchor point on the bone it
-#   attaches to, computed the same way the build script computes it on the
-#   BodyParts3D mesh, so the build can translate the part into place.
+# - Bones and glands (coccyx.obj, parotid-gland-*.obj, ossicles/): each OBJ
+#   header records an anchor point on the part it attaches to or sits beside,
+#   computed the same way the build script computes it on the BodyParts3D
+#   mesh, so the build can translate the part into place.
 # - Nervous system (nervous/): brain regions and other meshes as OBJ files,
 #   the nerves (Bezier curves in Z-Anatomy) sampled into polylines with a
 #   radius per point (nerves.json), and sample points of the bones the build
@@ -42,6 +43,9 @@ from mathutils.kdtree import KDTree
 # Z-Anatomy object -> (output file, display name, anchor object, anchor rule)
 PARTS = {
     'Coccyx': ('coccyx.obj', 'Coccyx', 'Sacrum', 'lowest'),
+    # Placed by the neighbouring submandibular gland, which both models have.
+    'Parotid gland.l': ('parotid-gland-left.obj', 'Left parotid gland', 'Submandibular gland.l', 'center'),
+    'Parotid gland.r': ('parotid-gland-right.obj', 'Right parotid gland', 'Submandibular gland.r', 'center'),
 }
 
 # The auditory ossicles, which Z-Anatomy adapted from the University of

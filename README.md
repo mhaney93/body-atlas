@@ -6,7 +6,7 @@ Free interactive 3D atlas of the human body with per-system highlighting.
 
 The page shows a see-through glass model of an adult male body that you can rotate, zoom and pan with a mouse or with touch. Turning on a body system in the filter panel lights up its parts in color. Clicking or tapping a part shows its name and a short description. Zoom in very close and parts near the camera are cut away, so you can see into bone to buried parts; parts smaller than about 1.5 cm stay whole.
 
-It ships the **Skeletal**, **Nervous**, **Circulatory** and **Joints & connective tissue** systems. Every bone, brain region, named nerve, artery, vein, ligament, joint capsule, cartilage pad and fascia in the model is a separate, clickable part with its own name and description. A system's model downloads when its filter is first switched on, except Skeletal, which loads in the background at startup.
+It ships the **Skeletal**, **Nervous**, **Circulatory**, **Joints & connective tissue** and **Digestive** systems. Every bone, brain region, named nerve, artery, vein, ligament, joint capsule, cartilage pad, fascia and digestive organ in the model is a separate, clickable part with its own name and description. A system's model downloads when its filter is first switched on, except Skeletal, which loads in the background at startup.
 
 It is a static site with no backend, so it costs nothing to host. Vercel builds every push: pull requests get preview deployments, and `main` deploys to production at https://body-atlas-hd.vercel.app.
 
@@ -30,6 +30,8 @@ npm run preview   # serve dist/ locally
 | `src/effects.js` | Decorative effects a layer can offer, such as the skin haze (not anatomy) |
 | `src/data/circulatory.json` | Circulatory layer: as above, plus artery/vein/heart sub-groups, blood-flow direction, and the capillary-glow effect |
 | `src/data/joints.json` | Joints & connective tissue layer: as above, plus sub-groups you can show or hide and parts shared with the Skeletal layer |
+| `src/data/digestive.json` | Digestive layer: as above, plus its two decorative hazes and the "Follow the food" tour |
+| `src/tour.js` | A layer's guided tour: a glowing pulse that travels its parts in order, with a caption per stage |
 | `src/main.js`, `index.html`, `src/style.css` | UI: filter panel, info panel, loading indicator, credit |
 | `public/models/*.glb` | Generated, compressed models (committed) |
 | `scripts/fetch-bodyparts3d.mjs` | Downloads and checksums the BodyParts3D source meshes into `.cache/` |
@@ -57,7 +59,9 @@ Optional layer fields, all generic (see `circulatory.json` for an example):
 - `groups`: sub-groups with their own `label`, `color`, optional `opacity`, and optional `flow` text. The build tags each mesh with a group (`groups` in its `ASSETS` entry, stored as the `group` node extra), and the filter panel shows them as a colour key.
 - `preload: true`: download the model in the background at startup so the first toggle is instant. Leave it off for heavy models so phones only fetch them on demand.
 - `flowLabel`, plus `flow` on a group or a part: an extra line in the info panel (e.g. "Blood flow: Away from the heart").
-- `effects`: optional toggles shown under the layer's button. `type: "haze"` lays a decorative glow over the skin (and over any layer with `hazeSurface: true`). The UI badges every effect as "Illustrative", so describe it in `note` as a visual effect, never as modeled anatomy.
+- `effects`: optional toggles shown under the layer's button. `type: "haze"` lays a decorative glow over the skin (and over any layer with `hazeSurface: true`). `type: "part-haze"` scatters glowing specks over the layer's own parts named in `parts` (mesh names), in a `style` from `src/effects.js` (`villi` or `bacteria`). The UI badges every effect as "Illustrative", so describe it in `note` as a visual effect, never as modeled anatomy.
+- `tour`: a "play" button under the layer's toggle that sends a glowing pulse through the layer's parts in order. It has a `label`, a `note`, a `total` shown at the end, and `stages`, each with a `name`, the `parts` (mesh names) it passes through, a `time` caption and how many `seconds` the animation spends there. The pulse follows a part's centreline where the build stored one (`centerlines` in its `ASSETS` entry) and otherwise passes through the part's centre.
+- In `scripts/build-models.mjs`, an `ASSETS` entry can also `merge` several elements into one part, `split` an element at a height into two parts, and `rename` parts (the Digestive entry does all three).
 - A part whose left and right sides differ can be keyed by its full lowercase name (e.g. `"left ventricle"`), which wins over the side-less key.
 - `"group": "<id>"` on a part puts it in a sub-group when the build didn't tag one (`joints.json` does this).
 - `groupToggles: true`: each colour-key entry becomes a checkbox that shows or hides its sub-group; a group with `visible: false` starts hidden. A see-through group (`opacity` below 1) only takes a click when no solid part is behind it.
@@ -69,7 +73,7 @@ The 3D anatomy comes from **[BodyParts3D](https://dbarchive.biosciencedbc.jp/en/
 
 - **License:** [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/), per the [official license page](https://dbarchive.biosciencedbc.jp/en/bodyparts3d/lic.html) (updated 2025-02-27). The OBJ files still carry a header from an older release that names CC BY-SA 2.1 Japan; the database's current license page supersedes that header.
 - **Required credit:** "BodyParts3D, © The Database Center for Life Science licensed under CC Attribution 4.0 International". The site shows this in its footer, with links to the source and the license.
-- **Changes made:** the meshes were converted from OBJ to glTF, rescaled to metres, re-oriented to Y-up, simplified, and compressed with meshopt. A few parts were renamed (see `NAME_OVERRIDES` in `scripts/build-models.mjs`). In the circulatory model, elements that share a name (e.g. the segments of one vein) were merged into one part, and same-named vessels on both sides of the body were split into left and right.
+- **Changes made:** the meshes were converted from OBJ to glTF, rescaled to metres, re-oriented to Y-up, simplified, and compressed with meshopt. A few parts were renamed (see `NAME_OVERRIDES` in `scripts/build-models.mjs`). In the circulatory model, elements that share a name (e.g. the segments of one vein) were merged into one part, and same-named vessels on both sides of the body were split into left and right. In the digestive model, the pieces of the liver, pharynx, bile ducts, jejunum and ileum were merged into one part each, and the cecum and sigmoid colon were cut off the ascending and descending colon at an approximate boundary.
 - **Source files used:** `isa_BP3D_4.0_obj_99.zip` (polygon reduction rate 99%, IS-A tree) and the element lists `isa_element_parts.txt` and `partof_element_parts.txt`, which say which elements are arteries, veins or parts of the heart, BodyParts3D version 4.0.
 
 The **coccyx**, which BodyParts3D lacks, comes from **[Z-Anatomy](https://www.z-anatomy.com)** ([source repository](https://github.com/Z-Anatomy/Models-of-human-anatomy)), "Z-Anatomy - The libre 3D atlas of anatomy", licensed [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Z-Anatomy is itself derived from BodyParts3D and shares its scale. `scripts/extract-z-anatomy.py` extracts the mesh from Z-Anatomy's Blender template into `data-sources/z-anatomy/coccyx.obj`. The build then moves it so that it sits under the BodyParts3D sacrum.
@@ -84,7 +88,9 @@ Z-Anatomy lists these models as used for reference or included and adapted, so p
 
 Most **ligaments, joint capsules, menisci, joint discs and fasciae** come from Z-Anatomy too, because BodyParts3D has only a few of them (the interosseous membranes, the wrist's flexor retinaculum, the iliotibial tract, the long plantar ligament and the ligaments and membranes of the larynx and hyoid, which are taken from BodyParts3D). `scripts/extract-z-anatomy.py` writes them to `data-sources/z-anatomy/connective-tissue.obj.gz`, already moved onto the BodyParts3D skeleton: Z-Anatomy's bones were reshaped from BodyParts3D's and sit up to about 2 cm away from them, so the script registers each Z-Anatomy bone onto its BodyParts3D twin (long bones piece by piece) and moves every vertex of a ligament or fascia with the bones nearest to it. It also decimates the largest sheets, and the build simplifies them further.
 
-Because of those ShareAlike parts, **`public/models/skeletal.glb`, `public/models/nervous.glb`, `public/models/joints.glb` and `data-sources/z-anatomy/` (apart from `ossicles/` and the inner-ear nerve entries in `nervous/nerves.json`) are distributed under CC BY-SA 4.0**. `public/models/skin.glb` and `public/models/circulatory.glb` are under CC BY 4.0. The site credits both sources in its footer, notes that the Z-Anatomy parts were modified, and states that the skeletal, nervous and joints models are CC BY-SA 4.0.
+The two **parotid glands** come from Z-Anatomy as well, because BodyParts3D has the other salivary glands but not these. `scripts/extract-z-anatomy.py` extracts them into `data-sources/z-anatomy/parotid-gland-left.obj` and `parotid-gland-right.obj`, and the build moves each one so that the submandibular gland next to it lines up with the BodyParts3D one.
+
+Because of those ShareAlike parts, **`public/models/skeletal.glb`, `public/models/nervous.glb`, `public/models/joints.glb`, `public/models/digestive.glb` and `data-sources/z-anatomy/` (apart from `ossicles/` and the inner-ear nerve entries in `nervous/nerves.json`) are distributed under CC BY-SA 4.0**. `public/models/skin.glb` and `public/models/circulatory.glb` are under CC BY 4.0. The site credits both sources in its footer, notes that the Z-Anatomy parts were modified, and states that the skeletal, nervous, joints and digestive models are CC BY-SA 4.0.
 
 The **inner-ear nerves** (the cochlear, vestibular and vestibulocochlear (VIII) nerves and the chorda tympani of each side) also come from Z-Anatomy, which may have adapted them from **[“Anatomy of the Inner Ear”](https://sketchfab.com/3d-models/anatomy-of-the-inner-ear-f80bda64666c4b8aaac8f63b7b82a0a0)** by Annie Campbell, University of Dundee School of Medicine. That model is itself a derivative of “3D Ear” by W. Robert J. Funnell, PhD, Sam Daniel, MD, CM and Daren Nicolson, MD, CM at McGill University. It is licensed [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/), which allows **non-commercial use only**. So that the restriction stays with those parts only, they ship separately: **`public/models/nervous-inner-ear.glb` and the inner-ear nerve entries in `data-sources/z-anatomy/nervous/nerves.json` (Cochlear nerve, Vestibular nerve, Vestibulocochlear nerve (VIII) and Chorda tympani, both sides) are distributed under CC BY-NC-SA 4.0 and may not be used commercially.** Body Atlas is a free, non-commercial site. The footer credits Dundee, McGill and Z-Anatomy, notes the changes and states that the inner-ear nerve model is non-commercial.
 
@@ -94,11 +100,11 @@ The part descriptions in `src/data/` are original text written for this project.
 
 ```sh
 npm run fetch-data     # downloads ~140 MB into .cache/ (gitignored) and checks its SHA-256
-npm run build-models   # writes public/models/skin.glb, skeletal.glb, skeletal-ossicles.glb, nervous.glb, nervous-inner-ear.glb, circulatory.glb and joints.glb
+npm run build-models   # writes public/models/skin.glb, skeletal.glb, skeletal-ossicles.glb, nervous.glb, nervous-inner-ear.glb, circulatory.glb, joints.glb and digestive.glb
 npm run check-nerves   # fails if a nerve lies outside the skin, or runs through solid bone away from a real foramen or canal
 ```
 
-The generated GLB files come to about 12.3 MB in total (circulatory.glb is about 4.7 MB, joints.glb about 1.4 MB); each system's file downloads only when its filter is first turned on. They are committed, so a normal build does not need the source data.
+The generated GLB files come to about 13.6 MB in total (circulatory.glb is about 4.7 MB, joints.glb about 1.4 MB, digestive.glb about 1.3 MB); each system's file downloads only when its filter is first turned on. They are committed, so a normal build does not need the source data.
 
 `data-sources/z-anatomy/` is committed too. To regenerate it, run `npm run fetch-data` (the registration needs the BodyParts3D meshes), download `Z-Anatomy.zip` from the Z-Anatomy repository, unzip it, and run its `Startup.blend` through Blender 4.x or later (it needs about 9 GB of memory and a few minutes):
 
@@ -144,3 +150,22 @@ Not shown:
 - **Tendons and tendon sheaths**, which belong with the muscles, and **bursae**.
 - **Ligaments of the eye** (suspensory ligament of the lens, check ligaments) and of the ossicles.
 - The **triradiate cartilage** of the hip socket, a growth cartilage that has fused in an adult.
+
+### Digestive coverage
+
+The Digestive layer follows the tract from mouth to anus, plus the organs that feed into it:
+
+- **Mouth**: lips, upper and lower gums, tongue, and 28 teeth (each incisor, canine, premolar and first and second molar is its own part; BodyParts3D has no wisdom teeth).
+- **Salivary glands**: the parotid, submandibular and sublingual glands of each side.
+- **Pharynx** (shown as its constrictor muscles, merged into one part) and **esophagus**.
+- **Stomach**.
+- **Small intestine**: duodenum, jejunum, ileum and the ileocecal junction.
+- **Large intestine**: cecum, appendix, ascending, transverse, descending and sigmoid colon, rectum and the external anal sphincter. BodyParts3D models the cecum as part of the ascending colon and the sigmoid colon as part of the descending colon, so the boundaries between them are approximate.
+- **Accessory organs**: liver, gallbladder, bile ducts and pancreas.
+
+The layer has two optional decorative effects, each badged "Illustrative" in the filter panel. They are visual effects, not modeled anatomy:
+
+- **Villi haze**: a fine, swaying fuzz over the small intestine, a hint of the millions of tiny villi that line it.
+- **Gut bacteria haze**: drifting specks around the colon, a hint of its gut bacteria.
+
+**Follow the food** sends a glowing pulse through the tract in order (mouth, pharynx, esophagus, stomach, small intestine, large intestine, rectum and anus), lighting up each stage and showing the typical time food spends there, from seconds in the mouth to one to three days in all. The animation is shortened to about half a minute.

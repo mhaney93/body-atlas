@@ -236,6 +236,65 @@ body {
   line-height: 1.4;
 }
 
+/* A layer's guided tour (`tour` in its data; see src/tour.js). */
+.tour-button {
+  margin-top: 10px;
+  padding: 5px 12px;
+  border: 1px solid var(--layer-color);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--layer-color) 12%, transparent);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.tour-button:hover {
+  background: color-mix(in srgb, var(--layer-color) 24%, transparent);
+}
+
+.tour-caption {
+  bottom: calc(max(10px, env(safe-area-inset-bottom)) + var(--credit-height, 30px) + 36px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(360px, calc(100% - 2 * var(--gutter)));
+  padding-right: 40px;
+  z-index: 3;
+}
+
+.tour-caption .kicker {
+  margin: 0 0 2px;
+  color: var(--layer-color);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.tour-caption h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: 1.15rem;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.tour-caption p {
+  margin: 2px 0 0;
+  font-size: 0.85rem;
+}
+
+.tour-caption .tour-part:empty,
+.tour-caption .tour-time:empty {
+  display: none;
+}
+
+.tour-caption .tour-note {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
 .summary {
   margin: 12px 0 0;
   font-size: 0.85rem;
@@ -409,6 +468,9 @@ body {
     bottom: calc(max(10px, env(safe-area-inset-bottom)) + var(--credit-height, 40px) + 8px);
     width: auto;
     padding: 10px 12px;
+    /* Keep the body in view however many systems and extras the panel lists. */
+    max-height: 42svh;
+    overflow-y: auto;
   }
 
   .filters h2,
@@ -449,5 +511,21 @@ body {
 
   .credit {
     font-size: 0.65rem;
+  }
+
+  /* The filter bar is at the bottom on phones, so the caption goes up top. */
+  .tour-caption {
+    top: 64px;
+    bottom: auto;
+  }
+
+  .tour-caption .tour-note {
+    display: none;
+  }
+
+  /* A running tour takes the hint's and the filter bar's place (its caption's × stops it). */
+  body.touring .hint,
+  body.touring .filters {
+    display: none;
   }
 }

@@ -1,4 +1,5 @@
 import { LAYERS, SHELL_ASSET, partInfo } from './layers.js';
+import { tourControls } from './tour.js';
 import { Viewer } from './viewer.js';
 
 const $ = (id) => document.getElementById(id);
@@ -57,7 +58,7 @@ function applyEffects(layer) {
   for (const effect of layer.effects ?? []) {
     const on = active.has(layer.id) && effectsOn.has(effect.id);
     if (effect.type === 'haze') viewer.setHaze(effect.id, on ? effect.color : null);
-    else viewer.setEffectVisible(effect, on);
+    else viewer.setEffectVisible(effect, on, layer);
   }
 }
 
@@ -126,8 +127,11 @@ for (const layer of layers) {
   button.innerHTML = '<span class="swatch" aria-hidden="true"></span><span class="label"></span><span class="state"></span>';
   button.querySelector('.label').textContent = layer.name;
   const extras = layerExtras(layer);
+  const tour = layer.tour && tourControls(viewer, layer);
+  if (tour) extras.append(tour.element);
   const sync = () => {
     const on = active.has(layer.id);
+    if (!on) tour?.stop();
     button.setAttribute('aria-pressed', String(on));
     extras.hidden = !on || !extras.childElementCount;
     applyEffects(layer);
@@ -140,6 +144,7 @@ for (const layer of layers) {
     button.querySelector('.state').textContent = '';
     try {
       await viewer.setLayerVisible(layer, active.has(layer.id));
+      applyEffects(layer); // effects built from the layer's own parts need its model
     } catch (err) {
       console.error(err);
       active.delete(layer.id);

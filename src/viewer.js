@@ -167,6 +167,10 @@ export class Viewer {
     /** @type {Map<string, {material: THREE.ShaderMaterial, overlays: THREE.Mesh[]}>} haze effects by id */
     this.hazes = new Map();
     this.time = { value: 0 };
+    /** Meshes drawn in their hover style while nothing else styles them (e.g. a tour's current stage). */
+    this.emphasized = new Set();
+    /** Called every frame with (seconds since the last frame); see onFrame(). */
+    this.frameCallbacks = new Set();
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -210,6 +214,8 @@ export class Viewer {
     renderer.setAnimationLoop(() => {
       timer.update();
       this.time.value = timer.getElapsed();
+      const dt = Math.min(timer.getDelta(), 0.1);
+      for (const fn of this.frameCallbacks) fn(dt);
       controls.update();
       const distance = camera.position.distanceTo(controls.target);
       cutUniform.value = CUT_RADIUS * THREE.MathUtils.smoothstep(CUT_START - distance, 0, CUT_START - CUT_FULL);
@@ -332,17 +338,41 @@ export class Viewer {
 
   /**
    * Shows or hides a decorative effect, e.g. { id, type: 'skin-haze', color, ... }
-   * (see effects.js). It is built from the shell the first time it is shown.
+   * (see effects.js). It is built the first time it is shown: from the shell,
+   * or for an effect with `parts`, from those meshes of `layer` (once loaded).
    */
-  setEffectVisible(effect, visible) {
+  setEffectVisible(effect, visible, layer) {
     let fx = this.effects.get(effect.id);
     if (!fx) {
-      if (!visible || !this.shell) return;
-      fx = EFFECTS[effect.type](this.shell, effect);
+      const source = effect.parts ? this.#partMeshes(layer, effect.parts) : this.shell;
+      if (!visible || !source) return;
+      fx = EFFECTS[effect.type](source, effect);
       this.scene.add(fx.object);
       this.effects.set(effect.id, fx);
     }
     fx.object.visible = visible;
+  }
+
+  /** The meshes of a loaded layer with these names, or null if the layer hasn't loaded. */
+  #partMeshes(layer, names) {
+    const group = layer && this.layers.get(layer.id)?.group;
+    if (!group) return null;
+    const meshes = [];
+    group.traverse((o) => o.isMesh && names.includes(o.userData.name ?? o.name) && meshes.push(o));
+    return meshes;
+  }
+
+  /** Runs `fn(dt)` every frame until the returned function is called. */
+  onFrame(fn) {
+    this.frameCallbacks.add(fn);
+    return () => this.frameCallbacks.delete(fn);
+  }
+
+  /** Highlights these meshes in their hover style, replacing any previous emphasis. */
+  emphasize(meshes = []) {
+    const prev = this.emphasized;
+    this.emphasized = new Set(meshes);
+    for (const mesh of new Set([...prev, ...meshes])) this.#restyle(mesh);
   }
 
   /** Selects a mesh (or clears the selection with null). */
@@ -400,7 +430,11 @@ export class Viewer {
   #restyle(mesh) {
     const { materials } = mesh.userData;
     mesh.material =
-      mesh === this.selected ? materials.selected : mesh === this.hovered ? materials.hover : materials.base;
+      mesh === this.selected
+        ? materials.selected
+        : mesh === this.hovered || this.emphasized.has(mesh)
+          ? materials.hover
+          : materials.base;
   }
 
   #setHovered(mesh) {

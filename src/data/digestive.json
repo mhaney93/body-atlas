@@ -1,0 +1,265 @@
+{
+  "id": "digestive",
+  "name": "Digestive",
+  "color": "#ff8a65",
+  "asset": "models/digestive.glb",
+  "summary": "The digestive system is a muscular tube several metres long, running from the mouth to the anus, with the liver, gallbladder and pancreas alongside. It breaks food down, absorbs nutrients and water, and gets rid of what is left.",
+  "groups": {
+    "mouth": { "label": "Mouth & salivary glands", "color": "#ffb48f" },
+    "tract": { "label": "Digestive tract", "color": "#ff8a65" },
+    "accessory": { "label": "Liver, gallbladder & pancreas", "color": "#e0a03c" }
+  },
+  "parts": {
+    "lips": {
+      "region": "Mouth",
+      "group": "mouth",
+      "description": "The muscular folds around the mouth opening. They help take in food, keep it in the mouth while chewing, and shape speech."
+    },
+    "upper gum": {
+      "region": "Mouth",
+      "group": "mouth",
+      "description": "The gum (gingiva) of the upper jaw: firm, moist tissue that covers the jawbone and seals around the necks of the upper teeth."
+    },
+    "lower gum": {
+      "region": "Mouth",
+      "group": "mouth",
+      "description": "The gum (gingiva) of the lower jaw: firm, moist tissue that covers the jawbone and seals around the necks of the lower teeth."
+    },
+    "tongue": {
+      "region": "Mouth",
+      "group": "mouth",
+      "description": "A muscular organ that moves food around while you chew, mixes it with saliva and pushes it back to be swallowed. It carries most of the taste buds."
+    },
+    "upper central incisor": {
+      "region": "Teeth",
+      "group": "mouth",
+      "description": "One of the two front teeth of the upper jaw. Its thin, chisel-shaped edge bites and cuts food."
+    },
+    "upper lateral incisor": {
+      "region": "Teeth",
+      "group": "mouth",
+      "description": "The cutting tooth beside each upper front tooth. It is a little smaller than the central incisor and also bites into food."
+    },
+    "upper canine": {
+      "region": "Teeth",
+      "group": "mouth",
+      "description": "The pointed \"eye tooth\" at the corner of the upper arch. It has the longest root of any tooth and grips and tears food."
+    },
+    "upper first premolar": {
+      "region": "Teeth",
+      "group": "mouth",
+      "description": "A tooth with two cusps behind the upper canine. Premolars crush and tear food, sitting between the cutting and grinding teeth."
+    },
+    "upper second premolar": {
+      "region": "Teeth",
+      "group": "mouth",
+      "description": "The second two-cusped tooth of the upper jaw. It crushes food before it reaches the molars."
+    },
+    "upper first molar": {
+      "region": "Teeth",
+      "group": "mouth",
+      "description": "A broad grinding tooth of the upper jaw, usually the first permanent tooth to come in, at about age six."
+    },
+    "upper second molar": {
+      "region": "Teeth",
+      "group": "mouth",
+      "description": "A broad grinding tooth behind the upper first molar, coming in at about age twelve. (Wisdom teeth are not shown in this model.)"
+    },
+    "lower central incisor": {
+      "region": "Teeth",
+      "group": "mouth",
+      "description": "One of the two smallest front teeth of the lower jaw. It bites against the upper incisors to cut food."
+    },
+    "lower lateral incisor": {
+      "region": "Teeth",
+      "group": "mouth",
+      "description": "The cutting tooth beside each lower front tooth. Together the incisors slice off bite-sized pieces."
+    },
+    "lower canine": {
+      "region": "Teeth",
+      "group": "mouth",
+      "description": "The pointed tooth at the corner of the lower arch. It grips and tears food."
+    },
+    "lower first premolar": {
+      "region": "Teeth",
+      "group": "mouth",
+      "description": "The first tooth behind the lower canine. It has a large outer cusp and helps tear and crush food."
+    },
+    "lower second premolar": {
+      "region": "Teeth",
+      "group": "mouth",
+      "description": "The second premolar of the lower jaw. It crushes food on its way to the molars."
+    },
+    "lower first molar": {
+      "region": "Teeth",
+      "group": "mouth",
+      "description": "A large grinding tooth of the lower jaw with two roots, usually the first permanent tooth to appear, at about age six."
+    },
+    "lower second molar": {
+      "region": "Teeth",
+      "group": "mouth",
+      "description": "A grinding tooth behind the lower first molar that comes in at about age twelve. (Wisdom teeth are not shown in this model.)"
+    },
+    "parotid gland": {
+      "region": "Salivary glands",
+      "group": "mouth",
+      "description": "The largest salivary gland, in front of each ear. It pours watery saliva containing the starch-digesting enzyme amylase into the mouth through a duct in the cheek."
+    },
+    "submandibular gland": {
+      "region": "Salivary glands",
+      "group": "mouth",
+      "description": "A salivary gland under each side of the lower jaw. It makes most of the saliva at rest, which drains into the floor of the mouth beneath the tongue."
+    },
+    "sublingual gland": {
+      "region": "Salivary glands",
+      "group": "mouth",
+      "description": "The smallest of the three main salivary glands, lying under the tongue. It makes a thick, mucus-rich saliva that coats food for swallowing."
+    },
+    "pharynx": {
+      "region": "Throat",
+      "group": "tract",
+      "description": "The throat: a muscular tube shared by food and air. When you swallow, its constrictor muscles (shown here) squeeze food down into the esophagus while the airway closes."
+    },
+    "esophagus": {
+      "region": "Upper digestive tract",
+      "group": "tract",
+      "description": "The food pipe, about 25 cm long, running behind the windpipe and through the diaphragm. Waves of muscle contraction (peristalsis) carry each swallow down to the stomach."
+    },
+    "stomach": {
+      "region": "Upper digestive tract",
+      "group": "tract",
+      "description": "A stretchy muscular bag that stores a meal and churns it with acid and enzymes into a thick liquid called chyme. It releases chyme to the small intestine a little at a time."
+    },
+    "duodenum": {
+      "region": "Small intestine",
+      "group": "tract",
+      "description": "The first, C-shaped part of the small intestine, about 25 cm long. Bile from the liver and juices from the pancreas enter it here to continue digestion."
+    },
+    "jejunum": {
+      "region": "Small intestine",
+      "group": "tract",
+      "description": "The middle part of the small intestine, about 2.5 metres of coiled tube. Its lining is densely folded and covered in villi, and it absorbs most nutrients."
+    },
+    "ileum": {
+      "region": "Small intestine",
+      "group": "tract",
+      "description": "The last and longest part of the small intestine, about 3.5 metres. It absorbs what the jejunum missed, including vitamin B12 and bile salts."
+    },
+    "ileocecal junction": {
+      "region": "Small intestine",
+      "group": "tract",
+      "description": "Where the ileum joins the large intestine. A valve here lets digested material into the cecum and limits backflow."
+    },
+    "cecum": {
+      "region": "Large intestine",
+      "group": "tract",
+      "description": "A short pouch at the start of the large intestine, low on the right side, which receives material from the small intestine. Its boundary with the ascending colon is approximate in this model."
+    },
+    "appendix": {
+      "region": "Large intestine",
+      "group": "tract",
+      "description": "A narrow, finger-like tube that hangs from the cecum. It contains lymphoid tissue and may act as a reserve of gut bacteria."
+    },
+    "ascending colon": {
+      "region": "Large intestine",
+      "group": "tract",
+      "description": "The part of the colon that rises up the right side of the abdomen to below the liver. The colon absorbs water and salts, turning liquid waste into stool."
+    },
+    "transverse colon": {
+      "region": "Large intestine",
+      "group": "tract",
+      "description": "The longest and most mobile part of the colon, hanging across the upper abdomen from right to left beneath the stomach."
+    },
+    "descending colon": {
+      "region": "Large intestine",
+      "group": "tract",
+      "description": "The part of the colon that runs down the left side of the abdomen, carrying stool towards the pelvis."
+    },
+    "sigmoid colon": {
+      "region": "Large intestine",
+      "group": "tract",
+      "description": "An S-shaped loop of colon in the pelvis that leads into the rectum. Its boundary with the descending colon is approximate in this model."
+    },
+    "rectum": {
+      "region": "Large intestine",
+      "group": "tract",
+      "description": "The last straight section of the large intestine, about 12 cm long. It stores stool until it is passed; stretching of its wall creates the urge to go."
+    },
+    "external anal sphincter": {
+      "region": "Large intestine",
+      "group": "tract",
+      "description": "A ring of muscle around the anal canal, at the very end of the tract, that you control voluntarily. It keeps the anus closed until it relaxes during a bowel movement."
+    },
+    "liver": {
+      "region": "Accessory organs",
+      "group": "accessory",
+      "description": "The largest internal organ, under the right ribs. It makes bile for digesting fat, processes nutrients arriving from the gut, stores energy and clears toxins from the blood."
+    },
+    "gallbladder": {
+      "region": "Accessory organs",
+      "group": "accessory",
+      "description": "A small pear-shaped sac under the liver that stores and concentrates bile, then squeezes it into the duodenum after a fatty meal."
+    },
+    "bile ducts": {
+      "region": "Accessory organs",
+      "group": "accessory",
+      "description": "Small tubes that carry bile out of the liver (the hepatic ducts), to and from the gallbladder (the cystic duct) and down to the duodenum (the common bile duct)."
+    },
+    "pancreas": {
+      "region": "Accessory organs",
+      "group": "accessory",
+      "description": "A gland behind the stomach. It releases enzymes that digest protein, fat and starch into the duodenum, and also makes the hormones insulin and glucagon."
+    }
+  },
+  "effects": [
+    {
+      "id": "villi",
+      "type": "part-haze",
+      "label": "Villi haze",
+      "note": "Illustrative effect, not modeled anatomy. Real villi are tiny finger-like folds, about 1 mm tall, that line the inside of the small intestine and absorb nutrients.",
+      "style": "villi",
+      "color": "#fff0fa",
+      "parts": ["Duodenum", "Jejunum", "Ileum"],
+      "count": 9000
+    },
+    {
+      "id": "bacteria",
+      "type": "part-haze",
+      "label": "Gut bacteria haze",
+      "note": "Illustrative effect, not modeled anatomy. Trillions of microscopic bacteria live mostly in the colon, where they ferment fibre and make some vitamins.",
+      "style": "bacteria",
+      "color": "#3dffc8",
+      "parts": ["Cecum", "Ascending colon", "Transverse colon", "Descending colon", "Sigmoid colon"],
+      "count": 4500
+    }
+  ],
+  "tour": {
+    "label": "Follow the food",
+    "note": "Typical times for a healthy adult. They vary a lot with the meal and the person.",
+    "total": "Roughly 1 to 3 days from mouth to exit",
+    "stages": [
+      { "name": "Mouth", "parts": ["Lips", "Tongue"], "time": "About 5–30 seconds of chewing", "seconds": 3 },
+      { "name": "Pharynx", "parts": ["Pharynx"], "time": "About 1 second to swallow", "seconds": 1.5 },
+      { "name": "Esophagus", "parts": ["Esophagus"], "time": "About 5–10 seconds", "seconds": 2.5 },
+      { "name": "Stomach", "parts": ["Stomach"], "time": "About 2–5 hours", "seconds": 4 },
+      {
+        "name": "Small intestine",
+        "parts": ["Duodenum", "Jejunum", "Ileum", "Ileocecal junction"],
+        "time": "About 2–6 hours",
+        "seconds": 12
+      },
+      {
+        "name": "Large intestine",
+        "parts": ["Cecum", "Ascending colon", "Transverse colon", "Descending colon", "Sigmoid colon"],
+        "time": "About 10–60 hours",
+        "seconds": 8
+      },
+      {
+        "name": "Rectum and anus",
+        "parts": ["Rectum", "External anal sphincter"],
+        "time": "Stored until the next bowel movement",
+        "seconds": 2.5
+      }
+    ]
+  }
+}
