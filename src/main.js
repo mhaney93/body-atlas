@@ -36,9 +36,7 @@ const viewer = new Viewer($('stage'), {
     $('info-flow').querySelector('.value').textContent = part.flow ?? '';
     $('info-flow').style.setProperty('--group-color', part.group?.color ?? layer.color);
     $('info-description').textContent = part.description ?? '';
-    const role = controls.get(layer.id)?.describe(mesh);
-    $('info-role').hidden = !role;
-    $('info-role').textContent = role ?? '';
+    showRole(layer, mesh);
     info.hidden = false;
   },
 });
@@ -60,6 +58,13 @@ const effectsOn = new Set();
 /** Per-layer extra controls (layer-controls.js) by layer id. */
 const controls = new Map();
 const toggles = new Map();
+
+/** The selected part's role in its layer's chosen movement, if any. */
+function showRole(layer, mesh) {
+  const role = controls.get(layer.id)?.describe(mesh);
+  $('info-role').hidden = !role;
+  $('info-role').textContent = role ?? '';
+}
 
 function applyEffects(layer) {
   for (const effect of layer.effects ?? []) {
@@ -115,6 +120,10 @@ function layerExtras(layer) {
     layerName: (id) => layers.find((l) => l.id === id)?.name,
     isLayerOn: (id) => active.has(id),
     showLayer: (id) => !active.has(id) && toggles.get(id)?.click(),
+    movementChanged: () => {
+      const mesh = viewer.selected;
+      if (mesh?.userData.layerId === layer.id) showRole(layer, mesh);
+    },
   });
   if (extra) {
     controls.set(layer.id, extra);

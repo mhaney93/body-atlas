@@ -21,7 +21,7 @@ const meshName = (mesh) => mesh.userData.name ?? mesh.name;
  * Builds the controls for one layer, or returns null if it has none.
  * @param {object} layer layer data
  * @param {import('./viewer.js').Viewer} viewer
- * @param {{ layerName: (id: string) => string | undefined, isLayerOn: (id: string) => boolean, showLayer: (id: string) => void }} host
+ * @param {{ layerName: (id: string) => string | undefined, isLayerOn: (id: string) => boolean, showLayer: (id: string) => void, movementChanged: () => void }} host
  * @returns {{ element: HTMLElement, refresh: () => void, describe: (mesh: object) => string | null } | null}
  */
 export function buildLayerControls(layer, viewer, host) {
@@ -101,6 +101,7 @@ export function buildLayerControls(layer, viewer, host) {
       movement = m && { ...m, primeKeys: new Set(m.prime), synergistKeys: new Set(m.synergist) };
       viewer.setEmphasis(layer.id, movement ? (mesh) => roleOf(mesh) : null);
       details.hidden = !m;
+      host.movementChanged();
       if (!m) return;
       details.querySelector('.movement-note').textContent = m.note ?? '';
       details.querySelector('.movement-prime').textContent = m.prime.map(displayName).join(', ');
