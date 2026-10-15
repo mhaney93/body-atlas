@@ -177,12 +177,7 @@ The layer has four groups, each in its own color with its own checkbox in the fi
 - **Capsules** (see-through): the fibrous capsules of the main joints, the hip's zona orbicularis and capsular folds, and the knee's infrapatellar fat pad.
 - **Fascia** (see-through): the deep fasciae, intermuscular septa, retinacula and the palmar and plantar aponeuroses.
 
-Not shown:
-
-- **Articular (hyaline) cartilage**, the thin layer that caps the bone ends inside joints. Neither BodyParts3D nor Z-Anatomy models it.
-- **Tendons and tendon sheaths**, which belong with the muscles, and **bursae**.
-- **Ligaments of the eye** (suspensory ligament of the lens, check ligaments) and of the ossicles.
-- The **triradiate cartilage** of the hip socket, a growth cartilage that has fused in an adult.
+The layer's "Not shown" panel lists what it leaves out, such as articular cartilage, bursae and tendon sheaths, and why.
 
 ### Digestive coverage
 
