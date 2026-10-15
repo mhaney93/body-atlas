@@ -1,0 +1,240 @@
+{
+  "id": "respiratory",
+  "name": "Respiratory",
+  "color": "#ff8fb1",
+  "asset": "models/respiratory.glb",
+  "summary": "The respiratory system brings air into the body and lets oxygen pass into the blood while carbon dioxide passes out. Air flows through the nose, pharynx and larynx, down the trachea and branching bronchi, into the lungs. The diaphragm powers each breath.",
+  "groups": {
+    "upper": {
+      "label": "Nose, sinuses & pharynx",
+      "color": "#ffb38a"
+    },
+    "larynx": {
+      "label": "Larynx",
+      "color": "#ffd166"
+    },
+    "bronchi": {
+      "label": "Trachea & bronchial tree",
+      "color": "#ff6f91"
+    },
+    "lungs": {
+      "label": "Lung lobes",
+      "color": "#ffa8c5",
+      "opacity": 0.35
+    },
+    "diaphragm": {
+      "label": "Diaphragm",
+      "color": "#c77dff",
+      "opacity": 0.5
+    }
+  },
+  "effects": [
+    {
+      "id": "alveoli-haze",
+      "type": "part-haze",
+      "label": "Air-sac haze",
+      "note": "Illustrative effect, not modeled anatomy. It hints at the roughly 480 million alveoli (air sacs) that fill the lungs, each far too small to model.",
+      "style": "alveoli",
+      "color": "#ffe1ea",
+      "parts": ["Superior lobe of right lung", "Middle lobe of right lung", "Inferior lobe of right lung", "Superior lobe of left lung", "Inferior lobe of left lung"],
+      "count": 5000
+    }
+  ],
+  "parts": {
+    "nasal cavity": {
+      "region": "Nose",
+      "group": "upper",
+      "description": "The air passage inside the nose, divided in two by the nasal septum. Its moist, blood-rich lining warms, humidifies and filters the air you breathe in."
+    },
+    "septal nasal cartilage": {
+      "region": "Nose",
+      "group": "upper",
+      "description": "The flexible plate of cartilage that forms the front part of the nasal septum, the wall dividing the two nostrils."
+    },
+    "lateral nasal cartilage": {
+      "region": "Nose",
+      "group": "upper",
+      "description": "A triangular plate of cartilage forming the side of the middle of the nose, just below the nasal bone. It helps hold the nasal passage open."
+    },
+    "major alar cartilage": {
+      "region": "Nose",
+      "group": "upper",
+      "description": "A curved, U-shaped cartilage that shapes the tip of the nose and the rim of the nostril."
+    },
+    "frontal sinus": {
+      "region": "Paranasal sinuses",
+      "group": "upper",
+      "description": "An air-filled space in the frontal bone just above the eyes. Like the other sinuses, it lightens the skull and drains mucus into the nasal cavity."
+    },
+    "sphenoidal sinus": {
+      "region": "Paranasal sinuses",
+      "group": "upper",
+      "description": "An air space deep in the body of the sphenoid bone, behind the nasal cavity and just below the pituitary gland. It drains into the back of the nasal cavity."
+    },
+    "anterior ethmoidal cells": {
+      "region": "Paranasal sinuses",
+      "group": "upper",
+      "description": "The front group of the ethmoidal air cells, small honeycomb-like air spaces between the nasal cavity and the eye socket. They drain into the middle meatus of the nose."
+    },
+    "middle ethmoidal cells": {
+      "region": "Paranasal sinuses",
+      "group": "upper",
+      "description": "The middle group of the ethmoidal air cells, which sit between the nasal cavity and the eye socket. They drain into the middle meatus of the nose."
+    },
+    "posterior ethmoidal cells": {
+      "region": "Paranasal sinuses",
+      "group": "upper",
+      "description": "The back group of the ethmoidal air cells, next to the sphenoidal sinus. They drain into the superior meatus at the back of the nasal cavity."
+    },
+    "nasopharynx": {
+      "region": "Pharynx",
+      "group": "upper",
+      "description": "The upper part of the throat, behind the nasal cavity and above the soft palate. It carries only air, and the Eustachian tubes from the middle ears open into it."
+    },
+    "oropharynx": {
+      "region": "Pharynx",
+      "group": "upper",
+      "description": "The middle part of the throat, behind the mouth. Both air and swallowed food pass through it."
+    },
+    "laryngopharynx": {
+      "region": "Pharynx",
+      "group": "upper",
+      "description": "The lowest part of the throat, behind the larynx. Here the pathways split: air goes forward into the larynx and food goes back into the oesophagus."
+    },
+    "thyroid cartilage": {
+      "region": "Larynx",
+      "group": "larynx",
+      "description": "The largest cartilage of the larynx, shaped like a shield open at the back. Its front ridge forms the Adam's apple, and the vocal cords attach inside it."
+    },
+    "cricoid cartilage": {
+      "region": "Larynx",
+      "group": "larynx",
+      "description": "The only complete ring of cartilage in the airway, shaped like a signet ring with its broad part at the back. It forms the base of the larynx, just above the trachea."
+    },
+    "epiglottis": {
+      "region": "Larynx",
+      "group": "larynx",
+      "description": "A leaf-shaped flap of elastic cartilage behind the tongue. When you swallow it tips back over the entrance to the larynx, so food goes down the oesophagus instead of the airway."
+    },
+    "arytenoid cartilage": {
+      "region": "Larynx",
+      "group": "larynx",
+      "description": "A small pyramid-shaped cartilage sitting on the back of the cricoid. Its pivoting and sliding open and close the vocal cords."
+    },
+    "corniculate cartilage": {
+      "region": "Larynx",
+      "group": "larynx",
+      "description": "A tiny horn-shaped nodule of cartilage on the tip of the arytenoid cartilage, inside the fold at the back of the laryngeal entrance."
+    },
+    "cuneiform cartilage": {
+      "region": "Larynx",
+      "group": "larynx",
+      "description": "A small rod of elastic cartilage in the aryepiglottic fold that stiffens the rim of the laryngeal entrance."
+    },
+    "conus elasticus": {
+      "region": "Larynx",
+      "group": "larynx",
+      "description": "A cone-shaped elastic membrane running up from the cricoid cartilage. Its thickened upper edge is the vocal ligament inside each vocal cord (shown in the Joints layer)."
+    },
+    "trachea": {
+      "region": "Lower airway",
+      "group": "bronchi",
+      "description": "The windpipe: a tube about 10 to 12 cm long that carries air from the larynx into the chest. C-shaped rings of cartilage keep it from collapsing."
+    },
+    "main bronchus": {
+      "region": "Bronchial tree",
+      "group": "bronchi",
+      "description": "One of the two airways that split from the bottom of the trachea, one to each lung. The right is wider, shorter and steeper than the left, so inhaled objects lodge on the right more often."
+    },
+    "apical segmental bronchial tree": {
+      "region": "Bronchial tree",
+      "group": "bronchi",
+      "description": "Airways serving the apical segment at the very top of the upper lobe. Each segmental bronchus keeps branching into smaller and smaller tubes, ending in the alveoli."
+    },
+    "posterior segmental bronchial tree": {
+      "region": "Bronchial tree",
+      "group": "bronchi",
+      "description": "Airways serving the posterior segment of the upper lobe, at the back of the upper chest."
+    },
+    "anterior segmental bronchial tree": {
+      "region": "Bronchial tree",
+      "group": "bronchi",
+      "description": "Airways serving the anterior segment of the upper lobe, at the front of the upper chest."
+    },
+    "superior lingular bronchial tree": {
+      "region": "Bronchial tree",
+      "group": "bronchi",
+      "description": "Airways serving the upper part of the lingula, the tongue-shaped lower front portion of the left upper lobe."
+    },
+    "inferior lingular bronchial tree": {
+      "region": "Bronchial tree",
+      "group": "bronchi",
+      "description": "Airways serving the lower part of the lingula, the tongue-shaped lower front portion of the left upper lobe, next to the heart."
+    },
+    "lateral segmental bronchial tree": {
+      "region": "Bronchial tree",
+      "group": "bronchi",
+      "description": "Airways serving the lateral (outer) segment of the right middle lobe."
+    },
+    "medial segmental bronchial tree": {
+      "region": "Bronchial tree",
+      "group": "bronchi",
+      "description": "Airways serving the medial (inner) segment of the right middle lobe, next to the heart."
+    },
+    "superior segmental bronchial tree": {
+      "region": "Bronchial tree",
+      "group": "bronchi",
+      "description": "Airways serving the superior segment, the top of the lower lobe at the back of the chest. In someone lying on their back it is the lowest point, so inhaled material often settles here."
+    },
+    "medial basal segmental bronchial tree": {
+      "region": "Bronchial tree",
+      "group": "bronchi",
+      "description": "Airways serving the medial basal segment, the inner part of the base of the lower lobe beside the heart."
+    },
+    "anterior basal segmental bronchial tree": {
+      "region": "Bronchial tree",
+      "group": "bronchi",
+      "description": "Airways serving the anterior basal segment, the front part of the base of the lower lobe resting on the diaphragm."
+    },
+    "lateral basal segmental bronchial tree": {
+      "region": "Bronchial tree",
+      "group": "bronchi",
+      "description": "Airways serving the lateral basal segment, the outer part of the base of the lower lobe."
+    },
+    "posterior basal segmental bronchial tree": {
+      "region": "Bronchial tree",
+      "group": "bronchi",
+      "description": "Airways serving the posterior basal segment, the back of the base of the lower lobe and the lowest part of the lung."
+    },
+    "superior lobe of right lung": {
+      "region": "Lungs",
+      "group": "lungs",
+      "description": "The upper lobe of the right lung, separated from the middle lobe by the horizontal fissure. It fills the top of the right chest, up to just above the collarbone."
+    },
+    "middle lobe of right lung": {
+      "region": "Lungs",
+      "group": "lungs",
+      "description": "The smallest lobe, found only in the right lung. It is a wedge at the front of the chest between the horizontal and oblique fissures."
+    },
+    "inferior lobe of right lung": {
+      "region": "Lungs",
+      "group": "lungs",
+      "description": "The lower lobe of the right lung, behind and below the oblique fissure. It rests on the dome of the diaphragm and makes up much of the back of the lung."
+    },
+    "superior lobe of left lung": {
+      "region": "Lungs",
+      "group": "lungs",
+      "description": "The upper lobe of the left lung. The left lung has only two lobes to leave room for the heart; this one includes the lingula, a tongue-shaped part that takes the place of a middle lobe."
+    },
+    "inferior lobe of left lung": {
+      "region": "Lungs",
+      "group": "lungs",
+      "description": "The lower lobe of the left lung, below and behind the oblique fissure. It sits on the diaphragm and fills the back of the lower left chest."
+    },
+    "diaphragm": {
+      "region": "Breathing muscle",
+      "group": "diaphragm",
+      "description": "The dome-shaped sheet of muscle between the chest and abdomen, and the main muscle of breathing. As it contracts it flattens, enlarging the chest and drawing air into the lungs."
+    }
+  }
+}
