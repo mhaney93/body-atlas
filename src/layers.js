@@ -5,10 +5,11 @@ import skeletal from './data/skeletal.json';
 import nervous from './data/nervous.json';
 import circulatory from './data/circulatory.json';
 import joints from './data/joints.json';
+import digestive from './data/digestive.json';
 
 export const SHELL_ASSET = 'models/skin.glb';
 
-export const LAYERS = [skeletal, nervous, circulatory, joints];
+export const LAYERS = [skeletal, nervous, circulatory, joints, digestive];
 
 /** Canonical form of a mesh name used to match part info, e.g. "Navicular bone of left foot" → "navicular bone of foot". */
 function canonical(meshName) {

@@ -53,12 +53,18 @@ const NAME_OVERRIDES = {
   FJ3376: 'Lateral sesamoid bone of right big toe',
 };
 
-// Bones BodyParts3D lacks, taken from Z-Anatomy (CC BY-SA 4.0) by
+// Bones and glands BodyParts3D lacks, taken from Z-Anatomy (CC BY-SA 4.0) by
 // scripts/extract-z-anatomy.py. Each is translated so its recorded anchor
 // (e.g. the sacrum's apex in Z-Anatomy) lands on the same point of the named
 // BodyParts3D element; the two models share BodyParts3D's scale.
 const Z_ANATOMY_DIR = join(ROOT, 'data-sources', 'z-anatomy');
-const Z_ANATOMY_ANCHORS = { Sacrum: 'FJ3393', 'Temporal bone.l': 'FJ3281', 'Temporal bone.r': 'FJ3386' };
+const Z_ANATOMY_ANCHORS = {
+  Sacrum: 'FJ3393',
+  'Temporal bone.l': 'FJ3281',
+  'Temporal bone.r': 'FJ3386',
+  'Submandibular gland.l': 'FJ2766',
+  'Submandibular gland.r': 'FJ2768',
+};
 
 // The auditory ossicles are CC BY-NC-SA 4.0 (Z-Anatomy adapted them from the
 // University of Dundee), so they ship as their own file rather than inside
@@ -135,6 +141,76 @@ const CONNECTIVE_TISSUE = [
   'FJ2789', // median cricothyroid ligament
 ];
 
+// Digestive system. BodyParts3D models the liver, jejunum and ileum as many
+// pieces (liver segments, tube segments) and the pharynx as its constrictor
+// muscles; each is merged into one clickable part. Its ascending and
+// descending colon meshes include the cecum and sigmoid colon, which are cut
+// off at an approximate boundary (a horizontal plane, source mm).
+const DIGESTIVE = {
+  file: 'digestive.glb',
+  elements: [
+    ...['FJ2814', 'FJ1252', 'FJ1253', ...range(1254, 1281), 'FJ2761'], // lip, gums, 28 teeth, tongue
+    ...['FJ2765', 'FJ2767', 'FJ2766', 'FJ2768'], // sublingual and submandibular glands
+    ...['FJ2747', 'FJ2759', 'FJ2754', 'FJ2742', 'FJ2740', 'FJ2752'], // pharyngeal constrictors
+    ...['FJ2563', 'FJ2564', 'FJ2573', ...range(2574, 2628)], // esophagus, stomach, small intestine
+    ...['FJ2565', 'FJ2566', 'FJ2572', 'FJ2567', 'FJ2571', 'FJ2543', 'FJ2548'], // large intestine, anal sphincter
+    ...['FJ2816', 'FJ2818', 'FJ2819', 'FJ2820', 'FJ2821', 'FJ2822', 'FJ2409', 'FJ2823', 'FJ2824', 'FJ1858'], // liver
+    ...['FJ2817', 'FJ3079', 'FJ3080', 'FJ3096', 'FJ3123', 'FJ1895'], // gallbladder, bile ducts, pancreas
+  ],
+  extras: ['parotid-gland-left.obj', 'parotid-gland-right.obj'],
+  split: [
+    { element: 'FJ2566', below: 895, name: 'Cecum' },
+    { element: 'FJ2567', below: 880, name: 'Sigmoid colon' },
+  ],
+  merge: [
+    { name: 'Pharynx', elements: ['FJ2747', 'FJ2759', 'FJ2754', 'FJ2742', 'FJ2740', 'FJ2752'] },
+    {
+      name: 'Liver',
+      elements: ['FJ2816', 'FJ2818', 'FJ2819', 'FJ2820', 'FJ2821', 'FJ2822', 'FJ2409', 'FJ2823', 'FJ2824', 'FJ1858'],
+    },
+    { name: 'Bile ducts', elements: ['FJ3079', 'FJ3080', 'FJ3096', 'FJ3123'] },
+    { name: 'External anal sphincter', elements: ['FJ2543', 'FJ2548'] },
+    {
+      name: 'Jejunum',
+      elements: [
+        ['FJ2606', 'FJ2617', ...range(2622, 2627)], // proximal
+        [...range(2607, 2610), 'FJ2628'], // middle
+        [...range(2611, 2616), ...range(2618, 2621)], // distal
+      ],
+      chain: { startNear: 'FJ2573' },
+    },
+    {
+      name: 'Ileum',
+      elements: [
+        ['FJ2574', 'FJ2575', 'FJ2585', 'FJ2596', ...range(2600, 2605)], // proximal
+        [...range(2576, 2584), 'FJ2586'], // middle
+        [...range(2587, 2595), 'FJ2597', 'FJ2598'], // distal
+      ],
+      chain: { startNear: 'Jejunum' },
+    },
+  ],
+  // "Left lower first secondary molar tooth" → "Left lower first molar".
+  rename: (name) =>
+    ({ 'Gingiva of upper jaw': 'Upper gum', 'Gingiva of lower jaw': 'Lower gum', Lip: 'Lips' })[name] ??
+    name.replace(/ secondary (.+) tooth$/, ' $1'),
+  // Parts the "follow the food" pulse travels along, rather than through their centre.
+  centerlines: [
+    'Esophagus',
+    'Stomach',
+    'Duodenum',
+    'Jejunum',
+    'Ileum',
+    'Ileocecal junction',
+    'Cecum',
+    'Ascending colon',
+    'Transverse colon',
+    'Descending colon',
+    'Sigmoid colon',
+    'Rectum',
+  ],
+  ratio: 0.5,
+};
+
 const ASSETS = [
   { file: 'skin.glb', elements: [SKIN], ratio: 0.35 },
   { file: 'skeletal.glb', elements: range(3152, 3395), extras: ['coccyx.obj'], ratio: 0.5 },
@@ -147,6 +223,7 @@ const ASSETS = [
   // Intervertebral discs and costal cartilages are shared from skeletal.glb
   // at runtime (see "shared" in src/data/joints.json), not duplicated here.
   { file: 'joints.glb', elements: CONNECTIVE_TISSUE, load: () => parseRegisteredObjs('connective-tissue.obj.gz'), ratio: 0.25, error: 0.01 },
+  DIGESTIVE,
 ];
 
 /** BodyParts3D bone meshes (mm) by English name, for nervous-model.mjs. */
@@ -382,6 +459,190 @@ function transform(positions) {
   return out;
 }
 
+/** Dijkstra over mesh edges from `start`; returns the distance (mm) to every vertex (Infinity if unreachable). */
+function geodesic(positions, indices, start) {
+  const n = positions.length / 3;
+  const adj = Array.from({ length: n }, () => []);
+  const len = (a, b) =>
+    Math.hypot(positions[3 * a] - positions[3 * b], positions[3 * a + 1] - positions[3 * b + 1], positions[3 * a + 2] - positions[3 * b + 2]);
+  for (let i = 0; i < indices.length; i += 3) {
+    for (const [a, b] of [[indices[i], indices[i + 1]], [indices[i + 1], indices[i + 2]], [indices[i + 2], indices[i]]]) {
+      const d = len(a, b);
+      adj[a].push(b, d);
+      adj[b].push(a, d);
+    }
+  }
+  const dist = new Float64Array(n).fill(Infinity);
+  dist[start] = 0;
+  const heap = [[0, start]];
+  const push = (item) => {
+    heap.push(item);
+    for (let i = heap.length - 1; i > 0; ) {
+      const p = (i - 1) >> 1;
+      if (heap[p][0] <= heap[i][0]) break;
+      [heap[p], heap[i]] = [heap[i], heap[p]];
+      i = p;
+    }
+  };
+  const pop = () => {
+    const top = heap[0];
+    const last = heap.pop();
+    if (heap.length) {
+      heap[0] = last;
+      for (let i = 0; ; ) {
+        const l = 2 * i + 1;
+        const r = l + 1;
+        let m = i;
+        if (l < heap.length && heap[l][0] < heap[m][0]) m = l;
+        if (r < heap.length && heap[r][0] < heap[m][0]) m = r;
+        if (m === i) break;
+        [heap[m], heap[i]] = [heap[i], heap[m]];
+        i = m;
+      }
+    }
+    return top;
+  };
+  while (heap.length) {
+    const [d, v] = pop();
+    if (d > dist[v]) continue;
+    const edges = adj[v];
+    for (let k = 0; k < edges.length; k += 2) {
+      const nd = d + edges[k + 1];
+      if (nd < dist[edges[k]]) {
+        dist[edges[k]] = nd;
+        push([nd, edges[k]]);
+      }
+    }
+  }
+  return dist;
+}
+
+/**
+ * Approximate centreline (mm, source frame) of a tube-shaped mesh, running
+ * from one end to the other: vertices are bucketed by their distance along the
+ * surface from one end, and each bucket's centroid becomes a point.
+ */
+function centerlineMm(positions, indices, spacing = 12) {
+  const farthest = (dist) => dist.reduce((best, d, i) => (d !== Infinity && d > dist[best] ? i : best), 0);
+  const start = farthest(geodesic(positions, indices, 0));
+  const dist = geodesic(positions, indices, start);
+  const total = dist[farthest(dist)];
+  const bins = Math.max(2, Math.min(40, Math.round(total / spacing)));
+  const sums = Array.from({ length: bins }, () => [0, 0, 0, 0]);
+  dist.forEach((d, i) => {
+    if (d === Infinity) return;
+    const s = sums[Math.min(bins - 1, Math.floor((d / total) * bins))];
+    for (let k = 0; k < 3; k++) s[k] += positions[3 * i + k];
+    s[3]++;
+  });
+  return sums.filter((s) => s[3]).map((s) => [s[0] / s[3], s[1] / s[3], s[2] / s[3]]);
+}
+
+/** Converts a centreline from source millimetres to the output frame, rounded to 1 mm. */
+function toOutputPath(points) {
+  const out = transform(points.flat());
+  return points.map((_, i) => [0, 1, 2].map((k) => Math.round(out[3 * i + k] * 1000) / 1000));
+}
+
+const centerlineOf = (obj) => toOutputPath(centerlineMm(obj.positions, obj.indices));
+
+/**
+ * Applies an asset's `split` list: the triangles of `element` whose centroid
+ * lies below the horizontal plane z = `below` (source mm) become a new part
+ * called `name`.
+ */
+function applySplits(objs, splits = []) {
+  const out = [...objs];
+  for (const { element, below, name } of splits) {
+    const obj = out.find((o) => o.id === element);
+    if (!obj) continue;
+    const keep = [];
+    const cut = [];
+    const { positions: p, indices } = obj;
+    for (let i = 0; i < indices.length; i += 3) {
+      const z = (p[3 * indices[i] + 2] + p[3 * indices[i + 1] + 2] + p[3 * indices[i + 2] + 2]) / 3;
+      (z < below ? cut : keep).push(indices[i], indices[i + 1], indices[i + 2]);
+    }
+    obj.indices = keep;
+    out.push({ ...obj, id: `${element}-below-${below}`, name, fma: undefined, indices: cut });
+  }
+  // Drop vertices no triangle uses any more (the welder would keep them).
+  return out.map((o) => {
+    const remap = new Map();
+    const positions = [];
+    const indices = o.indices.map((i) => {
+      if (!remap.has(i)) {
+        remap.set(i, remap.size);
+        positions.push(o.positions[3 * i], o.positions[3 * i + 1], o.positions[3 * i + 2]);
+      }
+      return remap.get(i);
+    });
+    return { ...o, positions, indices };
+  });
+}
+
+/**
+ * Applies an asset's `merge` list: each entry folds several elements into one
+ * node called `name`. With `chain`, the pieces are consecutive segments of one
+ * tube, listed in order of groups (e.g. proximal, middle, distal); their
+ * centrelines are joined into a single path that starts at the end nearest
+ * the element `chain.startNear`.
+ */
+function applyMerges(objs, merges = []) {
+  const byId = new Map(objs.map((o) => [o.id, o]));
+  const used = new Set();
+  const merged = [];
+  const pathEnds = new Map(); // merged name → last centreline point (mm)
+  for (const { name, elements, chain } of merges) {
+    const parts = elements.flat().map((id) => byId.get(id)).filter(Boolean);
+    parts.forEach((p) => used.add(p.id));
+    const positions = [];
+    const indices = [];
+    for (const p of parts) {
+      const base = positions.length / 3;
+      positions.push(...p.positions);
+      for (const i of p.indices) indices.push(i + base);
+    }
+    const obj = { id: parts[0]?.id, ids: parts.flatMap((p) => p.ids ?? [p.id]), name, fma: undefined, positions, indices };
+    if (chain) {
+      // Start near an element's surface, or at the end of an earlier chain.
+      const anchor = pathEnds.get(chain.startNear) ?? byId.get(chain.startNear).positions;
+      const nearAnchor = (pt) => {
+        let best = Infinity;
+        for (let i = 0; i < anchor.length; i += 3) {
+          best = Math.min(best, Math.hypot(anchor[i] - pt[0], anchor[i + 1] - pt[1], anchor[i + 2] - pt[2]));
+        }
+        return best;
+      };
+      const gap = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
+      const path = [];
+      for (const group of elements) {
+        const pending = group
+          .map((id) => byId.get(id))
+          .filter(Boolean)
+          .map((p) => centerlineMm(p.positions, p.indices));
+        while (pending.length) {
+          // Next: the piece with an end closest to where the path is now.
+          const score = (line, end) => (path.length ? gap(path.at(-1), end) : nearAnchor(end));
+          let best = null;
+          pending.forEach((line, i) => {
+            for (const flip of [false, true]) {
+              const s = score(line, flip ? line.at(-1) : line[0]);
+              if (!best || s < best.s) best = { s, i, flip };
+            }
+          });
+          const [line] = pending.splice(best.i, 1);
+          path.push(...(best.flip ? line.reverse() : line));
+        }
+      }
+      pathEnds.set(name, path.at(-1));
+      obj.centerline = toOutputPath(path);
+    }
+    merged.push(obj);
+  }
+  return [...objs.filter((o) => !used.has(o.id)), ...merged];
+}
+
 await MeshoptEncoder.ready;
 await MeshoptSimplifier.ready;
 const io = new NodeIO()
@@ -405,6 +666,8 @@ for (const asset of ASSETS) {
     ...(asset.load?.() ?? []),
   ];
   if (asset.mergeByName) objs = mergeByName(objs);
+  objs = applyMerges(applySplits(objs, asset.split), asset.merge);
+  if (asset.rename) for (const obj of objs) obj.name = asset.rename(obj.name);
 
   const addNode = (obj) => {
     const pos = transform(obj.positions);
@@ -416,11 +679,12 @@ for (const asset of ASSETS) {
       .setMaterial(material);
     const mesh = doc.createMesh(obj.name).addPrimitive(prim);
     scene.addChild(
-      doc.createNode(obj.name).setMesh(mesh).setExtras(
-        obj.source === 'z-anatomy'
+      doc.createNode(obj.name).setMesh(mesh).setExtras({
+        ...(obj.source === 'z-anatomy'
           ? { name: obj.name, source: 'Z-Anatomy' }
-          : { name: obj.name, fma: obj.fma, bp3d: obj.ids?.join(' ') ?? obj.id, ...(obj.group && { group: obj.group }) },
-      ),
+          : { name: obj.name, fma: obj.fma, bp3d: obj.ids?.join(' ') ?? obj.id, ...(obj.group && { group: obj.group }) }),
+        ...(asset.centerlines?.includes(obj.name) && { centerline: obj.centerline ?? centerlineOf(obj) }),
+      }),
     );
   };
 
