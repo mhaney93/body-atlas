@@ -52,6 +52,7 @@ const NAME_OVERRIDES = {
   FJ2138: 'Set of perforating veins of foot',
   FJ2174: 'Set of perforating veins of foot',
   FJ3376: 'Lateral sesamoid bone of right big toe',
+  FJ2539: 'Right main bronchus', // "Right main bronchus proper"
 };
 
 // Bones and glands BodyParts3D lacks, taken from Z-Anatomy (CC BY-SA 4.0) by
@@ -212,6 +213,26 @@ const DIGESTIVE = {
   ratio: 0.5,
 };
 
+// Respiratory system. Element files FJ2441–FJ2541 are the trachea, the main
+// bronchi and the segmental bronchial trees (each tree is split into several
+// files that share its name, which `mergeByName` joins into one part). The
+// lung lobes, nasal cavity, sinuses and pharynx come from Z-Anatomy. The
+// vocal ligaments stay in joints.glb.
+const RESPIRATORY = {
+  file: 'respiratory.glb',
+  elements: [
+    ...range(2441, 2541),
+    'FJ2554', 'FJ2555', 'FJ2556', 'FJ2557', 'FJ2558', // nasal cartilages
+    'FJ2808', 'FJ2440', 'FJ2770', // thyroid and cricoid cartilages, epiglottis
+    'FJ2775', 'FJ2792', 'FJ2776', 'FJ2793', 'FJ2773', 'FJ2795', // arytenoid, corniculate, cuneiform cartilages
+    'FJ2777', 'FJ2794', // conus elasticus
+    'FJ3131', // diaphragm
+  ],
+  load: () => parseRegisteredObjs('respiratory.obj.gz'),
+  mergeByName: true,
+  ratio: 0.5,
+};
+
 const ASSETS = [
   { file: 'skin.glb', elements: [SKIN], ratio: 0.35 },
   { file: 'skeletal.glb', elements: range(3152, 3395), extras: ['coccyx.obj'], ratio: 0.5 },
@@ -243,6 +264,7 @@ const ASSETS = [
     error: 0.004,
     lockBorder: true,
   },
+  RESPIRATORY,
 ];
 
 /** BodyParts3D bone meshes (mm) by English name, for nervous-model.mjs. */

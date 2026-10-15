@@ -26,6 +26,8 @@
 #   registered onto it (scale, rotation, translation; long bones piece by
 #   piece), and each vertex follows the bones nearest to it, blended by
 #   distance. That needs the BodyParts3D meshes (npm run fetch-data).
+# - Respiratory system (respiratory.obj.gz): the lung lobes, nasal cavity,
+#   paranasal sinuses and pharynx, moved onto BodyParts3D the same way.
 #
 # Meshes are read as stored, except those with modifiers (the spinal cord is
 # a short segment arrayed and bent along a curve), which are evaluated first.
@@ -561,3 +563,41 @@ path = os.path.join(out_dir, 'connective-tissue.obj.gz')
 with gzip.open(path, 'wt', compresslevel=9, newline='\n') as f:
     f.write('\n'.join(lines) + '\n')
 print(f'Wrote connective-tissue.obj.gz: {count} parts, {offset - 1} vertices')
+
+
+# --- Respiratory system ------------------------------------------------------
+
+# Airway parts BodyParts3D lacks: the lung lobes, the nasal cavity, the
+# paranasal sinuses and the three parts of the pharynx. They are moved onto
+# BodyParts3D the same way as the connective tissue (Z-Anatomy object ->
+# display name).
+RESPIRATORY = {
+    'Superior lobe of right lung': 'Superior lobe of right lung',
+    'Middle lobe of right lung': 'Middle lobe of right lung',
+    'Inferior lobe of right lung': 'Inferior lobe of right lung',
+    'Superior lobe of left lung': 'Superior lobe of left lung',
+    'Inferior lobe of left lung': 'Inferior lobe of left lung',
+    'Mucosa of nasal cavity': 'Nasal cavity',
+    'Sinus of frontal bone': 'Frontal sinus',
+    'Sinus of sphenoid bone': 'Sphenoidal sinus',
+    **{f'{group.capitalize()} cells of ethmoid bone.{s}': f'{side} {group} ethmoidal cells'
+       for group in ('anterior', 'middle', 'posterior') for s, side in (('l', 'Left'), ('r', 'Right'))},
+    'Nasopharynx': 'Nasopharynx',
+    'Oropharynx': 'Oropharynx',
+    'Laryngopharynx': 'Laryngopharynx',
+}
+
+lines = ['# Extracted from Z-Anatomy (https://www.z-anatomy.com), CC BY-SA 4.0,',
+         '# and registered onto BodyParts3D (millimetres) by scripts/extract-z-anatomy.py.']
+offset = 1
+for name, label in RESPIRATORY.items():
+    verts, tris = evaluated(bpy.data.objects[name])
+    verts = to_bp3d(verts)
+    lines += [f'o {name}', f'# English name : {label}']
+    lines += [f'v {x:.2f} {y:.2f} {z:.2f}' for x, y, z in verts]
+    lines += [f'f {a + offset} {b + offset} {c + offset}' for a, b, c in tris]
+    offset += len(verts)
+path = os.path.join(out_dir, 'respiratory.obj.gz')
+with gzip.open(path, 'wt', compresslevel=9, newline='\n') as f:
+    f.write('\n'.join(lines) + '\n')
+print(f'Wrote respiratory.obj.gz: {len(RESPIRATORY)} parts, {offset - 1} vertices')
