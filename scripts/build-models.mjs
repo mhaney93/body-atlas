@@ -11,6 +11,7 @@ import { Document, NodeIO } from '@gltf-transform/core';
 import { EXTMeshoptCompression, KHRMeshQuantization } from '@gltf-transform/extensions';
 import { meshopt, simplify, weld } from '@gltf-transform/functions';
 import { MeshoptEncoder, MeshoptSimplifier } from 'meshoptimizer';
+import { loadMuscular } from './muscular-model.mjs';
 import { loadNervous } from './nervous-model.mjs';
 
 const ROOT = join(import.meta.dirname, '..');
@@ -224,6 +225,24 @@ const ASSETS = [
   // at runtime (see "shared" in src/data/joints.json), not duplicated here.
   { file: 'joints.glb', elements: CONNECTIVE_TISSUE, load: () => parseRegisteredObjs('connective-tissue.obj.gz'), ratio: 0.25, error: 0.01 },
   DIGESTIVE,
+  // BodyParts3D muscles plus the ones it lacks from Z-Anatomy, with tendons
+  // split off (see muscular-model.mjs). Borders stay put so a muscle and its
+  // tendon still meet after simplification.
+  {
+    file: 'muscular.glb',
+    elements: [],
+    load: () =>
+      loadMuscular(
+        { objDir: OBJ_DIR, metaDir: META_DIR, zDir: join(Z_ANATOMY_DIR, 'muscular') },
+        skeletalBones(),
+        shown.get('skeletal.glb'),
+        parseObj,
+        mergeByName,
+      ),
+    ratio: 0.08,
+    error: 0.004,
+    lockBorder: true,
+  },
 ];
 
 /** BodyParts3D bone meshes (mm) by English name, for nervous-model.mjs. */
@@ -681,8 +700,14 @@ for (const asset of ASSETS) {
     scene.addChild(
       doc.createNode(obj.name).setMesh(mesh).setExtras({
         ...(obj.source === 'z-anatomy'
-          ? { name: obj.name, source: 'Z-Anatomy' }
-          : { name: obj.name, fma: obj.fma, bp3d: obj.ids?.join(' ') ?? obj.id, ...(obj.group && { group: obj.group }) }),
+          ? { name: obj.name, source: 'Z-Anatomy', ...(obj.group && { group: obj.group }), ...(obj.of && { of: obj.of }) }
+          : {
+              name: obj.name,
+              fma: obj.fma,
+              bp3d: obj.ids?.join(' ') ?? obj.id,
+              ...(obj.group && { group: obj.group }),
+              ...(obj.of && { of: obj.of }),
+            }),
         ...(asset.centerlines?.includes(obj.name) && { centerline: obj.centerline ?? centerlineOf(obj) }),
       }),
     );
@@ -692,7 +717,7 @@ for (const asset of ASSETS) {
   objs.filter((o) => o.simplify !== false).forEach(addNode);
   await doc.transform(
     weld(),
-    simplify({ simplifier: MeshoptSimplifier, ratio: asset.ratio, error: asset.error ?? 0.0005 }),
+    simplify({ simplifier: MeshoptSimplifier, ratio: asset.ratio, error: asset.error ?? 0.0005, lockBorder: asset.lockBorder ?? false }),
   );
   if (asset.file === 'skin.glb' || asset.file === 'skeletal.glb') {
     shown.set(

@@ -1,0 +1,1829 @@
+{
+  "id": "muscular",
+  "name": "Muscular",
+  "color": "#f2705a",
+  "asset": "models/muscular.glb",
+  "flowLabel": "Action",
+  "summary": "Skeletal muscles pull on bones to move the body, hold its posture and steady its joints.",
+  "groupToggles": true,
+  "groups": {
+    "muscle": {
+      "label": "Muscles",
+      "color": "#f2705a"
+    },
+    "tendon": {
+      "label": "Tendons",
+      "color": "#f3e2c4",
+      "description": "Tendons are tough cords and sheets of collagen that tie a muscle to bone. They carry the muscle's pull to the skeleton, so they show where it attaches."
+    }
+  },
+  "depthLevels": [
+    "Superficial",
+    "Intermediate",
+    "Deep"
+  ],
+  "peelReveals": "skeletal",
+  "movementPrompt": "Show me the muscles for…",
+  "movements": [
+    {
+      "id": "squat",
+      "name": "Squat",
+      "note": "Lowering and rising with the feet planted. The hamstrings and trunk muscles steady the hips and spine.",
+      "prime": [
+        "gluteus maximus",
+        "rectus femoris",
+        "vastus lateralis",
+        "vastus medialis",
+        "vastus intermedius"
+      ],
+      "synergist": [
+        "adductor magnus",
+        "soleus",
+        "gluteus medius",
+        "long head of biceps femoris",
+        "semitendinosus",
+        "semimembranosus",
+        "iliocostalis lumborum",
+        "longissimus thoracis",
+        "spinalis thoracis",
+        "multifidus lumborum",
+        "transversus abdominis",
+        "rectus abdominis"
+      ]
+    },
+    {
+      "id": "lunge",
+      "name": "Lunge",
+      "note": "Stepping forward into a split stance and pushing back up; the front leg does most of the work.",
+      "prime": [
+        "gluteus maximus",
+        "rectus femoris",
+        "vastus lateralis",
+        "vastus medialis",
+        "vastus intermedius"
+      ],
+      "synergist": [
+        "adductor magnus",
+        "gluteus medius",
+        "gluteus minimus",
+        "tensor fasciae latae",
+        "long head of biceps femoris",
+        "semitendinosus",
+        "semimembranosus",
+        "soleus",
+        "medial head of gastrocnemius",
+        "lateral head of gastrocnemius"
+      ]
+    },
+    {
+      "id": "deadlift",
+      "name": "Deadlift",
+      "note": "Lifting a weight from the floor by driving the hips forward with a flat back.",
+      "prime": [
+        "gluteus maximus",
+        "long head of biceps femoris",
+        "semitendinosus",
+        "semimembranosus",
+        "adductor magnus",
+        "iliocostalis lumborum",
+        "longissimus thoracis",
+        "spinalis thoracis"
+      ],
+      "synergist": [
+        "rectus femoris",
+        "vastus lateralis",
+        "vastus medialis",
+        "vastus intermedius",
+        "multifidus lumborum",
+        "quadratus lumborum",
+        "descending part of trapezius",
+        "transverse part of trapezius",
+        "ascending part of trapezius",
+        "latissimus dorsi",
+        "rhomboid major",
+        "rhomboid minor",
+        "flexor digitorum superficialis",
+        "flexor digitorum profundus",
+        "transversus abdominis"
+      ]
+    },
+    {
+      "id": "glute-bridge",
+      "name": "Glute bridge",
+      "note": "Lying on the back with knees bent and lifting the hips.",
+      "prime": [
+        "gluteus maximus"
+      ],
+      "synergist": [
+        "long head of biceps femoris",
+        "semitendinosus",
+        "semimembranosus",
+        "adductor magnus",
+        "gluteus medius",
+        "gluteus minimus",
+        "iliocostalis lumborum",
+        "longissimus thoracis",
+        "spinalis thoracis",
+        "multifidus lumborum"
+      ]
+    },
+    {
+      "id": "calf-raise",
+      "name": "Calf raise",
+      "note": "Rising up onto the balls of the feet.",
+      "prime": [
+        "medial head of gastrocnemius",
+        "lateral head of gastrocnemius",
+        "soleus",
+        "calcaneal tendon"
+      ],
+      "synergist": [
+        "plantaris",
+        "fibularis longus",
+        "fibularis brevis",
+        "tibialis posterior",
+        "flexor hallucis longus",
+        "flexor digitorum longus"
+      ]
+    },
+    {
+      "id": "push-up",
+      "name": "Push-up",
+      "note": "Lowering the chest to the floor and pressing back up; the trunk is held straight like a plank.",
+      "prime": [
+        "clavicular part of pectoralis major",
+        "sternocostal part of pectoralis major",
+        "abdominal part of pectoralis major",
+        "long head of triceps brachii",
+        "lateral head of triceps brachii",
+        "medial head of triceps brachii"
+      ],
+      "synergist": [
+        "clavicular part of deltoid",
+        "serratus anterior",
+        "coracobrachialis",
+        "anconeus",
+        "rectus abdominis",
+        "external oblique",
+        "transversus abdominis"
+      ]
+    },
+    {
+      "id": "bench-press",
+      "name": "Bench press",
+      "note": "Lying on a bench and pressing a bar up from the chest.",
+      "prime": [
+        "clavicular part of pectoralis major",
+        "sternocostal part of pectoralis major",
+        "abdominal part of pectoralis major"
+      ],
+      "synergist": [
+        "clavicular part of deltoid",
+        "long head of triceps brachii",
+        "lateral head of triceps brachii",
+        "medial head of triceps brachii",
+        "serratus anterior",
+        "coracobrachialis",
+        "anconeus"
+      ]
+    },
+    {
+      "id": "overhead-press",
+      "name": "Overhead press",
+      "note": "Pressing a weight from the shoulders to straight overhead.",
+      "prime": [
+        "clavicular part of deltoid",
+        "acromial part of deltoid",
+        "long head of triceps brachii",
+        "lateral head of triceps brachii",
+        "medial head of triceps brachii"
+      ],
+      "synergist": [
+        "supraspinatus",
+        "descending part of trapezius",
+        "ascending part of trapezius",
+        "serratus anterior",
+        "clavicular part of pectoralis major",
+        "anconeus"
+      ]
+    },
+    {
+      "id": "pull-up",
+      "name": "Pull-up",
+      "note": "Hanging from a bar and pulling the chin up over it.",
+      "prime": [
+        "latissimus dorsi",
+        "teres major"
+      ],
+      "synergist": [
+        "long head of biceps brachii",
+        "short head of biceps brachii",
+        "brachialis",
+        "brachioradialis",
+        "rhomboid major",
+        "rhomboid minor",
+        "ascending part of trapezius",
+        "transverse part of trapezius",
+        "spinal part of deltoid",
+        "sternocostal part of pectoralis major",
+        "flexor digitorum superficialis",
+        "flexor digitorum profundus"
+      ]
+    },
+    {
+      "id": "row",
+      "name": "Bent-over row",
+      "note": "Leaning forward with a flat back and pulling a weight up to the lower ribs.",
+      "prime": [
+        "latissimus dorsi",
+        "rhomboid major",
+        "rhomboid minor",
+        "transverse part of trapezius"
+      ],
+      "synergist": [
+        "teres major",
+        "spinal part of deltoid",
+        "infraspinatus",
+        "teres minor",
+        "ascending part of trapezius",
+        "long head of biceps brachii",
+        "short head of biceps brachii",
+        "brachialis",
+        "brachioradialis",
+        "iliocostalis lumborum",
+        "longissimus thoracis",
+        "spinalis thoracis",
+        "flexor digitorum superficialis",
+        "flexor digitorum profundus"
+      ]
+    },
+    {
+      "id": "bicep-curl",
+      "name": "Bicep curl",
+      "note": "Bending the elbow to lift a weight with the palm facing up.",
+      "prime": [
+        "long head of biceps brachii",
+        "short head of biceps brachii",
+        "brachialis"
+      ],
+      "synergist": [
+        "brachioradialis",
+        "humeral head of pronator teres",
+        "flexor carpi radialis",
+        "humeral head of flexor carpi ulnaris",
+        "ulnar head of flexor carpi ulnaris",
+        "palmaris longus"
+      ]
+    },
+    {
+      "id": "triceps-dip",
+      "name": "Triceps dip",
+      "note": "Lowering and pushing the body back up between parallel bars or from a bench.",
+      "prime": [
+        "long head of triceps brachii",
+        "lateral head of triceps brachii",
+        "medial head of triceps brachii"
+      ],
+      "synergist": [
+        "anconeus",
+        "sternocostal part of pectoralis major",
+        "clavicular part of deltoid",
+        "pectoralis minor",
+        "ascending part of trapezius",
+        "latissimus dorsi"
+      ]
+    },
+    {
+      "id": "plank",
+      "name": "Plank",
+      "note": "Holding the body straight on the forearms and toes. Nothing moves: the muscles work to hold the position.",
+      "prime": [
+        "rectus abdominis",
+        "external oblique",
+        "internal oblique",
+        "transversus abdominis"
+      ],
+      "synergist": [
+        "serratus anterior",
+        "clavicular part of deltoid",
+        "clavicular part of pectoralis major",
+        "sternocostal part of pectoralis major",
+        "abdominal part of pectoralis major",
+        "gluteus maximus",
+        "rectus femoris",
+        "tensor fasciae latae",
+        "iliocostalis lumborum",
+        "longissimus thoracis",
+        "spinalis thoracis",
+        "multifidus lumborum"
+      ]
+    },
+    {
+      "id": "crunch",
+      "name": "Crunch",
+      "note": "Lying on the back and curling the shoulders up toward the hips.",
+      "prime": [
+        "rectus abdominis"
+      ],
+      "synergist": [
+        "external oblique",
+        "internal oblique",
+        "pyramidalis"
+      ]
+    }
+  ],
+  "effects": [
+    {
+      "id": "muscle-fiber-haze",
+      "type": "fiber-haze",
+      "surface": "layer",
+      "label": "Muscle-fiber haze",
+      "color": "#ffb4a2",
+      "note": "Illustrative effect, not modeled anatomy: glowing streaks that hint at muscle fibers. They run along each part's long axis, not its real fiber directions."
+    }
+  ],
+  "parts": {
+    "abdominal part of pectoralis major": {
+      "region": "Chest",
+      "depth": 1,
+      "description": "The small lowest part of the chest muscle, arising from the sheath of the abdominal muscles.",
+      "flow": "Pulls the raised arm down and across the body"
+    },
+    "abductor digiti minimi of foot": {
+      "region": "Foot",
+      "depth": 1,
+      "description": "A muscle along the outer edge of the sole, from the heel to the little toe.",
+      "flow": "Moves the little toe out and helps support the outer arch"
+    },
+    "abductor digiti minimi of hand": {
+      "region": "Hand",
+      "depth": 1,
+      "description": "The outermost muscle of the fleshy edge of the palm on the little-finger side (hypothenar eminence).",
+      "flow": "Spreads the little finger away from the others"
+    },
+    "abductor hallucis": {
+      "region": "Foot",
+      "depth": 1,
+      "description": "A muscle along the inner edge of the sole, from the heel to the big toe.",
+      "flow": "Moves the big toe away from the others and supports the arch"
+    },
+    "abductor pollicis brevis": {
+      "region": "Hand",
+      "depth": 1,
+      "description": "The most superficial muscle of the ball of the thumb (thenar eminence).",
+      "flow": "Moves the thumb away from the palm, at right angles to it"
+    },
+    "abductor pollicis longus": {
+      "region": "Forearm",
+      "depth": 3,
+      "description": "A deep muscle on the back of the forearm whose tendon winds around to the base of the thumb's hand bone.",
+      "flow": "Moves the thumb away from the palm and helps tip the wrist toward the thumb"
+    },
+    "acromial part of deltoid": {
+      "region": "Shoulder",
+      "depth": 1,
+      "description": "The middle part of the deltoid, running from the acromion at the tip of the shoulder down to the upper arm bone.",
+      "flow": "Lifts the arm out to the side"
+    },
+    "adductor brevis": {
+      "region": "Thigh",
+      "depth": 2,
+      "description": "A short adductor lying under pectineus and adductor longus.",
+      "flow": "Draws the thigh inward"
+    },
+    "adductor longus": {
+      "region": "Thigh",
+      "depth": 1,
+      "description": "A fan-shaped muscle at the front of the inner thigh, running from the pubic bone to the middle of the thigh bone.",
+      "flow": "Draws the thigh inward and helps flex the hip"
+    },
+    "adductor magnus": {
+      "region": "Thigh",
+      "depth": 3,
+      "description": "The largest of the inner-thigh muscles, a big triangle from the pubic and sitting bones to the whole length of the thigh bone.",
+      "flow": "Draws the thigh inward; its back part also extends the hip, as in rising from a squat"
+    },
+    "adductor minimus": {
+      "region": "Thigh",
+      "depth": 3,
+      "description": "The upper, separately named part of adductor magnus, running almost horizontally to the thigh bone.",
+      "flow": "Draws the thigh inward and turns it outward"
+    },
+    "anconeus": {
+      "region": "Elbow",
+      "depth": 1,
+      "description": "A small triangular muscle on the back of the elbow, running from the outer bump of the arm bone to the ulna.",
+      "flow": "Helps straighten the elbow and steadies it while the forearm turns"
+    },
+    "aryepiglotticus": {
+      "region": "Larynx",
+      "depth": 3,
+      "description": "A thin band continuing on from the oblique arytenoid up to the side of the epiglottis.",
+      "flow": "Helps pull the epiglottis down and narrow the larynx's entrance when swallowing"
+    },
+    "ascending part of trapezius": {
+      "region": "Back",
+      "depth": 1,
+      "description": "The lower fibres of the trapezius, running up from the mid-back vertebrae to the spine of the shoulder blade.",
+      "flow": "Pulls the shoulder blade down and helps turn it upward as the arm rises"
+    },
+    "brachialis": {
+      "region": "Upper arm",
+      "depth": 2,
+      "description": "A broad muscle under the biceps on the lower half of the arm bone, inserting on the ulna just below the elbow.",
+      "flow": "The elbow's main flexor, whatever the forearm's position"
+    },
+    "brachioradialis": {
+      "region": "Forearm",
+      "depth": 1,
+      "description": "The muscle forming the outer bulge of the forearm below the elbow, running from the lower arm bone to the end of the radius.",
+      "flow": "Bends the elbow, most strongly with the thumb pointing up (as in a hammer curl)"
+    },
+    "buccinator": {
+      "region": "Face",
+      "depth": 3,
+      "description": "The muscle forming the wall of the cheek, deep to the other facial muscles, running from the jaws to the corner of the mouth.",
+      "flow": "Presses the cheek against the teeth to keep food between them, and helps blow air out"
+    },
+    "calcaneal tendon": {
+      "region": "Ankle",
+      "depth": 1,
+      "description": "The Achilles tendon, the thickest and strongest tendon in the body, joining the calf muscles to the heel bone.",
+      "flow": "Carries the pull of gastrocnemius and soleus to the heel, pointing the foot down"
+    },
+    "cervical rotator": {
+      "region": "Back",
+      "depth": 3,
+      "description": "Small muscles of the neck running from the side process of one vertebra to the spine of the vertebra above, deepest of the back muscles.",
+      "flow": "Steady the neck vertebrae and help turn them"
+    },
+    "clavicular part of deltoid": {
+      "region": "Shoulder",
+      "depth": 1,
+      "description": "The front part of the deltoid, the rounded cap of the shoulder, running from the outer collarbone to the upper arm bone.",
+      "flow": "Lifts the arm forward and turns it inward"
+    },
+    "clavicular part of pectoralis major": {
+      "region": "Chest",
+      "depth": 1,
+      "description": "The upper part of the large chest muscle, running from the inner half of the collarbone to the upper arm bone.",
+      "flow": "Lifts the arm forward and across the chest, as in an incline press"
+    },
+    "coccygeus": {
+      "region": "Pelvic floor",
+      "depth": 3,
+      "description": "A triangular muscle at the back of the pelvic floor, running from the ischial spine to the edges of the sacrum and coccyx.",
+      "flow": "Supports the pelvic organs and pulls the coccyx forward"
+    },
+    "common tendinous ring": {
+      "region": "Eye",
+      "depth": 3,
+      "description": "A ring of tough tissue at the back of the eye socket, around the optic canal, from which the four rectus muscles arise.",
+      "flow": "Anchors the four rectus muscles at the back of the eye socket"
+    },
+    "coracobrachialis": {
+      "region": "Upper arm",
+      "depth": 2,
+      "description": "A slender muscle in the upper inner arm, running from the coracoid process of the shoulder blade to the middle of the arm bone.",
+      "flow": "Draws the arm forward and toward the body"
+    },
+    "corrugator supercilii": {
+      "region": "Face",
+      "depth": 2,
+      "description": "A small, narrow muscle under the inner end of each eyebrow, beneath frontalis and orbicularis oculi.",
+      "flow": "Draws the eyebrows down and together, making vertical frown lines"
+    },
+    "deep part of masseter": {
+      "region": "Jaw",
+      "depth": 2,
+      "description": "The smaller inner part of the masseter, running more vertically from the cheekbone arch to the jaw's branch.",
+      "flow": "Closes the jaw and pulls it back slightly"
+    },
+    "depressor anguli oris": {
+      "region": "Face",
+      "depth": 1,
+      "description": "A triangular muscle running from the lower edge of the jaw up to the corner of the mouth.",
+      "flow": "Pulls the corner of the mouth down, as in a frown"
+    },
+    "depressor labii inferioris": {
+      "region": "Face",
+      "depth": 2,
+      "description": "A square-shaped muscle running from the jaw up into the lower lip, partly under depressor anguli oris.",
+      "flow": "Pulls the lower lip down and out, as in a pout of disgust"
+    },
+    "depressor septi nasi": {
+      "region": "Face",
+      "depth": 2,
+      "description": "A tiny muscle under the nose that runs from above the upper front teeth to the base of the nasal septum.",
+      "flow": "Pulls the tip of the nose down and helps widen the nostrils"
+    },
+    "descending part of trapezius": {
+      "region": "Back",
+      "depth": 1,
+      "description": "The upper fibres of the trapezius, the large diamond-shaped muscle of the upper back, running from the skull and neck down to the collarbone.",
+      "flow": "Lifts the shoulder blade (shrugging) and turns it so the arm can rise overhead"
+    },
+    "diaphragm": {
+      "region": "Chest",
+      "depth": 3,
+      "description": "The dome-shaped sheet of muscle that separates the chest from the abdomen, attached all around the lower rib cage and the lumbar spine.",
+      "flow": "The main muscle of breathing: it flattens as it contracts, drawing air into the lungs"
+    },
+    "digastric": {
+      "region": "Neck",
+      "depth": 2,
+      "description": "A muscle with two bellies joined by a round tendon that slings through a loop on the hyoid bone, under the jaw.",
+      "flow": "Opens the mouth and raises the hyoid bone when swallowing"
+    },
+    "extensor carpi radialis brevis": {
+      "region": "Forearm",
+      "depth": 1,
+      "description": "A muscle alongside extensor carpi radialis longus, starting at the outer elbow; its tendon is the one most involved in \"tennis elbow\".",
+      "flow": "Straightens (lifts) the wrist and steadies it while gripping"
+    },
+    "extensor carpi radialis longus": {
+      "region": "Forearm",
+      "depth": 1,
+      "description": "A muscle on the thumb side of the forearm's back, starting just above the outer elbow and ending at the base of the index finger's hand bone.",
+      "flow": "Straightens (lifts) the wrist and tips the hand toward the thumb"
+    },
+    "extensor carpi ulnaris": {
+      "region": "Forearm",
+      "depth": 1,
+      "description": "A long muscle on the little-finger side of the back of the forearm, ending at the base of the fifth hand bone.",
+      "flow": "Straightens the wrist and tips the hand toward the little finger"
+    },
+    "extensor digiti minimi": {
+      "region": "Forearm",
+      "depth": 1,
+      "description": "A slim muscle beside extensor digitorum that sends a tendon to the little finger.",
+      "flow": "Straightens the little finger"
+    },
+    "extensor digitorum": {
+      "region": "Forearm",
+      "depth": 1,
+      "description": "The main finger-straightening muscle on the back of the forearm, splitting into four tendons across the back of the hand.",
+      "flow": "Straightens the fingers and helps lift the wrist"
+    },
+    "extensor digitorum brevis": {
+      "region": "Foot",
+      "depth": 1,
+      "description": "A small, fleshy muscle on the top of the foot that sends tendons to the second to fourth toes.",
+      "flow": "Helps straighten the middle toes"
+    },
+    "extensor digitorum longus": {
+      "region": "Leg",
+      "depth": 1,
+      "description": "A muscle on the front outer shin whose tendon splits into four across the top of the foot to the small toes.",
+      "flow": "Lifts the four small toes and the foot"
+    },
+    "extensor hallucis brevis": {
+      "region": "Foot",
+      "depth": 1,
+      "description": "The innermost slip of the short toe-extensor on the top of the foot, running to the big toe.",
+      "flow": "Helps straighten the big toe"
+    },
+    "extensor hallucis longus": {
+      "region": "Leg",
+      "depth": 2,
+      "description": "A thin muscle between tibialis anterior and extensor digitorum longus, whose tendon runs to the big toe.",
+      "flow": "Lifts the big toe and helps lift the foot"
+    },
+    "extensor indicis": {
+      "region": "Forearm",
+      "depth": 3,
+      "description": "A narrow, deep muscle on the lower back of the ulna that sends a tendon to the index finger.",
+      "flow": "Straightens the index finger on its own, as in pointing"
+    },
+    "extensor pollicis brevis": {
+      "region": "Forearm",
+      "depth": 3,
+      "description": "A deep forearm muscle whose tendon runs beside that of abductor pollicis longus to the thumb's first joint.",
+      "flow": "Straightens the thumb at its knuckle"
+    },
+    "extensor pollicis longus": {
+      "region": "Forearm",
+      "depth": 3,
+      "description": "A deep forearm muscle whose tendon hooks around a bony bump on the radius on its way to the thumb tip.",
+      "flow": "Straightens the thumb at all its joints and pulls it back"
+    },
+    "external anal sphincter": {
+      "region": "Pelvic floor",
+      "depth": 2,
+      "description": "A ring of voluntary muscle around the anal canal.",
+      "flow": "Keeps the anus closed and can be tightened at will"
+    },
+    "external intercostal muscle": {
+      "region": "Chest",
+      "depth": 2,
+      "description": "The outer layer of muscle in each gap between the ribs, its fibres slanting down and forward.",
+      "flow": "Lifts the ribs to help breathe in"
+    },
+    "external oblique": {
+      "region": "Abdomen",
+      "depth": 1,
+      "description": "The largest and outermost of the three flat abdominal muscles, its fibres running down and forward from the lower ribs.",
+      "flow": "Bends and twists the trunk (to the opposite side) and squeezes the belly"
+    },
+    "fibularis brevis": {
+      "region": "Leg",
+      "depth": 2,
+      "description": "A muscle under fibularis longus on the outside of the leg, ending on the outer edge of the foot.",
+      "flow": "Turns the sole of the foot outward and helps point it down"
+    },
+    "fibularis longus": {
+      "region": "Leg",
+      "depth": 1,
+      "description": "A long muscle on the outside of the leg whose tendon runs behind the outer ankle and right across the sole.",
+      "flow": "Points the foot down, turns its sole outward and supports the arches"
+    },
+    "fibularis tertius": {
+      "region": "Leg",
+      "depth": 1,
+      "description": "A small, often variable part split off the lower extensor digitorum longus, ending on the fifth foot bone.",
+      "flow": "Lifts the foot and turns its sole outward"
+    },
+    "first lumbrical of foot": {
+      "region": "Foot",
+      "depth": 2,
+      "description": "A small, worm-shaped muscle in the sole, starting on a tendon of flexor digitorum longus and running to the second toe.",
+      "flow": "Bends the second toe at its base and straightens its other joints"
+    },
+    "first plantar interosseous of foot": {
+      "region": "Foot",
+      "depth": 3,
+      "description": "A small muscle on the sole side between the foot bones, running to the third toe.",
+      "flow": "Draws the third toe toward the second"
+    },
+    "flexor accessorius": {
+      "region": "Foot",
+      "depth": 2,
+      "description": "A flat, square muscle (quadratus plantae) in the sole that joins the tendon of flexor digitorum longus.",
+      "flow": "Straightens the pull of flexor digitorum longus so the toes curl straight"
+    },
+    "flexor carpi radialis": {
+      "region": "Forearm",
+      "depth": 1,
+      "description": "A superficial forearm muscle running from the inner elbow to the base of the second and third hand bones on the thumb side.",
+      "flow": "Bends the wrist and tips the hand toward the thumb"
+    },
+    "flexor digiti minimi brevis of foot": {
+      "region": "Foot",
+      "depth": 3,
+      "description": "A small muscle in the outer sole, under the fifth foot bone.",
+      "flow": "Bends the little toe at its base"
+    },
+    "flexor digiti minimi brevis of hand": {
+      "region": "Hand",
+      "depth": 1,
+      "description": "A small muscle of the little-finger side of the palm, beside abductor digiti minimi.",
+      "flow": "Bends the little finger at its knuckle"
+    },
+    "flexor digitorum brevis": {
+      "region": "Foot",
+      "depth": 1,
+      "description": "The central muscle of the sole's first layer, running from the heel to the four small toes.",
+      "flow": "Curls the small toes"
+    },
+    "flexor digitorum longus": {
+      "region": "Leg",
+      "depth": 3,
+      "description": "A deep muscle on the back of the shin whose tendon passes behind the inner ankle and splits into four for the toes.",
+      "flow": "Curls the four small toes and helps point the foot"
+    },
+    "flexor digitorum profundus": {
+      "region": "Forearm",
+      "depth": 3,
+      "description": "A deep forearm muscle on the ulna, with four tendons that pass through splits in the superficialis tendons to the fingertips.",
+      "flow": "Bends the fingertips, and with them the whole finger, as in gripping"
+    },
+    "flexor digitorum superficialis": {
+      "region": "Forearm",
+      "depth": 2,
+      "description": "A large forearm muscle under the superficial layer, with four tendons running through the wrist to the middle bones of the fingers.",
+      "flow": "Bends the fingers at their middle joints, and helps bend the wrist"
+    },
+    "flexor hallucis longus": {
+      "region": "Leg",
+      "depth": 3,
+      "description": "A deep, powerful muscle on the back of the fibula whose tendon runs under the foot to the tip of the big toe.",
+      "flow": "Bends the big toe and helps push off when walking"
+    },
+    "flexor pollicis brevis": {
+      "region": "Hand",
+      "depth": 2,
+      "description": "A short muscle in the ball of the thumb, beside abductor pollicis brevis and over opponens pollicis.",
+      "flow": "Bends the thumb at its knuckle"
+    },
+    "flexor pollicis longus": {
+      "region": "Forearm",
+      "depth": 3,
+      "description": "A deep forearm muscle on the radius whose tendon runs through the wrist to the tip of the thumb.",
+      "flow": "Bends the tip of the thumb"
+    },
+    "fourth lumbrical of foot": {
+      "region": "Foot",
+      "depth": 2,
+      "description": "A small, worm-shaped muscle in the sole that runs from the long flexor tendons to the little toe.",
+      "flow": "Bends the little toe at its base and straightens its other joints"
+    },
+    "frontalis": {
+      "region": "Head",
+      "depth": 1,
+      "description": "The front belly of the scalp muscle, a thin sheet over the forehead. It has no bony insertion; it pulls on the skin of the brows.",
+      "flow": "Raises the eyebrows and wrinkles the forehead"
+    },
+    "gemellus inferior": {
+      "region": "Hip",
+      "depth": 3,
+      "description": "A small muscle running from the sitting bone (ischial tuberosity) to the tendon of obturator internus.",
+      "flow": "Turns the thigh outward"
+    },
+    "gemellus superior": {
+      "region": "Hip",
+      "depth": 3,
+      "description": "A small muscle running from the ischial spine to the tendon of obturator internus.",
+      "flow": "Turns the thigh outward"
+    },
+    "genioglossus": {
+      "region": "Tongue",
+      "depth": 3,
+      "description": "The fan-shaped muscle making up most of the tongue's bulk, running from the inside of the chin into the whole length of the tongue.",
+      "flow": "Pushes the tongue forward and out and draws its middle down"
+    },
+    "geniohyoid": {
+      "region": "Neck",
+      "depth": 3,
+      "description": "A narrow muscle just above the mylohyoid, running from the inside of the chin back to the hyoid bone.",
+      "flow": "Pulls the hyoid bone forward and up, widening the throat, and helps open the mouth"
+    },
+    "gluteus maximus": {
+      "region": "Hip",
+      "depth": 1,
+      "description": "The large, thick muscle of the buttock, running from the back of the pelvis and sacrum to the thigh bone and the iliotibial tract.",
+      "flow": "Extends the hip powerfully (rising from a squat, climbing, sprinting) and turns the thigh outward"
+    },
+    "gluteus medius": {
+      "region": "Hip",
+      "depth": 2,
+      "description": "A thick, fan-shaped muscle on the outer hip, partly under gluteus maximus, ending on the top of the thigh bone (greater trochanter).",
+      "flow": "Moves the thigh out to the side and keeps the pelvis level when you stand on one leg"
+    },
+    "gluteus minimus": {
+      "region": "Hip",
+      "depth": 3,
+      "description": "The smallest and deepest of the gluteal muscles, under gluteus medius.",
+      "flow": "Moves the thigh out to the side, turns it inward and keeps the pelvis level when walking"
+    },
+    "gracilis": {
+      "region": "Thigh",
+      "depth": 1,
+      "description": "A long, thin strap muscle on the inner thigh, running from the pubic bone to the inside of the shin below the knee.",
+      "flow": "Draws the thigh inward and helps bend the knee"
+    },
+    "humeral head of flexor carpi ulnaris": {
+      "region": "Forearm",
+      "depth": 1,
+      "description": "The head of flexor carpi ulnaris that starts at the inner elbow; the muscle ends on the pisiform bone at the little-finger side of the wrist.",
+      "flow": "Bends the wrist and tips the hand toward the little finger"
+    },
+    "humeral head of pronator teres": {
+      "region": "Forearm",
+      "depth": 1,
+      "description": "The larger head of pronator teres, starting from the inner bump of the arm bone (medial epicondyle) and slanting across to the radius.",
+      "flow": "Turns the palm down and helps bend the elbow"
+    },
+    "hyoglossus": {
+      "region": "Tongue",
+      "depth": 3,
+      "description": "A thin, flat muscle running up from the hyoid bone into the side of the tongue.",
+      "flow": "Pulls the sides of the tongue down and back"
+    },
+    "iliacus": {
+      "region": "Pelvis",
+      "depth": 3,
+      "description": "A fan-shaped muscle filling the inner bowl of the hip bone; its tendon joins that of psoas major.",
+      "flow": "Flexes the hip together with psoas major"
+    },
+    "iliococcygeus": {
+      "region": "Pelvic floor",
+      "depth": 3,
+      "description": "The thin back part of the levator ani, running from a band on the pelvic side wall to the coccyx.",
+      "flow": "Supports the pelvic organs and raises the pelvic floor"
+    },
+    "iliocostalis cervicis": {
+      "region": "Back",
+      "depth": 2,
+      "description": "The neck part of iliocostalis, the outermost column of the erector spinae, running from the upper ribs to the neck vertebrae.",
+      "flow": "Extends the neck and bends it to its own side"
+    },
+    "iliocostalis lumborum": {
+      "region": "Back",
+      "depth": 2,
+      "description": "The lower-back part of iliocostalis, the outermost column of the erector spinae, running from the pelvis to the lower ribs.",
+      "flow": "Straightens and holds up the lower spine and bends it to its own side"
+    },
+    "iliocostalis thoracis": {
+      "region": "Back",
+      "depth": 2,
+      "description": "The chest part of iliocostalis, the outermost column of the erector spinae, linking the lower ribs to the upper ribs.",
+      "flow": "Straightens the spine and bends it to its own side"
+    },
+    "inferior head of lateral pterygoid": {
+      "region": "Jaw",
+      "depth": 3,
+      "description": "The larger, lower head of the lateral pterygoid, running back from the skull base to the neck of the jaw.",
+      "flow": "Pulls the jaw forward and opens the mouth; one side alone swings the jaw to the other side"
+    },
+    "inferior oblique": {
+      "region": "Eye",
+      "depth": 3,
+      "description": "The only eye-moving muscle that starts at the front of the eye socket, curving under the eyeball to its outer back side.",
+      "flow": "Turns the eye upward and outward and rotates its top outward"
+    },
+    "inferior oblique part of longus colli": {
+      "region": "Neck",
+      "depth": 3,
+      "description": "The lower slanting part of longus colli, running from the upper chest vertebrae to the lower neck vertebrae.",
+      "flow": "Bends the neck forward and helps turn it to the opposite side"
+    },
+    "inferior pharyngeal constrictor": {
+      "region": "Throat",
+      "depth": 3,
+      "description": "The thickest and lowest of the three throat-wrapping muscles, arising from the cartilages of the larynx.",
+      "flow": "Squeezes the lower throat to push food into the oesophagus; its lowest fibres act as the upper oesophageal sphincter"
+    },
+    "inferior rectus": {
+      "region": "Eye",
+      "depth": 3,
+      "description": "One of the six muscles that move the eyeball, running from the back of the eye socket to the underside of the eye.",
+      "flow": "Turns the eye downward (and slightly inward)"
+    },
+    "infraspinatus": {
+      "region": "Shoulder",
+      "depth": 2,
+      "description": "A thick rotator cuff muscle covering most of the back of the shoulder blade below its spine.",
+      "flow": "Turns the arm outward and holds the head of the arm bone in its socket"
+    },
+    "innermost intercostal muscle": {
+      "region": "Chest",
+      "depth": 3,
+      "description": "The deepest layer of muscle between the ribs, separated from the internal intercostals by the intercostal nerves and vessels.",
+      "flow": "Helps the internal intercostals move the ribs when breathing"
+    },
+    "internal intercostal muscle": {
+      "region": "Chest",
+      "depth": 3,
+      "description": "The middle layer of muscle between the ribs, its fibres slanting down and back, across the external intercostals.",
+      "flow": "Pulls the ribs down to help breathe out forcefully"
+    },
+    "internal oblique": {
+      "region": "Abdomen",
+      "depth": 2,
+      "description": "The middle of the three flat abdominal muscles, its fibres running up and forward, across those of the external oblique.",
+      "flow": "Bends and twists the trunk (to its own side) and squeezes the belly"
+    },
+    "interspinalis thoracis": {
+      "region": "Back",
+      "depth": 3,
+      "description": "Short muscles between the spines of neighbouring chest vertebrae, mostly at the top and bottom of the chest spine.",
+      "flow": "Help extend and steady the spine"
+    },
+    "lateral crico-arytenoid": {
+      "region": "Larynx",
+      "depth": 3,
+      "description": "A small muscle on the side of the voice box, running from the cricoid cartilage up to an arytenoid cartilage.",
+      "flow": "Swings the vocal cords together to close the gap between them for speaking"
+    },
+    "lateral head of flexor hallucis brevis": {
+      "region": "Foot",
+      "depth": 3,
+      "description": "The outer head of the short flexor of the big toe, deep in the sole; its tendon holds the outer sesamoid bone.",
+      "flow": "Bends the big toe at its base"
+    },
+    "lateral head of gastrocnemius": {
+      "region": "Leg",
+      "depth": 1,
+      "description": "The outer head of the calf muscle, starting on the thigh bone above the knee and ending in the Achilles tendon.",
+      "flow": "Points the foot down (rising onto the toes) and helps bend the knee"
+    },
+    "lateral head of triceps brachii": {
+      "region": "Upper arm",
+      "depth": 1,
+      "description": "The outer head of the triceps, starting high on the back of the arm bone, forming the horseshoe shape of a toned arm.",
+      "flow": "Straightens the elbow"
+    },
+    "lateral lumbar intertransversarius": {
+      "region": "Back",
+      "depth": 3,
+      "description": "Small muscles bridging the side processes of neighbouring lower-back vertebrae.",
+      "flow": "Bend the lower spine to their own side"
+    },
+    "lateral rectus": {
+      "region": "Eye",
+      "depth": 3,
+      "description": "An eye-moving muscle running along the outer wall of the eye socket to the outer side of the eye.",
+      "flow": "Turns the eye outward, away from the nose"
+    },
+    "latissimus dorsi": {
+      "region": "Back",
+      "depth": 1,
+      "description": "The broadest muscle of the back, sweeping from the lower spine and pelvis up to the front of the upper arm bone.",
+      "flow": "Pulls the arm down and back and turns it inward, as in a pull-up or rowing"
+    },
+    "levator anguli oris": {
+      "region": "Face",
+      "depth": 2,
+      "description": "A muscle running from the upper jaw, beneath levator labii superioris, down to the corner of the mouth.",
+      "flow": "Lifts the corner of the mouth, helping to deepen the smile line"
+    },
+    "levator labii superioris": {
+      "region": "Face",
+      "depth": 1,
+      "description": "A flat muscle running from just below the eye socket down into the upper lip.",
+      "flow": "Raises and turns out the upper lip"
+    },
+    "levator labii superioris alaeque nasi": {
+      "region": "Face",
+      "depth": 1,
+      "description": "A thin strip running down the side of the nose from the upper jaw to the nostril and upper lip.",
+      "flow": "Lifts the upper lip and flares the nostril, as in a snarl"
+    },
+    "levator palpebrae superioris": {
+      "region": "Eye",
+      "depth": 2,
+      "description": "A thin muscle inside the eye socket, above the eyeball, that fans out into the upper eyelid.",
+      "flow": "Raises the upper eyelid"
+    },
+    "levator scapulae": {
+      "region": "Neck",
+      "depth": 2,
+      "description": "A strap muscle running from the upper four neck vertebrae down to the top inner corner of the shoulder blade.",
+      "flow": "Lifts the shoulder blade and turns it to tip the shoulder down; also bends the neck to its own side"
+    },
+    "levator veli palatini": {
+      "region": "Throat",
+      "depth": 3,
+      "description": "A muscle running from the skull base near the ear tube down into the soft palate.",
+      "flow": "Lifts the soft palate to seal off the nose when swallowing, and helps open the ear tube"
+    },
+    "long head of biceps brachii": {
+      "region": "Upper arm",
+      "depth": 1,
+      "description": "The outer head of the biceps; its long tendon starts just above the shoulder socket and runs over the head of the arm bone.",
+      "flow": "Bends the elbow, turns the palm up and helps lift the arm forward"
+    },
+    "long head of biceps femoris": {
+      "region": "Thigh",
+      "depth": 1,
+      "description": "The outer hamstring's long head, running from the sitting bone to the head of the fibula below the outer knee.",
+      "flow": "Bends the knee and extends the hip"
+    },
+    "long head of triceps brachii": {
+      "region": "Upper arm",
+      "depth": 1,
+      "description": "The inner head of the triceps on the back of the arm, the only one starting on the shoulder blade (just below the socket).",
+      "flow": "Straightens the elbow and helps pull the arm back and down"
+    },
+    "longissimus capitis": {
+      "region": "Back",
+      "depth": 2,
+      "description": "The top of the longissimus column, running from the lower neck and upper chest vertebrae to the bony bump behind the ear.",
+      "flow": "Extends the head and turns it to its own side"
+    },
+    "longissimus cervicis": {
+      "region": "Back",
+      "depth": 2,
+      "description": "The neck part of longissimus, running from the upper chest vertebrae to the neck vertebrae.",
+      "flow": "Extends the neck and bends it to its own side"
+    },
+    "longissimus thoracis": {
+      "region": "Back",
+      "depth": 2,
+      "description": "The largest part of the erector spinae, a long column running from the pelvis and lower back up to the ribs and chest vertebrae.",
+      "flow": "Straightens the spine and holds it upright, and bends it to its own side"
+    },
+    "longus capitis": {
+      "region": "Neck",
+      "depth": 3,
+      "description": "A deep muscle on the front of the upper neck vertebrae that reaches up to the base of the skull.",
+      "flow": "Bends the head and upper neck forward"
+    },
+    "lumbar rotator": {
+      "region": "Back",
+      "depth": 3,
+      "description": "Small, deep muscles in the lower back running from one vertebra to the one above.",
+      "flow": "Steady the lower-back vertebrae and sense their position"
+    },
+    "medial head of flexor hallucis brevis": {
+      "region": "Foot",
+      "depth": 3,
+      "description": "The inner head of the short flexor of the big toe, deep in the sole; its tendon holds the inner sesamoid bone.",
+      "flow": "Bends the big toe at its base"
+    },
+    "medial head of gastrocnemius": {
+      "region": "Leg",
+      "depth": 1,
+      "description": "The larger, inner head of the calf muscle, starting above the knee on the thigh bone and ending in the Achilles tendon.",
+      "flow": "Points the foot down (rising onto the toes) and helps bend the knee"
+    },
+    "medial head of triceps brachii": {
+      "region": "Upper arm",
+      "depth": 2,
+      "description": "The deepest head of the triceps, lying under the other two along the lower back of the arm bone.",
+      "flow": "Straightens the elbow, working in every elbow extension"
+    },
+    "medial lumbar intertransversarius": {
+      "region": "Back",
+      "depth": 3,
+      "description": "Small muscles linking the small bony bumps on the backs of neighbouring lower-back vertebrae.",
+      "flow": "Steady the lower-back vertebrae and bend the spine to the side"
+    },
+    "medial pterygoid": {
+      "region": "Jaw",
+      "depth": 3,
+      "description": "A thick, square muscle on the inner side of the jaw's branch, mirroring the masseter on the outside.",
+      "flow": "Closes the jaw and moves it forward and to the opposite side when grinding food"
+    },
+    "medial rectus": {
+      "region": "Eye",
+      "depth": 3,
+      "description": "The largest of the eye-moving muscles, running along the inner (nose-side) wall of the eye socket.",
+      "flow": "Turns the eye inward, toward the nose"
+    },
+    "mentalis": {
+      "region": "Face",
+      "depth": 2,
+      "description": "A small cone of muscle on the chin, running from the jaw just below the lower front teeth into the chin's skin.",
+      "flow": "Raises and wrinkles the chin skin and pushes the lower lip out, as in pouting"
+    },
+    "middle pharyngeal constrictor": {
+      "region": "Throat",
+      "depth": 3,
+      "description": "The middle of the three throat-wrapping muscles, fanning out from the hyoid bone.",
+      "flow": "Squeezes the middle of the throat to push food down when swallowing"
+    },
+    "multifidus cervicis": {
+      "region": "Back",
+      "depth": 3,
+      "description": "The neck part of multifidus, short bundles crossing two to four vertebrae, deep against the spine.",
+      "flow": "Steadies the neck vertebrae, extends the neck and helps turn it"
+    },
+    "multifidus lumborum": {
+      "region": "Back",
+      "depth": 3,
+      "description": "The thickest part of multifidus, filling the groove beside the lower-back spine down to the sacrum.",
+      "flow": "Holds the lower-back vertebrae steady and extends the lower spine"
+    },
+    "multifidus thoracis": {
+      "region": "Back",
+      "depth": 3,
+      "description": "The chest part of multifidus, short bundles crossing two to four vertebrae, deep against the spine.",
+      "flow": "Steadies the spine, extends it and helps turn it"
+    },
+    "mylohyoid": {
+      "region": "Neck",
+      "depth": 2,
+      "description": "A flat sheet that runs between the two sides of the lower jaw, forming the muscular floor of the mouth.",
+      "flow": "Raises the floor of the mouth and the tongue when swallowing, and helps open the mouth"
+    },
+    "nasalis": {
+      "region": "Face",
+      "depth": 1,
+      "description": "A small muscle over the side of the nose, with a part that crosses the bridge and a part at the nostril.",
+      "flow": "Compresses the bridge of the nose and flares or narrows the nostrils"
+    },
+    "oblique arytenoid": {
+      "region": "Larynx",
+      "depth": 3,
+      "description": "Two crossing slips of muscle on the back of the arytenoid cartilages, forming an X.",
+      "flow": "Draws the arytenoid cartilages together to help close the larynx"
+    },
+    "oblique head of adductor hallucis": {
+      "region": "Foot",
+      "depth": 3,
+      "description": "The larger head of adductor hallucis, running obliquely across the deep sole to the big toe.",
+      "flow": "Draws the big toe toward the others and supports the arch"
+    },
+    "oblique head of adductor pollicis": {
+      "region": "Hand",
+      "depth": 3,
+      "description": "The upper head of adductor pollicis, deep in the palm, starting from the wrist bones and the bases of the middle hand bones.",
+      "flow": "Pulls the thumb toward the palm, as in a key grip"
+    },
+    "oblique part of cricothyroid": {
+      "region": "Larynx",
+      "depth": 3,
+      "description": "The more slanted part of the cricothyroid, on the outside front of the voice box.",
+      "flow": "Slides the thyroid cartilage forward to tighten the vocal cords, raising pitch"
+    },
+    "obliquus capitis inferior": {
+      "region": "Neck",
+      "depth": 3,
+      "description": "A suboccipital muscle running from the spine of the axis to the side of the atlas; it is the only one that does not reach the skull.",
+      "flow": "Turns the atlas, and with it the head, to its own side"
+    },
+    "obliquus capitis superior": {
+      "region": "Neck",
+      "depth": 3,
+      "description": "A short suboccipital muscle running from the side of the atlas up and back to the skull.",
+      "flow": "Tips the head back and tilts it to its own side"
+    },
+    "obturator externus": {
+      "region": "Hip",
+      "depth": 3,
+      "description": "A fan-shaped muscle covering the outer face of the large opening in the hip bone (obturator foramen), passing under the hip joint.",
+      "flow": "Turns the thigh outward and steadies the hip"
+    },
+    "obturator internus": {
+      "region": "Hip",
+      "depth": 3,
+      "description": "A fan-shaped muscle inside the pelvis whose tendon turns sharply around the hip bone to reach the thigh bone.",
+      "flow": "Turns the thigh outward and steadies the head of the thigh bone in its socket"
+    },
+    "occipitalis": {
+      "region": "Head",
+      "depth": 1,
+      "description": "The back belly of the scalp muscle, over the back of the skull. It anchors the tough sheet (galea aponeurotica) that links it to frontalis.",
+      "flow": "Pulls the scalp backward"
+    },
+    "omohyoid": {
+      "region": "Neck",
+      "depth": 2,
+      "description": "A long, thin muscle with two bellies linked by a tendon, running from the top of the shoulder blade to the hyoid bone.",
+      "flow": "Pulls the hyoid bone down and steadies it"
+    },
+    "opponens digiti minimi of foot": {
+      "region": "Foot",
+      "depth": 3,
+      "description": "A small, often absent slip deep in the outer sole, running to the fifth foot bone.",
+      "flow": "Draws the fifth foot bone down and in"
+    },
+    "opponens digiti minimi of hand": {
+      "region": "Hand",
+      "depth": 2,
+      "description": "A muscle under the other little-finger muscles of the palm, attached along the fifth hand bone.",
+      "flow": "Cups the palm by drawing the little finger's hand bone forward to meet the thumb"
+    },
+    "opponens pollicis": {
+      "region": "Hand",
+      "depth": 2,
+      "description": "A muscle under the other two of the ball of the thumb, attached along the whole thumb hand bone.",
+      "flow": "Swings the thumb across the palm to meet the fingertips (opposition)"
+    },
+    "orbicularis oris": {
+      "region": "Face",
+      "depth": 1,
+      "description": "The ring of muscle inside the lips, formed largely from fibres of the other muscles that meet at the mouth.",
+      "flow": "Closes and purses the lips, as in whistling, kissing and speaking"
+    },
+    "orbital part of orbicularis oculi": {
+      "region": "Face",
+      "depth": 1,
+      "description": "The outer ring of the muscle that encircles the eye, spreading over the bony rim of the eye socket.",
+      "flow": "Shuts the eyelids tightly, as when squinting or squeezing the eyes shut"
+    },
+    "palatopharyngeus": {
+      "region": "Throat",
+      "depth": 3,
+      "description": "A thin muscle running from the soft palate down the inside of the throat, forming the back arch of the tonsil.",
+      "flow": "Lifts the throat and larynx and narrows the passage to the nose when swallowing"
+    },
+    "palmaris longus": {
+      "region": "Forearm",
+      "depth": 1,
+      "description": "A small muscle with a long, thin tendon that runs into the palm; about one person in seven lacks it on one side or both.",
+      "flow": "Tenses the palm's fibrous sheet and helps bend the wrist"
+    },
+    "palpebral part of orbicularis oculi": {
+      "region": "Face",
+      "depth": 1,
+      "description": "The thin inner part of the eye's ring muscle, lying within the eyelids themselves.",
+      "flow": "Closes the eyelids gently, as in blinking and sleep"
+    },
+    "pectineus": {
+      "region": "Thigh",
+      "depth": 2,
+      "description": "A flat, square muscle at the top of the inner thigh, between the pubic bone and the upper thigh bone.",
+      "flow": "Draws the thigh inward and flexes the hip"
+    },
+    "pectoralis minor": {
+      "region": "Chest",
+      "depth": 2,
+      "description": "A thin, triangular muscle under pectoralis major, running from the third to fifth ribs up to the coracoid process of the shoulder blade.",
+      "flow": "Pulls the shoulder blade forward and down, and lifts the ribs when breathing hard"
+    },
+    "piriformis": {
+      "region": "Hip",
+      "depth": 3,
+      "description": "A pear-shaped muscle running from the front of the sacrum out through the greater sciatic notch to the top of the thigh bone; the sciatic nerve passes just below it.",
+      "flow": "Turns the thigh outward, or moves it out to the side when the hip is bent"
+    },
+    "plantaris": {
+      "region": "Leg",
+      "depth": 2,
+      "description": "A small muscle with a very long, thin tendon, lying between gastrocnemius and soleus; it is absent in some people.",
+      "flow": "Weakly helps point the foot and bend the knee"
+    },
+    "platysma": {
+      "region": "Neck",
+      "depth": 1,
+      "description": "A broad, very thin sheet of muscle just under the skin of the front of the neck, running from the upper chest up over the jaw.",
+      "flow": "Tenses the skin of the neck and pulls the corners of the mouth down"
+    },
+    "popliteus": {
+      "region": "Leg",
+      "depth": 3,
+      "description": "A thin, triangular muscle behind the knee, from the outer thigh bone to the back of the shin.",
+      "flow": "Unlocks the straightened knee by turning the shin inward, so it can start to bend"
+    },
+    "posterior crico-arytenoid": {
+      "region": "Larynx",
+      "depth": 3,
+      "description": "A muscle on the back of the voice box, running from the cricoid cartilage to the arytenoid cartilages.",
+      "flow": "The only muscle that opens the vocal cords, keeping the airway open for breathing"
+    },
+    "procerus": {
+      "region": "Face",
+      "depth": 1,
+      "description": "A small muscle over the bridge of the nose that blends into the forehead skin between the eyebrows.",
+      "flow": "Pulls the inner eyebrows down, making horizontal wrinkles across the nose bridge (as in a frown)"
+    },
+    "pronator quadratus": {
+      "region": "Forearm",
+      "depth": 3,
+      "description": "A flat, square muscle across the lower front of the forearm, deep against the radius and ulna.",
+      "flow": "The main muscle that turns the palm down"
+    },
+    "psoas major": {
+      "region": "Abdomen",
+      "depth": 3,
+      "description": "A long, thick muscle running from the sides of the lower spine through the pelvis to the inner thigh bone, joining iliacus as the iliopsoas.",
+      "flow": "The strongest hip flexor: lifts the thigh, or bends the trunk forward when the legs are fixed"
+    },
+    "pubococcygeus": {
+      "region": "Pelvic floor",
+      "depth": 3,
+      "description": "Part of the levator ani, the pelvic floor's main muscle, running from the back of the pubic bone to the coccyx.",
+      "flow": "Supports the pelvic organs and helps control urination"
+    },
+    "puborectalis": {
+      "region": "Pelvic floor",
+      "depth": 3,
+      "description": "Part of the levator ani that loops like a sling around the back of the rectum from the pubic bone.",
+      "flow": "Pulls the end of the rectum forward to keep stool in"
+    },
+    "pyramidalis": {
+      "region": "Abdomen",
+      "depth": 1,
+      "description": "A small triangular muscle in front of the bottom of rectus abdominis, just above the pubic bone; some people lack it.",
+      "flow": "Tenses the midline seam of the belly wall (linea alba)"
+    },
+    "quadratus femoris": {
+      "region": "Hip",
+      "depth": 3,
+      "description": "A flat, square muscle running from the sitting bone across to the back of the thigh bone.",
+      "flow": "Turns the thigh outward"
+    },
+    "quadratus lumborum": {
+      "region": "Back",
+      "depth": 3,
+      "description": "A thick, square muscle deep in the lower back, between the lowest rib, the lower-back vertebrae and the top of the pelvis.",
+      "flow": "Bends the lower spine to its own side, hitches up the hip, and steadies the lowest rib when breathing in"
+    },
+    "rectus abdominis": {
+      "region": "Abdomen",
+      "depth": 1,
+      "description": "The long, strap-like muscle down the front of the belly, from the lower ribs to the pubic bone, crossed by tendinous bands that form the \"six-pack\".",
+      "flow": "Bends the trunk forward, as in a crunch, and steadies the pelvis"
+    },
+    "rectus capitis anterior": {
+      "region": "Neck",
+      "depth": 3,
+      "description": "A short muscle running from the front of the first neck vertebra (atlas) to the base of the skull.",
+      "flow": "Nods the head forward and steadies the joint between skull and atlas"
+    },
+    "rectus capitis lateralis": {
+      "region": "Neck",
+      "depth": 3,
+      "description": "A short muscle running from the side of the first neck vertebra (atlas) up to the skull base.",
+      "flow": "Tilts the head to its own side"
+    },
+    "rectus capitis posterior major": {
+      "region": "Neck",
+      "depth": 3,
+      "description": "One of the small suboccipital muscles under the back of the skull, running from the second neck vertebra (axis) to the skull.",
+      "flow": "Tips the head back and turns it to its own side"
+    },
+    "rectus capitis posterior minor": {
+      "region": "Neck",
+      "depth": 3,
+      "description": "The smallest suboccipital muscle, running from the back of the first neck vertebra (atlas) to the skull.",
+      "flow": "Tips the head back"
+    },
+    "rectus femoris": {
+      "region": "Thigh",
+      "depth": 1,
+      "description": "The middle quadriceps muscle at the front of the thigh, the only one that crosses the hip as well as the knee.",
+      "flow": "Straightens the knee and helps flex the hip, as in kicking"
+    },
+    "rhomboid major": {
+      "region": "Back",
+      "depth": 2,
+      "description": "A flat, four-sided muscle under the trapezius, running from the upper chest vertebrae to the inner edge of the shoulder blade.",
+      "flow": "Pulls the shoulder blade back toward the spine and up"
+    },
+    "rhomboid minor": {
+      "region": "Back",
+      "depth": 2,
+      "description": "A small strip just above rhomboid major, running from the lowest neck vertebrae to the shoulder blade.",
+      "flow": "Pulls the shoulder blade back toward the spine"
+    },
+    "risorius": {
+      "region": "Face",
+      "depth": 1,
+      "description": "A thin, variable band that runs across the cheek to the corner of the mouth from the fascia over the parotid gland.",
+      "flow": "Pulls the corner of the mouth sideways, as in a grimace"
+    },
+    "salpingopharyngeus": {
+      "region": "Throat",
+      "depth": 3,
+      "description": "A slender muscle running from the opening of the ear tube down the side wall of the throat.",
+      "flow": "Lifts the throat when swallowing and helps open the ear tube"
+    },
+    "sartorius": {
+      "region": "Thigh",
+      "depth": 1,
+      "description": "The longest muscle in the body, a strap running diagonally across the front of the thigh from the front of the hip bone to the inside of the knee.",
+      "flow": "Flexes, spreads and turns out the hip and bends the knee, as when sitting cross-legged"
+    },
+    "scalenus anterior": {
+      "region": "Neck",
+      "depth": 2,
+      "description": "A muscle on the side of the neck running from the neck vertebrae down to the first rib, with the main nerves to the arm passing behind it.",
+      "flow": "Raises the first rib when breathing hard and bends the neck to its own side"
+    },
+    "scalenus medius": {
+      "region": "Neck",
+      "depth": 2,
+      "description": "The longest of the scalene muscles, running from most of the neck vertebrae down to the first rib.",
+      "flow": "Raises the first rib when breathing hard and bends the neck to its own side"
+    },
+    "scalenus posterior": {
+      "region": "Neck",
+      "depth": 2,
+      "description": "The smallest and deepest-lying scalene muscle, running from the lower neck vertebrae to the second rib.",
+      "flow": "Raises the second rib when breathing hard and bends the neck to its own side"
+    },
+    "second lumbrical of foot": {
+      "region": "Foot",
+      "depth": 2,
+      "description": "A small, worm-shaped muscle in the sole that runs from the long flexor tendons to the third toe.",
+      "flow": "Bends the third toe at its base and straightens its other joints"
+    },
+    "second plantar interosseous of foot": {
+      "region": "Foot",
+      "depth": 3,
+      "description": "A small muscle on the sole side between the foot bones, running to the fourth toe.",
+      "flow": "Draws the fourth toe toward the second"
+    },
+    "semimembranosus": {
+      "region": "Thigh",
+      "depth": 2,
+      "description": "The broad inner hamstring muscle under semitendinosus, named for its flat, membrane-like upper tendon.",
+      "flow": "Bends the knee and extends the hip, and turns the leg inward when the knee is bent"
+    },
+    "semispinalis capitis": {
+      "region": "Back",
+      "depth": 2,
+      "description": "A broad, thick muscle on the back of the neck, under splenius, running from the upper spine to the back of the skull.",
+      "flow": "Extends the head and turns it slightly to the opposite side"
+    },
+    "semispinalis cervicis": {
+      "region": "Back",
+      "depth": 3,
+      "description": "A deep back muscle running from the side processes of the chest vertebrae up to the spines of the neck vertebrae.",
+      "flow": "Extends the neck and turns it to the opposite side"
+    },
+    "semispinalis thoracis": {
+      "region": "Back",
+      "depth": 3,
+      "description": "A deep back muscle crossing several vertebrae, from the side processes of lower chest vertebrae to the spines of higher ones.",
+      "flow": "Extends the upper spine and turns it to the opposite side"
+    },
+    "semitendinosus": {
+      "region": "Thigh",
+      "depth": 1,
+      "description": "An inner hamstring muscle named for its long, cord-like lower tendon, which ends on the inner shin.",
+      "flow": "Bends the knee and extends the hip, and turns the leg inward when the knee is bent"
+    },
+    "serratus anterior": {
+      "region": "Chest",
+      "depth": 2,
+      "description": "A muscle with saw-toothed slips on the side of the chest, running from the upper eight or nine ribs around to the inner edge of the shoulder blade.",
+      "flow": "Pulls the shoulder blade forward around the chest, as in punching or pushing, and turns it upward"
+    },
+    "serratus posterior inferior": {
+      "region": "Back",
+      "depth": 2,
+      "description": "A thin muscle in the lower back, running from the spine up and out to the lowest four ribs.",
+      "flow": "Pulls the lowest ribs down and back"
+    },
+    "serratus posterior superior": {
+      "region": "Back",
+      "depth": 2,
+      "description": "A thin muscle under the rhomboids, running from the lower neck and upper chest spine down to the upper ribs.",
+      "flow": "Raises the upper ribs, which may help breathing in"
+    },
+    "set of anterior cervical intertransversarii": {
+      "region": "Neck",
+      "depth": 3,
+      "description": "Tiny muscles bridging the front parts of the side processes of neighbouring neck vertebrae.",
+      "flow": "Bend the neck to their own side and steady the vertebrae"
+    },
+    "set of dorsal interossei of foot": {
+      "region": "Foot",
+      "depth": 3,
+      "description": "Four two-headed muscles filling the spaces between the foot bones.",
+      "flow": "Spread the toes apart from the second toe"
+    },
+    "set of dorsal interossei of hand": {
+      "region": "Hand",
+      "depth": 3,
+      "description": "Four two-headed muscles filling the gaps between the hand bones, felt on the back of the hand.",
+      "flow": "Spread the fingers apart from the middle finger"
+    },
+    "set of interspinales cervicis": {
+      "region": "Neck",
+      "depth": 3,
+      "description": "Short muscles running between the spines of neighbouring neck vertebrae, either side of the midline.",
+      "flow": "Extend the neck and steady its vertebrae"
+    },
+    "set of interspinales lumborum": {
+      "region": "Back",
+      "depth": 3,
+      "description": "Short muscles bridging the spines of neighbouring lower-back vertebrae, either side of the midline.",
+      "flow": "Help extend and steady the lower spine"
+    },
+    "set of levatores costarum breves": {
+      "region": "Back",
+      "depth": 3,
+      "description": "Small muscles running from the side process of a vertebra to the rib just below.",
+      "flow": "Raise the ribs and help bend and turn the spine"
+    },
+    "set of levatores costarum longi": {
+      "region": "Back",
+      "depth": 3,
+      "description": "Small muscles that run from the side process of a vertebra, skipping a rib, to the rib two below.",
+      "flow": "Raise the ribs and help bend and turn the spine"
+    },
+    "set of lumbricals of hand": {
+      "region": "Hand",
+      "depth": 2,
+      "description": "Four small, worm-shaped muscles in the palm that start on the tendons of flexor digitorum profundus.",
+      "flow": "Bend the fingers at the knuckles while straightening their middle and end joints"
+    },
+    "set of palmar interossei of hand": {
+      "region": "Hand",
+      "depth": 3,
+      "description": "Small muscles between the hand bones on the palm side.",
+      "flow": "Draw the fingers together toward the middle finger"
+    },
+    "set of posterior cervical intertransversarii": {
+      "region": "Neck",
+      "depth": 3,
+      "description": "Tiny muscles bridging the back parts of the side processes of neighbouring neck vertebrae.",
+      "flow": "Bend the neck to their own side and steady the vertebrae"
+    },
+    "short head of biceps brachii": {
+      "region": "Upper arm",
+      "depth": 1,
+      "description": "The inner head of the biceps, starting from the coracoid process of the shoulder blade; it joins the long head to insert on the radius.",
+      "flow": "Bends the elbow, turns the palm up and helps lift the arm forward"
+    },
+    "short head of biceps femoris": {
+      "region": "Thigh",
+      "depth": 2,
+      "description": "The outer hamstring's short head, starting on the back of the thigh bone; it crosses only the knee.",
+      "flow": "Bends the knee and turns the leg outward when the knee is bent"
+    },
+    "soleus": {
+      "region": "Leg",
+      "depth": 2,
+      "description": "A broad, flat muscle under the gastrocnemius that joins it in the Achilles tendon.",
+      "flow": "Points the foot down and keeps the body from tipping forward when standing"
+    },
+    "spinal part of deltoid": {
+      "region": "Shoulder",
+      "depth": 1,
+      "description": "The back part of the deltoid, running from the spine of the shoulder blade to the upper arm bone.",
+      "flow": "Draws the arm backward and turns it outward"
+    },
+    "spinalis cervicis": {
+      "region": "Back",
+      "depth": 2,
+      "description": "The neck part of spinalis, the innermost column of the erector spinae, running between the spines of the neck vertebrae.",
+      "flow": "Extends the neck"
+    },
+    "spinalis thoracis": {
+      "region": "Back",
+      "depth": 2,
+      "description": "The innermost column of the erector spinae, running from spine to spine along the chest vertebrae.",
+      "flow": "Straightens the spine"
+    },
+    "splenius capitis": {
+      "region": "Neck",
+      "depth": 2,
+      "description": "A broad, flat muscle on the back of the neck, running from the spine up and out to the base of the skull behind the ear.",
+      "flow": "Extends the head and neck and turns the head to its own side"
+    },
+    "splenius cervicis": {
+      "region": "Neck",
+      "depth": 2,
+      "description": "A flat muscle running from the upper chest vertebrae up to the upper neck vertebrae, below splenius capitis.",
+      "flow": "Extends the neck and turns it to its own side"
+    },
+    "sternocleidomastoid": {
+      "region": "Neck",
+      "depth": 1,
+      "description": "The prominent strap running diagonally up the side of the neck, from the breastbone and collarbone to the bony bump behind the ear.",
+      "flow": "One side turns the head to the opposite side and tilts it toward its own shoulder; both together bend the neck forward"
+    },
+    "sternocostal part of pectoralis major": {
+      "region": "Chest",
+      "depth": 1,
+      "description": "The large middle part of the chest muscle, running from the breastbone and upper rib cartilages to the upper arm bone.",
+      "flow": "Pulls the arm across the body and turns it inward, as in a push-up or bench press"
+    },
+    "sternohyoid": {
+      "region": "Neck",
+      "depth": 2,
+      "description": "A thin strap muscle running up the front of the neck from the breastbone to the hyoid bone.",
+      "flow": "Pulls the hyoid bone down after swallowing"
+    },
+    "sternothyroid": {
+      "region": "Neck",
+      "depth": 3,
+      "description": "A strap muscle beneath the sternohyoid, running from the breastbone up to the thyroid cartilage of the voice box.",
+      "flow": "Pulls the voice box down after swallowing"
+    },
+    "straight part of cricothyroid": {
+      "region": "Larynx",
+      "depth": 3,
+      "description": "The more vertical part of the cricothyroid, the only voice-box muscle on the outside of the larynx.",
+      "flow": "Tilts the thyroid cartilage forward to stretch the vocal cords, raising the voice's pitch"
+    },
+    "stylohyoid": {
+      "region": "Neck",
+      "depth": 2,
+      "description": "A slender muscle running from the styloid process under the ear down to the hyoid bone, split by the digastric's tendon.",
+      "flow": "Pulls the hyoid bone up and back when swallowing"
+    },
+    "stylopharyngeus": {
+      "region": "Throat",
+      "depth": 3,
+      "description": "A long, thin muscle running from a spike of bone under the ear (the styloid process) down into the throat wall.",
+      "flow": "Lifts and widens the throat when swallowing and speaking"
+    },
+    "subclavius": {
+      "region": "Chest",
+      "depth": 2,
+      "description": "A small, rounded muscle under the collarbone, running from the first rib to the collarbone.",
+      "flow": "Pulls the collarbone down and steadies it during shoulder movements"
+    },
+    "subscapularis": {
+      "region": "Shoulder",
+      "depth": 3,
+      "description": "The largest rotator cuff muscle, filling the front surface of the shoulder blade, against the ribs.",
+      "flow": "Turns the arm inward and holds the head of the arm bone in its socket"
+    },
+    "superficial head of flexor pollicis brevis": {
+      "region": "Hand",
+      "depth": 1,
+      "description": "The main head of flexor pollicis brevis, in the ball of the thumb beside abductor pollicis brevis.",
+      "flow": "Bends the thumb at its knuckle"
+    },
+    "superficial part of masseter": {
+      "region": "Jaw",
+      "depth": 1,
+      "description": "The larger, outer part of the masseter, the thick muscle over the angle of the jaw that you feel bulge when you clench.",
+      "flow": "Closes the jaw powerfully and pulls it forward slightly"
+    },
+    "superior head of lateral pterygoid": {
+      "region": "Jaw",
+      "depth": 3,
+      "description": "The upper head of the lateral pterygoid, running nearly horizontally from the skull base to the jaw joint's capsule and disc.",
+      "flow": "Steadies the jaw joint's disc as the jaw closes"
+    },
+    "superior oblique": {
+      "region": "Eye",
+      "depth": 3,
+      "description": "A long, thin eye muscle whose tendon loops through a small fibrous pulley (the trochlea) before reaching the top of the eye.",
+      "flow": "Turns the eye downward and outward and rotates its top inward"
+    },
+    "superior oblique part of longus colli": {
+      "region": "Neck",
+      "depth": 3,
+      "description": "The upper slanting part of longus colli, the deep muscle on the front of the neck vertebrae, rising to the first vertebra (atlas).",
+      "flow": "Bends the neck forward and helps turn it"
+    },
+    "superior pharyngeal constrictor": {
+      "region": "Throat",
+      "depth": 3,
+      "description": "The uppermost of three curved muscles that wrap the back and sides of the throat, behind the nose and mouth.",
+      "flow": "Squeezes the upper throat in sequence to push food down when swallowing"
+    },
+    "superior rectus": {
+      "region": "Eye",
+      "depth": 3,
+      "description": "One of the six muscles that move the eyeball, running from the back of the eye socket to the top of the eye.",
+      "flow": "Turns the eye upward (and slightly inward)"
+    },
+    "supinator": {
+      "region": "Forearm",
+      "depth": 3,
+      "description": "A deep muscle that wraps around the top of the radius from the outer elbow and the ulna.",
+      "flow": "Turns the palm up, especially with the elbow straight"
+    },
+    "supraspinatus": {
+      "region": "Shoulder",
+      "depth": 2,
+      "description": "A rotator cuff muscle filling the hollow above the spine of the shoulder blade; its tendon runs over the top of the shoulder joint.",
+      "flow": "Starts lifting the arm out to the side and holds the head of the arm bone in its socket"
+    },
+    "temporalis": {
+      "region": "Jaw",
+      "depth": 2,
+      "description": "A fan-shaped muscle over the side of the skull that narrows to a tendon on the jaw's coronoid process, under the cheekbone.",
+      "flow": "Closes the jaw; its back fibres pull the jaw backward"
+    },
+    "temporoparietalis": {
+      "region": "Head",
+      "depth": 1,
+      "description": "A thin, variable sheet of muscle above the ear, between frontalis and the ear muscles.",
+      "flow": "Tightens the scalp and helps raise the ear slightly"
+    },
+    "tensor fasciae latae": {
+      "region": "Hip",
+      "depth": 1,
+      "description": "A short muscle on the front outer hip that pulls on the iliotibial tract, the long band down the outside of the thigh.",
+      "flow": "Helps flex and spread the hip and steadies the knee and pelvis when standing on one leg"
+    },
+    "tensor veli palatini": {
+      "region": "Throat",
+      "depth": 3,
+      "description": "A thin muscle whose tendon hooks around a small bony pulley on the skull to fan out into the soft palate.",
+      "flow": "Tightens the soft palate and opens the auditory (ear) tube, as when yawning or swallowing"
+    },
+    "teres major": {
+      "region": "Shoulder",
+      "depth": 2,
+      "description": "A thick, rounded muscle from the lower corner of the shoulder blade to the front of the upper arm bone, working like latissimus dorsi's little helper.",
+      "flow": "Pulls the arm down and back and turns it inward"
+    },
+    "teres minor": {
+      "region": "Shoulder",
+      "depth": 2,
+      "description": "A small rotator cuff muscle running along the outer edge of the shoulder blade, just below infraspinatus.",
+      "flow": "Turns the arm outward and steadies the shoulder joint"
+    },
+    "third lumbrical of foot": {
+      "region": "Foot",
+      "depth": 2,
+      "description": "A small, worm-shaped muscle in the sole that runs from the long flexor tendons to the fourth toe.",
+      "flow": "Bends the fourth toe at its base and straightens its other joints"
+    },
+    "third plantar interosseous of foot": {
+      "region": "Foot",
+      "depth": 3,
+      "description": "A small muscle on the sole side between the foot bones, running to the little toe.",
+      "flow": "Draws the little toe toward the second"
+    },
+    "thoracic rotator": {
+      "region": "Back",
+      "depth": 3,
+      "description": "Small, best-developed rotator muscles of the chest spine, each running from a side process to the vertebra above.",
+      "flow": "Steady the chest vertebrae and help turn the spine"
+    },
+    "thyro-arytenoid": {
+      "region": "Larynx",
+      "depth": 3,
+      "description": "A broad muscle running alongside each vocal cord, from the thyroid cartilage back to the arytenoid cartilage.",
+      "flow": "Relaxes and shortens the vocal cords, lowering pitch, and helps close the larynx"
+    },
+    "thyrohyoid": {
+      "region": "Neck",
+      "depth": 3,
+      "description": "A short strap muscle continuing upward from the sternothyroid, from the thyroid cartilage to the hyoid bone.",
+      "flow": "Pulls the hyoid bone down, or raises the voice box when the hyoid is held still"
+    },
+    "tibialis anterior": {
+      "region": "Leg",
+      "depth": 1,
+      "description": "The muscle running down the front of the shin, just outside the shinbone, to the inner side of the foot.",
+      "flow": "Lifts the foot up at the ankle (so the toes clear the ground) and turns its sole inward"
+    },
+    "tibialis posterior": {
+      "region": "Leg",
+      "depth": 3,
+      "description": "The deepest muscle on the back of the leg; its tendon runs behind the inner ankle to the bones of the arch.",
+      "flow": "Points the foot down, turns its sole inward and holds up the arch"
+    },
+    "transverse arytenoid": {
+      "region": "Larynx",
+      "depth": 3,
+      "description": "An unpaired muscle that runs straight across the back of the two arytenoid cartilages.",
+      "flow": "Draws the arytenoid cartilages together, closing the back of the gap between the vocal cords"
+    },
+    "transverse head of adductor hallucis": {
+      "region": "Foot",
+      "depth": 3,
+      "description": "The small head of adductor hallucis that runs across the sole under the bases of the toes.",
+      "flow": "Draws the big toe toward the others and supports the front of the arch"
+    },
+    "transverse head of adductor pollicis": {
+      "region": "Hand",
+      "depth": 3,
+      "description": "The lower, fan-shaped head of adductor pollicis, starting from the third hand bone, deep in the palm.",
+      "flow": "Pulls the thumb toward the palm, as in a key grip"
+    },
+    "transverse part of trapezius": {
+      "region": "Back",
+      "depth": 1,
+      "description": "The middle, horizontal fibres of the trapezius, running from the upper chest vertebrae across to the top of the shoulder blade.",
+      "flow": "Pulls the shoulder blades back together"
+    },
+    "transversus abdominis": {
+      "region": "Abdomen",
+      "depth": 3,
+      "description": "The deepest of the three flat abdominal muscles, its fibres running horizontally around the belly like a corset.",
+      "flow": "Squeezes the belly and stiffens the trunk before you lift or move"
+    },
+    "transversus thoracis": {
+      "region": "Chest",
+      "depth": 3,
+      "description": "A thin muscle on the inside of the front chest wall, fanning out from the lower breastbone to the rib cartilages.",
+      "flow": "Pulls the rib cartilages down to help breathe out"
+    },
+    "ulnar head of flexor carpi ulnaris": {
+      "region": "Forearm",
+      "depth": 1,
+      "description": "The head of flexor carpi ulnaris that starts along the back edge of the ulna; the ulnar nerve passes between its two heads.",
+      "flow": "Bends the wrist and tips the hand toward the little finger"
+    },
+    "ulnar head of pronator teres": {
+      "region": "Forearm",
+      "depth": 3,
+      "description": "The small, deep head of pronator teres, starting from the ulna and joining the humeral head.",
+      "flow": "Turns the palm down"
+    },
+    "uvular muscle": {
+      "region": "Throat",
+      "depth": 3,
+      "description": "A small paired muscle running within the uvula, the fleshy tab hanging from the back of the soft palate.",
+      "flow": "Shortens and lifts the uvula to help close off the nasal cavity when swallowing"
+    },
+    "vastus intermedius": {
+      "region": "Thigh",
+      "depth": 3,
+      "description": "The quadriceps muscle lying deep under rectus femoris, directly on the front of the thigh bone.",
+      "flow": "Straightens the knee"
+    },
+    "vastus lateralis": {
+      "region": "Thigh",
+      "depth": 1,
+      "description": "The largest quadriceps muscle, forming the outside of the front of the thigh.",
+      "flow": "Straightens the knee"
+    },
+    "vastus medialis": {
+      "region": "Thigh",
+      "depth": 1,
+      "description": "The quadriceps muscle on the inner front thigh, forming the teardrop bulge above the knee.",
+      "flow": "Straightens the knee and keeps the kneecap tracking straight"
+    },
+    "vertical intermediate part of longus colli": {
+      "region": "Neck",
+      "depth": 3,
+      "description": "The central, vertical part of longus colli, lying directly on the front of the neck vertebrae.",
+      "flow": "Bends the neck forward and steadies it"
+    },
+    "vocalis": {
+      "region": "Larynx",
+      "depth": 3,
+      "description": "The innermost part of the thyro-arytenoid, lying within the vocal cord itself.",
+      "flow": "Fine-tunes the tension of the vocal cords for pitch and voice quality"
+    },
+    "zygomaticus major": {
+      "region": "Face",
+      "depth": 1,
+      "description": "The main smiling muscle, a strap running from the cheekbone down to the corner of the mouth.",
+      "flow": "Pulls the corner of the mouth up and out into a smile"
+    },
+    "zygomaticus minor": {
+      "region": "Face",
+      "depth": 1,
+      "description": "A thin strap from the cheekbone to the upper lip, just inside zygomaticus major.",
+      "flow": "Raises the upper lip, showing the upper teeth"
+    }
+  }
+}

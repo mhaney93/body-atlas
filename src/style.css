@@ -82,6 +82,10 @@ body {
   top: 92px;
   left: var(--gutter);
   width: 260px;
+  /* Several layers' extra controls can outgrow the screen: scroll, never cover the credits. */
+  max-height: calc(100dvh - 92px - var(--credit-height, 40px) - 16px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .filters ul {
@@ -295,6 +299,96 @@ body {
   font-size: 0.72rem;
 }
 
+.layer-controls {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+  font-size: 0.85rem;
+}
+
+.layer-controls .control {
+  display: grid;
+  gap: 5px;
+}
+
+.control-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--muted);
+}
+
+.control-label output {
+  color: var(--text);
+  text-align: right;
+}
+
+.layer-controls input[type='range'] {
+  width: 100%;
+  margin: 0;
+  accent-color: var(--layer-color);
+}
+
+.layer-controls select {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  background: #121a24;
+  color: var(--text);
+  font: inherit;
+}
+
+.control-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.control-note .link-button {
+  margin: 0;
+  font-size: 0.8rem;
+}
+
+.movement {
+  display: grid;
+  gap: 4px;
+}
+
+.movement-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+  margin: 2px 0 0;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.movement-legend .key {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--layer-color);
+}
+
+.movement-legend .key.prime {
+  background: color-mix(in srgb, #ffffff 45%, var(--layer-color));
+  box-shadow: 0 0 8px var(--layer-color);
+}
+
+.movement-legend .key.synergist {
+  margin-left: 6px;
+  opacity: 0.6;
+}
+
+.info .role {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
 .summary {
   margin: 12px 0 0;
   font-size: 0.85rem;
@@ -467,6 +561,7 @@ body {
     right: var(--gutter);
     bottom: calc(max(10px, env(safe-area-inset-bottom)) + var(--credit-height, 40px) + 8px);
     width: auto;
+    max-height: 42dvh; /* keep the body in view; the panel scrolls */
     padding: 10px 12px;
     /* Keep the body in view however many systems and extras the panel lists. */
     max-height: 42svh;

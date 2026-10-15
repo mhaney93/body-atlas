@@ -111,22 +111,27 @@ function withCutaway(material) {
   return material;
 }
 
+/** Emissive intensity of an emphasised part's "prime" material, which pulses (see setEmphasis). */
+const PRIME_GLOW = 0.85;
+
 /**
- * Base/hover/selected materials for a layer colour. `opacity` < 1 makes them
- * see-through; `onTop` draws a part shared from another layer (see `shared` in
- * the layer data) over that layer's own copy of the same mesh.
+ * Materials for one highlight colour: `base`, `hover` and `selected`, plus
+ * the emphasis roles (see setEmphasis): `prime` (brightest), `synergist`
+ * (lit, dimmer) and `dim` (a faint ghost for parts outside the emphasis).
+ * `opacity` < 1 makes them see-through; `onTop` draws a part shared from
+ * another layer (see `shared` in the layer data) over that layer's own copy
+ * of the same mesh.
  */
 function layerMaterials(hex, opacity = 1, cutaway = false, onTop = false) {
   const color = new THREE.Color(hex);
-  const translucent = opacity < 1;
-  const make = (emissive, intensity) => {
+  const make = (emissive, intensity, alpha = opacity, tint = color) => {
     const material = new THREE.MeshStandardMaterial({
-      color,
+      color: tint,
       emissive,
       emissiveIntensity: intensity,
       roughness: 0.55,
       metalness: 0.0,
-      ...(translucent && { transparent: true, opacity, depthWrite: false }),
+      ...(alpha < 1 && { transparent: true, opacity: alpha, depthWrite: false }),
       ...(onTop && { polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -4 }),
     });
     return cutaway ? withCutaway(material) : material;
@@ -135,6 +140,9 @@ function layerMaterials(hex, opacity = 1, cutaway = false, onTop = false) {
     base: make(color, 0.45),
     hover: make(new THREE.Color('#ffffff').lerp(color, 0.4), 0.7),
     selected: make(new THREE.Color('#ffffff'), 0.9),
+    prime: make(new THREE.Color('#ffffff').lerp(color, 0.55), PRIME_GLOW),
+    synergist: make(color, 0.3, opacity, color.clone().multiplyScalar(0.7)),
+    dim: make(color, 0.1, Math.min(opacity, 0.08)),
   };
 }
 
@@ -166,6 +174,14 @@ export class Viewer {
     this.shellMeshes = [];
     /** @type {Map<string, {material: THREE.ShaderMaterial, overlays: THREE.Mesh[]}>} haze effects by id */
     this.hazes = new Map();
+    /**
+     * Per-layer part filters (see setPeeled and setEmphasis), applied when the
+     * layer loads and whenever they change.
+     * @type {Map<string, {hide?: (mesh: THREE.Mesh) => boolean, role?: (mesh: THREE.Mesh) => string | null}>}
+     */
+    this.display = new Map();
+    /** @type {Set<THREE.MeshStandardMaterial>} every `prime` material, pulsed while an emphasis is shown */
+    this.primeMaterials = new Set();
     this.time = { value: 0 };
     /** Meshes drawn in their hover style while nothing else styles them (e.g. a tour's current stage). */
     this.emphasized = new Set();
@@ -211,6 +227,7 @@ export class Viewer {
     new ResizeObserver(() => this.#resize()).observe(container);
     this.#resize();
     const timer = new THREE.Timer();
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     renderer.setAnimationLoop(() => {
       timer.update();
       this.time.value = timer.getElapsed();
@@ -220,6 +237,10 @@ export class Viewer {
       const distance = camera.position.distanceTo(controls.target);
       cutUniform.value = CUT_RADIUS * THREE.MathUtils.smoothstep(CUT_START - distance, 0, CUT_START - CUT_FULL);
       for (const fx of this.effects.values()) if (fx.object.visible) fx.update(this.time.value, camera, renderer);
+      if (!reducedMotion.matches) {
+        const glow = PRIME_GLOW + 0.25 * Math.sin(this.time.value * 3);
+        for (const m of this.primeMaterials) m.emissiveIntensity = glow;
+      }
       renderer.render(scene, camera);
     });
   }
@@ -256,7 +277,10 @@ export class Viewer {
     const byColor = new Map();
     const materialsFor = (color, opacity, cutaway, onTop) => {
       const key = `${color}/${opacity ?? 1}/${cutaway}/${onTop}`;
-      if (!byColor.has(key)) byColor.set(key, layerMaterials(color, opacity, cutaway, onTop));
+      if (!byColor.has(key)) {
+        byColor.set(key, layerMaterials(color, opacity, cutaway, onTop));
+        this.primeMaterials.add(byColor.get(key).prime);
+      }
       return byColor.get(key);
     };
     entry = { layer, group: null, promise: null };
@@ -284,12 +308,12 @@ export class Viewer {
           o.userData.materials = materialsFor(color, g?.opacity, !o.userData.uncut, o.userData.sourceId !== undefined);
           o.material = o.userData.materials.base;
           o.userData.layerId = layer.id;
-          o.visible = this.groupShown.get(`${layer.id}/${o.userData.group}`) ?? g?.visible ?? true;
         }
       });
       this.scene.add(group);
       entry.group = group;
       if (layer.hazeSurface) this.#applyHazes();
+      this.#applyDisplay(layer.id);
       return group;
     });
     entry.promise.catch(() => this.layers.delete(layer.id));
@@ -316,12 +340,7 @@ export class Viewer {
   /** Shows or hides one of a layer's sub-groups (see `groups` in the layer data). */
   setGroupVisible(layer, groupId, visible) {
     this.groupShown.set(`${layer.id}/${groupId}`, visible);
-    this.layers.get(layer.id)?.group?.traverse((o) => {
-      if (!o.isMesh || o.userData.group !== groupId) return;
-      o.visible = visible;
-      if (!visible && o === this.hovered) this.#setHovered(null);
-      if (!visible && o === this.selected) this.select(null);
-    });
+    this.#applyDisplay(layer.id);
   }
 
   async setLayerVisible(layer, visible) {
@@ -339,14 +358,20 @@ export class Viewer {
   /**
    * Shows or hides a decorative effect, e.g. { id, type: 'skin-haze', color, ... }
    * (see effects.js). It is built the first time it is shown: from the shell,
-   * or for an effect with `parts`, from those meshes of `layer` (once loaded).
+   * for an effect with `parts`, from those meshes of `layer`, or if the effect
+   * sets `surface: "layer"`, from `layer`'s whole model (call again once the
+   * layer has loaded).
    */
   setEffectVisible(effect, visible, layer) {
     let fx = this.effects.get(effect.id);
     if (!fx) {
-      const source = effect.parts ? this.#partMeshes(layer, effect.parts) : this.shell;
+      const source = effect.parts
+        ? this.#partMeshes(layer, effect.parts)
+        : effect.surface === 'layer'
+          ? this.layers.get(layer?.id)?.group
+          : this.shell;
       if (!visible || !source) return;
-      fx = EFFECTS[effect.type](source, effect);
+      fx = EFFECTS[effect.type](source, effect, { cut: cutUniform });
       this.scene.add(fx.object);
       this.effects.set(effect.id, fx);
     }
@@ -373,6 +398,43 @@ export class Viewer {
     const prev = this.emphasized;
     this.emphasized = new Set(meshes);
     for (const mesh of new Set([...prev, ...meshes])) this.#restyle(mesh);
+  }
+
+  /**
+   * Peels parts of a layer away: hides every mesh for which `hide(mesh)` is
+   * true (null shows them all). Emphasised parts (see setEmphasis) stay.
+   */
+  setPeeled(layerId, hide) {
+    this.display.set(layerId, { ...this.display.get(layerId), hide });
+    this.#applyDisplay(layerId);
+  }
+
+  /**
+   * Picks out some parts of a layer: `role(mesh)` returns 'prime' (lit
+   * brightest, gently pulsing), 'synergist' (lit, dimmer) or null (faded to
+   * a ghost). Null instead of a function clears the emphasis.
+   */
+  setEmphasis(layerId, role) {
+    this.display.set(layerId, { ...this.display.get(layerId), role });
+    this.#applyDisplay(layerId);
+  }
+
+  /** Applies a layer's sub-group visibility (setGroupVisible), peeling and emphasis to its meshes. */
+  #applyDisplay(layerId) {
+    const { layer, group } = this.layers.get(layerId) ?? {};
+    if (!group) return;
+    const { hide, role } = this.display.get(layerId) ?? {};
+    group.traverse((o) => {
+      if (!o.isMesh || o.userData.haze) return;
+      o.userData.role = role ? (role(o) ?? 'dim') : null;
+      const groupOn = this.groupShown.get(`${layerId}/${o.userData.group}`) ?? layer.groups?.[o.userData.group]?.visible ?? true;
+      o.visible = groupOn && (!hide?.(o) || o.userData.role === 'prime' || o.userData.role === 'synergist');
+      if (!o.visible) {
+        if (o === this.hovered) this.#setHovered(null);
+        if (o === this.selected) this.select(null);
+      }
+      this.#restyle(o);
+    });
   }
 
   /** Selects a mesh (or clears the selection with null). */
@@ -428,13 +490,13 @@ export class Viewer {
   }
 
   #restyle(mesh) {
-    const { materials } = mesh.userData;
+    const { materials, role } = mesh.userData;
     mesh.material =
       mesh === this.selected
         ? materials.selected
         : mesh === this.hovered || this.emphasized.has(mesh)
           ? materials.hover
-          : materials.base;
+          : (materials[role] ?? materials.base);
   }
 
   #setHovered(mesh) {
@@ -450,7 +512,10 @@ export class Viewer {
     const rect = this.renderer.domElement.getBoundingClientRect();
     this.pointer.set(((clientX - rect.left) / rect.width) * 2 - 1, -((clientY - rect.top) / rect.height) * 2 + 1);
     this.raycaster.setFromCamera(this.pointer, this.camera);
-    const hits = this.#hits();
+    let hits = this.#hits();
+    // While a layer has an emphasis (setEmphasis), its faded parts let clicks
+    // through to any part behind them that is lit.
+    if (hits.some((h) => h.object.userData.role !== 'dim')) hits = hits.filter((h) => h.object.userData.role !== 'dim');
     // A part shared from another layer wins over that layer's own copy of it.
     const twin = hits[0] && hits.find((h) => h.distance - hits[0].distance < 1e-5 && h.object.userData.sourceId);
     if (twin) hits.unshift(twin);
@@ -469,6 +534,7 @@ export class Viewer {
     for (const { group } of this.layers.values()) if (group?.visible) targets.push(group);
     return this.raycaster
       .intersectObjects(targets, true)
+      // three.js also hits hidden meshes, such as peeled-away parts.
       .filter((h) => h.object.isMesh && h.object.visible && (h.distance >= cutUniform.value || h.object.userData.uncut));
   }
 
