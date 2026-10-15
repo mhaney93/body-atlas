@@ -1,6 +1,7 @@
 import { LAYERS, SHELL_ASSET, partInfo } from './layers.js';
 import { tourControls } from './tour.js';
 import { Viewer } from './viewer.js';
+import { buildLayerControls } from './layer-controls.js';
 
 const $ = (id) => document.getElementById(id);
 // Asset paths in layer data are relative to the site root.
@@ -26,7 +27,7 @@ const viewer = new Viewer($('stage'), {
     const { layer, mesh } = selection;
     // three.js sanitises node names (spaces → underscores); the original lives in extras.
     const source = layers.find((l) => l.id === mesh.userData.sourceId);
-    const part = partInfo(layer, mesh.userData.name ?? mesh.name, mesh.userData.group, source);
+    const part = partInfo(layer, mesh.userData.name ?? mesh.name, mesh.userData.group, source, mesh.userData.of);
     $('info-kicker').textContent = part.region ? `${layer.name} · ${part.region}` : layer.name;
     $('info-kicker').style.color = part.color ?? layer.color;
     $('info-name').textContent = part.name;
@@ -35,6 +36,7 @@ const viewer = new Viewer($('stage'), {
     $('info-flow').querySelector('.value').textContent = part.flow ?? '';
     $('info-flow').style.setProperty('--group-color', part.group?.color ?? layer.color);
     $('info-description').textContent = part.description ?? '';
+    showRole(layer, mesh);
     info.hidden = false;
   },
 });
@@ -53,6 +55,16 @@ $('reset-view').addEventListener('click', () => viewer.resetView());
 const active = new Set();
 /** Effect ids the user has switched on; an effect shows only while its layer is on too. */
 const effectsOn = new Set();
+/** Per-layer extra controls (layer-controls.js) by layer id. */
+const controls = new Map();
+const toggles = new Map();
+
+/** The selected part's role in its layer's chosen movement, if any. */
+function showRole(layer, mesh) {
+  const role = controls.get(layer.id)?.describe(mesh);
+  $('info-role').hidden = !role;
+  $('info-role').textContent = role ?? '';
+}
 
 function applyEffects(layer) {
   for (const effect of layer.effects ?? []) {
@@ -104,10 +116,24 @@ function layerExtras(layer) {
     });
     extras.append(label);
   }
+  const extra = buildLayerControls(layer, viewer, {
+    layerName: (id) => layers.find((l) => l.id === id)?.name,
+    isLayerOn: (id) => active.has(id),
+    showLayer: (id) => !active.has(id) && toggles.get(id)?.click(),
+    movementChanged: () => {
+      const mesh = viewer.selected;
+      if (mesh?.userData.layerId === layer.id) showRole(layer, mesh);
+    },
+  });
+  if (extra) {
+    controls.set(layer.id, extra);
+    extras.append(extra.element);
+  }
   return extras;
 }
 
 function renderSummary() {
+  for (const c of controls.values()) c.refresh();
   const summary = $('layer-summary');
   const shown = layers.filter((l) => active.has(l.id));
   summary.hidden = shown.length === 0;
@@ -126,6 +152,7 @@ for (const layer of layers) {
   button.style.setProperty('--layer-color', layer.color);
   button.innerHTML = '<span class="swatch" aria-hidden="true"></span><span class="label"></span><span class="state"></span>';
   button.querySelector('.label').textContent = layer.name;
+  toggles.set(layer.id, button);
   const extras = layerExtras(layer);
   const tour = layer.tour && tourControls(viewer, layer);
   if (tour) extras.append(tour.element);
@@ -144,7 +171,7 @@ for (const layer of layers) {
     button.querySelector('.state').textContent = '';
     try {
       await viewer.setLayerVisible(layer, active.has(layer.id));
-      applyEffects(layer); // effects built from the layer's own parts need its model
+      applyEffects(layer); // effects built from the layer's own parts or model need it loaded
     } catch (err) {
       console.error(err);
       active.delete(layer.id);

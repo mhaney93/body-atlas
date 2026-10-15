@@ -259,9 +259,138 @@ export function partHaze(meshes, { color, style = 'villi', count = 5000 }) {
   };
 }
 
+/** The longest axis of a mesh's vertices in world space (principal component). */
+function principalAxis(mesh) {
+  const pos = mesh.geometry.getAttribute('position');
+  const v = new THREE.Vector3();
+  const mean = new THREE.Vector3();
+  const pts = [];
+  const step = Math.max(1, Math.floor(pos.count / 1500));
+  for (let i = 0; i < pos.count; i += step) {
+    pts.push(v.fromBufferAttribute(pos, i).applyMatrix4(mesh.matrixWorld).clone());
+    mean.add(pts.at(-1));
+  }
+  mean.divideScalar(pts.length);
+  const c = [0, 0, 0, 0, 0, 0]; // xx xy xz yy yz zz
+  for (const p of pts) {
+    const [x, y, z] = [p.x - mean.x, p.y - mean.y, p.z - mean.z];
+    c[0] += x * x;
+    c[1] += x * y;
+    c[2] += x * z;
+    c[3] += y * y;
+    c[4] += y * z;
+    c[5] += z * z;
+  }
+  // Power iteration for the covariance matrix's dominant eigenvector.
+  const dir = new THREE.Vector3(0.3, 1, 0.2).normalize();
+  for (let k = 0; k < 32; k++) {
+    dir
+      .set(
+        c[0] * dir.x + c[1] * dir.y + c[2] * dir.z,
+        c[1] * dir.x + c[3] * dir.y + c[4] * dir.z,
+        c[2] * dir.x + c[4] * dir.y + c[5] * dir.z,
+      )
+      .normalize();
+  }
+  return dir;
+}
+
+/**
+ * Faint glowing streaks drawn over every part of a layer, running along each
+ * part's long axis, with slow pulses travelling along them: a hint of muscle
+ * fibres. The streaks are a pattern, not the fibres' real directions.
+ * @param {THREE.Object3D} model the layer's loaded model
+ * @param {{ color: string, spacing?: number }} options `spacing`: streak spacing in metres
+ * @param {{ cut: { value: number } }} context the viewer's close-zoom cutaway radius
+ */
+export function fiberHaze(model, { color, spacing = 0.004 }, { cut }) {
+  const material = new THREE.ShaderMaterial({
+    uniforms: {
+      uColor: { value: new THREE.Color(color) },
+      uTime: { value: 0 },
+      uAxis: { value: new THREE.Vector3(0, 1, 0) },
+      uFreq: { value: (Math.PI * 2) / spacing },
+      uCut: cut,
+    },
+    vertexShader: /* glsl */ `
+      varying vec3 vPos;
+      varying vec3 vNormal;
+      varying vec3 vView;
+      void main() {
+        vec4 world = modelMatrix * vec4(position, 1.0);
+        vec4 mv = viewMatrix * world;
+        vPos = world.xyz;
+        vNormal = normalize(normalMatrix * normal);
+        vView = -mv.xyz;
+        gl_Position = projectionMatrix * mv;
+      }`,
+    fragmentShader: /* glsl */ `
+      uniform vec3 uColor;
+      uniform float uTime;
+      uniform vec3 uAxis;
+      uniform float uFreq;
+      uniform float uCut;
+      varying vec3 vPos;
+      varying vec3 vNormal;
+      varying vec3 vView;
+      void main() {
+        if (length(vView) < uCut) discard;
+        vec3 b1 = normalize(cross(uAxis, abs(uAxis.y) < 0.9 ? vec3(0.0, 1.0, 0.0) : vec3(1.0, 0.0, 0.0)));
+        vec3 b2 = cross(uAxis, b1);
+        float along = dot(vPos, uAxis);
+        float across = dot(vPos, b1) + 0.7 * dot(vPos, b2);
+        // Streaks across the axis, wavering a little along it; faded out where
+        // they would be finer than a pixel so they never shimmer.
+        float phase = across * uFreq + 0.8 * sin(along * 90.0 + across * 260.0);
+        float streak = smoothstep(0.3, 1.0, sin(phase)) * (1.0 - smoothstep(1.0, 3.0, fwidth(phase)));
+        float pulse = 0.35 + 0.65 * pow(0.5 + 0.5 * sin(along * 40.0 - uTime * 2.0 + across * 150.0), 3.0);
+        float rim = pow(1.0 - abs(dot(normalize(vNormal), normalize(vView))), 2.0);
+        gl_FragColor = vec4(uColor * (streak * pulse * 0.55 + rim * 0.12 + 0.03), 1.0);
+      }`,
+    transparent: true,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending,
+  });
+
+  const group = new THREE.Group();
+  const overlays = [];
+  model.updateWorldMatrix(true, true);
+  model.traverse((mesh) => {
+    if (!mesh.isMesh || mesh.userData.haze) return;
+    const overlay = new THREE.Mesh(mesh.geometry, material.clone());
+    overlay.material.uniforms.uAxis.value = principalAxis(mesh);
+    // Shared uniforms: one clock, one colour, the viewer's cutaway radius.
+    for (const key of ['uColor', 'uTime', 'uFreq']) overlay.material.uniforms[key] = material.uniforms[key];
+    // Small parts the viewer never cuts away (userData.uncut) keep their streaks too.
+    overlay.material.uniforms.uCut = mesh.userData.uncut ? { value: 0 } : cut;
+    overlay.matrixAutoUpdate = false;
+    overlay.matrix.copy(mesh.matrixWorld);
+    overlay.renderOrder = 5; // after the opaque parts it lies on
+    overlay.raycast = () => {}; // never picked: it is not a part
+    group.add(overlay);
+    overlays.push({ overlay, mesh });
+  });
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const shown = (o) => {
+    for (; o; o = o.parent) if (!o.visible) return false;
+    return true;
+  };
+
+  return {
+    object: group,
+    /** Per-frame update: drift the pulses (unless reduced motion) and follow each part's visibility and fading. */
+    update(time) {
+      if (!reducedMotion.matches) material.uniforms.uTime.value = time;
+      for (const { overlay, mesh } of overlays) overlay.visible = shown(mesh) && !mesh.material.transparent;
+    },
+  };
+}
+
 /**
  * Effect builders by `type`. Each takes the surface to decorate (the skin
- * shell, or for an effect with `parts`, those meshes of its layer) and the
- * effect's data, and returns { object, update(time, camera, renderer) }.
+ * shell; for an effect with `parts`, those meshes of its layer; for
+ * `surface: 'layer'`, the layer's whole model), the effect's data and
+ * { cut } (the viewer's cutaway radius), and returns
+ * { object, update(time, camera, renderer) }.
  */
-export const EFFECTS = { 'skin-haze': skinHaze, 'part-haze': partHaze };
+export const EFFECTS = { 'skin-haze': skinHaze, 'part-haze': partHaze, 'fiber-haze': fiberHaze };

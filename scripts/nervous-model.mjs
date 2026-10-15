@@ -201,7 +201,7 @@ function pointsOf(positions) {
 }
 
 /** Fits every landmark bone and returns functions mapping Z-Anatomy mm → BodyParts3D mm. */
-function buildWarp(landmarks, bp3dBones) {
+export function buildWarp(landmarks, bp3dBones) {
   const bones = [];
   for (const [name, pts] of Object.entries(landmarks)) {
     const target = bp3dBones.get(name);

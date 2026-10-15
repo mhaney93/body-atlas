@@ -6,13 +6,14 @@ import nervous from './data/nervous.json';
 import circulatory from './data/circulatory.json';
 import joints from './data/joints.json';
 import digestive from './data/digestive.json';
+import muscular from './data/muscular.json';
 
 export const SHELL_ASSET = 'models/skin.glb';
 
-export const LAYERS = [skeletal, nervous, circulatory, joints, digestive];
+export const LAYERS = [skeletal, nervous, circulatory, joints, digestive, muscular];
 
 /** Canonical form of a mesh name used to match part info, e.g. "Navicular bone of left foot" → "navicular bone of foot". */
-function canonical(meshName) {
+export function canonical(meshName) {
   return meshName
     .toLowerCase()
     .replace(/^(left|right) /, '')
@@ -42,23 +43,28 @@ export function sharedEntry(layer, sourceId, meshName) {
 }
 
 /**
- * Returns { name, region?, description?, color?, group?, flow? } for a mesh in the
- * given layer. Parts whose left and right sides differ (e.g. the heart's
- * chambers) are keyed by their full lowercase name, which wins over the
+ * Returns { name, region?, description?, color?, group?, flow?, depth?, of? } for a
+ * mesh in the given layer. Parts whose left and right sides differ (e.g. the
+ * heart's chambers) are keyed by their full lowercase name, which wins over the
  * side-less one. `group` is the layer's sub-group (see `groups` in the layer
- * data) that the model assigns the mesh to, else the one its part entry names.
- * A part shared from another layer (`source`, see sharedEntry) falls back to
- * that layer's part info.
+ * data) that the model assigns the mesh to, else the one its part entry names;
+ * its `description` stands in for a part without one. A part shared from
+ * another layer (`source`, see sharedEntry) falls back to that layer's part
+ * info. `of` names the part a mesh belongs to (e.g. a muscle's tendon, via the
+ * `of` node extra), whose region, flow and depth it shares unless it has its own.
  */
-export function partInfo(layer, meshName, groupId, source) {
+export function partInfo(layer, meshName, groupId, source, of) {
   const part = partEntry(layer, meshName) ?? (source && partEntry(source, meshName));
+  const owner = of ? partEntry(layer, of) : undefined;
   const group = layer.groups?.[groupId ?? part?.group];
   return {
     name: meshName,
-    region: part?.region,
-    description: part?.description,
+    region: part?.region ?? owner?.region,
+    description: part?.description ?? group?.description,
     color: part?.color,
     group,
-    flow: part?.flow ?? group?.flow,
+    flow: part?.flow ?? owner?.flow ?? group?.flow,
+    depth: part?.depth ?? owner?.depth,
+    of,
   };
 }
