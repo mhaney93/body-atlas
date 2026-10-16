@@ -161,11 +161,14 @@ export class Viewer {
    * @param {{
    *   onSelect?: (sel: {layer: object, mesh: THREE.Mesh} | null) => void,
    *   partColor?: (layer: object, meshName: string) => string | undefined,
-   * }} [options] `partColor` can give a part its own highlight color instead of the layer's.
+   *   onFadedChange?: (count: number) => void,
+   * }} [options] `partColor` can give a part its own highlight color instead of the layer's;
+   *   `onFadedChange` hears how many parts are faded (see focusOn) whenever that set changes.
    */
-  constructor(container, { onSelect, partColor } = {}) {
+  constructor(container, { onSelect, partColor, onFadedChange } = {}) {
     this.container = container;
     this.onSelect = onSelect ?? (() => {});
+    this.onFadedChange = onFadedChange ?? (() => {});
     this.partColor = partColor ?? (() => undefined);
     this.loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
     /** @type {Map<string, {layer: object, group: THREE.Group | null, promise: Promise<THREE.Group>}>} */
@@ -512,6 +515,7 @@ export class Viewer {
     const prev = this.faded;
     this.faded = new Set(meshes);
     for (const mesh of new Set([...prev, ...this.faded])) this.#restyle(mesh);
+    this.onFadedChange(this.faded.size);
   }
 
   /** Visible layer meshes between `from` and points across `mesh`'s bounding box. */

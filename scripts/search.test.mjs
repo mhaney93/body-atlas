@@ -8,7 +8,7 @@ import { createServer } from 'vite';
 import { collectMeshNames, MESH_NAMES_FILE, serialize } from './mesh-names.mjs';
 import { isTypingTarget, movementKey } from '../src/keyboard-nav.js';
 import { editDistance, isSearchShortcut, normalize, search, sidelessName, sideOf } from '../src/search.js';
-import { fadeNote, frameView, searchSelector } from '../src/search-select.js';
+import { fadeNote, fadeNoteKeeper, frameView, searchSelector } from '../src/search-select.js';
 
 let server;
 let layers;
@@ -157,6 +157,25 @@ test('WASD do not move the camera while typing in the search box', () => {
 });
 
 /** A stand-in page that records what the selector asks of it. */
+test('the faded-parts note follows the faded set after a pick, until another note replaces it', () => {
+  const shown = [];
+  const notes = fadeNoteKeeper({ show: (note) => shown.push(note.text), hide: () => shown.push('hidden') });
+  notes.fadedChanged(0); // a selection change before any pick leaves other notes alone
+  notes.focused(3);
+  notes.fadedChanged(1); // a layer holding faded parts is switched off
+  notes.fadedChanged(0); // the last one goes too, or "Show it" is pressed
+  notes.fadedChanged(2);
+  notes.focused(2);
+  notes.replaced(); // e.g. a left-out part's note
+  notes.fadedChanged(0);
+  assert.deepEqual(shown, [
+    '3 parts in front of it are faded so you can see it.',
+    'One part in front of it is faded so you can see it.',
+    'hidden',
+    '2 parts in front of it are faded so you can see it.',
+  ]);
+});
+
 function fakeHost({ meshes = {}, hiddenGroups = [], loadDelay = {} } = {}) {
   const calls = [];
   return {

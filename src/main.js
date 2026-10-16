@@ -5,7 +5,7 @@ import { buildLayerControls } from './layer-controls.js';
 import { notShownPanel } from './not-shown.js';
 import { buildIndex } from './search.js';
 import { searchBox } from './search-ui.js';
-import { fadeNote, searchSelector } from './search-select.js';
+import { fadeNoteKeeper, searchSelector } from './search-select.js';
 import meshNames from './mesh-names.json';
 
 const $ = (id) => document.getElementById(id);
@@ -24,8 +24,9 @@ for (const layer of layers) {
 const info = $('info');
 const viewer = new Viewer($('stage'), {
   partColor: (layer, meshName) => partInfo(layer, meshName).color,
+  onFadedChange: (count) => fadeNotes.fadedChanged(count),
   onSelect(selection) {
-    $('info-note').hidden = true;
+    hideInfoNote();
     if (!selection) {
       info.hidden = true;
       return;
@@ -79,6 +80,7 @@ const layerHost = {
 
 /** A line under the info panel's text with an optional action button. */
 function infoNote(text, action, onAction) {
+  fadeNotes.replaced();
   const note = $('info-note');
   note.querySelector('span').textContent = text;
   const button = note.querySelector('button');
@@ -87,6 +89,17 @@ function infoNote(text, action, onAction) {
   button.onclick = onAction ?? null;
   note.hidden = false;
 }
+
+function hideInfoNote() {
+  fadeNotes.replaced();
+  $('info-note').hidden = true;
+}
+
+/** The note saying how many parts in front of a picked part are faded, kept up to date as that changes. */
+const fadeNotes = fadeNoteKeeper({
+  show: (note) => infoNote(note.text, note.action, () => viewer.clearFaded()),
+  hide: hideInfoNote,
+});
 
 /** Fills the info panel with text that is not about a part on screen (nothing selected). */
 function showInfoText({ kicker, color, name, description }) {
@@ -252,14 +265,7 @@ const pickResult = searchSelector({
   focus(mesh) {
     viewer.focusOn(mesh);
     // Re-picking the selected part does not reselect it, so replace or hide the last note here.
-    const note = fadeNote(viewer.faded.size);
-    if (!note) $('info-note').hidden = true;
-    else {
-      infoNote(note.text, note.action, () => {
-        viewer.clearFaded();
-        $('info-note').hidden = true;
-      });
-    }
+    fadeNotes.focused(viewer.faded.size);
   },
   showNotShown(entry) {
     const layer = layerById(entry.layerId);

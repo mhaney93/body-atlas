@@ -55,6 +55,34 @@ export function fadeNote(faded) {
 }
 
 /**
+ * Keeps the faded-parts note in step with what is faded: shown after a search
+ * pick frames a part, then refreshed or hidden whenever the faded set changes
+ * (a layer switched off, "Show them"), until another note replaces it.
+ * @param {{ show: (note: { text: string, action: string }) => void, hide: () => void }} host
+ */
+export function fadeNoteKeeper(host) {
+  let shown = false;
+  const update = (faded) => {
+    const note = fadeNote(faded);
+    if (note) host.show(note);
+    else host.hide();
+    shown = !!note;
+  };
+  return {
+    /** A pick framed a part with this many parts faded in front of it. */
+    focused: update,
+    /** The faded set changed to this many parts. */
+    fadedChanged(faded) {
+      if (shown) update(faded);
+    },
+    /** Another note, or none, now takes the note's place. */
+    replaced() {
+      shown = false;
+    },
+  };
+}
+
+/**
  * Where to put the camera to frame a part: looking at its centre from outside
  * the body on its own side (from the current direction for parts near the
  * midline), slightly from above, far enough back that the whole part fits.
