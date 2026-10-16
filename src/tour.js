@@ -196,7 +196,7 @@ export function tourControls(viewer, layer) {
     set('.kicker', `${label} · ${index + 1} of ${tour.stages.length}`);
     set('.tour-stage', stage.name);
     set('.tour-part', stage.parts.length > 1 ? part : '');
-    set('.tour-time', `Typical time here: ${stage.time}`);
+    set('.tour-time', stage.caption ?? `Typical time here: ${stage.time}`);
     set('.tour-note', note);
     caption.hidden = false;
     document.body.classList.add('touring');

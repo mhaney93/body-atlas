@@ -28,6 +28,8 @@
 #   distance. That needs the BodyParts3D meshes (npm run fetch-data).
 # - Respiratory system (respiratory.obj.gz): the lung lobes, nasal cavity,
 #   paranasal sinuses and pharynx, moved onto BodyParts3D the same way.
+# - Lymphatic system (lymphatic.obj.gz): the lymph nodes and palatine tonsils,
+#   moved the same way, each tagged with its body region.
 #
 # Meshes are read as stored, except those with modifiers (the spinal cord is
 # a short segment arrayed and bent along a curve), which are evaluated first.
@@ -601,3 +603,59 @@ path = os.path.join(out_dir, 'respiratory.obj.gz')
 with gzip.open(path, 'wt', compresslevel=9, newline='\n') as f:
     f.write('\n'.join(lines) + '\n')
 print(f'Wrote respiratory.obj.gz: {len(RESPIRATORY)} parts, {offset - 1} vertices')
+
+
+# --- Lymphatic system --------------------------------------------------------
+
+# The lymph nodes and palatine tonsils, which BodyParts3D lacks (it has the
+# spleen and thymus, which the build takes from it instead). Every mesh in
+# Z-Anatomy's lymphoid-organs collection, moved onto BodyParts3D the same way
+# as the connective tissue, with its body region (the layer's sub-group) taken
+# from the Z-Anatomy label it hangs under. Z-Anatomy puts a node in
+# parentheses when it is often absent; the name keeps that out.
+LYMPHATIC_COLLECTION = '6: Lymphoid organs'
+LYMPHATIC_SKIP = {'Spleen', 'Left lobe of thymus', 'Right lobe of thymus'}
+LYMPHATIC_GROUPS = [
+    ('Pharyngeal lymphoid ring', 'organs'),
+    ('Lymph nodes of head', 'head-neck'),
+    ('Lymph nodes of neck', 'head-neck'),
+    ('Lymph nodes of upper limb', 'upper-limb'),
+    ('Thoracic lymph nodes', 'thorax'),
+    ('Abdominal lymph nodes', 'abdomen'),
+    ('Pelvic lymph nodes', 'pelvis'),
+    ('Lymph nodes of lower limb', 'lower-limb'),
+]
+
+
+def lymphatic_group(obj):
+    o = obj.parent
+    while o is not None:
+        label = re.sub(r'\.[gjlr]$', '', o.name)
+        for prefix, group in LYMPHATIC_GROUPS:
+            if label == prefix:
+                return group
+        o = o.parent
+    raise ValueError(f'{obj.name}: no lymphatic region above it')
+
+
+lines = ['# Extracted from Z-Anatomy (https://www.z-anatomy.com), CC BY-SA 4.0,',
+         '# and registered onto BodyParts3D (millimetres) by scripts/extract-z-anatomy.py.']
+offset, count = 1, 0
+lymphoid = [o for o in bpy.data.collections[LYMPHATIC_COLLECTION].all_objects
+            if o.type == 'MESH' and not re.search(r'\.[gjit]$', o.name) and o.name not in LYMPHATIC_SKIP]
+for obj in sorted(lymphoid, key=lambda o: o.name):
+    verts, tris = evaluated(obj)
+    if not len(tris):
+        print(f'  {obj.name}: no faces, skipped')
+        continue
+    verts = to_bp3d(verts)
+    name = display_name(re.sub(r'^\((.+)\)', r'\1', obj.name), verts[:, 0].mean())
+    lines += [f'o {obj.name}', f'# English name : {name}', f'# Group : {lymphatic_group(obj)}']
+    lines += [f'v {x:.2f} {y:.2f} {z:.2f}' for x, y, z in verts]
+    lines += [f'f {a + offset} {b + offset} {c + offset}' for a, b, c in tris]
+    offset += len(verts)
+    count += 1
+path = os.path.join(out_dir, 'lymphatic.obj.gz')
+with gzip.open(path, 'wt', compresslevel=9, newline='\n') as f:
+    f.write('\n'.join(lines) + '\n')
+print(f'Wrote lymphatic.obj.gz: {count} parts, {offset - 1} vertices')

@@ -26,7 +26,7 @@ const BONE_TOLERANCE = 1.5;
 // Samples along each nerve edge are at most this far apart (mm).
 const STEP = 1.5;
 
-async function load(file) {
+export async function load(file) {
   const io = new NodeIO()
     .registerExtensions([EXTMeshoptCompression, KHRMeshQuantization])
     .registerDependencies({ 'meshopt.decoder': MeshoptDecoder });
@@ -51,7 +51,7 @@ async function load(file) {
 }
 
 /** Points along every edge of a mesh, at most STEP apart. */
-function samples({ positions, indices }) {
+export function samples({ positions, indices }) {
   const seen = new Set();
   const out = [];
   const at = (i) => [positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]];

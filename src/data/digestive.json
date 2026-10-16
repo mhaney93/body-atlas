@@ -20,7 +20,7 @@
     { "name": "Villi and gut bacteria", "reason": "too-small", "note": "The optional hazes hint at them; they are illustrative, not anatomy." },
     { "name": "Hard palate", "reason": "other-system", "layer": "skeletal", "note": "It is part of the maxilla and palatine bones." },
     { "name": "Muscles of chewing and swallowing", "reason": "other-system", "layer": "muscular" },
-    { "name": "Palatine tonsils", "reason": "other-system", "system": "lymphatic" }
+    { "name": "Palatine tonsils", "reason": "other-system", "layer": "lymphatic" }
   ],
   "parts": {
     "lips": {
