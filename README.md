@@ -52,8 +52,10 @@ npm run preview   # serve dist/ locally
 | `scripts/muscular-model.mjs` | Builds the muscles: BodyParts3D's plus the ones it lacks from Z-Anatomy (fitted onto the BodyParts3D skeleton), with each muscle's tendons split off as parts of their own |
 | `scripts/export-z-anatomy.py`, `data-sources/z-anatomy/muscular/` | Blender script that exports chosen Z-Anatomy objects as OBJ files, and the muscles it exported (listed in `objects.txt`) |
 | `scripts/nervous-model.mjs` | Fits the Z-Anatomy nervous system onto the BodyParts3D skeleton, keeps nerves under the skin and out of solid bone, and turns nerve curves into tubes |
-| `scripts/check-nerves.mjs`, `scripts/nerve-passages.mjs` | Checks the built nerves against the skin and bones; the list of real foramina and canals a nerve may pass through |
-| `scripts/lymphatic-model.mjs`, `scripts/check-lymphatic.mjs` | Sizes the Z-Anatomy lymph nodes and moves any that the fit left in bone or outside the skin; checks the built model for it |
+| `scripts/lymphatic-model.mjs` | Sizes the Z-Anatomy lymph nodes and moves any that the fit left in bone or outside the skin |
+| `scripts/settle.mjs` | Build step that moves every layer's simplified meshes under the skin, out of solid bone and out of the parts they yield to |
+| `scripts/check-placement.mjs`, `scripts/placement.mjs` | Checks every layer's built model against the skin, the bones and the other layers (see "Placement check" below) |
+| `scripts/passages.mjs`, `scripts/overlaps.mjs` | Where a part may lie inside a bone (real openings, attachments, known residuals), and where parts of different systems may overlap (nested anatomy, yields, known clipping) |
 
 ### Adding a body system
 
@@ -129,12 +131,11 @@ The part descriptions in `src/data/` are original text written for this project.
 
 ```sh
 npm run fetch-data     # downloads ~140 MB into .cache/ (gitignored) and checks its SHA-256
-npm run build-models   # writes public/models/skin.glb, skeletal.glb, skeletal-ossicles.glb, nervous.glb, nervous-inner-ear.glb, circulatory.glb, joints.glb, digestive.glb, muscular.glb, respiratory.glb and lymphatic.glb, then src/mesh-names.json
-npm run check-nerves   # fails if a nerve lies outside the skin, or runs through solid bone away from a real foramen or canal
-npm run check-lymphatic  # fails if a lymph node or lymphoid organ lies outside the skin or inside solid bone
+npm run build-models   # writes public/models/skin.glb, skeletal.glb, skeletal-ossicles.glb, circulatory.glb, joints.glb, muscular.glb, digestive.glb, respiratory.glb, lymphatic.glb, nervous.glb and nervous-inner-ear.glb, then src/mesh-names.json, then runs the placement check
+npm run check-placement   # the placement check on its own (a few minutes)
 ```
 
-The generated GLB files come to about 19.8 MB in total (circulatory.glb is about 4.7 MB, muscular.glb about 4.2 MB, joints.glb about 1.4 MB, digestive.glb about 1.3 MB, respiratory.glb about 1.1 MB, lymphatic.glb about 0.9 MB); each system's file downloads only when its filter is first turned on. They are committed, so a normal build does not need the source data.
+The generated GLB files come to about 21.1 MB in total (circulatory.glb is about 4.8 MB, muscular.glb about 4.3 MB, digestive.glb about 1.5 MB, joints.glb about 1.4 MB, respiratory.glb about 1.2 MB, lymphatic.glb about 0.9 MB); each system's file downloads only when its filter is first turned on. They are committed, so a normal build does not need the source data.
 
 `data-sources/z-anatomy/` is committed too. To regenerate it, run `npm run fetch-data` (the registration needs the BodyParts3D meshes), download `Z-Anatomy.zip` from the Z-Anatomy repository, unzip it, and run its `Startup.blend` through Blender 4.x or later (it needs about 9 GB of memory and a few minutes):
 
@@ -149,6 +150,18 @@ The Z-Anatomy muscles in `data-sources/z-anatomy/muscular/` come from a lighter 
 blender -b --factory-startup --disable-autoexec --python scripts/export-z-anatomy.py -- \
   Z-Anatomy/Startup.blend data-sources/z-anatomy "names:muscular=data-sources/z-anatomy/muscular/objects.txt"
 ```
+
+### Placement check
+
+`npm run check-placement` (also run at the end of `npm run build-models`, and in CI on every pull request by `.github/workflows/check.yml`) checks every layer listed in `src/data/`, so a new layer is covered without being registered anywhere:
+
+1. **Nothing outside the skin.** Every triangle edge of every part, bones included, is sampled; none may stick out of the skin shell by more than 0.3 mm.
+2. **Nothing through solid bone.** BodyParts3D's simplified bones are solid, so a part may lie inside one only where it really does, as listed in `PASSAGES` in `scripts/passages.mjs`, each entry named and bounded by how deep it may run: nerves in their foramina and canals, teeth in their sockets, the sinuses in their bones, the nasal cavity around its conchae, and muscles, tendons, ligaments, capsules and fasciae up to 3 mm where they attach. Everything else may graze bone by 1.5 mm at most (lymph nodes, which sit in fat, 1 mm). The Skeletal layer is the reference and is only checked against the skin.
+3. **Systems not running deep into each other.** Each vertex of a part is tested against the closed parts of the other layers. Overlap up to 3 mm is contact; up to 6 mm is listed but allowed; deeper fails, unless one part really lies inside the other (`NESTED` in `scripts/overlaps.mjs`: the bronchial and pulmonary vessels in the lungs, the hepatic vessels in the liver, the tongue's muscles and nerves in the tongue, the cerebral vessels in the brain's sulci, fascia between muscles, and so on, each bounded). Overlaps within one layer (a branch leaving its parent vessel, a tooth in its gum) are that layer's own modelling and are not checked.
+
+The build fixes what it can before the check runs. `scripts/settle.mjs` moves each layer's simplified meshes the way `nervous-model.mjs` fits the nerves: vertices outside the skin or too deep in bone move just far enough, the move fades out over the surrounding surface, and edges that still cut through a bone are split so their middle can move too. Parts also move out of the parts they must yield to (`YIELDS` in `scripts/overlaps.mjs`): the gut out of the abdominal wall muscles, the lungs off the diaphragm and chest wall, and the nerves out of the gut and the great vessels. So that each part can yield to parts already built, the build makes the organs after the muscles and the nerves last. (`scripts/lymphatic-model.mjs` first moves each lymph node out of bone and skin whole, so it keeps its shape.)
+
+What the build could not fix is listed rather than hidden, each entry with its reason and bounded by how deep it runs now so it cannot grow: `RESIDUALS` in `scripts/passages.mjs` (mostly muscles and ligaments left 0.5 to 2.5 mm deeper than the attachment allowance, named by part and bone, such as the deep back muscles and interspinous ligaments between the vertebrae, and a few deeper cases that BodyParts3D's own source meshes overlap, such as the adductor magnus in the femur) and `KNOWN` in `scripts/overlaps.mjs` (mostly BodyParts3D organs that already overlap in the source, such as the stomach and liver, organs pressed into Z-Anatomy's fascia sheets, which are open and cannot be yielded to, and the Lymphatic layer's lymph node clusters pressed into the organs they drain). The check prints all of them. A new layer, or a change that makes any of them deeper, fails.
 
 ### Skeletal coverage
 

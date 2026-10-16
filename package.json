@@ -9,10 +9,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "fetch-data": "node scripts/fetch-bodyparts3d.mjs",
-    "build-models": "node scripts/build-models.mjs && node scripts/mesh-names.mjs",
+    "build-models": "node scripts/build-models.mjs && node scripts/mesh-names.mjs && node scripts/check-placement.mjs",
     "mesh-names": "node scripts/mesh-names.mjs",
-    "check-nerves": "node scripts/check-nerves.mjs",
-    "check-lymphatic": "node scripts/check-lymphatic.mjs",
+    "check-placement": "node scripts/check-placement.mjs",
     "test": "node --test scripts/*.test.mjs"
   },
   "dependencies": {

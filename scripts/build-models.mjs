@@ -14,6 +14,10 @@ import { MeshoptEncoder, MeshoptSimplifier } from 'meshoptimizer';
 import { loadMuscular } from './muscular-model.mjs';
 import { loadNervous } from './nervous-model.mjs';
 import { settleLymphatic } from './lymphatic-model.mjs';
+import { yieldsTo } from './overlaps.mjs';
+import { Body, layerOf, REFERENCE_LAYER, SKIN_ASSET } from './placement.mjs';
+import { settle } from './settle.mjs';
+import { Solid } from './solid.mjs';
 
 const ROOT = join(import.meta.dirname, '..');
 const OBJ_DIR = join(ROOT, '.cache', 'bodyparts3d', 'obj');
@@ -88,13 +92,56 @@ const OSSICLES = ['malleus', 'incus', 'stapes'].flatMap((b) => [`ossicles/${b}-l
 // rather than inside nervous.glb; the Nervous layer lists it under `extraAssets`.
 const INNER_EAR = /^(left |right )?(cochlear nerve|vestibular nerve|vestibulocochlear nerve \(viii\)|chorda tympani)$/i;
 
-// Nerves are kept beneath the skin and out of bone as skin.glb and
+// Every layer is kept beneath the skin and out of bone as skin.glb and
 // skeletal.glb show them: simplifying the skin moves it inward by up to ~3 mm
-// at the fingertips. Each is set once that asset is built (they come first).
+// at the fingertips. Each asset's meshes as built (mm, source frame) are
+// kept here once it is written (skin and skeletal come first).
 const shown = new Map();
+let bodyCache;
+const body = () => (bodyCache ??= new Body(shown.get(SKIN_ASSET)[0], shown.get('skeletal.glb')));
+// The bones themselves are only kept beneath the skin.
+let skinOnlyCache;
+const skinOnly = () => (skinOnlyCache ??= new Body(shown.get(SKIN_ASSET)[0], []));
+
+/**
+ * The parts already built that a part of `layer` must be moved out of
+ * (YIELDS in overlaps.mjs), as solids. A muscle and its tendons (the `of`
+ * extra) are one part, so together they are closed.
+ */
+const builtParts = () =>
+  [...shown]
+    .filter(([file]) => file !== SKIN_ASSET && layerOf(file) !== REFERENCE_LAYER)
+    .flatMap(([file, meshes]) => {
+      const units = new Map();
+      for (const m of meshes) {
+        const name = m.of ?? m.name;
+        if (!units.has(name)) units.set(name, { layer: layerOf(file), name, meshes: [] });
+        units.get(name).meshes.push(m);
+      }
+      return [...units.values()];
+    });
+const solids = new Map();
+function blockersFor(layer, part) {
+  return yieldsTo(layer, part, builtParts()).map((u) => {
+    const key = `${u.layer}\t${u.name}`;
+    if (!solids.has(key)) {
+      const positions = [];
+      const indices = [];
+      for (const m of u.meshes) {
+        const base = positions.length / 3;
+        positions.push(...m.positions);
+        for (const i of m.indices) indices.push(i + base);
+      }
+      solids.set(key, { name: key, solid: new Solid(positions, indices, 4) });
+    }
+    return solids.get(key);
+  });
+}
 let nervousCache;
 const nervousParts = () =>
-  (nervousCache ??= loadNervous(join(Z_ANATOMY_DIR, 'nervous'), skeletalBones(), shown.get('skin.glb')[0], shown.get('skeletal.glb'), parseObj));
+  (nervousCache ??= loadNervous(join(Z_ANATOMY_DIR, 'nervous'), skeletalBones(), shown.get('skin.glb')[0], shown.get('skeletal.glb'), parseObj, (part) =>
+    blockersFor('nervous', part),
+  ));
 
 const META_DIR = join(ROOT, '.cache', 'bodyparts3d');
 
@@ -321,21 +368,10 @@ const ASSETS = [
   { file: 'skin.glb', elements: [SKIN], ratio: 0.35 },
   { file: 'skeletal.glb', elements: range(3152, 3395), extras: ['coccyx.obj'], ratio: 0.5 },
   { file: 'skeletal-ossicles.glb', elements: [], extras: OSSICLES, ratio: 0.5 },
-  // BodyParts3D has no spinal cord or peripheral nerves and only part of the
-  // cortex, so the system comes from Z-Anatomy (see nervous-model.mjs), apart
-  // from the deep brain structures BodyParts3D has (DEEP_BRAIN).
-  {
-    file: 'nervous.glb',
-    elements: [],
-    load: () => [...nervousParts().filter((p) => !INNER_EAR.test(p.name)), ...deepBrain()],
-    ratio: 0.25,
-  },
-  { file: 'nervous-inner-ear.glb', elements: [], load: () => nervousParts().filter((p) => INNER_EAR.test(p.name)), ratio: 0.25 },
   { file: 'circulatory.glb', groups: circulatoryGroups(), mergeByName: true, ratio: 0.2, error: 0.002 },
   // Intervertebral discs and costal cartilages are shared from skeletal.glb
   // at runtime (see "shared" in src/data/joints.json), not duplicated here.
   { file: 'joints.glb', elements: CONNECTIVE_TISSUE, load: () => parseRegisteredObjs('connective-tissue.obj.gz'), ratio: 0.25, error: 0.01 },
-  DIGESTIVE,
   // BodyParts3D muscles plus the ones it lacks from Z-Anatomy, with tendons
   // split off (see muscular-model.mjs). Borders stay put so a muscle and its
   // tendon still meet after simplification.
@@ -354,8 +390,21 @@ const ASSETS = [
     error: 0.004,
     lockBorder: true,
   },
+  // The organs come after the muscles, and the nerves last, so each can be
+  // moved out of the parts it must yield to (YIELDS in overlaps.mjs).
+  DIGESTIVE,
   RESPIRATORY,
   LYMPHATIC,
+  // BodyParts3D has no spinal cord or peripheral nerves and only part of the
+  // cortex, so the system comes from Z-Anatomy (see nervous-model.mjs), apart
+  // from the deep brain structures BodyParts3D has (DEEP_BRAIN).
+  {
+    file: 'nervous.glb',
+    elements: [],
+    load: () => [...nervousParts().filter((p) => !INNER_EAR.test(p.name)), ...deepBrain()],
+    ratio: 0.25,
+  },
+  { file: 'nervous-inner-ear.glb', elements: [], load: () => nervousParts().filter((p) => INNER_EAR.test(p.name)), ratio: 0.25 },
 ];
 
 /** BodyParts3D bone meshes (mm) by English name, for nervous-model.mjs. */
@@ -835,16 +884,53 @@ for (const asset of ASSETS) {
     weld(),
     simplify({ simplifier: MeshoptSimplifier, ratio: asset.ratio, error: asset.error ?? 0.0005, lockBorder: asset.lockBorder ?? false }),
   );
-  if (asset.file === 'skin.glb' || asset.file === 'skeletal.glb') {
-    shown.set(
-      asset.file,
-      doc.getRoot().listMeshes().map((mesh) => {
-        const prim = mesh.listPrimitives()[0];
-        return { name: mesh.getName(), positions: untransform(prim.getAttribute('POSITION').getArray()), indices: prim.getIndices().getArray() };
-      }),
-    );
+  const meshesMm = () =>
+    doc
+      .getRoot()
+      .listNodes()
+      .filter((node) => node.getMesh())
+      .map((node) => {
+        const prim = node.getMesh().listPrimitives()[0];
+        return {
+          name: node.getMesh().getName(),
+          of: node.getExtras().of,
+          positions: untransform(prim.getAttribute('POSITION').getArray()),
+          indices: prim.getIndices().getArray(),
+        };
+      });
+  // Every layer is settled after simplification, which moves surfaces (see
+  // settle.mjs): under the skin, out of bone and out of the parts it yields
+  // to. The bones (the reference) are only kept under the skin.
+  const layer = layerOf(asset.file);
+  if (asset.file !== SKIN_ASSET) {
+    const parts = meshesMm();
+    const before = parts.map((p) => [...p.positions]);
+    const moved =
+      layer === REFERENCE_LAYER
+        ? settle(parts, { layer, body: skinOnly() })
+        : settle(parts, { layer, body: body(), blockers: (part) => blockersFor(layer, part) });
+    // Rewrite only the vertices that moved or were added, so an untouched
+    // mesh stays byte-identical.
+    doc
+      .getRoot()
+      .listNodes()
+      .filter((node) => node.getMesh())
+      .forEach((node, i) => {
+        if (!moved.has(parts[i].name)) return;
+        const prim = node.getMesh().listPrimitives()[0];
+        const attr = prim.getAttribute('POSITION');
+        const old = attr.getArray();
+        const out = transform(parts[i].positions);
+        for (let k = 0; k < old.length; k++) if (parts[i].positions[k] === before[i][k]) out[k] = old[k];
+        attr.setArray(out);
+        prim.getIndices().setArray(new Uint32Array(parts[i].indices));
+      });
+    const worst = [...moved].sort((a, b) => b[1] - a[1]).slice(0, 3);
+    if (moved.size)
+      console.log(`  settled ${moved.size} parts; largest moves: ${worst.map(([n, d]) => `${n} ${d.toFixed(1)} mm`).join(', ')}`);
   }
   objs.filter((o) => o.simplify === false).forEach(addNode);
+  shown.set(asset.file, meshesMm());
 
   // Smooth normals after simplification so shading matches the reduced mesh.
   for (const mesh of doc.getRoot().listMeshes()) {

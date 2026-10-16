@@ -6,8 +6,9 @@
 import assert from 'node:assert/strict';
 import { after, before, test } from 'node:test';
 import { MeshoptDecoder } from 'meshoptimizer';
+import { join } from 'node:path';
 import { createServer } from 'vite';
-import { load } from './check-nerves.mjs';
+import { readModel } from './placement.mjs';
 import { Solid } from './solid.mjs';
 
 const DEEP = [
@@ -21,6 +22,7 @@ const DEEP = [
   'Cerebral aqueduct', 'Interventricular foramen', 'Left choroid plexus', 'Right choroid plexus',
 ];
 const COVERINGS = ['Falx cerebri', 'Tentorium cerebelli'];
+const MODELS = join(import.meta.dirname, '..', 'public', 'models');
 const CRANIUM = /^(frontal|occipital|sphenoid|ethmoid) bone$|^(left|right) (parietal|temporal) bone$/i;
 
 let server;
@@ -35,8 +37,8 @@ before(async () => {
   layer = layers.LAYERS.find((l) => l.id === 'nervous');
   partInfo = layers.partInfo;
   await MeshoptDecoder.ready;
-  parts = new Map((await load('nervous.glb')).map((p) => [p.name, p]));
-  cranium = (await load('skeletal.glb')).filter((b) => CRANIUM.test(b.name));
+  parts = new Map((await readModel(join(MODELS, 'nervous.glb'))).map((p) => [p.name, p]));
+  cranium = (await readModel(join(MODELS, 'skeletal.glb'))).filter((b) => CRANIUM.test(b.name));
 });
 after(() => server?.close());
 

@@ -14,12 +14,12 @@
 // BodyParts3D skin and some nerves running through solid bone (the vagus
 // through the thoracic vertebrae, the intercostals through the sternum). So
 // a last, local step (fitLine, fitPoints) pushes each nerve back under the skin and
-// out of any bone it has no real opening through (nerve-passages.mjs), and
+// out of any bone it has no real opening through (passages.mjs), and
 // fades the push out along the nerve so it bends smoothly.
 // Nerves, which Z-Anatomy stores as bevelled curves, become tubes here.
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { passage } from './nerve-passages.mjs';
+import { passage } from './passages.mjs';
 import { Envelope, Solid } from './solid.mjs';
 
 const CRANIUM = ['Frontal bone', 'Occipital bone', 'Left parietal bone', 'Right parietal bone', 'Left temporal bone', 'Right temporal bone'];
@@ -267,15 +267,18 @@ const ESCAPE_DIRS = Array.from({ length: 42 }, (_, i) => {
 
 /**
  * Moves that keep nerves where they belong in the BodyParts3D body: beneath
- * the skin, and out of every bone they have no real passage through
- * (nerve-passages.mjs). Radii are the tube radii in mm.
+ * the skin, out of every bone they have no real passage through
+ * (passages.mjs), and out of the parts `organs(part)` they yield to. Radii
+ * are the tube radii in mm.
  */
-function bodyConstraints(skinMesh, solids) {
+function bodyConstraints(skinMesh, solids, organs) {
   const skin = new Envelope(skinMesh.positions, skinMesh.indices, 10, 2.5);
   const allBones = [...solids].map(([name, solid]) => ({ name, solid }));
   const blockers = new Map();
+  // A nerve also stays out of the organs and vessels it yields to (YIELDS in
+  // overlaps.mjs), as if they were bones it has no opening through.
   const bonesFor = (part) => {
-    if (!blockers.has(part)) blockers.set(part, allBones.filter((b) => !passage(part, b.name)));
+    if (!blockers.has(part)) blockers.set(part, [...allBones.filter((b) => !passage('nervous', part, b.name)), ...organs(part)]);
     return blockers.get(part);
   };
   const underSkin = (q, deep) => {
@@ -493,11 +496,12 @@ const sideName = (side, name) => (side ? `${side} ${name[0].toLowerCase()}${name
  * @param {{positions: number[], indices: number[]}} skin the BodyParts3D skin as shown (simplified)
  * @param {{name: string, positions: number[], indices: number[]}[]} shownBones the bones as shown (simplified)
  * @param {(path: string) => object} parseObj
+ * @param {(part: string) => {name: string, solid: Solid}[]} [organs] parts of other layers a nerve must stay out of
  */
-export function loadNervous(dir, bp3dBones, skin, shownBones, parseObj) {
+export function loadNervous(dir, bp3dBones, skin, shownBones, parseObj, organs = () => []) {
   const solids = new Map(shownBones.map((b) => [b.name, new Solid(b.positions, b.indices, 4)]));
   const warp = buildWarp(JSON.parse(readFileSync(join(dir, 'landmarks.json'), 'utf8')), bp3dBones);
-  const body = bodyConstraints(skin, solids);
+  const body = bodyConstraints(skin, solids, organs);
   const parts = [];
 
   for (const file of readdirSync(dir).filter((f) => f.endsWith('.obj')).sort()) {

@@ -1,5 +1,5 @@
 // Keeps the lymphatic parts under the skin and out of solid bone, as
-// scripts/check-lymphatic.mjs checks them. The Z-Anatomy lymph nodes are
+// scripts/check-placement.mjs checks them. The Z-Anatomy lymph nodes are
 // fitted onto the BodyParts3D skeleton bone by bone (extract-z-anatomy.py),
 // which leaves a few up to ~7 mm into a bone or out through the skin. Each
 // node (a connected piece of a part's mesh) is moved as a whole, so it keeps
