@@ -545,6 +545,30 @@ body {
   max-width: calc(100% - 2 * var(--gutter));
 }
 
+/* Keyboard movement is listed only where there is likely a keyboard. */
+.hint-keys {
+  display: none;
+}
+
+@media (hover: hover) and (pointer: fine) and (min-width: 701px) {
+  .hint-keys {
+    display: block;
+    margin-top: 2px;
+  }
+}
+
+.hint kbd {
+  display: inline-block;
+  min-width: 1.5em;
+  margin: 0 1px;
+  padding: 0 4px;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  font: inherit;
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+
 .credit {
   position: fixed;
   bottom: max(10px, env(safe-area-inset-bottom));

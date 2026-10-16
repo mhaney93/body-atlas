@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body>
-    <div id="stage" aria-label="3D model of the human body. Drag to rotate, scroll or pinch to zoom."></div>
+    <div id="stage" aria-label="3D model of the human body. Drag to rotate, scroll or pinch to zoom, W A S D Q E keys to move."></div>
 
     <header class="brand">
       <h1>Body Atlas</h1>
@@ -39,7 +39,10 @@
       <p id="info-role" class="role" hidden></p>
     </aside>
 
-    <p id="hint" class="hint">Drag to rotate · scroll or pinch to zoom · right-drag or two fingers to pan</p>
+    <p class="hint">
+      <span id="hint">Drag to rotate · scroll or pinch to zoom · right-drag or two fingers to pan</span>
+      <span class="hint-keys"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> to move · <kbd>Q</kbd><kbd>E</kbd> down/up · hold <kbd>Shift</kbd> to go faster</span>
+    </p>
 
     <footer class="credit">
       3D anatomy from
