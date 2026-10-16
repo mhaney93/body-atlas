@@ -112,6 +112,7 @@
       "description": "The lowest part of the throat, behind the larynx. Here the pathways split: air goes forward into the larynx and food goes back into the oesophagus."
     },
     "thyroid cartilage": {
+      "aliases": ["Adam's apple"],
       "region": "Larynx",
       "group": "larynx",
       "description": "The largest cartilage of the larynx, shaped like a shield open at the back. Its front ridge forms the Adam's apple, and the vocal cords attach inside it."
@@ -147,6 +148,7 @@
       "description": "A cone-shaped elastic membrane running up from the cricoid cartilage. Its thickened upper edge is the vocal ligament inside each vocal cord (shown in the Joints layer)."
     },
     "trachea": {
+      "aliases": ["windpipe"],
       "region": "Lower airway",
       "group": "bronchi",
       "description": "The windpipe: a tube about 10 to 12 cm long that carries air from the larynx into the chest. C-shaped rings of cartilage keep it from collapsing."

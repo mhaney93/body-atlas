@@ -771,6 +771,7 @@
       "flow": "Pulls the hyoid bone forward and up, widening the throat, and helps open the mouth"
     },
     "gluteus maximus": {
+      "aliases": ["glutes"],
       "region": "Hip",
       "depth": 1,
       "description": "The large, thick muscle of the buttock, running from the back of the pelvis and sacrum to the thigh bone and the iliotibial tract.",
@@ -939,6 +940,7 @@
       "flow": "Turns the eye outward, away from the nose"
     },
     "latissimus dorsi": {
+      "aliases": ["lats"],
       "region": "Back",
       "depth": 1,
       "description": "The broadest muscle of the back, sweeping from the lower spine and pelvis up to the front of the upper arm bone.",
@@ -1305,6 +1307,7 @@
       "flow": "Bends the lower spine to its own side, hitches up the hip, and steadies the lowest rib when breathing in"
     },
     "rectus abdominis": {
+      "aliases": ["abs", "six-pack"],
       "region": "Abdomen",
       "depth": 1,
       "description": "The long, strap-like muscle down the front of the belly, from the lower ribs to the pubic bone, crossed by tendinous bands that form the \"six-pack\".",

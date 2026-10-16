@@ -5,6 +5,7 @@ import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.j
 import { EFFECTS } from './effects.js';
 import { KeyboardNav } from './keyboard-nav.js';
 import { partGroupId, sharedEntry } from './layers.js';
+import { frameView } from './search-select.js';
 
 const BODY_HEIGHT = 1.72; // metres, roughly; the models stand on y = 0
 const CLICK_SLOP_PX = 6;
@@ -21,6 +22,8 @@ const cutUniform = { value: 0 };
 const KEY_SPEED = 0.5;
 const KEY_SPEED_MIN = 0.05; // m/s
 const KEY_SPEED_MAX = 2; // m/s
+const FOCUS_MIN_DISTANCE = 0.1; // m; nearest focusOn() puts the camera to a part's centre
+const FLIGHT_SECONDS = 0.8; // camera move onto a part picked in the search
 
 /** Fresnel "glass" shading: nearly clear face-on, glowing at grazing angles. */
 function glassMaterial() {
@@ -193,6 +196,12 @@ export class Viewer {
     this.emphasized = new Set();
     /** Called every frame with (seconds since the last frame); see onFrame(). */
     this.frameCallbacks = new Set();
+    /** Parts faded out because they stand in front of the part focusOn() framed. */
+    this.faded = new Set();
+    /** The part focusOn() last framed, while it stays selected. */
+    this.focused = null;
+    /** Stops the camera flight focusOn() started, if one is running. */
+    this.flight = null;
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -235,12 +244,16 @@ export class Viewer {
     this.#resize();
     const timer = new THREE.Timer();
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    this.reducedMotion = reducedMotion;
     renderer.setAnimationLoop(() => {
       timer.update();
       this.time.value = timer.getElapsed();
       const dt = Math.min(timer.getDelta(), 0.1);
       for (const fn of this.frameCallbacks) fn(dt);
-      if (this.keys.moving) this.#moveByKeys(dt);
+      if (this.keys.moving) {
+        this.flight?.();
+        this.#moveByKeys(dt);
+      }
       controls.update();
       const distance = camera.position.distanceTo(controls.target);
       cutUniform.value = CUT_RADIUS * THREE.MathUtils.smoothstep(CUT_START - distance, 0, CUT_START - CUT_FULL);
@@ -358,6 +371,9 @@ export class Viewer {
     // The layer may have been toggled again while it was downloading.
     group.visible = this.wanted.get(layer.id);
     if (!group.visible) {
+      if ([...this.faded].some((m) => m.userData.layerId === layer.id)) {
+        this.#setFaded([...this.faded].filter((m) => m.userData.layerId !== layer.id));
+      }
       if (this.hovered?.userData.layerId === layer.id) this.#setHovered(null);
       if (this.selected?.userData.layerId === layer.id) this.select(null);
     }
@@ -435,7 +451,7 @@ export class Viewer {
     group.traverse((o) => {
       if (!o.isMesh || o.userData.haze) return;
       o.userData.role = role ? (role(o) ?? 'dim') : null;
-      const groupOn = this.groupShown.get(`${layerId}/${o.userData.group}`) ?? layer.groups?.[o.userData.group]?.visible ?? true;
+      const groupOn = this.isGroupVisible(layer, o.userData.group);
       o.visible = groupOn && (!hide?.(o) || o.userData.role === 'prime' || o.userData.role === 'synergist');
       if (!o.visible) {
         if (o === this.hovered) this.#setHovered(null);
@@ -445,9 +461,113 @@ export class Viewer {
     });
   }
 
+  /** Whether a layer's sub-group is shown (setGroupVisible, else the group's `visible`, else true). */
+  isGroupVisible(layer, groupId) {
+    return this.groupShown.get(`${layer.id}/${groupId}`) ?? layer.groups?.[groupId]?.visible ?? true;
+  }
+
+  /** The loaded mesh of a layer with this (original) name, its own before one shared from another layer. */
+  findMesh(layerId, meshName) {
+    let found = null;
+    this.layers.get(layerId)?.group?.traverse((o) => {
+      if (!o.isMesh || o.userData.haze || (o.userData.name ?? o.name) !== meshName) return;
+      if (!found || (found.userData.sourceId && !o.userData.sourceId)) found = o;
+    });
+    return found;
+  }
+
+  /**
+   * Selects a part and flies the camera to frame it (see frameView), fading
+   * every visible part in front of it from there, so a buried part shows.
+   * The fade lasts until the selection changes or clearFaded() is called.
+   */
+  focusOn(mesh) {
+    this.focused = null;
+    this.select(mesh);
+    this.focused = mesh;
+    const sphere = new THREE.Box3().setFromObject(mesh).getBoundingSphere(new THREE.Sphere());
+    const view = frameView({
+      center: sphere.center,
+      radius: sphere.radius,
+      camera: this.camera.position,
+      fov: this.camera.fov,
+      aspect: this.camera.aspect,
+      // Close enough for a small part to fill some of the view; what is in front is faded anyway.
+      minDistance: FOCUS_MIN_DISTANCE,
+      // On portrait screens the info sheet covers the bottom of the view.
+      raise: this.camera.aspect < 0.8 ? 0.2 : 0,
+      maxDistance: this.controls.maxDistance,
+    });
+    const position = new THREE.Vector3().copy(view.position);
+    this.#setFaded(this.#occluders(mesh, position));
+    this.#fly(position, new THREE.Vector3().copy(view.target));
+  }
+
+  /** Shows the parts focusOn() faded again. */
+  clearFaded() {
+    this.#setFaded([]);
+  }
+
+  #setFaded(meshes) {
+    const prev = this.faded;
+    this.faded = new Set(meshes);
+    for (const mesh of new Set([...prev, ...this.faded])) this.#restyle(mesh);
+  }
+
+  /** Visible layer meshes between `from` and points across `mesh`'s bounding box. */
+  #occluders(mesh, from) {
+    const targets = [];
+    for (const { group } of this.layers.values()) if (group?.visible) targets.push(group);
+    const box = new THREE.Box3().setFromObject(mesh);
+    const center = box.getCenter(new THREE.Vector3());
+    const half = box.getSize(new THREE.Vector3()).multiplyScalar(0.3);
+    const points = [center];
+    for (const x of [-1, 1]) for (const y of [-1, 1]) for (const z of [-1, 1]) points.push(center.clone().add(half.clone().multiply(new THREE.Vector3(x, y, z))));
+    const found = new Set();
+    for (const point of points) {
+      const dir = point.clone().sub(from);
+      const length = dir.length();
+      this.raycaster.set(from, dir.normalize());
+      const hits = this.raycaster.intersectObjects(targets, true).filter((h) => h.object.isMesh && h.object.visible);
+      // In front of the part where the ray meets it, else in front of the sample point.
+      const limit = hits.find((h) => h.object === mesh)?.distance ?? length;
+      for (const h of hits) if (h.distance < limit - 1e-4 && h.object !== mesh) found.add(h.object);
+    }
+    return found;
+  }
+
+  /** Moves the camera and orbit target to these over FLIGHT_SECONDS (at once if the viewer prefers reduced motion). */
+  #fly(position, target) {
+    this.flight?.();
+    const { camera, controls } = this;
+    if (this.reducedMotion.matches) {
+      camera.position.copy(position);
+      controls.target.copy(target);
+      controls.update();
+      return;
+    }
+    const from = { position: camera.position.clone(), target: controls.target.clone() };
+    let t = 0;
+    const stop = this.onFrame((dt) => {
+      t = Math.min(1, t + dt / FLIGHT_SECONDS);
+      const k = t * t * (3 - 2 * t);
+      camera.position.lerpVectors(from.position, position, k);
+      controls.target.lerpVectors(from.target, target, k);
+      if (t === 1) this.flight();
+    });
+    this.flight = () => {
+      stop();
+      this.flight = null;
+    };
+  }
+
   /** Selects a mesh (or clears the selection with null). */
   select(mesh) {
     if (mesh === this.selected) return;
+    if (mesh !== this.focused) {
+      this.focused = null;
+      this.#setFaded([]);
+    }
     const prev = this.selected;
     this.selected = mesh;
     if (prev) this.#restyle(prev);
@@ -504,7 +624,9 @@ export class Viewer {
         ? materials.selected
         : mesh === this.hovered || this.emphasized.has(mesh)
           ? materials.hover
-          : (materials[role] ?? materials.base);
+          : this.faded.has(mesh)
+            ? materials.dim
+            : (materials[role] ?? materials.base);
   }
 
   #setHovered(mesh) {
@@ -542,8 +664,14 @@ export class Viewer {
     for (const { group } of this.layers.values()) if (group?.visible) targets.push(group);
     return this.raycaster
       .intersectObjects(targets, true)
-      // three.js also hits hidden meshes, such as peeled-away parts.
-      .filter((h) => h.object.isMesh && h.object.visible && (h.distance >= cutUniform.value || h.object.userData.uncut));
+      // three.js also hits hidden meshes, such as peeled-away parts; parts faded by focusOn let clicks through.
+      .filter(
+        (h) =>
+          h.object.isMesh &&
+          h.object.visible &&
+          !this.faded.has(h.object) &&
+          (h.distance >= cutUniform.value || h.object.userData.uncut),
+      );
   }
 
   /** First visible layer mesh hit by this.raycaster, skipping anything cut away near the camera. */
@@ -567,11 +695,19 @@ export class Viewer {
     let pending = null;
     const active = new Set();
     el.addEventListener('pointerdown', (e) => {
+      this.flight?.(); // the user takes over the camera
       active.add(e.pointerId);
       down = active.size === 1 ? { x: e.clientX, y: e.clientY, id: e.pointerId } : null;
       if (active.size === 2) this.#reachTarget();
     });
-    el.addEventListener('wheel', () => this.#reachTarget(), { capture: true, passive: true });
+    el.addEventListener(
+      'wheel',
+      () => {
+        this.flight?.();
+        this.#reachTarget();
+      },
+      { capture: true, passive: true },
+    );
     el.addEventListener('pointerup', (e) => {
       active.delete(e.pointerId);
       if (!down || down.id !== e.pointerId) return;

@@ -134,6 +134,7 @@
       "description": "The throat: a muscular tube shared by food and air. When you swallow, its constrictor muscles (shown here) squeeze food down into the esophagus while the airway closes."
     },
     "esophagus": {
+      "aliases": ["gullet", "food pipe"],
       "region": "Upper digestive tract",
       "group": "tract",
       "description": "The food pipe, about 25 cm long, running behind the windpipe and through the diaphragm. Waves of muscle contraction (peristalsis) carry each swallow down to the stomach."

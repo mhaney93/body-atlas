@@ -10,6 +10,8 @@ It ships the **Skeletal**, **Nervous**, **Circulatory**, **Joints & connective t
 
 Every system also lists what it leaves out and why (not in the free models, too small to model, shown in another system, and so on) in a "Not shown" panel under its filter, so nothing is hidden silently.
 
+The search box above the filters finds any part by name, ignoring case and accents and allowing a typo or two; a few parts also answer to everyday names such as "kneecap" or "windpipe". Paired parts list both sides. Picking a part turns its system on, shows its sub-group and lowers the peel slider if they were hiding it, flies the camera to it, fades whatever stands in front of it (the info panel says how many parts and can show them again) and opens its info as a click would. Searching for a part the site leaves out, such as the hippocampus, says it is not shown and why. Press `/` to jump to the box; ↑/↓ and Enter pick a match and Esc closes the list. While you type in it, W/A/S/D type letters instead of moving the camera.
+
 It is a static site with no backend, so it costs nothing to host. Vercel builds every push: pull requests get preview deployments, and `main` deploys to production at https://body-atlas-hd.vercel.app.
 
 ## Development
@@ -38,6 +40,8 @@ npm run preview   # serve dist/ locally
 | `src/data/muscular.json` | Muscular layer: every muscle's description, action and depth, the tendon sub-group, the exercise presets for the movement view, and the fiber-haze effect |
 | `src/data/respiratory.json` | Respiratory layer: airway, bronchial tree, lung lobe and diaphragm descriptions in five sub-groups, and the air-sac haze |
 | `src/data/lymphatic.json` | Lymphatic layer: the spleen, thymus, palatine tonsils and every lymph node group, in seven sub-groups by body region, and the "Follow the lymph" tour |
+| `src/search.js`, `src/search-ui.js`, `src/search-select.js` | Part search: the index and matching, the search box, and what picking a result does (including where the camera goes) |
+| `src/mesh-names.json`, `scripts/mesh-names.mjs` | Every mesh name in each layer's models, so the search can list parts before their model loads; generated from the GLBs (`npm run mesh-names`, run by `npm run build-models`) |
 | `src/not-shown.js` | The collapsible "Not shown" panel built from each layer's `notShown` list |
 | `src/layer-controls.js` | Optional per-layer controls built from layer data: the peel-away depth slider and the movement picker |
 | `src/main.js`, `index.html`, `src/style.css` | UI: filter panel, info panel, loading indicator, credit |
@@ -75,6 +79,7 @@ Optional layer fields, all generic (see `circulatory.json` for an example):
 - `tour`: a "play" button under the layer's toggle that sends a glowing pulse through the layer's parts in order. It has a `label`, a `note`, a `total` shown at the end, and `stages`, each with a `name`, the `parts` (mesh names) it passes through, a `time` caption (shown as "Typical time here: …") or a free-text `caption` instead, and how many `seconds` the animation spends there. The pulse follows a part's centreline where the build stored one (`centerlines` in its `ASSETS` entry) and otherwise passes through the part's centre.
 - In `scripts/build-models.mjs`, an `ASSETS` entry can also `merge` several elements into one part, `split` an element at a height into two parts, and `rename` parts (the Digestive entry does all three).
 - A part whose left and right sides differ can be keyed by its full lowercase name (e.g. `"left ventricle"`), which wins over the side-less key.
+- `aliases`: everyday names a part or `notShown` entry can also be searched by (e.g. `"patella"` has `["kneecap"]`).
 - `"group": "<id>"` on a part puts it in a sub-group when the build didn't tag one (`joints.json` does this).
 - `groupToggles: true`: each colour-key entry becomes a checkbox that shows or hides its sub-group; a group with `visible: false` starts hidden. A see-through group (`opacity` below 1) only takes a click when no solid part is behind it.
 - `depthLevels`: names of a layer's depth layers, outermost first (e.g. `["Superficial", "Intermediate", "Deep"]`). A "Peel away" slider then hides parts layer by layer; each part sets `depth` (1 = outermost). `peelReveals: "<layer id>"` offers a link to switch that layer on underneath (Muscular offers Skeletal).
@@ -122,7 +127,7 @@ The part descriptions in `src/data/` are original text written for this project.
 
 ```sh
 npm run fetch-data     # downloads ~140 MB into .cache/ (gitignored) and checks its SHA-256
-npm run build-models   # writes public/models/skin.glb, skeletal.glb, skeletal-ossicles.glb, nervous.glb, nervous-inner-ear.glb, circulatory.glb, joints.glb, digestive.glb, muscular.glb, respiratory.glb and lymphatic.glb
+npm run build-models   # writes public/models/skin.glb, skeletal.glb, skeletal-ossicles.glb, nervous.glb, nervous-inner-ear.glb, circulatory.glb, joints.glb, digestive.glb, muscular.glb, respiratory.glb and lymphatic.glb, then src/mesh-names.json
 npm run check-nerves   # fails if a nerve lies outside the skin, or runs through solid bone away from a real foramen or canal
 npm run check-lymphatic  # fails if a lymph node or lymphoid organ lies outside the skin or inside solid bone
 ```
