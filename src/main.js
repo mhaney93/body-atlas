@@ -1,8 +1,12 @@
-import { LAYERS, SHELL_ASSET, partInfo } from './layers.js';
+import { LAYERS, NOT_SHOWN_REASONS, SHELL_ASSET, partInfo } from './layers.js';
 import { tourControls } from './tour.js';
 import { Viewer } from './viewer.js';
 import { buildLayerControls } from './layer-controls.js';
 import { notShownPanel } from './not-shown.js';
+import { buildIndex } from './search.js';
+import { searchBox } from './search-ui.js';
+import { searchSelector } from './search-select.js';
+import meshNames from './mesh-names.json';
 
 const $ = (id) => document.getElementById(id);
 // Asset paths in layer data are relative to the site root.
@@ -21,6 +25,7 @@ const info = $('info');
 const viewer = new Viewer($('stage'), {
   partColor: (layer, meshName) => partInfo(layer, meshName).color,
   onSelect(selection) {
+    $('info-note').hidden = true;
     if (!selection) {
       info.hidden = true;
       return;
@@ -33,6 +38,7 @@ const viewer = new Viewer($('stage'), {
     $('info-kicker').style.color = part.color ?? layer.color;
     $('info-name').textContent = part.name;
     $('info-flow').hidden = !part.flow;
+    $('info-description').hidden = false;
     $('info-flow').querySelector('.label').textContent = layer.flowLabel ? `${layer.flowLabel}: ` : '';
     $('info-flow').querySelector('.value').textContent = part.flow ?? '';
     $('info-flow').style.setProperty('--group-color', part.group?.color ?? layer.color);
@@ -58,13 +64,42 @@ const active = new Set();
 const effectsOn = new Set();
 /** Per-layer extra controls (layer-controls.js) by layer id. */
 const controls = new Map();
+/** Each layer's function that brings its toggle and extras in line with `active`. */
+const syncs = new Map();
 const toggles = new Map();
+/** Sub-group show/hide checkboxes (layer `groupToggles`) by "<layer id>/<group id>". */
+const groupBoxes = new Map();
+const layerById = (id) => layers.find((l) => l.id === id);
 
 /** Lets a layer's extras name another layer and switch it on. */
 const layerHost = {
-  layerName: (id) => layers.find((l) => l.id === id)?.name,
-  showLayer: (id) => !active.has(id) && toggles.get(id)?.click(),
+  layerName: (id) => layerById(id)?.name,
+  showLayer: (id) => !active.has(id) && setLayer(layerById(id), true),
 };
+
+/** A line under the info panel's text with an optional action button. */
+function infoNote(text, action, onAction) {
+  const note = $('info-note');
+  note.querySelector('span').textContent = text;
+  const button = note.querySelector('button');
+  button.hidden = !action;
+  button.textContent = action ?? '';
+  button.onclick = onAction ?? null;
+  note.hidden = false;
+}
+
+/** Fills the info panel with text that is not about a part on screen (nothing selected). */
+function showInfoText({ kicker, color, name, description }) {
+  viewer.select(null);
+  $('info-kicker').textContent = kicker;
+  $('info-kicker').style.color = color;
+  $('info-name').textContent = name;
+  $('info-flow').hidden = true;
+  $('info-role').hidden = true;
+  $('info-description').textContent = description ?? '';
+  $('info-description').hidden = !description;
+  info.hidden = false;
+}
 
 /** The selected part's role in its layer's chosen movement, if any. */
 function showRole(layer, mesh) {
@@ -101,6 +136,7 @@ function layerExtras(layer) {
         box.type = 'checkbox';
         box.checked = g.visible ?? true;
         box.addEventListener('change', () => viewer.setGroupVisible(layer, id, box.checked));
+        groupBoxes.set(`${layer.id}/${id}`, box);
         label.append(box, g.label);
         item.append(label);
       } else {
@@ -172,26 +208,93 @@ for (const layer of layers) {
     applyEffects(layer);
     renderSummary();
   };
-  button.addEventListener('click', async () => {
-    active.has(layer.id) ? active.delete(layer.id) : active.add(layer.id);
-    sync();
-    button.classList.add('busy');
-    button.querySelector('.state').textContent = '';
-    try {
-      await viewer.setLayerVisible(layer, active.has(layer.id));
-      applyEffects(layer); // effects built from the layer's own parts or model need it loaded
-    } catch (err) {
-      console.error(err);
-      active.delete(layer.id);
-      sync();
-      button.querySelector('.state').textContent = 'Failed to load';
-    } finally {
-      button.classList.remove('busy');
-    }
-  });
+  syncs.set(layer.id, sync);
+  button.addEventListener('click', () => setLayer(layer, !active.has(layer.id)));
   li.append(button, extras);
   $('layer-list').append(li);
 }
+
+/** Switches a layer on or off, loading its model the first time; resolves once it is shown. */
+async function setLayer(layer, on) {
+  const button = toggles.get(layer.id);
+  const sync = syncs.get(layer.id);
+  on ? active.add(layer.id) : active.delete(layer.id);
+  sync();
+  button.classList.add('busy');
+  button.querySelector('.state').textContent = '';
+  try {
+    await viewer.setLayerVisible(layer, active.has(layer.id));
+    applyEffects(layer); // effects built from the layer's own parts or model need it loaded
+  } catch (err) {
+    console.error(err);
+    active.delete(layer.id);
+    sync();
+    button.querySelector('.state').textContent = 'Failed to load';
+  } finally {
+    button.classList.remove('busy');
+  }
+}
+
+const pickResult = searchSelector({
+  async showLayer(id) {
+    const layer = layerById(id);
+    if (!active.has(id)) await setLayer(layer, true);
+    else await viewer.preloadLayer(layer).catch(() => {});
+  },
+  findMesh: (id, meshName) => (active.has(id) ? viewer.findMesh(id, meshName) : null),
+  isGroupVisible: (id, groupId) => viewer.isGroupVisible(layerById(id), groupId),
+  showGroup(id, groupId) {
+    const box = groupBoxes.get(`${id}/${groupId}`);
+    if (box) box.checked = true;
+    viewer.setGroupVisible(layerById(id), groupId, true);
+  },
+  unpeel: (id, mesh) => controls.get(id)?.unpeel(mesh),
+  focus(mesh) {
+    viewer.focusOn(mesh);
+    const n = viewer.faded.size;
+    if (n) {
+      infoNote(`${n === 1 ? 'One part' : `${n} parts`} in front of it ${n === 1 ? 'is' : 'are'} faded so you can see it.`, n === 1 ? 'Show it' : 'Show them', () => {
+        viewer.clearFaded();
+        $('info-note').hidden = true;
+      });
+    }
+  },
+  showNotShown(entry) {
+    const layer = layerById(entry.layerId);
+    const where = entry.shownIn ? null : entry.system && `Part of the ${entry.system} system, not on the site yet.`;
+    showInfoText({
+      kicker: `${layer.name} · Not shown`,
+      color: layer.color,
+      name: entry.name,
+      description: [entry.note, where].filter(Boolean).join(' '),
+    });
+    const why = `Not shown: ${NOT_SHOWN_REASONS[entry.reason] ?? entry.reason}.`;
+    const shownIn = entry.shownIn && layerById(entry.shownIn);
+    if (shownIn && !active.has(shownIn.id)) {
+      infoNote(why, `Shown in ${shownIn.name}: turn it on`, () => setLayer(shownIn, true));
+    } else {
+      infoNote(shownIn ? `${why} Shown in ${shownIn.name}, which is on.` : why);
+    }
+  },
+  showMissing(entry) {
+    const layer = layerById(entry.layerId);
+    showInfoText({
+      kicker: layer.name,
+      color: layer.color,
+      name: entry.meshName,
+      description: active.has(layer.id)
+        ? 'This part could not be found in the loaded model.'
+        : `The ${layer.name} model could not be loaded. Please check your connection and try again.`,
+    });
+  },
+});
+
+searchBox($('search'), {
+  index: () => buildIndex(layers, meshNames, partInfo),
+  layer: layerById,
+  reasons: NOT_SHOWN_REASONS,
+  onPick: (entry) => pickResult(entry).catch((err) => console.error(err)),
+});
 
 try {
   await viewer.loadShell(asset(SHELL_ASSET), (p) => {

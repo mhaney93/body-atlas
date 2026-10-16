@@ -10,6 +10,7 @@ This file is the project's committed home for project-intrinsic agent knowledge:
 - Viewer mesh visibility (sub-group toggles, peeling, movement emphasis) is applied in one place, `#applyDisplay` in `src/viewer.js`; set it through `setGroupVisible`/`setPeeled`/`setEmphasis`, not `mesh.visible`, or the controls overwrite each other.
 - After rebuilding the models, run `npm run check-nerves` and `npm run check-lymphatic` (lymph nodes are sized and moved out of bone/skin in `scripts/lymphatic-model.mjs`). For nerves: Z-Anatomy nerves are fitted onto BodyParts3D bones and then pushed under the skin and out of solid bone (`fitLine`/`fitPoints` in `scripts/nervous-model.mjs`); real foramina and canals are allowlisted in `scripts/nerve-passages.mjs`.
 - Page-wide keyboard shortcuts must skip keys while the user types: reuse `isTypingTarget` from `src/keyboard-nav.js` (the WASD movement guard) rather than writing another check.
+- The part search lists meshes from `src/mesh-names.json`, generated from the GLBs (`npm run mesh-names`, also run by `build-models`); `npm test` fails when it is stale. The search moves the camera and fades occluders through `Viewer.focusOn`, and reveals hidden parts only through the existing controls (group checkbox, peel slider), so the UI shows what changed.
 - GLTFLoader turns spaces in node names into underscores, so read the original mesh name from `mesh.userData.name` (a glTF node extra).
 
 ## Maintaining this file

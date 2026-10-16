@@ -22,7 +22,7 @@ const meshName = (mesh) => mesh.userData.name ?? mesh.name;
  * @param {object} layer layer data
  * @param {import('./viewer.js').Viewer} viewer
  * @param {{ layerName: (id: string) => string | undefined, isLayerOn: (id: string) => boolean, showLayer: (id: string) => void, movementChanged: () => void }} host
- * @returns {{ element: HTMLElement, refresh: () => void, describe: (mesh: object) => string | null } | null}
+ * @returns {{ element: HTMLElement, refresh: () => void, describe: (mesh: object) => string | null, unpeel: (mesh: object) => void } | null}
  */
 export function buildLayerControls(layer, viewer, host) {
   const { depthLevels, movements } = layer;
@@ -33,6 +33,7 @@ export function buildLayerControls(layer, viewer, host) {
   root.style.setProperty('--layer-color', layer.color);
   const uid = (name) => `${layer.id}-${name}`;
   let refreshPeel = () => {};
+  let unpeel = () => {};
   let movement = null;
 
   if (depthLevels?.length) {
@@ -73,6 +74,14 @@ export function buildLayerControls(layer, viewer, host) {
       viewer.setPeeled(layer.id, level ? (mesh) => depthOf(mesh) > 0 && depthOf(mesh) <= level : null);
       refreshPeel();
     });
+    // Lowers the slider just enough that this part is no longer peeled away.
+    unpeel = (mesh) => {
+      const depth = depthOf(mesh);
+      if (depth > 0 && Number(input.value) >= depth) {
+        input.value = String(depth - 1);
+        input.dispatchEvent(new Event('input'));
+      }
+    };
     refreshPeel();
     root.append(wrap);
   }
@@ -121,6 +130,7 @@ export function buildLayerControls(layer, viewer, host) {
   return {
     element: root,
     refresh: () => refreshPeel(),
+    unpeel: (mesh) => unpeel(mesh),
     describe(mesh) {
       const role = movement && roleOf(mesh);
       return role ? `${role === 'prime' ? 'Prime mover' : 'Synergist'} in: ${movement.name}` : null;

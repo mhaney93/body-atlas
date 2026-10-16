@@ -1937,16 +1937,19 @@
       "description": "A branch of the subclavian artery that climbs through holes in the neck vertebrae and enters the skull. The two vertebral arteries join to form the basilar artery."
     },
     "wall of left atrium": {
+      "aliases": ["heart"],
       "region": "Heart",
       "description": "The thin muscular wall of the left atrium. The four pulmonary veins open through it at the back of the heart.",
       "flow": "Squeezes blood from the left atrium into the left ventricle"
     },
     "wall of right atrium": {
+      "aliases": ["heart"],
       "region": "Heart",
       "description": "The thin muscular wall of the right atrium. It contains the sinoatrial node, the natural pacemaker that starts each heartbeat.",
       "flow": "Squeezes blood from the right atrium into the right ventricle"
     },
     "wall of ventricle": {
+      "aliases": ["heart", "myocardium"],
       "region": "Heart",
       "description": "The thick muscular wall (myocardium) of both ventricles, including the septum between them. Its contractions push blood out to the lungs and the body.",
       "flow": "Squeezes blood out to the lungs (right) and the body (left)"

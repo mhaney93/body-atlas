@@ -52,6 +52,7 @@
       "description": "A light, spongy bone between the eye sockets that forms the roof and side walls of the nasal cavity. Smell nerves pass through its sieve-like cribriform plate."
     },
     "maxilla": {
+      "aliases": ["upper jaw"],
       "region": "Skull",
       "description": "One half of the upper jaw. It holds the upper teeth, forms most of the hard palate and the floor of the eye socket, and contains the large maxillary sinus."
     },
@@ -80,6 +81,7 @@
       "description": "A thin, plough-shaped bone in the midline of the nasal cavity. It forms the lower back part of the nasal septum."
     },
     "mandible": {
+      "aliases": ["jawbone", "lower jaw"],
       "region": "Skull",
       "description": "The lower jaw, the largest and strongest bone of the face. It holds the lower teeth and is the only skull bone that moves freely."
     },
@@ -184,6 +186,7 @@
       "description": "The fifth lumbar vertebra (L5), the largest vertebra, with a wedge-shaped body. It joins the sacrum at the lumbosacral joint, a common site of back problems."
     },
     "coccyx": {
+      "aliases": ["tailbone"],
       "region": "Spine",
       "description": "The tailbone: three to five small vertebrae, usually fused, at the very bottom of the spine. It bears weight when sitting and anchors pelvic floor muscles, tendons and ligaments."
     },
@@ -284,10 +287,12 @@
       "description": "The intervertebral disc between the L5 and S1 vertebrae. Its gel-like core and tough fibrous outer ring absorb shock and let the spine bend; discs are cartilage, not bone."
     },
     "manubrium": {
+      "aliases": ["breastbone", "sternum"],
       "region": "Chest",
       "description": "The upper part of the sternum (breastbone). The clavicles and first ribs attach to it, and its upper edge forms the notch at the base of the neck."
     },
     "body of sternum": {
+      "aliases": ["breastbone", "sternum"],
       "region": "Chest",
       "description": "The long middle part of the breastbone. It meets the manubrium at the sternal angle, and ribs two to seven attach to its sides through their cartilages."
     },
@@ -372,14 +377,17 @@
       "description": "The cartilage joining the seventh rib to the sternum near the xiphoid process, the longest of the cartilages that reach the sternum."
     },
     "clavicle": {
+      "aliases": ["collarbone"],
       "region": "Shoulder and arm",
       "description": "The collarbone. It acts as a strut between the sternum and the shoulder blade, holding the arm out from the body, and is one of the most commonly broken bones."
     },
     "scapula": {
+      "aliases": ["shoulder blade"],
       "region": "Shoulder and arm",
       "description": "The shoulder blade, a flat triangular bone on the upper back. Its shallow socket, the glenoid cavity, forms the shoulder joint with the humerus."
     },
     "humerus": {
+      "aliases": ["upper arm bone"],
       "region": "Shoulder and arm",
       "description": "The upper arm bone, from the shoulder to the elbow. The radial nerve winds around its shaft in a spiral groove."
     },
@@ -504,26 +512,32 @@
       "description": "The large pelvic bone formed by the fused ilium, ischium and pubis. Its deep socket, the acetabulum, holds the head of the femur."
     },
     "femur": {
+      "aliases": ["thigh bone", "thighbone"],
       "region": "Leg",
       "description": "The thigh bone, the longest and strongest bone in the body. Its rounded head fits into the hip socket and its lower end forms the top of the knee."
     },
     "patella": {
+      "aliases": ["kneecap"],
       "region": "Leg",
       "description": "The kneecap, the largest sesamoid bone, inside the quadriceps tendon. It shields the knee joint and gives the thigh muscles extra leverage."
     },
     "tibia": {
+      "aliases": ["shin bone", "shinbone"],
       "region": "Leg",
       "description": "The shinbone, the larger of the two lower-leg bones. It carries most of the body's weight from the knee to the ankle and forms the inner ankle bump."
     },
     "fibula": {
+      "aliases": ["calf bone"],
       "region": "Leg",
       "description": "The slender outer bone of the lower leg. It bears little weight, anchors muscles, and forms the outer ankle bump."
     },
     "talus": {
+      "aliases": ["ankle bone"],
       "region": "Ankle and foot",
       "description": "The ankle bone that connects the leg to the foot. It passes the body's weight from the tibia to the heel and forefoot, and no muscles attach to it."
     },
     "calcaneus": {
+      "aliases": ["heel bone"],
       "region": "Ankle and foot",
       "description": "The heel bone, the largest bone of the foot. The Achilles tendon attaches to its back, and it takes the first impact of each step."
     },
