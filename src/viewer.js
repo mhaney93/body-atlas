@@ -3,6 +3,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import { EFFECTS } from './effects.js';
+import { KeyboardNav } from './keyboard-nav.js';
 import { partGroupId, sharedEntry } from './layers.js';
 
 const BODY_HEIGHT = 1.72; // metres, roughly; the models stand on y = 0
@@ -15,6 +16,11 @@ const CUT_FULL = 0.15; // orbit distance (m) where it reaches CUT_RADIUS
 const CUT_RADIUS = 0.03; // metres
 const UNCUT_SIZE = 0.015; // parts smaller than this (bounding-box diagonal, m) are never cut
 const cutUniform = { value: 0 };
+// Keyboard movement speed is this many orbit distances per second (within
+// these limits), so it is brisk from afar and fine-grained close up.
+const KEY_SPEED = 0.5;
+const KEY_SPEED_MIN = 0.05; // m/s
+const KEY_SPEED_MAX = 2; // m/s
 
 /** Fresnel "glass" shading: nearly clear face-on, glowing at grazing angles. */
 function glassMaterial() {
@@ -223,6 +229,7 @@ export class Viewer {
     this.raycaster = new THREE.Raycaster();
     this.pointer = new THREE.Vector2();
     this.#bindPointer(renderer.domElement);
+    this.keys = new KeyboardNav(window);
 
     new ResizeObserver(() => this.#resize()).observe(container);
     this.#resize();
@@ -233,6 +240,7 @@ export class Viewer {
       this.time.value = timer.getElapsed();
       const dt = Math.min(timer.getDelta(), 0.1);
       for (const fn of this.frameCallbacks) fn(dt);
+      if (this.keys.moving) this.#moveByKeys(dt);
       controls.update();
       const distance = camera.position.distanceTo(controls.target);
       cutUniform.value = CUT_RADIUS * THREE.MathUtils.smoothstep(CUT_START - distance, 0, CUT_START - CUT_FULL);
@@ -600,6 +608,40 @@ export class Viewer {
     this.raycaster.set(camera.position, camera.getWorldDirection(new THREE.Vector3()));
     const hit = this.#firstHit();
     if (hit && hit.distance > distance) controls.target.copy(this.raycaster.ray.at(hit.distance, new THREE.Vector3()));
+  }
+
+  /**
+   * Moves the camera and its orbit target together for the held keys: W/S
+   * along the view direction, A/D sideways, Q/E straight down/up. The target
+   * stays inside the same bounds as panning; once it is held there, W/S carry
+   * on by moving the camera toward or away from it, but no closer than where
+   * the cutaway starts (scroll zoom still goes further).
+   */
+  #moveByKeys(dt) {
+    const { camera, controls } = this;
+    const { forward, right, up } = this.keys.direction();
+    const distance = camera.position.distanceTo(controls.target);
+    const step = THREE.MathUtils.clamp(distance * KEY_SPEED, KEY_SPEED_MIN, KEY_SPEED_MAX) * dt;
+    const ahead = camera.getWorldDirection(new THREE.Vector3());
+    const side = new THREE.Vector3().crossVectors(ahead, camera.up).normalize();
+    const slide = side.multiplyScalar(right * step).addScaledVector(camera.up, up * step);
+    this.#translate(slide);
+    if (!forward) return;
+    // The part of the forward/back move the bounds hold back becomes a dolly.
+    const moved = this.#translate(ahead.clone().multiplyScalar(forward * step));
+    const held = forward * step - moved.dot(ahead);
+    const nearest = Math.min(distance, CUT_START);
+    const wanted = THREE.MathUtils.clamp(distance - held, nearest, controls.maxDistance);
+    camera.position.addScaledVector(ahead, distance - wanted);
+  }
+
+  /** Moves the camera and orbit target by `offset` within the target bounds; returns how far they moved. */
+  #translate(offset) {
+    const before = this.controls.target.clone();
+    this.camera.position.add(offset);
+    this.controls.target.add(offset);
+    this.#clampTarget();
+    return this.controls.target.clone().sub(before);
   }
 
   #clampTarget() {

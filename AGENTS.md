@@ -9,6 +9,7 @@ This file is the project's committed home for project-intrinsic agent knowledge:
 - Layer meshes must use `layerMaterials()` in `src/viewer.js` and be picked through `#hits()`, so the close-zoom cutaway (camera-distance discard) applies to both what you see and what you click.
 - Viewer mesh visibility (sub-group toggles, peeling, movement emphasis) is applied in one place, `#applyDisplay` in `src/viewer.js`; set it through `setGroupVisible`/`setPeeled`/`setEmphasis`, not `mesh.visible`, or the controls overwrite each other.
 - After rebuilding the models, run `npm run check-nerves` and `npm run check-lymphatic` (lymph nodes are sized and moved out of bone/skin in `scripts/lymphatic-model.mjs`). For nerves: Z-Anatomy nerves are fitted onto BodyParts3D bones and then pushed under the skin and out of solid bone (`fitLine`/`fitPoints` in `scripts/nervous-model.mjs`); real foramina and canals are allowlisted in `scripts/nerve-passages.mjs`.
+- Page-wide keyboard shortcuts must skip keys while the user types: reuse `isTypingTarget` from `src/keyboard-nav.js` (the WASD movement guard) rather than writing another check.
 - GLTFLoader turns spaces in node names into underscores, so read the original mesh name from `mesh.userData.name` (a glTF node extra).
 
 ## Maintaining this file
