@@ -1,0 +1,24 @@
+# Runs the tests and the placement check on every pull request and on main,
+# so a change to a body system's model cannot reintroduce clipping (parts
+# outside the skin, through solid bone, or deep in another system's parts).
+# Deploys stay with Vercel's Git integration.
+name: Check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run check-placement
+      - run: npm run build

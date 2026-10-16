@@ -3,14 +3,15 @@
 // requested lymphoid organs and node groups must be there on the right sides,
 // the tour must name existing parts, the parts the free models lack must be
 // listed as not shown, and nothing may lie outside the skin or inside bone
-// (check-lymphatic.mjs).
+// (check-placement.mjs).
 import assert from 'node:assert/strict';
 import { after, before, test } from 'node:test';
 import { NodeIO } from '@gltf-transform/core';
 import { EXTMeshoptCompression, KHRMeshQuantization } from '@gltf-transform/extensions';
 import { MeshoptDecoder } from 'meshoptimizer';
 import { createServer } from 'vite';
-import { BONE_TOLERANCE, SKIN_TOLERANCE, measure } from './check-lymphatic.mjs';
+import { measure, throughBone } from './check-placement.mjs';
+import { SKIN_TOLERANCE } from './placement.mjs';
 
 let server;
 let layers;
@@ -103,7 +104,7 @@ test('the parts the free models lack are listed as not shown', () => {
 });
 
 test('nothing lies outside the skin or inside solid bone', async () => {
-  const { skin, bone } = await measure();
+  const { skin, bone } = await measure({ only: 'lymphatic', organs: false });
   assert.deepEqual(skin.filter((h) => h.distance > SKIN_TOLERANCE).map((h) => `${h.part}: ${h.distance.toFixed(1)} mm out`), []);
-  assert.deepEqual(bone.filter((h) => h.depth > BONE_TOLERANCE).map((h) => `${h.part} in ${h.bone}: ${h.depth.toFixed(1)} mm`), []);
+  assert.deepEqual(bone.filter(throughBone).map((h) => `${h.part} in ${h.bone}: ${h.depth.toFixed(1)} mm`), []);
 });

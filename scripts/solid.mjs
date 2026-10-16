@@ -1,7 +1,8 @@
 // Point queries against a closed triangle mesh: is a point inside it, and how
-// far is it from the surface. Used to keep nerves inside the skin and out of
-// solid bone (nervous-model.mjs) and to check the built models for it
-// (check-nerves.mjs). Units are whatever the mesh uses.
+// far is it from the surface. Used to keep every layer inside the skin, out
+// of solid bone and out of the parts it yields to (nervous-model.mjs,
+// settle.mjs) and to check the built models for it (check-placement.mjs).
+// Units are whatever the mesh uses.
 
 /** Closest point to `p` on triangle abc (Ericson, Real-Time Collision Detection 5.1.5). */
 function closestOnTriangle(p, t, o) {
