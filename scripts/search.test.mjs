@@ -8,7 +8,7 @@ import { createServer } from 'vite';
 import { collectMeshNames, MESH_NAMES_FILE, serialize } from './mesh-names.mjs';
 import { isTypingTarget, movementKey } from '../src/keyboard-nav.js';
 import { editDistance, isSearchShortcut, normalize, search, sidelessName, sideOf } from '../src/search.js';
-import { frameView, searchSelector } from '../src/search-select.js';
+import { fadeNote, fadeNoteKeeper, frameView, searchSelector } from '../src/search-select.js';
 
 let server;
 let layers;
@@ -40,6 +40,28 @@ test('a paired part is found by its side-less name', () => {
   assert.equal(sideOf('Spinal cord'), null);
   assert.equal(sidelessName('Navicular bone of left foot'), 'Navicular bone of foot');
   assert.equal(sidelessName('Right femur'), 'Femur');
+});
+
+test('a name whose side words disagree keeps its full name and gets no side', () => {
+  const name = 'First right anterior branch of anterior interventricular branch of left coronary artery';
+  assert.equal(sideOf(name), null);
+  const [hit] = top('first right anterior branch');
+  assert.equal(label(hit), `part/circulatory/${name}`);
+  for (const n of ['Second', 'Third']) {
+    const entry = index.find((e) => e.meshName === `${n} right anterior branch of anterior interventricular branch of left coronary artery`);
+    assert.equal(entry.side, null);
+    assert.equal(entry.name, entry.meshName);
+  }
+  // Side words that agree still name the side.
+  const lobe = index.find((e) => e.meshName === 'Left lobe branch of left hepatic artery');
+  assert.equal(lobe.side, 'left');
+  assert.equal(lobe.name, 'Lobe branch of hepatic artery');
+});
+
+test('the faded-parts note follows the current count and goes away at zero', () => {
+  assert.equal(fadeNote(0), null);
+  assert.deepEqual(fadeNote(1), { text: 'One part in front of it is faded so you can see it.', action: 'Show it' });
+  assert.deepEqual(fadeNote(3), { text: '3 parts in front of it are faded so you can see it.', action: 'Show them' });
 });
 
 test('edit distance counts swaps as one typo', () => {
@@ -132,6 +154,25 @@ test('WASD do not move the camera while typing in the search box', () => {
   for (const code of ['KeyW', 'KeyA', 'KeyS', 'KeyD', 'KeyQ', 'KeyE']) {
     assert.equal(movementKey({ code, target: searchInput }), null, code);
   }
+});
+
+test('the faded-parts note follows the faded set after a pick, until another note replaces it', () => {
+  const shown = [];
+  const notes = fadeNoteKeeper({ show: (note) => shown.push(note.text), hide: () => shown.push('hidden') });
+  notes.fadedChanged(0); // a selection change before any pick leaves other notes alone
+  notes.focused(3);
+  notes.fadedChanged(1); // a layer holding faded parts is switched off
+  notes.fadedChanged(0); // the last one goes too, or "Show it" is pressed
+  notes.fadedChanged(2);
+  notes.focused(2);
+  notes.replaced(); // e.g. a left-out part's note
+  notes.fadedChanged(0);
+  assert.deepEqual(shown, [
+    '3 parts in front of it are faded so you can see it.',
+    'One part in front of it is faded so you can see it.',
+    'hidden',
+    '2 parts in front of it are faded so you can see it.',
+  ]);
 });
 
 /** A stand-in page that records what the selector asks of it. */
