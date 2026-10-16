@@ -91,6 +91,12 @@ test('naming a side puts that side first', () => {
   assert.deepEqual(top('navicular bone of left foot').map(label), ['part/skeletal/Navicular bone of foot/left']);
 });
 
+test('a paired part whose side-less name starts with the query ranks first', () => {
+  const hits = search(index, 'lateral ventricle').map(label);
+  assert.deepEqual(hits.slice(0, 2), ['part/nervous/Lateral ventricle/left', 'part/nervous/Lateral ventricle/right']);
+  assert.ok(hits.indexOf('part/circulatory/Lateral papillary muscle of left ventricle') > 1);
+});
+
 test('prefixes match while typing', () => {
   assert.equal(top('cerebe')[0].name, 'Cerebellum');
   assert.equal(top('sciat')[0].name, 'Sciatic nerve');
