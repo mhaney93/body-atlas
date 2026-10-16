@@ -97,16 +97,16 @@ test('prefixes match while typing', () => {
 });
 
 test('typos and accents still match', () => {
-  assert.equal(top('hipocampus')[0].name, 'Hippocampus and amygdala');
+  assert.equal(top('hipocampus')[0].name, 'Hippocampus');
   assert.equal(top('sciatic nevre')[0].name, 'Sciatic nerve');
   assert.equal(top('MALLÉUS')[0].name, 'Malleus');
 });
 
 test('a left-out part is found and says why', () => {
-  const [hit] = top('hippocampus');
+  const [hit] = top('substantia nigra');
   assert.equal(hit.kind, 'notShown');
   assert.equal(hit.layerId, 'nervous');
-  assert.equal(hit.reason, 'not-added');
+  assert.equal(hit.reason, 'no-model');
   assert.ok(layers.NOT_SHOWN_REASONS[hit.reason]);
 });
 
@@ -221,8 +221,8 @@ test('a part in a hidden sub-group gets its group shown first', async () => {
 
 test('picking a left-out part shows why, without touching the 3D view', async () => {
   const host = fakeHost();
-  await searchSelector(host)(top('hippocampus')[0]);
-  assert.deepEqual(host.calls, [['showNotShown', 'Hippocampus and amygdala']]);
+  await searchSelector(host)(top('substantia nigra')[0]);
+  assert.deepEqual(host.calls, [['showNotShown', 'Substantia nigra']]);
 });
 
 test('a part missing from its loaded model is reported, not silently ignored', async () => {
