@@ -13,6 +13,7 @@ import { meshopt, simplify, weld } from '@gltf-transform/functions';
 import { MeshoptEncoder, MeshoptSimplifier } from 'meshoptimizer';
 import { loadMuscular } from './muscular-model.mjs';
 import { loadNervous } from './nervous-model.mjs';
+import { settleLymphatic } from './lymphatic-model.mjs';
 
 const ROOT = join(import.meta.dirname, '..');
 const OBJ_DIR = join(ROOT, '.cache', 'bodyparts3d', 'obj');
@@ -233,6 +234,23 @@ const RESPIRATORY = {
   ratio: 0.5,
 };
 
+// Lymphatic system. BodyParts3D has the spleen and the thymus lobes; the
+// lymph nodes and palatine tonsils come from Z-Anatomy, each tagged with its
+// body region (the layer's sub-group) by the extract script. `fit` then
+// moves any node left in bone or outside the skin (see lymphatic-model.mjs).
+const LYMPHATIC = {
+  file: 'lymphatic.glb',
+  elements: ['FJ2561', 'FJ3150', 'FJ3151'], // spleen, left and right lobes of the thymus
+  groups: new Map(['FJ2561', 'FJ3150', 'FJ3151'].map((id) => [id, 'organs'])),
+  load: () => parseRegisteredObjs('lymphatic.obj.gz'),
+  fit: (objs) => {
+    const { moved, stuck } = settleLymphatic(objs, shown.get('skin.glb')[0], shown.get('skeletal.glb'));
+    console.log(`  moved ${moved} lymphatic pieces out of bone or back under the skin`);
+    if (stuck.length) throw new Error(`could not free: ${stuck.join(', ')}`);
+  },
+  ratio: 0.5,
+};
+
 const ASSETS = [
   { file: 'skin.glb', elements: [SKIN], ratio: 0.35 },
   { file: 'skeletal.glb', elements: range(3152, 3395), extras: ['coccyx.obj'], ratio: 0.5 },
@@ -265,6 +283,7 @@ const ASSETS = [
     lockBorder: true,
   },
   RESPIRATORY,
+  LYMPHATIC,
 ];
 
 /** BodyParts3D bone meshes (mm) by English name, for nervous-model.mjs. */
@@ -427,6 +446,8 @@ function parseRegisteredObjs(file) {
       objs.push(obj);
     } else if (line.startsWith('# English name : ')) {
       obj.name = line.slice('# English name : '.length).trim();
+    } else if (line.startsWith('# Group : ')) {
+      obj.group = line.slice('# Group : '.length).trim();
     } else if (line.startsWith('v ')) {
       obj.positions.push(...line.trim().split(/\s+/).slice(1).map(Number));
       seen++;
@@ -709,6 +730,7 @@ for (const asset of ASSETS) {
   if (asset.mergeByName) objs = mergeByName(objs);
   objs = applyMerges(applySplits(objs, asset.split), asset.merge);
   if (asset.rename) for (const obj of objs) obj.name = asset.rename(obj.name);
+  asset.fit?.(objs);
 
   const addNode = (obj) => {
     const pos = transform(obj.positions);

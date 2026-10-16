@@ -1,0 +1,512 @@
+{
+  "id": "lymphatic",
+  "name": "Lymphatic",
+  "color": "#b4e35a",
+  "asset": "models/lymphatic.glb",
+  "summary": "The lymphatic system drains the fluid that leaks out of the blood into the tissues (lymph), filters it through hundreds of lymph nodes where white blood cells check it for germs and damaged cells, and returns it to the blood near the heart. The spleen, thymus and tonsils are its other organs.",
+  "groups": {
+    "organs": { "label": "Spleen, thymus & tonsils", "color": "#c58bff" },
+    "head-neck": { "label": "Head & neck nodes", "color": "#d8f36a" },
+    "upper-limb": { "label": "Armpit & arm nodes", "color": "#7fe3a2" },
+    "thorax": { "label": "Chest nodes", "color": "#5cd6cf" },
+    "abdomen": { "label": "Abdominal nodes", "color": "#f2d45c" },
+    "pelvis": { "label": "Pelvic nodes", "color": "#ffaf6b" },
+    "lower-limb": { "label": "Groin & leg nodes", "color": "#a5e05a" }
+  },
+  "groupToggles": true,
+  "tour": {
+    "label": "Follow the lymph",
+    "note": "The pulse jumps from node group to node group in straight lines. Lymph really travels between them in thin lymphatic vessels and the thoracic duct, which the free models do not have.",
+    "total": "Back in the blood. A few litres of lymph return this way each day.",
+    "stages": [
+      {
+        "name": "Lower leg",
+        "parts": ["Left anterior tibial node", "Left superficial popliteal nodes", "Left deep popliteal nodes"],
+        "caption": "Fluid that seeps out of the blood into the foot and leg is picked up by tiny lymphatic vessels and carried up to the nodes behind the knee.",
+        "seconds": 3
+      },
+      {
+        "name": "Groin",
+        "parts": ["Left inferior superficial inguinal nodes", "Left superomedial superficial inguinal nodes", "Left proximal deep inguinal node"],
+        "caption": "All the lymph from the leg, plus the lower belly wall and genitals, passes through the inguinal nodes in the groin.",
+        "seconds": 3
+      },
+      {
+        "name": "Pelvis",
+        "parts": ["Left medial external iliac nodes", "Left intermediate external iliac nodes", "Lateral common iliac nodes"],
+        "caption": "It flows on along the iliac blood vessels, joined by lymph from the bladder and other pelvic organs.",
+        "seconds": 3
+      },
+      {
+        "name": "Abdomen",
+        "parts": ["Lateral aortic nodes", "Pre-aortic nodes"],
+        "caption": "Beside the aorta it meets fat-rich lymph from the gut and collects in the cisterna chyli, a sac at the start of the thoracic duct (not modeled).",
+        "seconds": 3
+      },
+      {
+        "name": "Chest",
+        "parts": ["Prevertebral nodes"],
+        "caption": "The thoracic duct (not modeled) carries it up in front of the spine, behind the heart and esophagus.",
+        "seconds": 3
+      },
+      {
+        "name": "Base of the neck",
+        "parts": ["Left inferior deep lateral cervical nodes", "Left supraclavicular nodes"],
+        "caption": "The duct empties into the big veins at the base of the left side of the neck, where the internal jugular and subclavian veins meet.",
+        "seconds": 3
+      }
+    ]
+  },
+  "notShown": [
+    { "name": "Lymphatic vessels", "reason": "no-model", "note": "The network of thin vessels, from microscopic lymphatic capillaries to the main lymphatic trunks, that carries lymph to the nodes and back toward the heart. Neither source model has them; the \"Follow the lymph\" tour draws the route as straight jumps." },
+    { "name": "Thoracic duct and cisterna chyli", "reason": "no-model", "note": "The body's largest lymphatic vessel and the sac at its start. Z-Anatomy names them in its index but has no mesh for them, and BodyParts3D lacks them." },
+    { "name": "Right lymphatic duct", "reason": "no-model", "note": "The short duct that returns lymph from the right side of the head, neck, chest and right arm." },
+    { "name": "Adenoids, tubal and lingual tonsils", "reason": "no-model", "note": "The rest of the ring of tonsils around the throat. Z-Anatomy names them but has no mesh for them; only the palatine tonsils are modeled." },
+    { "name": "Most individual lymph nodes", "reason": "too-small", "note": "An adult has roughly 450 to 600 lymph nodes. The model shows each named group as Z-Anatomy draws it, often as a few representative nodes." },
+    { "name": "Peyer's patches and other mucosal lymphoid tissue", "reason": "too-small", "note": "Patches of lymphoid tissue in the walls of the small intestine, appendix and airways." },
+    { "name": "Bone marrow", "reason": "no-model", "note": "Where all blood and immune cells are made. The Skeletal layer shows the bones but not the marrow inside them." },
+    { "name": "Inner structure of the spleen and thymus", "reason": "too-small", "note": "The spleen's red and white pulp and the thymus's lobules, cortex and medulla." },
+    { "name": "Lymph and immune cells", "reason": "too-small", "note": "The fluid itself and the lymphocytes and other white blood cells it carries." },
+    { "name": "Splenic artery and vein", "reason": "other-system", "layer": "circulatory" }
+  ],
+  "parts": {
+    "spleen": {
+      "region": "Abdomen",
+      "description": "The largest lymphoid organ, tucked under the left lower ribs behind the stomach. It filters the blood, clearing out old red blood cells and germs, and holds white blood cells that fight blood-borne infections."
+    },
+    "lobe of thymus": {
+      "region": "Chest",
+      "description": "One of the two lobes of the thymus, behind the top of the breastbone. T cells, the white blood cells that direct immune responses, mature here, mostly in childhood; in adults the thymus is largely replaced by fat."
+    },
+    "palatine tonsil": {
+      "region": "Throat",
+      "description": "One of the two tonsils at the back of the mouth, between the arches of the soft palate. It samples what you swallow and breathe in and starts immune responses to germs entering through the mouth."
+    },
+
+    "occipital nodes": {
+      "region": "Head & neck",
+      "description": "A few nodes at the back of the head, where the trapezius muscle meets the skull. They drain the back of the scalp."
+    },
+    "mastoid nodes": {
+      "region": "Head & neck",
+      "description": "Nodes behind the ear, over the mastoid process. They drain the scalp above and behind the ear and the back of the ear itself."
+    },
+    "superficial parotid nodes": {
+      "region": "Head & neck",
+      "description": "Nodes on the surface of the parotid salivary gland, in front of the ear. They drain the forehead, temple, eyelids and the front of the ear."
+    },
+    "pre-auricular nodes": {
+      "region": "Head & neck",
+      "description": "Nodes just in front of the ear, part of the parotid group. They drain the temple, the outer eyelids and the ear canal; they can swell with an eye infection."
+    },
+    "infra-auricular nodes": {
+      "region": "Head & neck",
+      "description": "Nodes just below the ear, at the lower edge of the parotid gland. They drain the gland and the nearby skin."
+    },
+    "intraglandular parotid nodes": {
+      "region": "Head & neck",
+      "description": "Nodes buried inside the parotid salivary gland. They drain the gland, the eyelids, the temple and the outer ear, and pass lymph on to the deep cervical nodes."
+    },
+    "nasolabial node": {
+      "region": "Head & neck",
+      "description": "A small facial node in the fold between the nose and the corner of the mouth. It drains the nearby skin of the face."
+    },
+    "bucinator node": {
+      "region": "Head & neck",
+      "description": "A small facial node on the buccinator muscle of the cheek. It drains the cheek and passes lymph on to the submandibular nodes."
+    },
+    "mandibular node": {
+      "region": "Head & neck",
+      "description": "A small facial node on the outside of the lower jaw, beside the facial artery. It drains the skin and soft tissue of the lower face."
+    },
+    "submental nodes": {
+      "region": "Head & neck",
+      "description": "Nodes under the chin, between the two front bellies of the digastric muscles. They drain the tip of the tongue, the floor of the mouth, the lower lip and the chin."
+    },
+    "submandibular nodes": {
+      "region": "Head & neck",
+      "description": "Nodes under the lower jaw, beside the submandibular gland. They drain most of the face, the nose, the gums and teeth and the front of the tongue, and swell with a tooth or mouth infection."
+    },
+    "retropharyngeal nodes": {
+      "region": "Head & neck",
+      "description": "Nodes behind the pharynx, in front of the upper neck vertebrae. They drain the nasal cavity, the nasopharynx and the middle ear."
+    },
+    "superficial anterior cervical nodes": {
+      "region": "Head & neck",
+      "description": "Nodes along the anterior jugular vein at the front of the neck. They drain the skin of the front of the neck."
+    },
+    "superficial lateral cervical nodes": {
+      "region": "Head & neck",
+      "description": "Nodes along the external jugular vein on the side of the neck. They drain the skin of the side of the neck and the lower part of the ear."
+    },
+    "jugulodigastric node": {
+      "region": "Head & neck",
+      "description": "The large node just below the angle of the jaw, where the digastric muscle crosses the internal jugular vein. It drains the palatine tonsil and the back of the tongue, so it is the node that swells with tonsillitis."
+    },
+    "lateral superior jugular node": {
+      "region": "Head & neck",
+      "description": "Upper deep cervical nodes along the internal jugular vein, under the sternocleidomastoid muscle. Lymph from most of the head passes through them."
+    },
+    "inferior deep lateral cervical nodes": {
+      "region": "Head & neck",
+      "description": "Lower deep cervical nodes along the internal jugular vein near the base of the neck. Lymph from the whole head and neck passes through them before it enters the jugular lymphatic trunk."
+    },
+    "anterior inferior jugular nodes": {
+      "region": "Head & neck",
+      "description": "Lower deep cervical nodes on the front of the internal jugular vein. They take lymph from the upper deep cervical nodes and from the front of the neck."
+    },
+    "supraclavicular nodes": {
+      "region": "Head & neck",
+      "description": "Nodes in the hollow above the collarbone, the lowest of the deep cervical chain. Lymph from the chest and abdomen can reach them, so a swollen left supraclavicular node (Virchow's node) can be a sign of cancer further down."
+    },
+    "pretracheal nodes": {
+      "region": "Head & neck",
+      "description": "Nodes in front of the trachea, below the thyroid gland. They drain the trachea, the larynx and the thyroid."
+    },
+    "paratracheal cervical nodes": {
+      "region": "Head & neck",
+      "description": "Nodes beside the trachea and esophagus in the neck, along the recurrent laryngeal nerves. They drain the larynx, trachea, esophagus and thyroid."
+    },
+    "thyroid nodes": {
+      "region": "Head & neck",
+      "description": "Nodes on the thyroid gland. They drain the gland and pass lymph on to the deep cervical nodes."
+    },
+
+    "cubital nodes": {
+      "region": "Arm",
+      "description": "Nodes on the inner side of the elbow. They drain the little-finger side of the hand and forearm."
+    },
+    "supratrochlear nodes": {
+      "region": "Arm",
+      "description": "Nodes just above the elbow on its inner side, part of the cubital group. They drain the ring and little fingers and the inner side of the hand and forearm."
+    },
+    "brachial nodes": {
+      "region": "Arm",
+      "description": "Nodes along the brachial blood vessels of the upper arm. They drain the deep tissues of the arm on the way to the armpit."
+    },
+    "lateral axillary nodes": {
+      "region": "Armpit",
+      "description": "Armpit nodes along the axillary vein. They drain almost all of the arm."
+    },
+    "anterior axillary nodes": {
+      "region": "Armpit",
+      "description": "Armpit nodes along the lower edge of the pectoralis minor muscle (the pectoral nodes). They drain the front of the chest wall and most of the breast."
+    },
+    "posterior axillary nodes": {
+      "region": "Armpit",
+      "description": "Armpit nodes along the subscapular vessels at the back of the armpit. They drain the back of the shoulder and the upper back."
+    },
+    "central axillary nodes": {
+      "region": "Armpit",
+      "description": "Nodes in the fat in the middle of the armpit. They collect lymph from the lateral, anterior and posterior groups; these are the armpit nodes you can feel when they swell."
+    },
+    "apical axillary nodes": {
+      "region": "Armpit",
+      "description": "Nodes at the top of the armpit, just below the collarbone. All the lymph from the arm and breast passes through them on its way to the subclavian lymphatic trunk."
+    },
+    "infraclavicular nodes": {
+      "region": "Armpit",
+      "description": "Nodes below the collarbone, in the groove between the deltoid and pectoralis major muscles. They drain the thumb side of the arm along the cephalic vein."
+    },
+    "interpectoral nodes": {
+      "region": "Armpit",
+      "description": "Nodes between the pectoralis major and minor muscles. They drain part of the breast and pass lymph to the apical axillary nodes."
+    },
+
+    "parasternal nodes": {
+      "region": "Chest",
+      "description": "Nodes along the internal thoracic vessels, just beside the breastbone. They drain the inner part of the breast, the front of the chest wall and the upper belly wall."
+    },
+    "intercostal nodes": {
+      "region": "Chest",
+      "description": "Nodes at the back ends of the spaces between the ribs. They drain the back and sides of the chest wall."
+    },
+    "superior diaphragmatic nodes": {
+      "region": "Chest",
+      "description": "Nodes on the upper surface of the diaphragm. They drain the diaphragm and the top of the liver."
+    },
+    "prevertebral nodes": {
+      "region": "Chest",
+      "description": "Nodes in front of the thoracic vertebrae, beside the thoracic duct. They drain the back of the chest wall and the spine."
+    },
+    "prepericardial nodes": {
+      "region": "Chest",
+      "description": "Nodes in front of the pericardium, the sac around the heart. They drain the front of the pericardium."
+    },
+    "lateral pericardial nodes": {
+      "region": "Chest",
+      "description": "Nodes along the sides of the pericardium, beside the phrenic nerves. They drain the pericardium and the diaphragm."
+    },
+    "brachiocephalic nodes": {
+      "region": "Chest",
+      "description": "Nodes in the upper chest along the brachiocephalic veins. They drain the thymus, the thyroid, the pericardium and the front of the chest."
+    },
+    "node of ligamentum arteriosum": {
+      "region": "Chest",
+      "description": "A single node beside the ligamentum arteriosum, the cord between the aortic arch and the pulmonary trunk. It drains part of the left lung."
+    },
+    "node of arch of azygos vein": {
+      "region": "Chest",
+      "description": "A single node by the arch of the azygos vein, above the right main bronchus. It drains part of the right lung and the trachea."
+    },
+    "paratracheal thoracic nodes": {
+      "region": "Chest",
+      "description": "Nodes beside the trachea in the chest. They carry lymph from the lungs and tracheobronchial nodes up to the bronchomediastinal lymphatic trunks."
+    },
+    "superior tracheobronchial nodes": {
+      "region": "Chest",
+      "description": "Nodes in the angle between the trachea and each main bronchus. Lymph from the lungs passes through them on its way to the paratracheal nodes."
+    },
+    "inferior tracheobronchial nodes": {
+      "region": "Chest",
+      "description": "Nodes below the fork of the trachea, between the two main bronchi. They drain the lower lobes of both lungs and part of the heart."
+    },
+    "intrapulmonary nodes": {
+      "region": "Chest",
+      "description": "Nodes inside the lungs, where the bronchi branch. Lymph from the lung tissue passes through them first."
+    },
+    "juxta-oesophageal nodes": {
+      "region": "Chest",
+      "description": "Nodes along the esophagus in the back of the chest. They drain the esophagus and pass lymph on to the tracheobronchial nodes and the thoracic duct."
+    },
+
+    "inferior diaphragmatic nodes": {
+      "region": "Abdomen",
+      "description": "Nodes on the underside of the diaphragm, along the inferior phrenic arteries. They drain the diaphragm and part of the liver."
+    },
+    "inferior epigastric nodes": {
+      "region": "Abdomen",
+      "description": "Nodes along the inferior epigastric vessels inside the lower front of the belly wall. They drain the deep tissue of the lower belly wall."
+    },
+    "lateral aortic nodes": {
+      "region": "Abdomen",
+      "description": "Lumbar nodes along the left side of the abdominal aorta. They drain the kidneys, adrenal glands, testes and the back of the abdominal wall, and take in the lymph from the pelvis and legs."
+    },
+    "pre-aortic nodes": {
+      "region": "Abdomen",
+      "description": "Lumbar nodes in front of the abdominal aorta. They gather lymph from the gut's nodes and send it into the start of the thoracic duct."
+    },
+    "retro-aortic nodes": {
+      "region": "Abdomen",
+      "description": "Lumbar nodes behind the abdominal aorta, in front of the lumbar vertebrae. They drain the back wall of the abdomen."
+    },
+    "precaval nodes": {
+      "region": "Abdomen",
+      "description": "Lumbar nodes in front of the inferior vena cava. They drain the right kidney, adrenal gland and testis and the back of the abdominal wall."
+    },
+    "lateral caval nodes": {
+      "region": "Abdomen",
+      "description": "Lumbar nodes along the right side of the inferior vena cava. They drain the right kidney, adrenal gland and testis and the back of the abdominal wall."
+    },
+    "retrocaval nodes": {
+      "region": "Abdomen",
+      "description": "Lumbar nodes behind the inferior vena cava. They drain the back wall of the abdomen on the right."
+    },
+    "intermediate lumbar nodes": {
+      "region": "Abdomen",
+      "description": "Lumbar nodes between the aorta and the inferior vena cava. They drain the kidneys, the testes and the back of the abdominal wall."
+    },
+    "coeliac nodes": {
+      "region": "Abdomen",
+      "description": "Nodes around the celiac trunk, the first big branch of the abdominal aorta. They collect lymph from the stomach, liver, spleen, pancreas and duodenum."
+    },
+    "right gastric nodes": {
+      "region": "Abdomen",
+      "description": "Nodes along the right gastric artery on the stomach's inner (lesser) curve. They drain the stomach near its outlet."
+    },
+    "right gastro-omental nodes": {
+      "region": "Abdomen",
+      "description": "Nodes along the right gastro-omental artery on the stomach's outer (greater) curve. They drain the lower part of the stomach."
+    },
+    "suprapyloric node": {
+      "region": "Abdomen",
+      "description": "A node above the pylorus, the stomach's outlet. It drains the pylorus."
+    },
+    "subpyloric nodes": {
+      "region": "Abdomen",
+      "description": "Nodes below the pylorus, the stomach's outlet. They drain the pylorus, the lower stomach and the start of the duodenum."
+    },
+    "retropyloric nodes": {
+      "region": "Abdomen",
+      "description": "Nodes behind the pylorus, the stomach's outlet. They drain the pylorus and the start of the duodenum."
+    },
+    "superior pancreatic nodes": {
+      "region": "Abdomen",
+      "description": "Nodes along the upper edge of the pancreas, beside the splenic artery. They drain the pancreas and part of the stomach."
+    },
+    "inferior pancreatic nodes": {
+      "region": "Abdomen",
+      "description": "Nodes along the lower edge of the pancreas. They drain the pancreas."
+    },
+    "splenic nodes": {
+      "region": "Abdomen",
+      "description": "Nodes at the hilum of the spleen, where its vessels enter. They drain the spleen, the tail of the pancreas and part of the stomach."
+    },
+    "superior pancreaticoduodenal nodes": {
+      "region": "Abdomen",
+      "description": "Nodes in the groove between the head of the pancreas and the duodenum. They drain both."
+    },
+    "cystic node": {
+      "region": "Abdomen",
+      "description": "A single node by the neck of the gallbladder. It drains the gallbladder."
+    },
+    "juxta-intestinal mesenteric nodes": {
+      "region": "Abdomen",
+      "description": "Nodes in the mesentery right next to the small intestine, a hundred or more of them. They filter the milky, fat-rich lymph (chyle) absorbed from food."
+    },
+    "central superior mesenteric nodes": {
+      "region": "Abdomen",
+      "description": "Nodes around the root of the superior mesenteric artery. Lymph from the whole small intestine and the right half of the colon passes through them."
+    },
+    "paracolic superior mesenteric nodes": {
+      "region": "Abdomen",
+      "description": "Nodes along the inner edge of the ascending and transverse colon. They drain the colon wall."
+    },
+    "ileocolic nodes": {
+      "region": "Abdomen",
+      "description": "Nodes along the ileocolic artery. They drain the end of the ileum, the cecum and the appendix."
+    },
+    "precaecal nodes": {
+      "region": "Abdomen",
+      "description": "Nodes in front of the cecum, the pouch where the large intestine begins. They drain the cecum."
+    },
+    "retrocaecal nodes": {
+      "region": "Abdomen",
+      "description": "Nodes behind the cecum, the pouch where the large intestine begins. They drain the cecum."
+    },
+    "appendicular nodes": {
+      "region": "Abdomen",
+      "description": "Nodes in the small fold of mesentery that holds the appendix. They drain the appendix."
+    },
+    "right colic nodes": {
+      "region": "Abdomen",
+      "description": "Nodes along the right colic artery. They drain the ascending colon."
+    },
+    "middle colic nodes": {
+      "region": "Abdomen",
+      "description": "Nodes along the middle colic artery. They drain the transverse colon."
+    },
+    "left colic nodes": {
+      "region": "Abdomen",
+      "description": "Nodes along the left colic artery. They drain the descending colon."
+    },
+    "sigmoid nodes": {
+      "region": "Abdomen",
+      "description": "Nodes along the sigmoid arteries. They drain the sigmoid colon."
+    },
+
+    "medial common iliac nodes": {
+      "region": "Pelvis",
+      "description": "Nodes along the inner side of the common iliac arteries. They collect lymph from the pelvic organs and pass it up to the lumbar nodes."
+    },
+    "intermediate common iliac nodes": {
+      "region": "Pelvis",
+      "description": "Nodes behind the common iliac arteries. They collect lymph from the external and internal iliac nodes and pass it up to the lumbar nodes."
+    },
+    "lateral common iliac nodes": {
+      "region": "Pelvis",
+      "description": "Nodes along the outer side of the common iliac arteries. They carry lymph from the external iliac nodes, and so from the legs, up to the lumbar nodes."
+    },
+    "subaortic nodes": {
+      "region": "Pelvis",
+      "description": "Nodes just below the fork of the aorta, in front of the last lumbar vertebra. They drain the pelvic organs."
+    },
+    "median sacral nodes": {
+      "region": "Pelvis",
+      "description": "Nodes along the median sacral artery on the front of the sacrum. They drain the rectum and the back wall of the pelvis."
+    },
+    "lateral sacral nodes": {
+      "region": "Pelvis",
+      "description": "Nodes on the front of the sacrum, along the lateral sacral arteries. They drain the back wall of the pelvis and the rectum."
+    },
+    "medial external iliac nodes": {
+      "region": "Pelvis",
+      "description": "Nodes along the inner side of the external iliac vessels. They take lymph from the groin nodes, and so from the leg, and from the bladder and prostate."
+    },
+    "intermediate external iliac nodes": {
+      "region": "Pelvis",
+      "description": "Nodes between the external iliac artery and vein. They take lymph from the groin nodes and pass it up to the common iliac nodes."
+    },
+    "medial lacunar node": {
+      "region": "Pelvis",
+      "description": "The lowest of the external iliac nodes, under the inguinal ligament on the inner side of the femoral vein, where the leg's vessels enter the pelvis."
+    },
+    "intermediate lacunar node": {
+      "region": "Pelvis",
+      "description": "One of the lowest external iliac nodes, under the inguinal ligament between the femoral artery and vein."
+    },
+    "lateral lacunar node": {
+      "region": "Pelvis",
+      "description": "One of the lowest external iliac nodes, under the inguinal ligament on the outer side of the femoral artery."
+    },
+    "obturator nodes": {
+      "region": "Pelvis",
+      "description": "Nodes along the obturator vessels on the side wall of the pelvis. They drain the bladder and the prostate."
+    },
+    "superior gluteal nodes": {
+      "region": "Pelvis",
+      "description": "Internal iliac nodes along the superior gluteal vessels. They drain the deep muscles of the buttock and the pelvic wall."
+    },
+    "inferior gluteal nodes": {
+      "region": "Pelvis",
+      "description": "Internal iliac nodes along the inferior gluteal vessels. They drain the deep tissues of the buttock and upper back of the thigh."
+    },
+    "prevesical nodes": {
+      "region": "Pelvis",
+      "description": "Nodes in front of the bladder. They drain the bladder."
+    },
+    "postvesical nodes": {
+      "region": "Pelvis",
+      "description": "Nodes behind the bladder. They drain the bladder, the prostate and the seminal vesicles."
+    },
+    "lateral vesical nodes": {
+      "region": "Pelvis",
+      "description": "Nodes beside the bladder. They drain the bladder."
+    },
+    "pararectal nodes": {
+      "region": "Pelvis",
+      "description": "Nodes beside the rectum, along the superior rectal artery. They drain the rectum."
+    },
+
+    "superomedial superficial inguinal nodes": {
+      "region": "Groin",
+      "description": "Groin nodes just below the inner half of the inguinal ligament. They drain the belly wall below the navel, the skin of the penis and scrotum, and the anal area."
+    },
+    "superolateral superficial inguinal nodes": {
+      "region": "Groin",
+      "description": "Groin nodes just below the outer half of the inguinal ligament. They drain the buttock and the side of the lower belly wall and back."
+    },
+    "inferior superficial inguinal nodes": {
+      "region": "Groin",
+      "description": "Groin nodes along the top of the great saphenous vein. They drain most of the skin of the leg and foot."
+    },
+    "proximal deep inguinal node": {
+      "region": "Groin",
+      "description": "The highest deep groin node, in the femoral canal beside the femoral vein (often called Cloquet's node). It passes lymph from the leg into the external iliac nodes."
+    },
+    "intermediate deep inguinal node": {
+      "region": "Groin",
+      "description": "A deep groin node beside the femoral vein. It drains the deep tissues of the leg and the lymph from the superficial groin nodes."
+    },
+    "superficial popliteal nodes": {
+      "region": "Leg",
+      "description": "Nodes behind the knee, where the small saphenous vein joins the popliteal vein. They drain the outer side of the foot and the back of the calf."
+    },
+    "deep popliteal nodes": {
+      "region": "Leg",
+      "description": "Nodes deep in the fat behind the knee, along the popliteal vessels. They drain the knee joint and the deep tissues of the lower leg."
+    },
+    "anterior tibial node": {
+      "region": "Leg",
+      "description": "A small node along the anterior tibial vessels at the front of the lower leg. It drains the deep tissues there."
+    },
+    "posterior tibial node": {
+      "region": "Leg",
+      "description": "A small node along the posterior tibial vessels in the back of the lower leg. It drains the deep tissues there."
+    },
+    "fibular node": {
+      "region": "Leg",
+      "description": "A small node along the fibular vessels in the back of the lower leg. It drains the deep tissues there."
+    }
+  }
+}

@@ -11,6 +11,7 @@
     "fetch-data": "node scripts/fetch-bodyparts3d.mjs",
     "build-models": "node scripts/build-models.mjs",
     "check-nerves": "node scripts/check-nerves.mjs",
+    "check-lymphatic": "node scripts/check-lymphatic.mjs",
     "test": "node --test scripts/*.test.mjs"
   },
   "dependencies": {

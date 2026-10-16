@@ -48,7 +48,7 @@
     { "name": "Vocal and other laryngeal ligaments", "reason": "other-system", "layer": "joints" },
     { "name": "Muscles of the larynx and the intercostal muscles", "reason": "other-system", "layer": "muscular" },
     { "name": "Phrenic nerve", "reason": "no-model", "note": "The nerve that drives the diaphragm. Neither source model has it." },
-    { "name": "Tonsils and adenoids", "reason": "other-system", "system": "lymphatic" }
+    { "name": "Tonsils and adenoids", "reason": "other-system", "layer": "lymphatic", "note": "The Lymphatic layer shows the palatine tonsils; neither source model has the adenoids." }
   ],
   "parts": {
     "nasal cavity": {

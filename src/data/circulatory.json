@@ -50,8 +50,8 @@
     { "name": "Pericardium", "reason": "no-model", "note": "The sac around the heart." },
     { "name": "Chordae tendineae", "reason": "no-model", "note": "The cords that tie the mitral and tricuspid valve leaflets to the papillary muscles." },
     { "name": "The heart's conduction system", "reason": "no-model", "note": "The sinoatrial and atrioventricular nodes and the bundle of His, which time each heartbeat." },
-    { "name": "Lymphatic vessels, lymph nodes and the thoracic duct", "reason": "other-system", "system": "lymphatic" },
-    { "name": "Spleen", "reason": "other-system", "system": "lymphatic" }
+    { "name": "Lymph nodes and spleen", "reason": "other-system", "layer": "lymphatic" },
+    { "name": "Lymphatic vessels and the thoracic duct", "reason": "no-model", "note": "They belong to the lymphatic system, but neither source model has them; the Lymphatic layer lists them too." }
   ],
   "parts": {
     "abdominal aorta": {
