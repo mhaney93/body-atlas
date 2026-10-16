@@ -135,7 +135,7 @@ npm run build-models   # writes public/models/skin.glb, skeletal.glb, skeletal-o
 npm run check-placement   # the placement check on its own (a few minutes)
 ```
 
-The generated GLB files come to about 20.3 MB in total (circulatory.glb is about 4.8 MB, muscular.glb about 4.3 MB, digestive.glb about 1.5 MB, joints.glb about 1.4 MB, respiratory.glb about 1.2 MB, lymphatic.glb about 0.9 MB); each system's file downloads only when its filter is first turned on. They are committed, so a normal build does not need the source data.
+The generated GLB files come to about 21.1 MB in total (circulatory.glb is about 4.8 MB, muscular.glb about 4.3 MB, digestive.glb about 1.5 MB, joints.glb about 1.4 MB, respiratory.glb about 1.2 MB, lymphatic.glb about 0.9 MB); each system's file downloads only when its filter is first turned on. They are committed, so a normal build does not need the source data.
 
 `data-sources/z-anatomy/` is committed too. To regenerate it, run `npm run fetch-data` (the registration needs the BodyParts3D meshes), download `Z-Anatomy.zip` from the Z-Anatomy repository, unzip it, and run its `Startup.blend` through Blender 4.x or later (it needs about 9 GB of memory and a few minutes):
 
