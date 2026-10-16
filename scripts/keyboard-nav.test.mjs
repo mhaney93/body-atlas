@@ -17,8 +17,10 @@ function fakeWindow() {
   };
 }
 
-test('typing targets are form controls and editable text', () => {
+test('typing targets are text fields, selects and editable text', () => {
   for (const tag of ['INPUT', 'TEXTAREA', 'SELECT']) assert.equal(isTypingTarget(el(tag)), true, tag);
+  for (const type of ['text', 'search', 'number', 'email']) assert.equal(isTypingTarget(el('INPUT', { type })), true, type);
+  for (const type of ['checkbox', 'radio', 'range', 'button']) assert.equal(isTypingTarget(el('INPUT', { type })), false, type);
   assert.equal(isTypingTarget(el('DIV', { isContentEditable: true })), true);
   for (const tag of ['BODY', 'BUTTON', 'CANVAS']) assert.equal(isTypingTarget(el(tag)), false, tag);
   assert.equal(isTypingTarget(null), false);
@@ -36,6 +38,15 @@ test('keys are ignored while typing or with Ctrl, Meta or Alt held', () => {
   assert.equal(movementKey(key('KeyS', { metaKey: true })), null);
   assert.equal(movementKey(key('KeyD', { altKey: true })), null);
   assert.equal(movementKey(key('KeyW', { shiftKey: true })), 'KeyW');
+});
+
+test('keys still move the camera after a checkbox or slider is clicked', () => {
+  const win = fakeWindow();
+  const nav = new KeyboardNav(win);
+  win.fire('keydown', key('KeyW', { target: el('INPUT', { type: 'checkbox' }) }));
+  win.fire('keydown', key('KeyD', { target: el('INPUT', { type: 'range' }) }));
+  assert.equal(nav.moving, true);
+  assert.deepEqual([...nav.held], ['KeyW', 'KeyD']);
 });
 
 test('direction maps keys to axes, cancels opposites and normalises diagonals', () => {

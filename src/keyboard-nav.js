@@ -14,15 +14,19 @@ const KEY_AXES = {
 
 export const FAST_MULTIPLIER = 3;
 
+/** Input types that take no typed text, so letter keys can stay page shortcuts. */
+const NON_TEXT_INPUT_TYPES = new Set(['checkbox', 'radio', 'range', 'button', 'submit', 'reset', 'color', 'file', 'image']);
+
 /**
- * True when keystrokes belong to the focused element (a form control or
+ * True when keystrokes belong to the focused element (a text field, select or
  * editable text), so page shortcuts should leave them alone.
  */
 export function isTypingTarget(el) {
   if (!el) return false;
   if (el.isContentEditable) return true;
   const tag = el.tagName?.toLowerCase();
-  return tag === 'input' || tag === 'textarea' || tag === 'select';
+  if (tag === 'input') return !NON_TEXT_INPUT_TYPES.has(el.type?.toLowerCase());
+  return tag === 'textarea' || tag === 'select';
 }
 
 /** The movement key an event is for, or null if the camera should ignore it. */
