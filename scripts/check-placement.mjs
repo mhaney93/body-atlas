@@ -13,10 +13,9 @@
 // cuts a corner is caught even when both of its ends are fine. Rule 3 tests
 // each vertex against the closed parts of the other systems.
 //
-//   node scripts/check-placement.mjs [--all] [--models <dir>] [--layer <id>]
+//   node scripts/check-placement.mjs [--all] [--layer <id>]
 // --all also lists allowed passages, nested parts and contact under the
-// tolerances; --models checks GLB files in another directory (default
-// public/models); --layer checks only that layer's parts (all three rules).
+// tolerances; --layer checks only that layer's parts (all three rules).
 import { join } from 'node:path';
 import { classify, ORGAN_LIMIT, ORGAN_TOLERANCE } from './overlaps.mjs';
 import { passage, residual } from './passages.mjs';
@@ -24,7 +23,7 @@ import { allowedDepth, Body, BONE_TOLERANCE, layerAssets, readModel, REFERENCE_L
 import { Solid } from './solid.mjs';
 
 const arg = (flag) => (process.argv.includes(flag) ? process.argv[process.argv.indexOf(flag) + 1] : undefined);
-const MODELS = arg('--models') ?? join(import.meta.dirname, '..', 'public', 'models');
+const MODELS = join(import.meta.dirname, '..', 'public', 'models');
 
 // Samples along each edge are at most this far apart (mm).
 const STEP = 1.5;

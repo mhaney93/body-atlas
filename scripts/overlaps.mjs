@@ -57,8 +57,12 @@ export const KNOWN = [
   ['circulatory', /brachiocephalic vein/i, 'muscular', /sternothyroid/i, 'the vein lies just behind the muscle and overlaps it in BodyParts3D', 6.5],
   // lymphatic-model.mjs moves the lymph nodes out of bone and skin only; the
   // build does not yet move them out of the organs and vessels they drain.
-  ['lymphatic', /nodes$/i, 'digestive', /liver|colon|jejunum|pancreas|rectum|duodenum|stomach/i, 'lymph node clusters, drawn 6 mm across, pressed into the organs they drain', 13],
-  ['lymphatic', /nodes$/i, 'circulatory', /vena cava/i, 'lymph nodes, drawn 6 mm across, pressed into the vena cava they lie on', 9],
+  // Lymph node clusters are drawn 6 mm across.
+  ['lymphatic', /gastro-omental nodes|gastric nodes|subpyloric nodes|splenic nodes/i, 'digestive', /^liver$|^stomach$/i, 'the gastric node chains along the stomach\'s curvatures, pressed into the stomach and liver', 13],
+  ['lymphatic', /superior mesenteric nodes|juxta-intestinal mesenteric nodes|middle colic nodes/i, 'digestive', /transverse colon|^jejunum$|^duodenum$/i, 'the mesenteric nodes, pressed into the gut they drain', 12],
+  ['lymphatic', /precaval nodes|lateral caval nodes|pre-aortic nodes|lateral aortic nodes|pancreatic nodes/i, 'digestive', /^pancreas$/i, 'the nodes around the aorta and vena cava, pressed into the pancreas in front of them', 9],
+  ['lymphatic', /pararectal nodes|postvesical nodes/i, 'digestive', /^rectum$/i, 'the nodes beside the rectum, pressed into it', 7.5],
+  ['lymphatic', /lateral aortic nodes|ileocolic nodes/i, 'circulatory', /inferior vena cava/i, 'nodes pressed into the vena cava they lie on', 8.5],
 ];
 
 /**

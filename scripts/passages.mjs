@@ -49,11 +49,29 @@ export const PASSAGES = [
  * check-placement.mjs reads this list; the build still aims for PASSAGES.
  * Coarse muscle and ligament meshes bridge the grooves between their
  * attachment points, and parts squeezed between a bone and the skin (or
- * between two bones) have no room to move out.
+ * between two bones) have no room to move out. Every entry names its parts
+ * and bones, so a part not listed here gets only its PASSAGES allowance.
  */
 export const RESIDUALS = [
-  ['muscular', /./, /./, 'attachment left slightly deep: the simplified muscle bridges grooves in the bone', 5.5],
-  ['joints', /./, /./, 'attachment left slightly deep: the simplified ligament bridges grooves in the bone', 5.5],
+  // Muscles attaching where the bone is grooved or the space is tight.
+  ['muscular', /rotator|interspinales|longissimus thoracis|spinalis thoracis|semispinalis|splenius capitis|serratus posterior superior|rhomboid minor|trapezius|levatores costarum/i, /vertebra$|^axis$/i, 'the deep back muscles packed onto the spinous and transverse processes', 5],
+  ['muscular', /psoas major|^diaphragm$/i, /vertebra$|^intervertebral disk/i, 'psoas and the diaphragm\'s crura on the sides of the lumbar spine', 4.5],
+  ['muscular', /intercostal|subscapularis|transversus (abdominis|thoracis)|pectoralis major|rectus abdominis|external oblique|levatores costarum|iliocostalis thoracis|longissimus thoracis|serratus posterior inferior|scalenus posterior|^diaphragm$/i, /rib$|costal cartilage$/i, 'the chest and abdominal wall muscles attaching along the ribs and costal cartilages', 5],
+  ['muscular', /sternocleidomastoid|pectoralis major/i, /^manubrium$/i, 'attaching on the manubrium, between the bone and the skin', 4.5],
+  ['muscular', /trapezius/i, /scapula$|clavicle$/i, 'trapezius inserting along the spine of the scapula and the clavicle, between the bone and the skin', 5.5],
+  ['muscular', /deltoid|teres (major|minor)|pectoralis major|iliocostalis lumborum/i, /scapula$|clavicle$/i, 'attaching on the scapula and clavicle', 4],
+  ['muscular', /depressor (anguli oris|labii inferioris)|mentalis|orbicularis oris|masseter/i, /^mandible$/i, 'the muscles of the mouth and masseter on the mandible, between the bone and the skin', 5.5],
+  ['muscular', /lateral pterygoid|temporalis/i, /temporal bone$|^frontal bone$/i, 'attaching in the infratemporal and temporal fossae', 3.5],
+  ['muscular', /quadratus lumborum|sartorius|rectus femoris/i, /hip bone$/i, 'attaching at the iliac crest and the anterior iliac spines', 5],
+  ['muscular', /gluteus maximus/i, /^sacrum$/i, 'attaching on the back of the sacrum, between the bone and the skin', 4],
+  ['muscular', /extensor hallucis brevis|biceps femoris|fibularis longus/i, /calcaneus$|fibula$/i, 'attaching on the calcaneus and the head of the fibula', 3.5],
+  // Ligaments, capsules and fasciae in the narrow gaps between bones.
+  ['joints', /interspinous|supraspinous|intertransverse/i, /vertebra$|^axis$/i, 'ligaments filling the narrow gaps between the spinous and transverse processes', 5.5],
+  ['joints', /sacrococcygeal symphysis/i, /^sacrum$/i, 'the joint between the sacrum and coccyx', 5],
+  ['joints', /iliopsoas fascia/i, /femur$|^sacrum$/i, 'the fitted sheet of fascia over iliopsoas', 4.5],
+  ['joints', /fascia lata/i, /^coccyx$/i, 'the fascia lata attaching at the coccyx', 4],
+  ['joints', /radiocarpal joint|ulnocapitate/i, /ulna$|radius$|capitate$/i, 'the wrist capsule and ligaments wrapped tightly around the joint', 5],
+  ['joints', /sternoclavicular|coraco-acromial|head of rib/i, /clavicle$|scapula$|rib$/i, 'small joint discs and ligaments wrapped tightly around their joints', 4],
   ['respiratory', /^diaphragm$|lobe of (left|right) lung$/i, /rib$|vertebra$|^intervertebral disk/i, 'pressed against the ribs and spine', 3.5],
   ['muscular', /adductor magnus/i, /femur$/i, 'BodyParts3D\'s adductor magnus sinks 14.5 mm into the femur at the adductor tubercle in the source data', 14],
   ['muscular', /gluteus (medius|minimus)|transversus abdominis|external oblique/i, /hip bone$/i, 'broad muscles attaching along the iliac crest, between the bone and the skin', 7.5],
@@ -66,7 +84,9 @@ export const RESIDUALS = [
   ['circulatory', /basilic vein/i, /humerus$/i, 'BodyParts3D\'s basilic vein dips into the humerus above the elbow in the source data', 5.5],
   ['circulatory', /subclavian|axillary|suprascapular/i, /clavicle$/i, 'squeezed between the clavicle and the first rib', 4.5],
   ['circulatory', /iliac|lumbar|renal|gluteal|azygos|hemiazygos|vena cava|intercostal/i, /vertebra$|^intervertebral disk|^sacrum$|rib$|costal cartilage$/i, 'vessels lying on the vertebral bodies, sacrum and ribs', 4.5],
-  ['circulatory', /./, /./, 'vessels lying on a bone, pressed against it', 2.5],
+  ['circulatory', /sulcus|temporal branch|anterior temporal artery/i, /parietal bone$|temporal bone$/i, 'cerebral arteries on the brain surface, pressed against the inside of the skull', 2.5],
+  ['circulatory', /ophthalmic artery/i, /^frontal bone$|^sphenoid bone$/i, 'running from the optic canal along the roof of the orbit', 2.5],
+  ['circulatory', /suprascapular|dorsal scapular/i, /scapula$/i, 'lying on the scapula under its muscles', 2],
 ];
 
 /** The deepest RESIDUALS entry for `part` of `layer` in `bone`, as { why, depth }, if there is one. */

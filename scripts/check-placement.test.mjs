@@ -60,12 +60,25 @@ test('known residuals are bounded by their depth now and by their bone', () => {
   assert.ok(throughBone(hit('circulatory', 'Left basilic vein', 'Left humerus', 6)));
 });
 
+test('residuals name their parts and bones: anything not listed gets only its passage allowance', () => {
+  assert.ok(!throughBone(hit('muscular', 'Right lumbar rotator', 'First lumbar vertebra', 4.5)));
+  assert.ok(throughBone(hit('muscular', 'Right lumbar rotator', 'First lumbar vertebra', 5.5)));
+  assert.ok(throughBone(hit('muscular', 'Right biceps brachii', 'Right radius', 4)));
+  assert.ok(throughBone(hit('muscular', 'Right lumbar rotator', 'Right femur', 4)));
+  assert.ok(!throughBone(hit('joints', 'Interspinous ligaments', 'Tenth thoracic vertebra', 5)));
+  assert.ok(throughBone(hit('joints', 'Left posterior cruciate ligament', 'Left tibia', 4)));
+  assert.ok(throughBone(hit('circulatory', 'Right popliteal artery', 'Right tibia', 2)));
+});
+
 test('known clipping between systems is bounded too', () => {
   const colon = { layer: 'digestive', part: 'Transverse colon' };
   const artery = { layer: 'circulatory', part: 'Left inferior epigastric artery' };
   assert.ok(classify({ a: artery, b: colon, depth: 12 }).known);
   assert.ok(!classify({ a: artery, b: colon, depth: 12 }).fail);
   assert.ok(classify({ a: artery, b: colon, depth: 20 }).fail);
+  const nodes = { layer: 'lymphatic', part: 'Paracolic superior mesenteric nodes' };
+  assert.ok(!classify({ a: nodes, b: { layer: 'digestive', part: 'Jejunum' }, depth: 11 }).fail);
+  assert.ok(classify({ a: nodes, b: { layer: 'digestive', part: 'Liver' }, depth: 11 }).fail, 'only the organs it is listed with');
 });
 
 test('teeth sit in their sockets and sinuses in their bones, nowhere else', () => {
