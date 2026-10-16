@@ -156,7 +156,6 @@ test('WASD do not move the camera while typing in the search box', () => {
   }
 });
 
-/** A stand-in page that records what the selector asks of it. */
 test('the faded-parts note follows the faded set after a pick, until another note replaces it', () => {
   const shown = [];
   const notes = fadeNoteKeeper({ show: (note) => shown.push(note.text), hide: () => shown.push('hidden') });
@@ -176,6 +175,7 @@ test('the faded-parts note follows the faded set after a pick, until another not
   ]);
 });
 
+/** A stand-in page that records what the selector asks of it. */
 function fakeHost({ meshes = {}, hiddenGroups = [], loadDelay = {} } = {}) {
   const calls = [];
   return {
