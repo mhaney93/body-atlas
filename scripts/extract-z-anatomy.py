@@ -166,6 +166,11 @@ REGIONS = {
     ],
     'Optic chiasm': [objects['Optic chiasm.l'], objects['Optic chiasm.r']],
     'Spinal cord': [objects['White matter of spinal cord']],
+    # Folds of the dura and the septum, which BodyParts3D lacks (its septum is
+    # hundreds of fragments); the rest of the deep brain comes from BodyParts3D.
+    'Falx cerebri': [objects['Falx cerebri']],
+    'Tentorium cerebelli': [objects['Tentorium cerebelli.l'], objects['Tentorium cerebelli.r']],
+    'Septum pellucidum': [objects['Septum pellucidum']],
 }
 
 # Paired meshes: Z-Anatomy base name -> output base name.

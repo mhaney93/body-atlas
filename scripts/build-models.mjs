@@ -58,6 +58,15 @@ const NAME_OVERRIDES = {
   FJ2174: 'Set of perforating veins of foot',
   FJ3376: 'Lateral sesamoid bone of right big toe',
   FJ2539: 'Right main bronchus', // "Right main bronchus proper"
+  // The deep brain's paired parts the dataset names without a side (by their
+  // bounds; +X is the patient's left), and shorter names for the fornix.
+  FJ1755: 'Left choroid plexus',
+  FJ1803: 'Right choroid plexus',
+  FJ1768: 'Left mammillary body',
+  FJ1815: 'Right mammillary body',
+  FJ1756: 'Left fornix',
+  FJ1804: 'Right fornix',
+  FJ1741: 'Commissure of fornix',
 };
 
 // Bones and glands BodyParts3D lacks, taken from Z-Anatomy (CC BY-SA 4.0) by
@@ -135,6 +144,63 @@ const nervousParts = () =>
   ));
 
 const META_DIR = join(ROOT, '.cache', 'bodyparts3d');
+
+// Deep brain structures, from BodyParts3D. They sit in its own head, onto
+// which the Z-Anatomy brain is fitted (the two cortices agree to a median of
+// 1.7 mm), so they need no registration. Left out: the septum (FJ1832, in
+// hundreds of fragments; Z-Anatomy's septum pellucidum is used instead), the
+// colliculi and geniculate bodies (buried inside the Z-Anatomy brainstem),
+// the fragmentary habenula, striae, tuber cinereum and lamina terminalis, and
+// the pineal and pituitary glands (endocrine). The falx cerebri and
+// tentorium cerebelli come from Z-Anatomy (nervous-model.mjs).
+const DEEP_BRAIN = {
+  elements: [
+    'FJ1782', 'FJ1827', // thalamus
+    'FJ1760', 'FJ1808', // hypothalamus (its two halves)
+    'FJ1768', 'FJ1815', // mammillary bodies
+    'FJ1754', 'FJ1802', // caudate nucleus
+    'FJ1776', 'FJ1823', // putamen
+    'FJ1757', 'FJ1805', // globus pallidus
+    'FJ1759', 'FJ1807', // hippocampus
+    'FJ1753', 'FJ1829', // amygdala
+    'FJ1742', // corpus callosum
+    'FJ1750', 'FJ1751', // internal capsule
+    'FJ1756', 'FJ1804', 'FJ1741', // fornix and its commissure
+    'FJ1734', 'FJ1799', // anterior and posterior commissures
+    'FJ1767', 'FJ1814', 'FJ1730', 'FJ1731', 'FJ1738', 'FJ1752', // ventricles, aqueduct, interventricular foramen
+    'FJ1755', 'FJ1803', // choroid plexus
+  ],
+  merge: [{ name: 'Hypothalamus', elements: ['FJ1760', 'FJ1808'] }],
+  // The corpus callosum mesh carries dozens of loose scraps; keep its pieces
+  // of at least this share of its triangles.
+  pieces: { FJ1742: 0.01 },
+};
+
+/** Drops the connected pieces of a mesh smaller than `share` of its triangles. */
+function dropScraps(obj, share) {
+  const parent = Array.from({ length: obj.positions.length / 3 }, (_, i) => i);
+  const find = (i) => (parent[i] === i ? i : (parent[i] = find(parent[i])));
+  for (let i = 0; i < obj.indices.length; i += 3) {
+    const a = find(obj.indices[i]);
+    for (const v of [obj.indices[i + 1], obj.indices[i + 2]]) parent[find(v)] = a;
+  }
+  const tris = new Map();
+  for (let i = 0; i < obj.indices.length; i += 3) tris.set(find(obj.indices[i]), (tris.get(find(obj.indices[i])) ?? 0) + 1);
+  const min = (obj.indices.length / 3) * share;
+  const indices = [];
+  for (let i = 0; i < obj.indices.length; i += 3) {
+    if (tris.get(find(obj.indices[i])) >= min) indices.push(obj.indices[i], obj.indices[i + 1], obj.indices[i + 2]);
+  }
+  return { ...obj, indices };
+}
+
+function deepBrain() {
+  const objs = DEEP_BRAIN.elements.map((id) => {
+    const obj = parseObj(join(OBJ_DIR, `${id}.obj`));
+    return DEEP_BRAIN.pieces[id] ? dropScraps(obj, DEEP_BRAIN.pieces[id]) : obj;
+  });
+  return applyMerges(objs, DEEP_BRAIN.merge);
+}
 
 // Circulatory: every element the IS-A tree files under a segment of the
 // arterial or venous tree, the heart's own parts from the PART-OF tree (minus
@@ -330,8 +396,14 @@ const ASSETS = [
   RESPIRATORY,
   LYMPHATIC,
   // BodyParts3D has no spinal cord or peripheral nerves and only part of the
-  // cortex, so the whole system comes from Z-Anatomy (see nervous-model.mjs).
-  { file: 'nervous.glb', elements: [], load: () => nervousParts().filter((p) => !INNER_EAR.test(p.name)), ratio: 0.25 },
+  // cortex, so the system comes from Z-Anatomy (see nervous-model.mjs), apart
+  // from the deep brain structures BodyParts3D has (DEEP_BRAIN).
+  {
+    file: 'nervous.glb',
+    elements: [],
+    load: () => [...nervousParts().filter((p) => !INNER_EAR.test(p.name)), ...deepBrain()],
+    ratio: 0.25,
+  },
   { file: 'nervous-inner-ear.glb', elements: [], load: () => nervousParts().filter((p) => INNER_EAR.test(p.name)), ratio: 0.25 },
 ];
 
