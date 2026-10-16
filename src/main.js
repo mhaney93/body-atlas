@@ -5,7 +5,7 @@ import { buildLayerControls } from './layer-controls.js';
 import { notShownPanel } from './not-shown.js';
 import { buildIndex } from './search.js';
 import { searchBox } from './search-ui.js';
-import { searchSelector } from './search-select.js';
+import { fadeNote, searchSelector } from './search-select.js';
 import meshNames from './mesh-names.json';
 
 const $ = (id) => document.getElementById(id);
@@ -251,9 +251,11 @@ const pickResult = searchSelector({
   unpeel: (id, mesh) => controls.get(id)?.unpeel(mesh),
   focus(mesh) {
     viewer.focusOn(mesh);
-    const n = viewer.faded.size;
-    if (n) {
-      infoNote(`${n === 1 ? 'One part' : `${n} parts`} in front of it ${n === 1 ? 'is' : 'are'} faded so you can see it.`, n === 1 ? 'Show it' : 'Show them', () => {
+    // Re-picking the selected part does not reselect it, so replace or hide the last note here.
+    const note = fadeNote(viewer.faded.size);
+    if (!note) $('info-note').hidden = true;
+    else {
+      infoNote(note.text, note.action, () => {
         viewer.clearFaded();
         $('info-note').hidden = true;
       });

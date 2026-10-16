@@ -6,7 +6,7 @@
 
 /** Words that may appear in a query without having to match ("head of femur" finds "Femur head"). */
 const STOP_WORDS = new Set(['of', 'the', 'and', 'a', 'an', 'to', 'in']);
-const SIDE = /\b(left|right)\b/i;
+const SIDES = /\b(left|right)\b/gi;
 
 /** "Nérf  Optique!" → "nerf optique": lowercase, accents and punctuation stripped. */
 export function normalize(text) {
@@ -20,9 +20,14 @@ export function normalize(text) {
 
 const words = (text) => normalize(text).split(' ').filter(Boolean);
 
-/** "Navicular bone of left foot" → "left"; null for a midline part. */
+/**
+ * "Navicular bone of left foot" → "left"; null for a midline part, and for a
+ * name whose side words disagree ("First right anterior branch of … left
+ * coronary artery"), where "right" names a branch, not the body's side.
+ */
 export function sideOf(meshName) {
-  return meshName.match(SIDE)?.[1].toLowerCase() ?? null;
+  const sides = new Set([...meshName.matchAll(SIDES)].map((m) => m[1].toLowerCase()));
+  return sides.size === 1 ? [...sides][0] : null;
 }
 
 /** "Navicular bone of left foot" → "Navicular bone of foot"; "Left femur" → "Femur". */

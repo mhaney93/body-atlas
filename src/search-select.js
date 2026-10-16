@@ -40,6 +40,21 @@ export function searchSelector(host) {
 }
 
 /**
+ * The note under a picked part's info about the parts focusOn() faded in front
+ * of it, or null when none are, so a re-pick never leaves an old count showing.
+ * @param {number} faded how many parts are faded now
+ * @returns {{ text: string, action: string } | null}
+ */
+export function fadeNote(faded) {
+  if (!faded) return null;
+  const one = faded === 1;
+  return {
+    text: `${one ? 'One part' : `${faded} parts`} in front of it ${one ? 'is' : 'are'} faded so you can see it.`,
+    action: one ? 'Show it' : 'Show them',
+  };
+}
+
+/**
  * Where to put the camera to frame a part: looking at its centre from outside
  * the body on its own side (from the current direction for parts near the
  * midline), slightly from above, far enough back that the whole part fits.
