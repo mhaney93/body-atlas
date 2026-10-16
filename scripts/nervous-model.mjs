@@ -24,7 +24,7 @@ import { Envelope, Solid } from './solid.mjs';
 
 const CRANIUM = ['Frontal bone', 'Occipital bone', 'Left parietal bone', 'Right parietal bone', 'Left temporal bone', 'Right temporal bone'];
 // Meshes that move with the cranium as one rigid body.
-const BRAIN = /lobe|insula|cerebellum|brainstem|optic chiasm|optic tract/i;
+const BRAIN = /lobe|insula|cerebellum|brainstem|optic chiasm|optic tract|falx cerebri|tentorium cerebelli|septum pellucidum/i;
 
 // Tube radius in mm for a Z-Anatomy radius (also mm). Z-Anatomy draws most
 // nerves at 0.5 mm; they are thickened so they stay visible as threads.

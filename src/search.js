@@ -141,7 +141,8 @@ function nameScore(queryWords, nameWords, phrase) {
     total += best;
   }
   const joined = nameWords.join(' ');
-  if (joined.startsWith(phrase)) total += 3; // the name starts with what was typed
+  // The name starts with what was typed, also past a leading side word ("Left lateral ventricle").
+  if (joined.startsWith(phrase) || joined.replace(/^(left|right) /, '').startsWith(phrase)) total += 3;
   else if (nameWords[0]?.startsWith(queryWords[0])) total += 1;
   return total - nameWords.length * 0.05; // shorter names first among equals
 }

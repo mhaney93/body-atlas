@@ -23,13 +23,21 @@
       ]
     }
   ],
+  "depthLevels": ["Brain surface", "Deep white matter", "Deep gray matter"],
   "notShown": [
-    { "name": "Thalamus and hypothalamus", "reason": "not-added", "note": "Deep brain structures. BodyParts3D and Z-Anatomy both have them; they are not in this layer yet." },
-    { "name": "Basal ganglia (caudate nucleus, putamen, globus pallidus)", "reason": "not-added" },
-    { "name": "Hippocampus and amygdala", "reason": "not-added" },
-    { "name": "Corpus callosum", "reason": "not-added", "note": "The thick band of nerve fibres joining the two hemispheres." },
-    { "name": "Ventricles and choroid plexus", "reason": "not-added", "note": "The fluid-filled spaces inside the brain and the tissue that makes their fluid." },
-    { "name": "Dura mater, falx cerebri and tentorium cerebelli", "reason": "not-added", "note": "The tough outer covering of the brain and spinal cord and its folds." },
+    { "name": "Substantia nigra", "reason": "no-model", "note": "The dark band in the midbrain whose dopamine cells are lost in Parkinson's disease. A free brain atlas has it; adding it is planned." },
+    { "name": "Subthalamic nucleus", "reason": "no-model", "note": "A small nucleus under the thalamus that works with the basal ganglia; a target of deep brain stimulation. A free brain atlas has it; adding it is planned." },
+    { "name": "Red nucleus", "reason": "no-model", "note": "A nucleus in the midbrain that relays signals for movement. A free brain atlas has it; adding it is planned." },
+    { "name": "Deep cerebellar nuclei (dentate, emboliform, globose, fastigial)", "reason": "no-model", "note": "The nuclei inside the cerebellum that carry its output. A free brain atlas has them; adding them is planned." },
+    { "name": "Nucleus accumbens", "reason": "no-model", "note": "Part of the basal ganglia under the caudate and putamen, involved in reward. A free brain atlas has it; adding it is planned." },
+    { "name": "Claustrum", "reason": "no-model", "note": "A thin sheet of grey matter between the putamen and the insula. A free brain atlas has it; adding it is planned." },
+    { "name": "Inferior olive", "reason": "no-model", "note": "The olive-shaped nucleus in the medulla that sends signals to the cerebellum. A free brain atlas has it; adding it is planned." },
+    { "name": "Thalamic nuclei", "reason": "no-model", "note": "The thalamus is shown whole, not split into its separate nuclei." },
+    { "name": "Superior and inferior colliculi; lateral and medial geniculate bodies", "reason": "not-added", "note": "Small relay centres for sight and hearing on the back of the midbrain and under the thalamus. BodyParts3D has them, but they would sit inside this layer's brainstem." },
+    { "name": "Habenula, stria medullaris, stria terminalis, tuber cinereum and lamina terminalis", "reason": "not-added", "note": "Small structures around the third ventricle. BodyParts3D has them only as fragmentary pieces." },
+    { "name": "Septal nuclei and hippocampal commissure", "reason": "not-added", "note": "Z-Anatomy has them." },
+    { "name": "Cranial dura mater", "reason": "no-model", "note": "The tough sheet lining the inside of the skull. Its two folds, the falx cerebri and tentorium cerebelli, are shown." },
+    { "name": "Spinal dura mater", "reason": "not-added", "note": "The tough sheath around the spinal cord. Z-Anatomy has it." },
     { "name": "Arachnoid and pia mater", "reason": "no-model", "note": "The two thin inner coverings of the brain and spinal cord." },
     { "name": "Branches of the ophthalmic nerve (frontal, lacrimal, nasociliary) and the ciliary ganglion", "reason": "not-added", "note": "BodyParts3D has them; the layer is built from Z-Anatomy, which does not." },
     { "name": "Cervical plexus, including the phrenic nerve", "reason": "no-model", "note": "The nerves of the neck, and the phrenic nerve that drives the diaphragm." },
@@ -42,36 +50,43 @@
   "parts": {
     "frontal lobe": {
       "region": "Brain",
+      "depth": 1,
       "color": "#ff8fab",
       "description": "The front of each cerebral hemisphere. It plans and controls voluntary movement and handles reasoning, decision-making, personality and, usually on the left, speech production."
     },
     "parietal lobe": {
       "region": "Brain",
+      "depth": 1,
       "color": "#7fd1ff",
       "description": "The upper middle part of each hemisphere, behind the central sulcus. It processes touch, pain, temperature and body position and helps judge space and distance."
     },
     "temporal lobe": {
       "region": "Brain",
+      "depth": 1,
       "color": "#8ef0b0",
       "description": "The lower side of each hemisphere, beneath the temples. It handles hearing and, usually on the left, understanding language, and works with the limbic system on memory."
     },
     "occipital lobe": {
       "region": "Brain",
+      "depth": 1,
       "color": "#ffb36b",
       "description": "The back of each hemisphere. It contains the visual cortex, which turns signals from the eyes into what we see."
     },
     "insula": {
       "region": "Brain",
+      "depth": 1,
       "color": "#ff6f91",
       "description": "A fold of cortex hidden deep in the groove between the frontal and temporal lobes. It senses the body's internal state, such as heartbeat and hunger, and is involved in taste and emotion."
     },
     "limbic lobe": {
       "region": "Brain",
+      "depth": 1,
       "color": "#f7e07a",
       "description": "The inner rim of each hemisphere, wrapped around the brainstem, including the cingulate and parahippocampal gyri. It is part of the limbic system, which links emotion, motivation and memory."
     },
     "cerebellum": {
       "region": "Brain",
+      "depth": 1,
       "color": "#e38cff",
       "description": "The 'little brain' tucked under the back of the cerebrum. It coordinates movement, balance and posture and helps learn motor skills."
     },
@@ -87,6 +102,138 @@
     "optic tract": {
       "region": "Brain",
       "description": "The continuation of the visual pathway behind the optic chiasm. Each tract carries signals for the opposite half of the visual field back towards the thalamus and visual cortex."
+    },
+    "falx cerebri": {
+      "region": "Brain coverings",
+      "depth": 1,
+      "color": "#c9c2b0",
+      "description": "A sickle-shaped fold of the dura mater, the brain's tough outer covering, that hangs down between the two cerebral hemispheres and keeps them from shifting."
+    },
+    "tentorium cerebelli": {
+      "region": "Brain coverings",
+      "depth": 1,
+      "color": "#b7ad97",
+      "description": "A tent-like fold of the dura mater stretched over the cerebellum. It separates the cerebellum from the occipital lobes above and supports their weight."
+    },
+    "corpus callosum": {
+      "region": "Deep brain",
+      "depth": 2,
+      "color": "#f2f2f2",
+      "description": "The thick band of about 200 million nerve fibres that joins the left and right cerebral hemispheres, so the two halves can share information."
+    },
+    "internal capsule": {
+      "region": "Deep brain",
+      "depth": 2,
+      "color": "#e8e0ff",
+      "description": "A curved sheet of nerve fibres between the thalamus and the basal ganglia. Nearly all the signals running between the cortex and the brainstem and spinal cord pass through it, so a small stroke here can weaken a whole side of the body."
+    },
+    "fornix": {
+      "region": "Deep brain",
+      "depth": 2,
+      "color": "#ffd6e8",
+      "description": "An arched bundle of fibres that carries signals from the hippocampus forward and down to the mammillary bodies and other parts of the limbic system. It is part of the circuit for forming memories."
+    },
+    "commissure of fornix": {
+      "region": "Deep brain",
+      "depth": 2,
+      "color": "#ffd6e8",
+      "description": "Where fibres of the left and right fornix cross under the corpus callosum, linking the two hippocampi."
+    },
+    "anterior commissure": {
+      "region": "Deep brain",
+      "depth": 2,
+      "color": "#fff0b3",
+      "description": "A small bundle of fibres crossing the midline in front of the fornix. It links parts of the two temporal lobes and the smell pathways."
+    },
+    "posterior commissure": {
+      "region": "Deep brain",
+      "depth": 2,
+      "color": "#fff0b3",
+      "description": "A small bundle of fibres crossing the midline above the cerebral aqueduct. It helps coordinate the pupils' reflex to light in both eyes."
+    },
+    "septum pellucidum": {
+      "region": "Deep brain",
+      "depth": 2,
+      "color": "#d9d2f0",
+      "description": "A thin, see-through membrane in the midline that separates the front parts of the left and right lateral ventricles."
+    },
+    "thalamus": {
+      "region": "Deep brain",
+      "depth": 3,
+      "color": "#7ec8a8",
+      "description": "An egg-shaped mass of grey matter on each side of the third ventricle. It is the main relay station of the brain: almost every sense except smell passes through it on the way to the cortex, and it helps regulate sleep and alertness."
+    },
+    "hypothalamus": {
+      "region": "Deep brain",
+      "depth": 3,
+      "color": "#ffa07a",
+      "description": "A small region under the thalamus that keeps the body's internal balance. It controls temperature, hunger, thirst and sleep cycles and directs the pituitary gland's hormones."
+    },
+    "mammillary body": {
+      "region": "Deep brain",
+      "depth": 3,
+      "color": "#ff8a65",
+      "description": "One of two small round bumps on the underside of the hypothalamus. They relay signals from the hippocampus, by way of the fornix, and are part of the memory circuit."
+    },
+    "caudate nucleus": {
+      "region": "Deep brain",
+      "depth": 3,
+      "color": "#5fa8ff",
+      "description": "A C-shaped mass of grey matter curving alongside the lateral ventricle. Part of the basal ganglia, it helps plan and start movements and is involved in learning and habits."
+    },
+    "putamen": {
+      "region": "Deep brain",
+      "depth": 3,
+      "color": "#4f7dff",
+      "description": "A rounded mass of grey matter on the outer side of the basal ganglia. With the caudate nucleus it forms the striatum, which receives signals from the cortex for controlling movement."
+    },
+    "globus pallidus": {
+      "region": "Deep brain",
+      "depth": 3,
+      "color": "#9b8cff",
+      "description": "A wedge of grey matter inside the putamen. It is the main output of the basal ganglia, sending signals through the thalamus that help keep movements smooth and stop unwanted ones."
+    },
+    "hippocampus": {
+      "region": "Deep brain",
+      "depth": 3,
+      "color": "#ffd166",
+      "description": "A curved ridge of grey matter in the floor of each lateral ventricle's lower horn, named for its seahorse shape. It is essential for forming new memories and for finding the way around."
+    },
+    "amygdala": {
+      "region": "Deep brain",
+      "depth": 3,
+      "color": "#ff6b6b",
+      "description": "An almond-shaped cluster of nuclei deep in each temporal lobe, in front of the hippocampus. It processes emotions, especially fear, and attaches emotional weight to memories."
+    },
+    "lateral ventricle": {
+      "region": "Deep brain",
+      "color": "#3fb8d9",
+      "description": "The largest of the brain's fluid-filled spaces, one in each hemisphere, shaped like a ram's horn. It makes and holds cerebrospinal fluid, which cushions the brain."
+    },
+    "third ventricle": {
+      "region": "Deep brain",
+      "color": "#3fb8d9",
+      "description": "A narrow, fluid-filled slit in the midline between the two thalami. It connects the lateral ventricles above to the cerebral aqueduct below."
+    },
+    "fourth ventricle": {
+      "region": "Deep brain",
+      "color": "#3fb8d9",
+      "description": "A tent-shaped, fluid-filled space between the brainstem and the cerebellum. Cerebrospinal fluid leaves it through small openings to flow around the brain and spinal cord."
+    },
+    "cerebral aqueduct": {
+      "region": "Deep brain",
+      "color": "#3fb8d9",
+      "description": "The narrow channel through the midbrain that carries cerebrospinal fluid from the third ventricle to the fourth."
+    },
+    "interventricular foramen": {
+      "region": "Deep brain",
+      "color": "#3fb8d9",
+      "description": "The small openings through which cerebrospinal fluid flows from each lateral ventricle into the third ventricle."
+    },
+    "choroid plexus": {
+      "region": "Deep brain",
+      "color": "#ff5c8a",
+      "description": "A fringe of blood vessels and lining cells inside the ventricles that makes cerebrospinal fluid, about half a litre a day."
     },
     "spinal cord": {
       "region": "Spinal cord",
