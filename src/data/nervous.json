@@ -25,13 +25,7 @@
   ],
   "depthLevels": ["Brain surface", "Deep white matter", "Deep gray matter"],
   "notShown": [
-    { "name": "Substantia nigra", "reason": "no-model", "note": "The dark band in the midbrain whose dopamine cells are lost in Parkinson's disease. A free brain atlas has it; adding it is planned." },
-    { "name": "Subthalamic nucleus", "reason": "no-model", "note": "A small nucleus under the thalamus that works with the basal ganglia; a target of deep brain stimulation. A free brain atlas has it; adding it is planned." },
-    { "name": "Red nucleus", "reason": "no-model", "note": "A nucleus in the midbrain that relays signals for movement. A free brain atlas has it; adding it is planned." },
-    { "name": "Deep cerebellar nuclei (dentate, emboliform, globose, fastigial)", "reason": "no-model", "note": "The nuclei inside the cerebellum that carry its output. A free brain atlas has them; adding them is planned." },
-    { "name": "Nucleus accumbens", "reason": "no-model", "note": "Part of the basal ganglia under the caudate and putamen, involved in reward. A free brain atlas has it; adding it is planned." },
-    { "name": "Claustrum", "reason": "no-model", "note": "A thin sheet of grey matter between the putamen and the insula. A free brain atlas has it; adding it is planned." },
-    { "name": "Inferior olive", "reason": "no-model", "note": "The olive-shaped nucleus in the medulla that sends signals to the cerebellum. A free brain atlas has it; adding it is planned." },
+    { "name": "Separate deep cerebellar nuclei (dentate, emboliform, globose, fastigial)", "reason": "no-model", "note": "Shown together as one part on each side, the deep cerebellar nuclei: the brain atlas they come from does not tell them apart." },
     { "name": "Thalamic nuclei", "reason": "no-model", "note": "The thalamus is shown whole, not split into its separate nuclei." },
     { "name": "Superior and inferior colliculi; lateral and medial geniculate bodies", "reason": "not-added", "note": "Small relay centres for sight and hearing on the back of the midbrain and under the thalamus. BodyParts3D has them, but they would sit inside this layer's brainstem." },
     { "name": "Habenula, stria medullaris, stria terminalis, tuber cinereum and lamina terminalis", "reason": "not-added", "note": "Small structures around the third ventricle. BodyParts3D has them only as fragmentary pieces." },
@@ -234,6 +228,55 @@
       "region": "Deep brain",
       "color": "#ff5c8a",
       "description": "A fringe of blood vessels and lining cells inside the ventricles that makes cerebrospinal fluid, about half a litre a day."
+    },
+    "substantia nigra": {
+      "region": "Deep brain",
+      "approximate": true,
+      "color": "#8f7bb8",
+      "description": "A curved band of grey matter in the midbrain, just behind the cerebral peduncles. Its dark, pigmented cells make dopamine for the basal ganglia; losing them causes Parkinson's disease."
+    },
+    "red nucleus": {
+      "region": "Deep brain",
+      "approximate": true,
+      "color": "#ff4d5e",
+      "description": "An oval nucleus in the midbrain, pinkish in fresh tissue from its rich blood supply. It relays signals from the cerebellum and the motor cortex and helps control movements of the arm."
+    },
+    "subthalamic nucleus": {
+      "region": "Deep brain",
+      "depth": 3,
+      "approximate": true,
+      "color": "#c3f584",
+      "description": "A small lens-shaped nucleus under the thalamus and above the substantia nigra. It works with the basal ganglia to hold back unwanted movement, and is the main target of deep brain stimulation for Parkinson's disease."
+    },
+    "deep cerebellar nuclei": {
+      "region": "Deep brain",
+      "depth": 3,
+      "approximate": true,
+      "color": "#ffb4f0",
+      "aliases": ["dentate nucleus", "emboliform nucleus", "globose nucleus", "fastigial nucleus", "interposed nucleus", "cerebellar nuclei"],
+      "description": "The grey matter buried in the white core of each half of the cerebellum: the large, folded dentate nucleus and the small emboliform, globose and fastigial nuclei, shown here together. Nearly all of the cerebellum's output leaves through them."
+    },
+    "inferior olive": {
+      "region": "Deep brain",
+      "approximate": true,
+      "color": "#d4e157",
+      "aliases": ["inferior olivary nucleus", "olivary nucleus"],
+      "description": "A crumpled, purse-shaped nucleus inside the olive, the bulge on each side of the front of the medulla. Its fibres climb into the opposite half of the cerebellum and carry the timing signals it uses to learn movements."
+    },
+    "nucleus accumbens": {
+      "region": "Deep brain",
+      "depth": 3,
+      "approximate": true,
+      "color": "#ffcc80",
+      "aliases": ["ventral striatum"],
+      "description": "The part of the basal ganglia where the caudate nucleus and putamen meet underneath, in front. It is a hub of the brain's reward circuit, involved in motivation, pleasure and addiction."
+    },
+    "claustrum": {
+      "region": "Deep brain",
+      "depth": 3,
+      "approximate": true,
+      "color": "#80e0d0",
+      "description": "A thin sheet of grey matter between the putamen and the insula, with a thin layer of white matter on each side. It is wired to almost every area of the cortex; what it does is still debated, perhaps steering attention."
     },
     "spinal cord": {
       "region": "Spinal cord",

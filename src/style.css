@@ -644,6 +644,16 @@ body {
   font-size: 0.92rem;
 }
 
+.info .approx {
+  display: inline-block;
+  margin-bottom: 8px;
+  padding: 1px 6px;
+  border: 1px dashed var(--muted);
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
 .info .flow {
   display: flex;
   align-items: center;

@@ -45,7 +45,14 @@ export function sharedEntry(layer, sourceId, meshName) {
 }
 
 /**
- * Returns { name, region?, description?, color?, group?, flow?, depth?, of? } for a
+ * The label on parts whose part entry sets `approximate: true`: parts placed
+ * from a population-average atlas rather than modelled on this body, so their
+ * position is good only to a few millimetres.
+ */
+export const APPROXIMATE_LABEL = 'Position approximate (population-average atlas)';
+
+/**
+ * Returns { name, region?, description?, color?, group?, flow?, depth?, of?, approximate? } for a
  * mesh in the given layer. Parts whose left and right sides differ (e.g. the
  * heart's chambers) are keyed by their full lowercase name, which wins over the
  * side-less one. `group` is the layer's sub-group (see `groups` in the layer
@@ -68,6 +75,7 @@ export function partInfo(layer, meshName, groupId, source, of) {
     flow: part?.flow ?? owner?.flow ?? group?.flow,
     depth: part?.depth ?? owner?.depth,
     of,
+    approximate: part?.approximate === true,
   };
 }
 

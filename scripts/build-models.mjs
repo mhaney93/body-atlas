@@ -12,6 +12,7 @@ import { EXTMeshoptCompression, KHRMeshQuantization } from '@gltf-transform/exte
 import { meshopt, simplify, weld } from '@gltf-transform/functions';
 import { MeshoptEncoder, MeshoptSimplifier } from 'meshoptimizer';
 import { loadMuscular } from './muscular-model.mjs';
+import { loadAllen, placeNuclei } from './allen-model.mjs';
 import { loadNervous } from './nervous-model.mjs';
 import { settleLymphatic } from './lymphatic-model.mjs';
 import { yieldsTo } from './overlaps.mjs';
@@ -144,6 +145,7 @@ const nervousParts = () =>
   ));
 
 const META_DIR = join(ROOT, '.cache', 'bodyparts3d');
+const ALLEN_DIR = join(ROOT, '.cache', 'allen');
 
 // Deep brain structures, from BodyParts3D. They sit in its own head, onto
 // which the Z-Anatomy brain is fitted (the two cortices agree to a median of
@@ -194,7 +196,12 @@ function dropScraps(obj, share) {
   return { ...obj, indices };
 }
 
+let deepBrainCache;
 function deepBrain() {
+  return (deepBrainCache ??= loadDeepBrain());
+}
+
+function loadDeepBrain() {
   const objs = DEEP_BRAIN.elements.map((id) => {
     const obj = parseObj(join(OBJ_DIR, `${id}.obj`));
     return DEEP_BRAIN.pieces[id] ? dropScraps(obj, DEEP_BRAIN.pieces[id]) : obj;
@@ -397,11 +404,19 @@ const ASSETS = [
   LYMPHATIC,
   // BodyParts3D has no spinal cord or peripheral nerves and only part of the
   // cortex, so the system comes from Z-Anatomy (see nervous-model.mjs), apart
-  // from the deep brain structures BodyParts3D has (DEEP_BRAIN).
+  // from the deep brain structures BodyParts3D has (DEEP_BRAIN) and the small
+  // nuclei neither has, mapped onto that brain from the Allen atlas
+  // (allen-model.mjs).
   {
     file: 'nervous.glb',
     elements: [],
-    load: () => [...nervousParts().filter((p) => !INNER_EAR.test(p.name)), ...deepBrain()],
+    load: () => {
+      const brain = [...nervousParts().filter((p) => !INNER_EAR.test(p.name)), ...deepBrain()];
+      return [...brain, ...loadAllen(ALLEN_DIR, new Map(brain.map((p) => [p.name, p])), { log: console.log })];
+    },
+    // Simplification moves the brain's surfaces by up to ~2 mm, so the Allen
+    // nuclei are placed again among the simplified parts.
+    place: placeNuclei,
     ratio: 0.25,
   },
   { file: 'nervous-inner-ear.glb', elements: [], load: () => nervousParts().filter((p) => INNER_EAR.test(p.name)), ratio: 0.25 },
@@ -866,7 +881,9 @@ for (const asset of ASSETS) {
       doc.createNode(obj.name).setMesh(mesh).setExtras({
         ...(obj.source === 'z-anatomy'
           ? { name: obj.name, source: 'Z-Anatomy', ...(obj.group && { group: obj.group }), ...(obj.of && { of: obj.of }) }
-          : {
+          : obj.source === 'allen'
+            ? { name: obj.name, source: 'Allen Human Reference Atlas 3D 2020', allen: obj.id }
+            : {
               name: obj.name,
               fma: obj.fma,
               bp3d: obj.ids?.join(' ') ?? obj.id,
@@ -909,6 +926,8 @@ for (const asset of ASSETS) {
       layer === REFERENCE_LAYER
         ? settle(parts, { layer, body: skinOnly() })
         : settle(parts, { layer, body: body(), blockers: (part) => blockersFor(layer, part) });
+    // An asset's own placement among its parts (`place`), after the settling.
+    for (const [name, d] of asset.place?.(parts) ?? []) moved.set(name, Math.max(moved.get(name) ?? 0, d));
     // Rewrite only the vertices that moved or were added, so an untouched
     // mesh stays byte-identical.
     doc

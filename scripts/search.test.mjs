@@ -109,11 +109,19 @@ test('typos and accents still match', () => {
 });
 
 test('a left-out part is found and says why', () => {
-  const [hit] = top('substantia nigra');
+  const [hit] = top('arachnoid');
   assert.equal(hit.kind, 'notShown');
   assert.equal(hit.layerId, 'nervous');
   assert.equal(hit.reason, 'no-model');
   assert.ok(layers.NOT_SHOWN_REASONS[hit.reason]);
+});
+
+test('parts placed from a population-average atlas are flagged as approximate', () => {
+  const [hit] = top('substantia nigra');
+  assert.equal(hit.kind, 'part');
+  assert.equal(hit.approximate, true);
+  assert.equal(top('dentate nucleus')[0].name, 'Deep cerebellar nuclei');
+  assert.equal(top('thalamus')[0].approximate, false);
 });
 
 test('aliases find parts by everyday names and say which alias matched', () => {
@@ -227,8 +235,8 @@ test('a part in a hidden sub-group gets its group shown first', async () => {
 
 test('picking a left-out part shows why, without touching the 3D view', async () => {
   const host = fakeHost();
-  await searchSelector(host)(top('substantia nigra')[0]);
-  assert.deepEqual(host.calls, [['showNotShown', 'Substantia nigra']]);
+  await searchSelector(host)(top('arachnoid')[0]);
+  assert.deepEqual(host.calls, [['showNotShown', 'Arachnoid and pia mater']]);
 });
 
 test('a part missing from its loaded model is reported, not silently ignored', async () => {

@@ -40,8 +40,8 @@ export function sidelessName(meshName) {
  * Builds the search index.
  * @param {object[]} layers layer data (src/layers.js LAYERS)
  * @param {Record<string, string[]>} meshNames mesh names per layer id (src/mesh-names.json)
- * @param {(layer: object, meshName: string) => {region?: string}} partInfo region lookup
- * @returns {object[]} entries: `{ kind: 'part', layerId, meshName, name, side, region, aliases, words }`
+ * @param {(layer: object, meshName: string) => {region?: string, approximate?: boolean}} partInfo region lookup
+ * @returns {object[]} entries: `{ kind: 'part', layerId, meshName, name, side, region, approximate, aliases, words }`
  *   or `{ kind: 'notShown', layerId, name, reason, note?, shownIn?, system?, aliases, words }`;
  *   `aliases` come from the part's or not-shown entry's optional `aliases` list
  */
@@ -54,13 +54,15 @@ export function buildIndex(layers, meshNames, partInfo) {
       const side = own ? null : sideOf(meshName);
       const name = side ? sidelessName(meshName) : meshName;
       const part = own ?? layer.parts[name.toLowerCase()];
+      const info = partInfo(layer, meshName);
       entries.push({
         kind: 'part',
         layerId: layer.id,
         meshName,
         name,
         side,
-        region: partInfo(layer, meshName).region,
+        region: info.region,
+        approximate: info.approximate,
         aliases: part?.aliases ?? [],
         words: [words(meshName), ...(part?.aliases ?? []).map(words)],
       });

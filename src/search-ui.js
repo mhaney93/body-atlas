@@ -10,10 +10,11 @@ import { isSearchShortcut, search } from './search.js';
  *   index: () => object[],
  *   layer: (id: string) => { name: string, color: string },
  *   reasons: Record<string, string>,
+ *   approximate: string,
  *   onPick: (entry: object) => void,
  * }} options `index` is called on first use, so the index is built only when needed
  */
-export function searchBox(root, { index, layer, reasons, onPick }) {
+export function searchBox(root, { index, layer, reasons, approximate, onPick }) {
   const input = root.querySelector('input');
   const list = root.querySelector('[role="listbox"]');
   let results = [];
@@ -59,7 +60,7 @@ export function searchBox(root, { index, layer, reasons, onPick }) {
     const parts =
       entry.kind === 'notShown'
         ? [`Not shown · ${reasons[entry.reason] ?? entry.reason}`, system.name]
-        : [system.name, entry.region];
+        : [system.name, entry.region, entry.approximate && approximate];
     if (entry.alias) parts.push(`also called ${entry.alias}`);
     meta.textContent = parts.filter(Boolean).join(' · ');
     li.append(name, meta);
