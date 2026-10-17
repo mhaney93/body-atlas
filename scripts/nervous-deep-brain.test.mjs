@@ -122,7 +122,7 @@ test('the deep structures and dura folds are inside the skull and out of its bon
 
 test('the not-shown list keeps naming what is still left out of the brain', () => {
   const names = layer.notShown.map((e) => e.name);
-  for (const want of ['Substantia nigra', 'Subthalamic nucleus', 'Red nucleus', 'Nucleus accumbens', 'Claustrum', 'Arachnoid and pia mater']) {
+  for (const want of ['Thalamic nuclei', 'Arachnoid and pia mater']) {
     assert.ok(names.includes(want), want);
   }
   for (const gone of ['Thalamus and hypothalamus', 'Hippocampus and amygdala', 'Corpus callosum', 'Ventricles and choroid plexus']) {

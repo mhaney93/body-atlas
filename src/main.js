@@ -1,4 +1,4 @@
-import { LAYERS, NOT_SHOWN_REASONS, SHELL_ASSET, partInfo } from './layers.js';
+import { APPROXIMATE_LABEL, LAYERS, NOT_SHOWN_REASONS, SHELL_ASSET, partInfo } from './layers.js';
 import { tourControls } from './tour.js';
 import { Viewer } from './viewer.js';
 import { buildLayerControls } from './layer-controls.js';
@@ -44,6 +44,8 @@ const viewer = new Viewer($('stage'), {
     $('info-flow').querySelector('.value').textContent = part.flow ?? '';
     $('info-flow').style.setProperty('--group-color', part.group?.color ?? layer.color);
     $('info-description').textContent = part.description ?? '';
+    $('info-approx').hidden = !part.approximate;
+    $('info-approx').textContent = part.approximate ? APPROXIMATE_LABEL : '';
     showRole(layer, mesh);
     info.hidden = false;
   },
@@ -109,6 +111,7 @@ function showInfoText({ kicker, color, name, description }) {
   $('info-name').textContent = name;
   $('info-flow').hidden = true;
   $('info-role').hidden = true;
+  $('info-approx').hidden = true;
   $('info-description').textContent = description ?? '';
   $('info-description').hidden = !description;
   info.hidden = false;
@@ -301,6 +304,7 @@ searchBox($('search'), {
   index: () => buildIndex(layers, meshNames, partInfo),
   layer: layerById,
   reasons: NOT_SHOWN_REASONS,
+  approximate: APPROXIMATE_LABEL,
   onPick: (entry) => pickResult(entry).catch((err) => console.error(err)),
 });
 

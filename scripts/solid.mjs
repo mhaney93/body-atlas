@@ -259,6 +259,13 @@ export class Envelope {
     return !this.solid.contains(p) && this.outer[near.triangle] ? near.distance : 0;
   }
 
+  /** Whether `p` lies within the outer surface: outside(p) === 0, without measuring how far out it is. */
+  encloses(p) {
+    if (!this.solid.nearBox(p)) return false;
+    const cell = this.grid[this.#index(p)];
+    return cell === 1 ? this.outside(p) === 0 : cell === 0;
+  }
+
   /**
    * Depth of `p` beneath the outer skin surface (negative outside) and the
    * nearest point on it, or null if `p` lies deeper than `limit`.

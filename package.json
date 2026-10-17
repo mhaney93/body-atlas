@@ -8,7 +8,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "fetch-data": "node scripts/fetch-bodyparts3d.mjs",
+    "fetch-data": "node scripts/fetch-bodyparts3d.mjs && node scripts/fetch-allen.mjs",
     "build-models": "node scripts/build-models.mjs && node scripts/mesh-names.mjs && node scripts/check-placement.mjs",
     "mesh-names": "node scripts/mesh-names.mjs",
     "check-placement": "node scripts/check-placement.mjs",
