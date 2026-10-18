@@ -272,4 +272,3 @@ The Reproductive (male) layer shows every male reproductive organ the free model
 - **Penis**: the corpora cavernosa (BodyParts3D models the two as one part, with their crura on the pubic arch), the corpus spongiosum and the glans.
 
 Neither free model has the scrotum as a part of its own (the glass skin shell covers it), the bulbourethral glands, the coverings of the spermatic cord and the cremaster muscle, the tunica vaginalis, the foreskin, or the bulbospongiosus and ischiocavernosus muscles, so the layer's "Not shown" panel lists them, along with the parts too small to model and the urethra and the vessels and nerves that other systems show.
-
