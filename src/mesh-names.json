@@ -745,6 +745,18 @@
   "Jejunum",
   "Ileum"
  ],
+ "endocrine": [
+  "Pineal gland",
+  "Left adrenal gland",
+  "Right adrenal gland",
+  "Thyroid gland",
+  "Left superior parathyroid gland",
+  "Right superior parathyroid gland",
+  "Left inferior parathyroid gland",
+  "Right inferior parathyroid gland",
+  "Anterior pituitary",
+  "Posterior pituitary"
+ ],
  "joints": [
   "Interosseous membrane of right leg",
   "Interosseous membrane of left leg",

@@ -11,10 +11,11 @@ import respiratory from './data/respiratory.json';
 import lymphatic from './data/lymphatic.json';
 import reproductive from './data/reproductive.json';
 import urinary from './data/urinary.json';
+import endocrine from './data/endocrine.json';
 
 export const SHELL_ASSET = 'models/skin.glb';
 
-export const LAYERS = [skeletal, nervous, circulatory, joints, digestive, muscular, respiratory, lymphatic, reproductive, urinary];
+export const LAYERS = [skeletal, nervous, circulatory, joints, digestive, muscular, respiratory, lymphatic, reproductive, urinary, endocrine];
 
 /** Canonical form of a mesh name used to match part info, e.g. "Navicular bone of left foot" → "navicular bone of foot". */
 export function canonical(meshName) {

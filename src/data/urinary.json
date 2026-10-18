@@ -74,7 +74,7 @@
     { "name": "Renal arteries and veins", "reason": "other-system", "layer": "circulatory", "note": "The vessels that bring blood to the kidneys to be filtered and take it back." },
     { "name": "Lymph nodes around the bladder", "reason": "other-system", "layer": "lymphatic" },
     { "name": "Pelvic floor muscles", "reason": "other-system", "layer": "muscular", "note": "They support the bladder and help hold urine in." },
-    { "name": "Adrenal glands", "reason": "other-system", "system": "endocrine", "note": "They sit on top of the kidneys but make hormones, not urine." },
+    { "name": "Adrenal glands", "reason": "other-system", "layer": "endocrine", "note": "They sit on top of the kidneys but make hormones, not urine." },
     { "name": "Prostate", "reason": "other-system", "layer": "reproductive", "note": "It wraps the first part of the urethra, just below the bladder." },
     { "name": "Nerves of the kidneys and bladder", "reason": "no-model", "note": "The renal and vesical nerve plexuses. Neither source model has them." }
   ],

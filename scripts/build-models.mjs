@@ -17,6 +17,7 @@ import { loadNervous } from './nervous-model.mjs';
 import { settleLymphatic } from './lymphatic-model.mjs';
 import { yieldsTo } from './overlaps.mjs';
 import { Body, layerOf, REFERENCE_LAYER, SKIN_ASSET } from './placement.mjs';
+import { loadEndocrine } from './endocrine-model.mjs';
 import { loadEjaculatoryDucts } from './reproductive-model.mjs';
 import { settle } from './settle.mjs';
 import { Solid } from './solid.mjs';
@@ -426,6 +427,26 @@ function renalPelves(dir) {
   });
 }
 
+// Endocrine system: only the glands no other layer has. BodyParts3D has the
+// pineal body and the adrenal glands; the thyroid, the parathyroids and the
+// two lobes of the pituitary come from Z-Anatomy (endocrine-model.mjs). The
+// hypothalamus, thymus, pancreas and testes are shared from the layers that
+// own them at runtime (see "shared" in src/data/endocrine.json).
+const ENDOCRINE = {
+  file: 'endocrine.glb',
+  groups: new Map([
+    ['FJ1795', 'brain'], // pineal body
+    ...['FJ3129', 'FJ3130'].map((id) => [id, 'trunk']), // adrenal glands
+  ]),
+  load: () =>
+    loadEndocrine(join(Z_ANATOMY_DIR, 'endocrine'), OBJ_DIR, parseObj).map((part) => ({
+      ...part,
+      group: /pituitary/i.test(part.name) ? 'brain' : 'neck',
+    })),
+  rename: (name) => ({ 'Pineal body': 'Pineal gland' })[name] ?? name,
+  ratio: 0.5,
+};
+
 const ASSETS = [
   { file: 'skin.glb', elements: [SKIN], ratio: 0.35 },
   { file: 'skeletal.glb', elements: range(3152, 3395), extras: ['coccyx.obj'], ratio: 0.5 },
@@ -478,6 +499,7 @@ const ASSETS = [
   { file: 'nervous-inner-ear.glb', elements: [], load: () => nervousParts().filter((p) => INNER_EAR.test(p.name)), ratio: 0.25 },
   // Added after the nerves, so the models built before it stay as they were.
   REPRODUCTIVE,
+  ENDOCRINE,
 ];
 
 /** BodyParts3D bone meshes (mm) by English name, for nervous-model.mjs. */
