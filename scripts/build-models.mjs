@@ -17,6 +17,7 @@ import { loadNervous } from './nervous-model.mjs';
 import { settleLymphatic } from './lymphatic-model.mjs';
 import { yieldsTo } from './overlaps.mjs';
 import { Body, layerOf, REFERENCE_LAYER, SKIN_ASSET } from './placement.mjs';
+import { loadEjaculatoryDucts } from './reproductive-model.mjs';
 import { settle } from './settle.mjs';
 import { Solid } from './solid.mjs';
 
@@ -371,6 +372,25 @@ const LYMPHATIC = {
   ratio: 0.5,
 };
 
+// Reproductive system (male). BodyParts3D has the testes, epididymides,
+// deferent ducts, seminal vesicles, prostate and the erectile bodies of the
+// penis; the ejaculatory ducts come from Z-Anatomy (reproductive-model.mjs).
+// It models both corpora cavernosa as one mesh. The urethra is left to the
+// urinary system.
+const REPRODUCTIVE = {
+  file: 'reproductive.glb',
+  groups: new Map([
+    ...['FJ3138', 'FJ3142', 'FJ3136', 'FJ3141'].map((id) => [id, 'testes']), // testes, epididymides
+    ...['FJ3135', 'FJ3140'].map((id) => [id, 'ducts']), // deferent ducts
+    ...['FJ3137', 'FJ3143', 'FJ3139'].map((id) => [id, 'glands']), // seminal vesicles, prostate
+    ...['FJ3132', 'FJ3133', 'FJ3134'].map((id) => [id, 'penis']), // corpora cavernosa, corpus spongiosum, glans
+  ]),
+  load: () =>
+    loadEjaculatoryDucts(join(Z_ANATOMY_DIR, 'reproductive'), OBJ_DIR, parseObj).map((duct) => ({ ...duct, group: 'ducts' })),
+  rename: (name) => ({ 'Corpus cavernosum of penis': 'Corpora cavernosa of penis' })[name] ?? name,
+  ratio: 0.5,
+};
+
 const ASSETS = [
   { file: 'skin.glb', elements: [SKIN], ratio: 0.35 },
   { file: 'skeletal.glb', elements: range(3152, 3395), extras: ['coccyx.obj'], ratio: 0.5 },
@@ -420,6 +440,8 @@ const ASSETS = [
     ratio: 0.25,
   },
   { file: 'nervous-inner-ear.glb', elements: [], load: () => nervousParts().filter((p) => INNER_EAR.test(p.name)), ratio: 0.25 },
+  // Added after the nerves, so the models built before it stay as they were.
+  REPRODUCTIVE,
 ];
 
 /** BodyParts3D bone meshes (mm) by English name, for nervous-model.mjs. */

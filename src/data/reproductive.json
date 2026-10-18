@@ -1,0 +1,72 @@
+{
+  "id": "reproductive",
+  "name": "Reproductive (male)",
+  "color": "#e46cf0",
+  "asset": "models/reproductive.glb",
+  "summary": "The male reproductive system makes sperm and the hormone testosterone, and delivers sperm out of the body. Sperm form in the testes, mature in the epididymides and travel up the deferent ducts, where fluid from the seminal vesicles and prostate joins them to make semen. The penis carries semen and urine out through the urethra.",
+  "groups": {
+    "testes": { "label": "Testes & epididymides", "color": "#f6a8ff" },
+    "ducts": { "label": "Sperm ducts", "color": "#ffd76e" },
+    "glands": { "label": "Seminal vesicles & prostate", "color": "#ff86c8" },
+    "penis": { "label": "Penis", "color": "#e46cf0" }
+  },
+  "groupToggles": true,
+  "notShown": [
+    { "name": "Scrotum", "reason": "no-model", "note": "The pouch of skin and thin smooth muscle that holds the testes outside the body, where they stay a few degrees cooler than the body core. Neither source model has it as a part of its own; the glass skin shell covers the area." },
+    { "name": "Bulbourethral glands", "aliases": ["Cowper's glands"], "reason": "no-model", "note": "Two pea-sized glands just below the prostate. They release a clear fluid into the urethra before ejaculation." },
+    { "name": "Spermatic cord coverings and cremaster muscle", "reason": "no-model", "note": "The layers that wrap the deferent duct, testicular vessels and nerves on their way from the groin to each testis, and the muscle in them that draws the testis up toward the body." },
+    { "name": "Tunica vaginalis and tunica albuginea", "reason": "no-model", "note": "The thin double-layered sac around the front and sides of each testis, and the tough fibrous capsule of the testis itself." },
+    { "name": "Foreskin (prepuce)", "reason": "no-model", "note": "The fold of skin that covers the glans of an uncircumcised penis." },
+    { "name": "Bulbospongiosus and ischiocavernosus muscles", "reason": "no-model", "note": "The small perineal muscles that wrap the root of the penis and help with erection and ejaculation. Neither source model has a mesh for them." },
+    { "name": "Seminiferous tubules and rete testis", "reason": "too-small", "note": "The coiled tubes, several hundred in each testis, where sperm are made, and the network of channels that collects the sperm and passes them to the epididymis." },
+    { "name": "Sperm cells and semen", "reason": "too-small", "note": "A sperm cell is about 0.05 mm long; a healthy adult makes millions every day." },
+    { "name": "Male urethra", "reason": "other-system", "system": "urinary", "note": "The tube that runs from the bladder through the prostate and the corpus spongiosum to the tip of the glans. In men it carries semen as well as urine; the ejaculatory ducts open into it inside the prostate." },
+    { "name": "Testicular arteries and veins", "reason": "other-system", "layer": "circulatory", "note": "They run down from the abdomen in the spermatic cord to each testis." },
+    { "name": "Dorsal arteries and veins of the penis", "reason": "other-system", "layer": "circulatory" },
+    { "name": "Pudendal nerve and genital branch of the genitofemoral nerve", "reason": "other-system", "layer": "nervous", "note": "The nerves that supply the penis, the scrotum and the cremaster muscle." }
+  ],
+  "parts": {
+    "testis": {
+      "region": "Scrotum",
+      "aliases": ["testicle", "testes"],
+      "description": "One of two oval glands, each about 4 to 5 cm long, that hang in the scrotum. They make sperm and the hormone testosterone."
+    },
+    "epididymis": {
+      "region": "Scrotum",
+      "description": "A comma-shaped organ along the back of each testis. Inside it a single tightly coiled tube, about 6 metres long, stores sperm while they mature."
+    },
+    "deferent duct": {
+      "region": "Groin and pelvis",
+      "aliases": ["vas deferens", "ductus deferens"],
+      "description": "A muscular tube, 30 to 45 cm long, that carries sperm from the epididymis up through the groin into the pelvis and behind the bladder. Its walls contract to push sperm forward during ejaculation."
+    },
+    "ejaculatory duct": {
+      "region": "Pelvis",
+      "description": "A short duct, about 2 cm long, formed where the deferent duct joins the duct of the seminal vesicle. It runs through the prostate and opens into the urethra."
+    },
+    "seminal vesicle": {
+      "region": "Pelvis",
+      "aliases": ["seminal gland"],
+      "description": "A coiled gland, about 5 cm long, behind the bladder. It makes most of the fluid in semen, which is rich in fructose, a sugar that fuels sperm."
+    },
+    "prostate": {
+      "region": "Pelvis",
+      "aliases": ["prostate gland"],
+      "description": "A walnut-sized gland just below the bladder, wrapped around the first part of the urethra, that adds a thin, milky fluid to semen. It often enlarges with age, which can narrow the urethra and slow the flow of urine."
+    },
+    "corpora cavernosa of penis": {
+      "region": "Penis",
+      "aliases": ["corpus cavernosum"],
+      "description": "The two parallel columns of spongy erectile tissue that form most of the shaft of the penis, rooted on the pubic arch by their crura. When they fill with blood, the penis becomes erect."
+    },
+    "corpus spongiosum of penis": {
+      "region": "Penis",
+      "description": "The column of erectile tissue along the underside of the penis that surrounds the urethra. It widens at its root into the bulb of the penis and at its tip into the glans."
+    },
+    "glans penis": {
+      "region": "Penis",
+      "aliases": ["glans"],
+      "description": "The rounded tip of the penis, the expanded end of the corpus spongiosum. The urethra opens at its tip, and it is densely supplied with sensory nerve endings."
+    }
+  }
+}
