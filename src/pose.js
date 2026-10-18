@@ -219,7 +219,8 @@ export function opAxis(op, rig) {
 
 /**
  * Each segment's world matrix (from the rest pose) with the ops made
- * `fraction` (0..1) of the way. Segments without ops follow their parent.
+ * `fraction` (0..1) of the way from their start (opStart; rest for all but a
+ * supination) to the full stretch. Segments without ops follow their parent.
  * @returns {Map<string, THREE.Matrix4>}
  */
 export function poseMatrices(rig, ops, fraction = 1) {
