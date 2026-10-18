@@ -39,7 +39,8 @@ function browserStorage() {
 }
 
 /**
- * Saved progress from `storage`: the variant refs done, whether the opt-in
+ * Saved progress from `storage`: the steps done (doneEntry: a one-side step
+ * per side; an older save's bare ref for one counts for neither), whether the opt-in
  * sections run, the step and side last shown. Anything missing, unreadable
  * or malformed reads as a fresh start.
  * @returns {{ done: Set<string>, optIn: boolean, ref: string | null, side: 'left' | 'right' }}
@@ -66,6 +67,21 @@ export function saveProgress(storage, { done, optIn, ref, side }) {
   } catch {
     // Progress is a convenience: without storage the mode still works for this visit.
   }
+}
+
+/** The progress entry for a step done on `side`: "P1a:left" for a one-side step, its ref alone otherwise. */
+export function doneEntry({ stretch, variant, ref }, side) {
+  return isSided(stretch, variant) ? `${ref}:${side}` : ref;
+}
+
+/** Every entry a step needs to be done: both sides for a one-side step, its ref alone otherwise. */
+export function entriesOf(item) {
+  return isSided(item.stretch, item.variant) ? ['left', 'right'].map((side) => doneEntry(item, side)) : [item.ref];
+}
+
+/** The refs of the steps done in full from progress entries: a one-side step only once both its sides are done. */
+export function completedSteps(done, items = runOrder({ optIn: true })) {
+  return new Set(items.filter((item) => entriesOf(item).every((e) => done.has(e))).map(({ ref }) => ref));
 }
 
 /** "abdominal part of pectoralis major" → "Abdominal part of pectoralis major". */
@@ -100,7 +116,7 @@ export function clock(seconds) {
  *   onStart?: () => void,
  * }} host the Muscular layer, a function that switches it on (loading it),
  *   and one that runs just before the mode starts (to end a guide or tour)
- * @returns {{ element: HTMLButtonElement, open: (muscleKey?: string) => Promise<void>, stop: () => void, stepper: Stepper }}
+ * @returns {{ element: HTMLButtonElement, open: (muscleKey?: string, side?: 'left' | 'right') => Promise<void>, stop: () => void, stepper: Stepper }}
  */
 export function stretchingMode(viewer, { muscular, showMuscles, onStart }) {
   const storage = browserStorage();
@@ -114,7 +130,7 @@ export function stretchingMode(viewer, { muscular, showMuscles, onStart }) {
 
   const stepper = new Stepper({
     onStep(item, index) {
-      if (index === last + 1 && last >= 0) progress.done.add(stepper.items[last].ref);
+      if (index === last + 1 && last >= 0) progress.done.add(doneEntry(stepper.items[last], progress.side));
       last = index;
       progress.ref = item.ref;
       show(item);
@@ -172,8 +188,9 @@ export function stretchingMode(viewer, { muscular, showMuscles, onStart }) {
     return `${item.stretch.name}${variant}${side}`;
   }
 
-  /** Starts the mode at a muscle's first stretch, else where it was left (or the start). */
-  async function open(muscleKey) {
+  /** Starts the mode at a muscle's first stretch (on `side`, the muscle's own), else where it was left (or the start). */
+  async function open(muscleKey, side) {
+    if (side) progress.side = side;
     onStart?.();
     await showMuscles();
     viewer.select(null);
@@ -185,7 +202,7 @@ export function stretchingMode(viewer, { muscular, showMuscles, onStart }) {
       // A muscle whose only stretches are opt-in (the face's) switches that section on.
       if (!first && !progress.optIn && runOrder({ optIn: true }).some(({ stretch, ref: r }) => refs.has(r) || refs.has(stretch.id))) {
         progress.optIn = true;
-        return open(muscleKey);
+        return open(muscleKey, side);
       }
       ref = first?.ref ?? ref;
     }
@@ -304,13 +321,15 @@ export function stretchingMode(viewer, { muscular, showMuscles, onStart }) {
     card.append(hold);
     card.append(el('p', 'stretch-timer-status'));
 
+    if (sided) card.append(el('p', 'stretch-sides-done'));
     const done = button('link-button stretch-done', '', () => {
-      progress.done.has(ref) ? progress.done.delete(ref) : progress.done.add(ref);
-      markDone(ref);
+      const entry = doneEntry(item, side);
+      progress.done.has(entry) ? progress.done.delete(entry) : progress.done.add(entry);
+      markDone(item);
       save();
     });
     card.append(done);
-    markDone(ref);
+    markDone(item);
 
     if (stretch.contractRelax) {
       const cr = el('details', 'stretch-more');
@@ -329,14 +348,19 @@ export function stretchingMode(viewer, { muscular, showMuscles, onStart }) {
     card.append(button('link-button stretch-progress-open', 'Progress and what can’t be stretched', () => document.body.classList.add('stretch-progress')));
   }
 
-  /** Shows whether a step is done, and refreshes the progress it adds to. */
-  function markDone(ref) {
+  /** Shows whether a step (on the side shown) is done, and each side's for a one-side step, and refreshes the progress it adds to. */
+  function markDone(item) {
     const done = card.querySelector('.stretch-done');
     if (done) {
-      const on = progress.done.has(ref);
+      const on = progress.done.has(doneEntry(item, sideOf(item)));
       done.textContent = on ? '✓ Done (undo)' : 'Mark as done';
       done.setAttribute('aria-pressed', String(on));
     }
+    const sides = card.querySelector('.stretch-sides-done');
+    if (sides)
+      sides.textContent = ['left', 'right']
+        .map((s) => `${s === 'left' ? 'Left' : 'Right'} ${progress.done.has(doneEntry(item, s)) ? '✓' : 'to do'}`)
+        .join(' · ');
     if (stepper.active) {
       fillPanel(stepper.current);
       fillStrip();
@@ -383,9 +407,9 @@ export function stretchingMode(viewer, { muscular, showMuscles, onStart }) {
       phase++;
       if (phase >= phases.length) {
         stopTimer();
-        progress.done.add(item.ref);
+        for (const entry of entriesOf(item)) progress.done.add(entry);
         status().textContent = '✓ Held. Step on with →.';
-        markDone(item.ref);
+        markDone(item);
         save();
         return;
       }
@@ -417,7 +441,8 @@ export function stretchingMode(viewer, { muscular, showMuscles, onStart }) {
   }
 
   function fillPanel(item) {
-    const c = coverage(progress.done, { optIn: progress.optIn });
+    const complete = completedSteps(progress.done);
+    const c = coverage(complete, { optIn: progress.optIn });
     panel.replaceChildren();
     const close = button('close stretch-progress-close', '×', () => document.body.classList.remove('stretch-progress'));
     close.setAttribute('aria-label', 'Back to the stretch');
@@ -443,7 +468,7 @@ export function stretchingMode(viewer, { muscular, showMuscles, onStart }) {
       const li = el('li');
       const go = button('stretch-group', '', () => {
         const items = stepper.items;
-        const todo = items.findIndex(({ stretch, ref }) => stretch.group === g.group && !progress.done.has(ref));
+        const todo = items.findIndex(({ stretch, ref }) => stretch.group === g.group && !complete.has(ref));
         stepper.go(todo >= 0 ? todo : items.findIndex(({ stretch }) => stretch.group === g.group));
         document.body.classList.remove('stretch-progress');
       });
@@ -479,14 +504,14 @@ export function stretchingMode(viewer, { muscular, showMuscles, onStart }) {
     panel.append(
       button('link-button', 'Start over', () => {
         progress.done.clear();
-        markDone(stepper.current.ref);
+        markDone(stepper.current);
         save();
       }),
     );
   }
 
   function fillStrip() {
-    const c = coverage(progress.done, { optIn: progress.optIn });
+    const c = coverage(completedSteps(progress.done), { optIn: progress.optIn });
     strip.replaceChildren();
     for (const g of c.groups) {
       const seg = el('span', 'seg');

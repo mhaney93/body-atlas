@@ -44,7 +44,8 @@ export function moves(stretch, variant) {
  * @param {import('./viewer.js').Viewer} viewer
  * @param {HTMLElement} el the panel's section
  * @param {{ color: string }} layer the Muscular layer
- * @param {{ openMode?: (muscleKey: string) => void }} [host] `openMode` opens Stretching mode at the muscle's first stretch
+ * @param {{ openMode?: (muscleKey: string, side?: 'left' | 'right') => void }} [host] `openMode` opens Stretching mode at
+ *   the muscle's first stretch, on the muscle's side (none for a midline muscle)
  */
 export function stretchPanel(viewer, el, layer, { openMode } = {}) {
   let playing = null;
@@ -112,7 +113,8 @@ export function stretchPanel(viewer, el, layer, { openMode } = {}) {
         p.textContent = entry.note;
         el.append(p);
       }
-      const side = sideOf(mesh.userData.of ?? mesh.userData.name ?? mesh.name) ?? 'left';
+      const own = sideOf(mesh.userData.of ?? mesh.userData.name ?? mesh.name);
+      const side = own ?? 'left';
       const list = document.createElement('ul');
       list.className = 'stretch-list';
       for (const { stretch, variant } of entry.stretches.flatMap((ref) => variantsOf(ref))) {
@@ -145,7 +147,7 @@ export function stretchPanel(viewer, el, layer, { openMode } = {}) {
         link.className = 'link-button';
         link.textContent = 'How to stretch it, in Stretching mode ›';
         link.title = 'Step through every stretch, starting with this muscle’s';
-        link.addEventListener('click', () => openMode(key));
+        link.addEventListener('click', () => openMode(key, own ?? undefined));
         el.append(link);
       }
     },

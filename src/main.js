@@ -82,7 +82,9 @@ const stretching = stretchingMode(viewer, {
 $('layer-list').after(stretching.element);
 
 /** "Stretch it" in a muscle's info panel (src/stretch-panel.js), with a way into Stretching mode. */
-const stretch = stretchPanel(viewer, $('info-stretch'), muscularLayer, { openMode: (key) => stretching.open(key).catch((err) => console.error(err)) });
+const stretch = stretchPanel(viewer, $('info-stretch'), muscularLayer, {
+  openMode: (key, side) => stretching.open(key, side).catch((err) => console.error(err)),
+});
 
 $('info-close').addEventListener('click', () => viewer.select(null));
 $('reset-view').addEventListener('click', () => viewer.resetView());

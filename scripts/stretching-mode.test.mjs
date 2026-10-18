@@ -2,7 +2,7 @@
 // every move a card shows has words, holds are timed where they can be, a
 // stretch done once for both sides lights the side it really lengthens,
 // coverage counts every muscle the run can stretch and lists the ones it
-// can't, and saved progress survives a reload and a broken or blocked store.
+// can't, a one-side step is done only once both sides are, and saved progress survives a reload and a broken or blocked store.
 import assert from 'node:assert/strict';
 import { after, before, test } from 'node:test';
 import { createServer } from 'vite';
@@ -101,6 +101,39 @@ test('coverage counts every muscle the run can stretch, by section, and lists th
   // Half the hamstring stretch is not the hamstrings stretched.
   const some = s.coverage(new Set(['P1a']));
   assert.equal(some.groups.find((g) => g.group === 'hip').done, 1);
+});
+
+test('a one-side step stretches its muscles only once both sides are done; the hold timer’s entries do both', () => {
+  const items = s.runOrder();
+  const p1a = items.find(({ ref }) => ref === 'P1a');
+  assert.ok(s.isSided(p1a.stretch, p1a.variant));
+  assert.equal(m.doneEntry(p1a, 'left'), 'P1a:left');
+  // Every one-side step of the semitendinosus done on the left only: not stretched; on both sides: stretched.
+  const steps = items.filter(({ stretch, variant }) => s.targetsOf(stretch, variant).includes('semitendinosus'));
+  assert.ok(steps.length && steps.every((item) => s.isSided(item.stretch, item.variant)));
+  const leftOnly = new Set(steps.map((item) => m.doneEntry(item, 'left')));
+  assert.equal(s.isStretched('semitendinosus', m.completedSteps(leftOnly)), false);
+  assert.ok(s.isStretched('semitendinosus', m.completedSteps(new Set(steps.flatMap(m.entriesOf)))));
+  // One side done (stepping past it, or marking it): the step is not done.
+  const left = new Set([m.doneEntry(p1a, 'left')]);
+  assert.equal(m.completedSteps(left).has('P1a'), false);
+  assert.equal(s.coverage(m.completedSteps(left)).groups.find((g) => g.group === 'hip').done, 0);
+  // Both sides: done.
+  const both = new Set([m.doneEntry(p1a, 'left'), m.doneEntry(p1a, 'right')]);
+  assert.ok(m.completedSteps(both).has('P1a'));
+  assert.equal(s.coverage(m.completedSteps(both)).groups.find((g) => g.group === 'hip').done, 1);
+  // The hold timer runs both sides and adds every entry the step needs.
+  assert.deepEqual(new Set(m.entriesOf(p1a)), both);
+  const all = new Set(items.flatMap(m.entriesOf));
+  const c = s.coverage(m.completedSteps(all));
+  assert.equal(c.stretched, c.total);
+  // A step done once for both sides is its ref alone, whatever side is shown.
+  const both1 = items.find((item) => !s.isSided(item.stretch, item.variant));
+  assert.equal(m.doneEntry(both1, 'right'), both1.ref);
+  assert.deepEqual(m.entriesOf(both1), [both1.ref]);
+  assert.ok(m.completedSteps(new Set([both1.ref])).has(both1.ref));
+  // An older save's bare ref for a one-side step counts for neither side.
+  assert.equal(m.completedSteps(new Set(['P1a'])).has('P1a'), false);
 });
 
 /** A localStorage stand-in; `fail` makes reads or writes throw as a blocked store does. */
