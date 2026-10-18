@@ -1,5 +1,5 @@
 // Checks Stretching mode's rules (src/stretching.js, src/stretching-mode.js):
-// every move a card shows has words, holds are timed where they can be, a
+// every move a card shows has words, every hold is said in words, a
 // stretch done once for both sides lights the side it really lengthens,
 // coverage counts every muscle the run can stretch and lists the ones it
 // can't, a one-side step is done only once both sides are, and saved progress survives a reload and a broken or blocked store.
@@ -45,15 +45,15 @@ test('every move a stretch card shows is put in words, with the side filled in',
   assert.throws(() => s.describeMove('hip.wiggle'), /no words/);
 });
 
-test('holds in seconds get a timer; reps and breaths do not', () => {
-  assert.deepEqual(s.holdTimer('30 s x 2'), { seconds: 30, rounds: 2 });
-  assert.deepEqual(s.holdTimer('5 s x 6'), { seconds: 5, rounds: 6 });
-  assert.equal(s.holdTimer('3 slow breaths'), null);
-  assert.equal(s.holdTimer('6 reps x 6 / day (Rocabado)'), null);
-  assert.equal(s.holdTimer(undefined), null);
-  assert.ok(s.STRETCHING.stretches.filter((st) => s.holdTimer(st.hold)).length > 40);
-  // The countdown rounds up, so it shows 0:00 only when the hold is over.
-  assert.deepEqual([30, 29.2, 59.5, 60, 61, 0.1, 0, -1].map(m.clock), ['0:30', '0:30', '1:00', '1:00', '1:01', '0:01', '0:00', '0:00']);
+test('the card says how long to hold each stretch, in words', () => {
+  assert.equal(s.holdText({ hold: '30 s x 2', kind: 'stretch' }), 'Hold 30 s, 2 times');
+  assert.equal(s.holdText({ hold: '5 s x 6', kind: 'lengthen' }), 'Hold 5 s, 6 times');
+  assert.equal(s.holdText({ hold: '60 s x 1', kind: 'roll' }), 'Roll for 60 s');
+  assert.equal(s.holdText({ hold: '3 slow breaths', kind: 'lengthen' }), 'Hold for 3 slow breaths');
+  assert.equal(s.holdText({ hold: '10 smooth reps', kind: 'glide' }), '10 smooth reps');
+  assert.equal(s.holdText({ hold: '6 reps x 6 / day (Rocabado)', kind: 'stretch' }), '6 reps x 6 / day (Rocabado)');
+  // Every stretch says how long to hold it.
+  for (const st of s.STRETCHING.stretches) assert.ok(s.holdText(st), st.id);
 });
 
 test('a stretch lights the muscles it lengthens on the side it lengthens them', () => {
@@ -103,7 +103,7 @@ test('coverage counts every muscle the run can stretch, by section, and lists th
   assert.equal(some.groups.find((g) => g.group === 'hip').done, 1);
 });
 
-test('a one-side step stretches its muscles only once both sides are done; the hold timer’s entries do both', () => {
+test('a one-side step stretches its muscles only once both sides are done', () => {
   const items = s.runOrder();
   const p1a = items.find(({ ref }) => ref === 'P1a');
   assert.ok(s.isSided(p1a.stretch, p1a.variant));
@@ -122,7 +122,7 @@ test('a one-side step stretches its muscles only once both sides are done; the h
   const both = new Set([m.doneEntry(p1a, 'left'), m.doneEntry(p1a, 'right')]);
   assert.ok(m.completedSteps(both).has('P1a'));
   assert.equal(s.coverage(m.completedSteps(both)).groups.find((g) => g.group === 'hip').done, 1);
-  // The hold timer runs both sides and adds every entry the step needs.
+  // The entries a one-side step needs are both sides'.
   assert.deepEqual(new Set(m.entriesOf(p1a)), both);
   const all = new Set(items.flatMap(m.entriesOf));
   const c = s.coverage(m.completedSteps(all));

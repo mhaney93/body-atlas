@@ -378,6 +378,41 @@ test('a posed model moves, bends at the joint and is picked where it is drawn', 
   const ray = new THREE.Raycaster(new THREE.Vector3(kneeNow.x - 0.03, 1.5, kneeNow.z - 0.12), new THREE.Vector3(0, -1, 0));
   const hits = ray.intersectObject(legs, true);
   assert.ok(hits.length && hits[0].point.y > 0.8, `hit ${hits[0]?.point.y}`);
+  // Picking a posed mesh finds what skinning every vertex (three.js's own posed raycast) finds:
+  // the femur follows one bone and is picked as a rigid mesh; the vastus blends the thigh and pelvis and is skinned once for them.
+  const femur = skeletal.children.find((m) => m.userData.name === 'Right femur');
+  assert.deepEqual(femur.segments, [R.SEGMENT_INDEX.get('right-thigh')]);
+  assert.ok(vastus.segments.length > 1, `vastus follows ${vastus.segments}`);
+  const v = new THREE.Vector3();
+  const samePicks = (mesh) => {
+    const index = mesh.geometry.getIndex();
+    const faces = index.count / 3;
+    let hit = 0;
+    for (let k = 0; k < 40; k++) {
+      // At the middle of a face, where the pose draws it.
+      const face = Math.floor((k * faces) / 40);
+      const aim = new THREE.Vector3();
+      for (let c = 0; c < 3; c++) aim.add(mesh.getVertexPosition(index.getX(face * 3 + c), v).applyMatrix4(mesh.matrixWorld));
+      aim.divideScalar(3);
+      const dir = new THREE.Vector3(Math.cos(k), Math.sin(k * 1.7), Math.sin(k)).normalize();
+      const caster = new THREE.Raycaster(aim.clone().addScaledVector(dir, 0.5), dir.negate());
+      const fast = [];
+      const exact = [];
+      mesh.raycast(caster, fast);
+      THREE.SkinnedMesh.prototype.raycast.call(mesh, caster, exact);
+      const first = (list) => Math.min(...list.map((h) => h.distance));
+      // A ray from behind a front face misses both ways.
+      assert.ok(fast.length === exact.length && (!exact.length || Math.abs(first(fast) - first(exact)) < 1e-5), `${mesh.userData.name} ray ${k}`);
+      assert.ok(fast.every((h) => h.object === mesh));
+      if (exact.length) hit++;
+    }
+    assert.ok(hit >= 10, `${mesh.userData.name}: ${hit} of 40 rays hit`);
+  };
+  samePicks(femur);
+  samePicks(vastus);
+  // Nodding moves none of the vastus's bones apart, so it is picked as a rigid mesh again, still where it is drawn.
+  poser.start(P.variantOps({ id: 'N', variants: [] }, { id: 'a', moves: ['head.flex:20'] }, 'left'), { still: true });
+  samePicks(vastus);
   poser.stop();
   assert.ok(!vastus.posed && Math.abs(lowest() - restLow) < 1e-6);
   // Unposed, nothing is hit up there.

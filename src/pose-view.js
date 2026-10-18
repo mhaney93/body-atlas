@@ -12,6 +12,18 @@ import { opAxis, opStart, opTurn, poseMatrices, vector } from './pose.js';
 
 const LOOP = { into: 1.6, hold: 2.4, out: 1.2, rest: 0.8 }; // seconds
 const ARROW_COLOR = '#9fd8ff';
+/** Bones whose skinning matrices differ by less than this (per element) carry a mesh alike. */
+const SAME_MOVE = 1e-6;
+
+const _first = new THREE.Matrix4();
+const _segment = new THREE.Matrix4();
+const _carried = new THREE.Matrix4();
+const _sphere = new THREE.Sphere();
+const _union = new THREE.Sphere();
+const _vertex = new THREE.Vector3();
+const _hits = [];
+/** A plain mesh that stands in for a posed one while it is picked (see PoseMesh.raycast). */
+const _proxy = new THREE.Mesh();
 
 /**
  * A skinned mesh that behaves as a plain mesh while unposed: bounds, picking
@@ -25,6 +37,10 @@ export class PoseMesh extends THREE.SkinnedMesh {
     this.posed = false;
     /** Whether skinWeights has given this mesh its real weights. */
     this.weighted = false;
+    /** The skeleton bone indices its vertices follow (set with its skin weights). */
+    this.segments = [0];
+    /** Its vertices where the pose last put them, for picking: { version, geometry } (see raycast). */
+    this.blended = null;
   }
 
   computeBoundingBox() {
@@ -39,9 +55,66 @@ export class PoseMesh extends THREE.SkinnedMesh {
     this.boundingSphere = (this.boundingSphere ?? new THREE.Sphere()).copy(this.geometry.boundingSphere);
   }
 
+  /**
+   * Picks the mesh where it is drawn. Skinning every vertex on the CPU (what
+   * three.js does for a skinned mesh) is slow, and hover picks every frame, so
+   * a mesh whose bones all carry it alike (it follows one, or the pose moves
+   * none of its bones apart) is picked as a rigid mesh carried by them, and
+   * one bent across a moving joint is skinned once per frame of the pose,
+   * and only when the ray comes near where the pose has it.
+   */
   raycast(raycaster, intersects) {
-    if (this.posed) return super.raycast(raycaster, intersects);
-    return THREE.Mesh.prototype.raycast.call(this, raycaster, intersects);
+    if (!this.posed) return THREE.Mesh.prototype.raycast.call(this, raycaster, intersects);
+    if (!this.geometry.boundingSphere) this.geometry.computeBoundingSphere();
+    _proxy.material = this.material;
+    const [first, ...rest] = this.segments;
+    this.#skinning(first, _first);
+    if (rest.every((i) => sameMove(this.#skinning(i, _segment), _first))) {
+      _proxy.geometry = this.geometry;
+      _proxy.matrixWorld.copy(this.#carried(_first));
+    } else {
+      // Each vertex is a blend (weights summing to 1) of where its bones carry it, so it lies in the union of its rest sphere carried by each.
+      this.segments.forEach((i, k) => {
+        _sphere.copy(this.geometry.boundingSphere).applyMatrix4(this.#carried(this.#skinning(i, _segment)));
+        k ? _union.union(_sphere) : _union.copy(_sphere);
+      });
+      if (!raycaster.ray.intersectsSphere(_union)) return;
+      const version = this.skeleton.poseVersion;
+      if (this.blended?.version !== version) this.blended = { version, geometry: this.#blend(this.blended?.geometry) };
+      _proxy.geometry = this.blended.geometry;
+      _proxy.matrixWorld.copy(this.matrixWorld);
+    }
+    _hits.length = 0;
+    _proxy.raycast(raycaster, _hits);
+    for (const hit of _hits) intersects.push({ ...hit, object: this });
+  }
+
+  /** Its vertices skinned where the pose has them now, into `geometry` (made on first use). */
+  #blend(geometry) {
+    const rest = this.geometry.getAttribute('position');
+    if (!geometry) {
+      geometry = new THREE.BufferGeometry();
+      geometry.setIndex(this.geometry.getIndex());
+      geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(rest.count * 3), 3));
+    }
+    const position = geometry.getAttribute('position');
+    for (let i = 0; i < rest.count; i++) {
+      const { x, y, z } = super.getVertexPosition(i, _vertex);
+      position.setXYZ(i, x, y, z);
+    }
+    geometry.boundingSphere = null;
+    geometry.boundingBox = null;
+    return geometry;
+  }
+
+  /** Skeleton bone `i`'s skinning matrix, into `target` (as SkinnedMesh.applyBoneTransform uses it). */
+  #skinning(i, target) {
+    return target.multiplyMatrices(this.skeleton.bones[i].matrixWorld, this.skeleton.boneInverses[i]);
+  }
+
+  /** The world matrix of this mesh's rest geometry carried by one bone's `skinning` matrix alone. */
+  #carried(skinning) {
+    return _carried.multiplyMatrices(this.matrixWorld, this.bindMatrixInverse).multiply(skinning).multiply(this.bindMatrix);
   }
 
   getVertexPosition(index, target) {
@@ -49,6 +122,8 @@ export class PoseMesh extends THREE.SkinnedMesh {
     return THREE.Mesh.prototype.getVertexPosition.call(this, index, target);
   }
 }
+
+const sameMove = (a, b) => a.elements.every((e, k) => Math.abs(e - b.elements[k]) < SAME_MOVE);
 
 /** World-space positions of a mesh's vertices, flat. */
 function worldPositions(mesh) {
@@ -126,6 +201,8 @@ export class Poser {
     });
     bones[0].updateMatrixWorld(true);
     this.skeleton = new THREE.Skeleton(bones);
+    /** Counts the skeleton's moves, so a posed mesh knows when its skinned vertices are out of date. */
+    this.skeleton.poseVersion = 0;
     this.resolveReady();
 
     function bone(b, pivot, parentPivot) {
@@ -159,6 +236,7 @@ export class Poser {
       posed.quaternion.copy(mesh.quaternion);
       posed.scale.copy(mesh.scale);
       posed.weighted = layer.posable === 'bones';
+      posed.segments = [seg];
       const parent = mesh.parent;
       parent.children[parent.children.indexOf(mesh)] = posed;
       posed.parent = parent;
@@ -202,6 +280,7 @@ export class Poser {
       mesh.posed = false;
       mesh.boundingSphere = null;
       mesh.boundingBox = null;
+      mesh.blended = null;
     }
     this.arrows.clear();
   }
@@ -228,6 +307,7 @@ export class Poser {
       local.decompose(bone.position, bone.quaternion, bone.scale);
     }
     this.skeleton.bones[0].updateMatrixWorld(true);
+    this.skeleton.poseVersion++;
     this.arrows.visible = this.ops !== null;
   }
 
@@ -251,9 +331,17 @@ export class Poser {
       const skinIndex = mesh.geometry.getAttribute('skinIndex');
       const skinWeight = mesh.geometry.getAttribute('skinWeight');
       skinIndex.array.set(indices);
-      for (let i = 0; i < weights.length; i++) skinWeight.array[i] = Math.round(weights[i] * 255);
+      const segments = new Set();
+      for (let v = 0; v < weights.length; v += 4) {
+        let sum = 0;
+        for (let j = v; j < v + 4; j++) sum += skinWeight.array[j] = Math.round(weights[j] * 255);
+        // The largest influence (skinWeights puts it first) takes the rounding, so each vertex's weights sum to exactly 1.
+        skinWeight.array[v] += 255 - sum;
+        for (let j = v; j < v + 4; j++) if (skinWeight.array[j]) segments.add(indices[j]);
+      }
       skinIndex.needsUpdate = true;
       skinWeight.needsUpdate = true;
+      mesh.segments = [...segments];
       mesh.weighted = true;
     }
   }
@@ -267,11 +355,7 @@ export class Poser {
     if (!mesh.geometry.boundingSphere) mesh.geometry.computeBoundingSphere();
     const local = mesh.geometry.boundingSphere;
     const world = local.clone().applyMatrix4(mesh.matrixWorld);
-    const segs = new Set();
-    const idx = mesh.geometry.getAttribute('skinIndex').array;
-    const wts = mesh.geometry.getAttribute('skinWeight').array;
-    for (let i = 0; i < idx.length; i++) if (wts[i]) segs.add(SEGMENTS[idx[i]].id);
-    for (const id of segs) {
+    for (const id of mesh.segments.map((i) => SEGMENTS[i].id)) {
       if (!moving.has(id)) continue;
       // Walk up to the highest moving segment: the mesh stays within the chain's reach of its pivot.
       let s = this.rig.segments.get(id);

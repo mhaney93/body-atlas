@@ -3,12 +3,11 @@
 // then the joint and spine moves, the nerve glides and (opt-in) foam rolling.
 // It drives the shared Stepper (src/stepper.js) and its bar, shows the layers
 // each step needs, poses the model into each variant (Viewer.showPose) with
-// the parts it works lit, and shows a stretch card (how, hold timer,
-// Left/Right, optional contract-relax), a coverage panel (muscles stretched,
-// each section, what can't be stretched) and a progress strip on the bar.
-// Progress is kept in localStorage when the browser allows it; the mode works
-// the same without it.
-import { isTypingTarget } from './keyboard-nav.js';
+// the parts it works lit, and shows a stretch card (how, how long to hold,
+// Left/Right, "Show skeleton", optional contract-relax), a coverage panel
+// (muscles stretched, each section, what can't be stretched) and a progress
+// strip on the bar. Progress is kept in localStorage when the browser allows
+// it; the mode works the same without it.
 import { canonical } from './layers.js';
 import { poseBox } from './pose.js';
 import { sideOf } from './search.js';
@@ -22,7 +21,7 @@ import {
   STRETCHING,
   coverage,
   describeMove,
-  holdTimer,
+  holdText,
   isSided,
   partsOf,
   runOrder,
@@ -131,12 +130,6 @@ function button(className, text, onClick) {
   return b;
 }
 
-/** Seconds left as "m:ss", rounded up so the count reaches 0:00 only at the end. */
-export function clock(seconds) {
-  const whole = Math.max(0, Math.ceil(seconds));
-  return `${Math.floor(whole / 60)}:${String(whole % 60).padStart(2, '0')}`;
-}
-
 /**
  * Builds Stretching mode: its panels go on the page, hidden until started.
  * @param {import('./viewer.js').Viewer} viewer
@@ -151,7 +144,13 @@ export function clock(seconds) {
  *   these layers (loading them), put back the ones shown before the mode,
  *   and show a hidden sub-group through its checkbox; and one that runs just
  *   before the mode starts (to end a guide or tour)
- * @returns {{ element: HTMLButtonElement, open: (muscleKey?: string, side?: 'left' | 'right') => Promise<void>, stop: () => void, stepper: Stepper }}
+ * @returns {{
+ *   element: HTMLButtonElement,
+ *   open: (muscleKey?: string, side?: 'left' | 'right') => Promise<void>,
+ *   stop: () => void,
+ *   layerSwitched: (id: string, on: boolean) => void,
+ *   stepper: Stepper,
+ * }} `layerSwitched` hears a layer switched in the filter panel, so the card's "Show skeleton" follows it
  */
 export function stretchingMode(viewer, { muscular, layer, showLayers, restoreLayers, showGroup, onStart }) {
   const storage = browserStorage();
@@ -159,7 +158,8 @@ export function stretchingMode(viewer, { muscular, layer, showLayers, restoreLay
   const save = () => saveProgress(storage, { ...progress, ref: stepper.active ? stepper.current.ref : progress.ref });
   /** Index of the step shown last, to tell a step forward (which marks it done) from a jump. */
   let last = -1;
-  let timer = null;
+  /** The card's "Show skeleton": on whenever the mode opens, so the joints are seen to move. */
+  let showSkeleton = true;
   /** Each layer's emphasis (the movement picker's) before the mode lit its own, put back when it ends. */
   const emphasisBefore = new Map();
   /** Counts steps shown, so a step whose layers finish loading after the next one started is dropped. */
@@ -174,7 +174,6 @@ export function stretchingMode(viewer, { muscular, layer, showLayers, restoreLay
       save();
     },
     onStop() {
-      stopTimer();
       last = -1;
       showing++;
       viewer.stopPose();
@@ -217,7 +216,7 @@ export function stretchingMode(viewer, { muscular, layer, showLayers, restoreLay
     stepper.active ? stepper.stop() : open().catch((err) => console.error(err)),
   );
   entry.style.setProperty('--layer-color', muscular.color);
-  entry.title = 'Step through every stretch, head to toe (← → to move, Space to time a hold, Esc to end)';
+  entry.title = 'Step through every stretch, head to toe (← → to move, Esc to end)';
 
   /** The side a step is shown on: the chosen one for a one-side stretch; the data's (left) otherwise. */
   const shownSide = (item) => (isSided(item.stretch, item.variant) ? progress.side : 'left');
@@ -232,7 +231,8 @@ export function stretchingMode(viewer, { muscular, layer, showLayers, restoreLay
   async function open(muscleKey, side) {
     if (side) progress.side = side;
     onStart?.();
-    await showLayers(['skeletal', muscular.id]);
+    if (!stepper.active) showSkeleton = true;
+    await showLayers(withSkeleton(['skeletal', muscular.id]));
     viewer.select(null);
     let ref = progress.ref;
     if (muscleKey) {
@@ -252,18 +252,17 @@ export function stretchingMode(viewer, { muscular, layer, showLayers, restoreLay
     stepper.start(items, Math.max(0, items.findIndex((item) => item.ref === ref)));
   }
 
-  /**
-   * Fills the card and panel for a step, then (once its layers have loaded)
-   * poses, lights and frames it; a running hold timer stops unless `keepTimer`.
-   */
-  function show(item, keepTimer = false) {
-    if (!keepTimer) stopTimer();
+  /** A step's layers (layersFor), less the skeleton while "Show skeleton" is off. */
+  const withSkeleton = (ids) => ids.filter((id) => showSkeleton || id !== 'skeletal');
+
+  /** Fills the card and panel for a step, then (once its layers have loaded) poses, lights and frames it. */
+  function show(item) {
     const side = shownSide(item);
     fillCard(item, side);
     fillPanel(item);
     fillStrip();
     const token = ++showing;
-    const ids = layersFor(item.stretch, item.variant);
+    const ids = withSkeleton(layersFor(item.stretch, item.variant));
     showLayers(ids)
       .then(() => token === showing && present(item, side, ids))
       .catch((err) => console.error(err));
@@ -332,6 +331,18 @@ export function stretchingMode(viewer, { muscular, layer, showLayers, restoreLay
     card.append(el('p', 'stretch-variant', variant.label));
     if (stretch.kind !== 'stretch') card.append(el('p', 'approx', KIND_NAMES[stretch.kind]));
 
+    // Through the step's layers, so the Skeletal switch in the filter panel follows it.
+    const bones = el('label', 'effect stretch-skeleton');
+    const bonesBox = el('input');
+    bonesBox.type = 'checkbox';
+    bonesBox.checked = showSkeleton;
+    bonesBox.addEventListener('change', () => {
+      showSkeleton = bonesBox.checked;
+      showLayers(withSkeleton(layersFor(stretch, variant))).catch((err) => console.error(err));
+    });
+    bones.append(bonesBox, el('span', 'effect-name', 'Show skeleton'));
+    card.append(bones);
+
     if (stretch.variants.length > 1) {
       const chips = el('div', 'stretch-chips');
       chips.setAttribute('role', 'group');
@@ -389,14 +400,8 @@ export function stretchingMode(viewer, { muscular, layer, showLayers, restoreLay
     }
 
     const hold = el('div', 'stretch-hold');
-    const timed = holdTimer(stretch.hold);
     const sided = isSided(stretch, variant);
-    if (timed) {
-      const start = button('tour-button stretch-timer', `▶ Hold ${timed.seconds} s`, () => (timer ? stopTimer() : startTimer(item, timed)));
-      start.title = 'Time the hold (Space)';
-      hold.append(start);
-    }
-    hold.append(el('span', 'stretch-hold-text', `${stretch.hold}${sided ? ' · each side' : ''}`));
+    hold.append(el('span', 'stretch-hold-text', `${holdText(stretch)}${sided ? ' · each side' : ''}`));
     if (sided) {
       const sides = el('div', 'stretch-sides');
       sides.setAttribute('role', 'group');
@@ -409,7 +414,6 @@ export function stretchingMode(viewer, { muscular, layer, showLayers, restoreLay
       hold.append(sides);
     }
     card.append(hold);
-    card.append(el('p', 'stretch-timer-status'));
 
     if (sided) card.append(el('p', 'stretch-sides-done'));
     const done = button('link-button stretch-done', '', () => {
@@ -464,70 +468,6 @@ export function stretchingMode(viewer, { muscular, layer, showLayers, restoreLay
     show(item);
     bar.querySelector('.stepper-title').textContent = barTitle(item);
     save();
-  }
-
-  /**
-   * Times the hold: each round on each side for a one-side stretch (the
-   * pose switches sides between them), then marks the step done.
-   */
-  function startTimer(item, { seconds, rounds }) {
-    stopTimer();
-    const sided = isSided(item.stretch, item.variant);
-    const first = progress.side;
-    const phases = [];
-    for (let r = 1; r <= rounds; r++) {
-      for (const side of sided ? [first, first === 'left' ? 'right' : 'left'] : [null]) phases.push({ round: r, side });
-    }
-    let phase = 0;
-    let left = seconds;
-    const status = () => card.querySelector('.stretch-timer-status');
-    const startButton = () => card.querySelector('.stretch-timer');
-    const render = () => {
-      const p = phases[phase];
-      const side = p.side ? `${p.side === 'left' ? 'Left' : 'Right'} · ` : '';
-      status().textContent = `${side}${clock(left)} · round ${p.round} of ${rounds}`;
-    };
-    // Wall-clock time, so the hold keeps time while frames are throttled (a background tab).
-    let then = performance.now();
-    const tick = () => {
-      const now = performance.now();
-      left -= (now - then) / 1000;
-      then = now;
-      if (left > 0) return render();
-      phase++;
-      if (phase >= phases.length) {
-        stopTimer();
-        for (const entry of entriesOf(item)) progress.done.add(entry);
-        status().textContent = '✓ Held. Step on with →.';
-        markDone(item);
-        save();
-        return;
-      }
-      left = seconds;
-      const next = phases[phase].side;
-      if (next && next !== progress.side) {
-        progress.side = next;
-        show(item, true);
-        bar.querySelector('.stepper-title').textContent = barTitle(item);
-        startButton().textContent = '■ Stop';
-      }
-      render();
-    };
-    const interval = setInterval(tick, 200);
-    const stop = () => clearInterval(interval);
-    timer = { stop };
-    startButton().textContent = '■ Stop';
-    render();
-  }
-
-  function stopTimer() {
-    if (!timer) return;
-    timer.stop();
-    timer = null;
-    const start = card.querySelector('.stretch-timer');
-    if (start) start.textContent = start.textContent.replace('■ Stop', '▶ Hold again');
-    const status = card.querySelector('.stretch-timer-status');
-    if (status && !status.textContent.startsWith('✓')) status.textContent = '';
   }
 
   function fillPanel(item) {
@@ -628,21 +568,16 @@ export function stretchingMode(viewer, { muscular, layer, showLayers, restoreLay
     save();
   }
 
-  // Space starts or stops the hold timer, unless a control that uses it has focus.
-  window.addEventListener('keydown', (e) => {
-    if (!stepper.active || e.key !== ' ' || e.ctrlKey || e.metaKey || e.altKey) return;
-    const tag = e.target?.tagName?.toLowerCase();
-    if (isTypingTarget(e.target) || ['button', 'input', 'select', 'summary', 'a'].includes(tag)) return;
-    const start = card.querySelector('.stretch-timer');
-    if (!start) return;
-    e.preventDefault();
-    start.click();
-  });
-
   return {
     element: entry,
     open,
     stop: () => stepper.stop(),
+    layerSwitched(id, on) {
+      if (id !== 'skeletal' || !stepper.active) return;
+      showSkeleton = on;
+      const box = card.querySelector('.stretch-skeleton input');
+      if (box) box.checked = on;
+    },
     stepper,
   };
 }
