@@ -46,6 +46,7 @@
     { "name": "Arterioles, venules and small unnamed vessels", "reason": "too-small" },
     { "name": "Dural venous sinuses", "reason": "not-added", "note": "The veins inside the skull that drain the brain (superior sagittal, transverse, sigmoid and cavernous sinuses). Z-Anatomy has them." },
     { "name": "External and anterior jugular, facial and retromandibular veins", "reason": "not-added", "note": "Veins of the head and neck that Z-Anatomy has but BodyParts3D, the source of this layer, does not." },
+    { "name": "External carotid artery and its branches", "reason": "not-added", "note": "The arteries of the face, scalp, tongue and thyroid (the superior thyroid, lingual, facial, occipital, maxillary and superficial temporal arteries and others). BodyParts3D, the source of this layer, does not have them, so the common carotid runs straight on into the internal carotid; Z-Anatomy has them." },
     { "name": "Dorsal venous network of the hand", "reason": "not-added" },
     { "name": "Pericardium", "reason": "no-model", "note": "The sac around the heart." },
     { "name": "Chordae tendineae", "reason": "no-model", "note": "The cords that tie the mitral and tricuspid valve leaflets to the papillary muscles." },

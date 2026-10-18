@@ -419,8 +419,12 @@ function strongest(best, bestLen, move, weight) {
   return len > bestLen ? [scale(move, weight), len] : [best, bestLen];
 }
 
-/** Parallel-transport tube around a polyline of [x, y, z, r] points (mm). */
-export function tube(line, positions, indices) {
+/**
+ * Parallel-transport tube around a polyline of [x, y, z, r] points (mm).
+ * `radius` maps a point's r to the tube's (by default a nerve's thickened
+ * radius); `sides` is how many sides the tube has.
+ */
+export function tube(line, positions, indices, { radius = tubeRadius, sides = TUBE_SIDES } = {}) {
   const pts = line.map((p) => p.slice(0, 3));
   const n = pts.length;
   const tangents = pts.map((_, i) => norm(sub(pts[Math.min(i + 1, n - 1)], pts[Math.max(i - 1, 0)])));
@@ -430,26 +434,26 @@ export function tube(line, positions, indices) {
     const t = tangents[i];
     normal = norm(sub(normal, scale(t, dot(normal, t))));
     const binormal = cross(t, normal);
-    const r = tubeRadius(line[i][3]);
-    for (let k = 0; k < TUBE_SIDES; k++) {
-      const a = (k / TUBE_SIDES) * Math.PI * 2;
+    const r = radius(line[i][3]);
+    for (let k = 0; k < sides; k++) {
+      const a = (k / sides) * Math.PI * 2;
       const off = add(scale(normal, Math.cos(a) * r), scale(binormal, Math.sin(a) * r));
       positions.push(...add(pts[i], off));
     }
   }
   for (let i = 0; i + 1 < n; i++)
-    for (let k = 0; k < TUBE_SIDES; k++) {
-      const a = base + i * TUBE_SIDES + k;
-      const b = base + i * TUBE_SIDES + ((k + 1) % TUBE_SIDES);
-      indices.push(a, a + TUBE_SIDES, b, b, a + TUBE_SIDES, b + TUBE_SIDES);
+    for (let k = 0; k < sides; k++) {
+      const a = base + i * sides + k;
+      const b = base + i * sides + ((k + 1) % sides);
+      indices.push(a, a + sides, b, b, a + sides, b + sides);
     }
   // Close both ends with a centre vertex each.
   for (const [i, flip] of [[0, true], [n - 1, false]]) {
     const c = positions.length / 3;
     positions.push(...pts[i]);
-    for (let k = 0; k < TUBE_SIDES; k++) {
-      const a = base + i * TUBE_SIDES + k;
-      const b = base + i * TUBE_SIDES + ((k + 1) % TUBE_SIDES);
+    for (let k = 0; k < sides; k++) {
+      const a = base + i * sides + k;
+      const b = base + i * sides + ((k + 1) % sides);
       indices.push(...(flip ? [c, b, a] : [c, a, b]));
     }
   }
