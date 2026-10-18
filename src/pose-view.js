@@ -1,4 +1,4 @@
-// Poses the models for Stretching mode. Layers whose data sets `posable` load
+// Poses the models into stretches. Layers whose data sets `posable` load
 // as PoseMeshes: skinned meshes bound to one shared skeleton (one bone per rig
 // segment, src/rig.js), which render and pick exactly like plain meshes while
 // the skeleton rests. Bones ("posable": "bones") follow their own segment;

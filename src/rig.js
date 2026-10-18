@@ -1,4 +1,4 @@
-// The skeleton that poses the anatomy for Stretching mode. The models are
+// The skeleton that poses the anatomy into stretches. The models are
 // separate rigid meshes with no bones or skin weights, so the rig is built from
 // the bones themselves: each body segment (thigh, forearm, a finger's middle
 // phalanx…) owns the bone meshes in it, and turns about a pivot found from

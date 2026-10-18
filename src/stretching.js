@@ -4,8 +4,8 @@
 // muscle's action is written "<joint>.<direction>" (e.g. "hip.flex"), relative
 // to the muscle's own side; a stretch variant's moves use the same codes, so a
 // move reverses an action when it is the opposite direction at the same joint.
-// scripts/stretches.test.mjs reads the data only through here, and so should
-// the upcoming Stretching mode.
+// The app (src/stretch-panel.js, src/pose.js) and scripts/stretches.test.mjs
+// read the data only through here.
 import STRETCHING from './stretches.json';
 
 /** Each direction and its opposite ("sbi" = side-bend to its own side, "rotc" = rotate to the other side). */
