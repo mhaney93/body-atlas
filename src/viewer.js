@@ -429,9 +429,10 @@ export class Viewer {
    * the stretch and back (held still for reduced motion). Only the posable
    * layers move, so the others, and effects laid over layers, hide until
    * stopPose(); the glass skin stays put as a ghost of the starting position.
+   * `cues` (src/cues.js) are arrows for the moves the bones can't show.
    */
-  showPose(ops) {
-    this.poser.start(ops, { still: this.reducedMotion.matches });
+  showPose(ops, cues = []) {
+    this.poser.start(ops, { still: this.reducedMotion.matches, cues });
     this.#applyPoseHiding();
   }
 

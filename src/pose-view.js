@@ -8,7 +8,7 @@
 // stays where it is, a ghost of the starting position.
 import * as THREE from 'three';
 import { buildRig, candidateSegments, indexBones, segmentOfBone, SEGMENTS, SEGMENT_INDEX, skinWeights } from './rig.js';
-import { opAxis, opStart, opTurn, poseMatrices } from './pose.js';
+import { opAxis, opStart, opTurn, poseMatrices, vector } from './pose.js';
 
 const LOOP = { into: 1.6, hold: 2.4, out: 1.2, rest: 0.8 }; // seconds
 const ARROW_COLOR = '#9fd8ff';
@@ -171,9 +171,11 @@ export class Poser {
 
   /**
    * Starts showing a pose: `ops` from variantOps (src/pose.js), looping into
-   * the stretch and back unless `still` (reduced motion: hold the full stretch).
+   * the stretch and back unless `still` (reduced motion: hold the full
+   * stretch), with `cues` (src/cues.js) for the moves it can't pose. Empty
+   * ops with cues still count as a pose: the arrows show the move.
    */
-  start(ops, { still = false } = {}) {
+  start(ops, { still = false, cues = [] } = {}) {
     this.stop();
     this.ops = ops;
     this.still = still;
@@ -187,6 +189,7 @@ export class Poser {
       mesh.boundingBox = null;
     }
     this.#drawArrows(ops, full);
+    this.#drawCues(cues, full);
     this.#apply(still ? 1 : 0);
   }
 
@@ -298,9 +301,18 @@ export class Poser {
       const key = `${op.code} ${op.side}`;
       // A joint shared over several segments (the spine's) turns by its whole angle, drawn once.
       const sweep = opTurn(op, this.rig) / (op.share ?? 1);
-      if (op.setup || op.plane === 'glide' || sweep < 1 || seen.has(key)) continue;
+      if (op.setup || sweep < 1 || seen.has(key)) continue;
       seen.add(key);
       const seg = this.rig.segments.get(op.seg);
+      if (op.plane === 'glide') {
+        // A glide (the jaw sliding forward) is a straight arrow at the segment's end.
+        const end = seg.end.clone().applyMatrix4(full.get(op.seg));
+        const dir = vector(op.glide, op.seg, op.side, this.rig).clone().applyMatrix4(new THREE.Matrix4().extractRotation(full.get(op.seg)));
+        const arrow = straightArrow(end, dir.normalize(), 0.025, material);
+        arrow.userData = { code: op.code, side: op.side, seg: op.seg, glide: true };
+        this.arrows.add(arrow);
+        continue;
+      }
       const parent = seg.parent ? full.get(seg.parent) : new THREE.Matrix4();
       const rot = new THREE.Matrix4().extractRotation(parent);
       const axis = opAxis(op, this.rig).applyMatrix4(rot).normalize();
@@ -316,15 +328,49 @@ export class Poser {
         if (start.lengthSq() < 1e-4) start = new THREE.Vector3(0, 0, 1).cross(axis);
       } else {
         center = seg.pivot.clone().applyMatrix4(parent);
-        radius = THREE.MathUtils.clamp(seg.length * 0.45, 0.02, 0.16);
+        // The jaw turns about its condyles, inside the head: its arc runs through the chin, where it shows.
+        radius = op.seg === 'mandible' ? seg.length : THREE.MathUtils.clamp(seg.length * 0.45, 0.02, 0.16);
         start = seg.dir.clone().applyMatrix4(rot);
       }
       start.addScaledVector(axis, -start.dot(axis)).normalize().applyAxisAngle(axis, THREE.MathUtils.degToRad(opStart(op, this.rig)));
       const arrow = arcArrow(center, axis, start, angle, radius, material);
-      arrow.userData = { code: op.code, side: op.side, seg: op.seg, sweep: Math.min(sweep, 300) };
+      arrow.userData = { code: op.code, side: op.side, seg: op.seg, sweep: Math.min(sweep, 300), radius };
       this.arrows.add(arrow);
     }
   }
+
+  /** A straight arrow per cue (src/cues.js), carried to where the pose puts its segment. */
+  #drawCues(cues, full) {
+    const material = new THREE.MeshBasicMaterial({ color: ARROW_COLOR, transparent: true, opacity: 0.9, depthTest: false });
+    for (const c of cues) {
+      const m = full.get(c.seg) ?? new THREE.Matrix4();
+      const from = c.center.clone().applyMatrix4(m);
+      const dir = c.dir.clone().applyMatrix4(new THREE.Matrix4().extractRotation(m)).normalize();
+      const arrow = straightArrow(from, dir, c.length, material);
+      arrow.userData = { code: c.code, seg: c.seg, cue: true, from, dir };
+      this.arrows.add(arrow);
+    }
+  }
+}
+
+/** A straight tube of `length` from `from` along `dir`, with a cone at its end. */
+function straightArrow(from, dir, length, material) {
+  const thickness = Math.max(0.0012, length * 0.05);
+  const group = new THREE.Group();
+  const tube = new THREE.Mesh(new THREE.CylinderGeometry(thickness, thickness, length, 8), material);
+  const tip = new THREE.Mesh(new THREE.ConeGeometry(thickness * 3, thickness * 8, 10), material);
+  const up = new THREE.Vector3(0, 1, 0);
+  const q = new THREE.Quaternion().setFromUnitVectors(up, dir);
+  tube.quaternion.copy(q);
+  tube.position.copy(from).addScaledVector(dir, length / 2);
+  tip.quaternion.copy(q);
+  tip.position.copy(from).addScaledVector(dir, length);
+  for (const m of [tube, tip]) {
+    m.renderOrder = 30;
+    m.raycast = () => {};
+  }
+  group.add(tube, tip);
+  return group;
 }
 
 /** A tube along an arc of `angle` about `axis` through `center`, from `start`, with a cone at its end. */
