@@ -46,10 +46,14 @@ export function cueCenters(group) {
   return (keys, side) => {
     const want = new Set(keys);
     const box = new THREE.Box3();
+    const part = new THREE.Box3();
     group?.traverse((o) => {
       if (!o.isMesh || o.userData.haze || o.userData.of) return;
       const name = o.userData.name ?? o.name;
-      if (want.has(canonical(name)) && (!side || sideOf(name) === side)) box.expandByObject(o);
+      if (!want.has(canonical(name)) || (side && sideOf(name) !== side)) return;
+      if (!o.geometry.boundingBox) o.geometry.computeBoundingBox();
+      o.updateWorldMatrix(true, false);
+      box.union(part.copy(o.geometry.boundingBox).applyMatrix4(o.matrixWorld));
     });
     return box.isEmpty() ? null : box.getCenter(new THREE.Vector3());
   };

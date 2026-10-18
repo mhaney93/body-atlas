@@ -384,6 +384,46 @@ test('a posed model moves, bends at the joint and is picked where it is drawn', 
   assert.equal(ray.intersectObject(legs, true).filter((h) => h.point.y > 0.8 && h.object === vastus).length, 0);
 });
 
+test('cue arrows start from the rest-pose centre of a muscle, whether or not a pose is playing', async () => {
+  const SP = await server.ssrLoadModule('/src/stretch-panel.js');
+  const scene = new THREE.Scene();
+  const poser = new V.Poser(scene, {
+    region: (layer, mesh) => L.partInfo(layer, mesh.userData.name, mesh.userData.group, undefined, mesh.userData.of).region,
+    side: (mesh) => (/\bright\b/i.test(mesh.userData.name) ? 'right' : /\bleft\b/i.test(mesh.userData.name) ? 'left' : null),
+  });
+  const skeletal = new THREE.Group();
+  for (const [name, m] of bones) {
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(m.positions, 3));
+    const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
+    mesh.userData = { name, ...m.extras };
+    skeletal.add(mesh);
+  }
+  scene.add(skeletal);
+  poser.setBones(skeletal);
+  poser.adopt({ posable: 'bones' }, skeletal);
+  const name = 'Right vastus lateralis';
+  const m = muscles.get(name);
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.BufferAttribute(m.positions, 3));
+  const legs = new THREE.Group();
+  const plain = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
+  plain.userData = { name, ...m.extras };
+  legs.add(plain);
+  scene.add(legs);
+  poser.adopt({ ...L.LAYERS.find((l) => l.id === 'muscular'), posable: 'soft' }, legs);
+  const vastus = legs.children[0];
+  const key = L.canonical(name);
+  const rest = new THREE.Box3().setFromArray(m.positions).getCenter(new THREE.Vector3());
+  const unposed = SP.cueCenters(legs)([key], 'right');
+  assert.ok(unposed.distanceTo(rest) < 1e-6, `unposed ${unposed.toArray()} vs rest ${rest.toArray()}`);
+  poser.start(P.variantOps({ id: 'T', sided: true, variants: [] }, { id: 'a', moves: ['hip.flex:90'] }, 'right'), { still: true });
+  assert.ok(vastus.posed);
+  const posed = SP.cueCenters(legs)([key], 'right');
+  assert.ok(posed.distanceTo(rest) < 1e-6, `posed ${posed.toArray()} vs rest ${rest.toArray()}`);
+  poser.stop();
+});
+
 test('nerves and joint parts follow the limb, so a glide or joint move shows them moving', async () => {
   const nerves = await meshes('nervous.glb');
   const joints = await meshes('joints.glb');
