@@ -16,7 +16,8 @@ import { loadAllen, placeNuclei } from './allen-model.mjs';
 import { loadNervous } from './nervous-model.mjs';
 import { settleLymphatic } from './lymphatic-model.mjs';
 import { yieldsTo } from './overlaps.mjs';
-import { Body, layerOf, REFERENCE_LAYER, SKIN_ASSET } from './placement.mjs';
+import { Body, layerOf, readModel, REFERENCE_LAYER, SKIN_ASSET } from './placement.mjs';
+import { loadEjaculatoryDucts } from './reproductive-model.mjs';
 import { settle } from './settle.mjs';
 import { Solid } from './solid.mjs';
 
@@ -371,6 +372,25 @@ const LYMPHATIC = {
   ratio: 0.5,
 };
 
+// Reproductive system (male). BodyParts3D has the testes, epididymides,
+// deferent ducts, seminal vesicles, prostate and the erectile bodies of the
+// penis; the ejaculatory ducts come from Z-Anatomy (reproductive-model.mjs).
+// It models both corpora cavernosa as one mesh. The urethra is left to the
+// urinary system.
+const REPRODUCTIVE = {
+  file: 'reproductive.glb',
+  groups: new Map([
+    ...['FJ3138', 'FJ3142', 'FJ3136', 'FJ3141'].map((id) => [id, 'testes']), // testes, epididymides
+    ...['FJ3135', 'FJ3140'].map((id) => [id, 'ducts']), // deferent ducts
+    ...['FJ3137', 'FJ3143', 'FJ3139'].map((id) => [id, 'glands']), // seminal vesicles, prostate
+    ...['FJ3132', 'FJ3133', 'FJ3134'].map((id) => [id, 'penis']), // corpora cavernosa, corpus spongiosum, glans
+  ]),
+  load: () =>
+    loadEjaculatoryDucts(join(Z_ANATOMY_DIR, 'reproductive'), OBJ_DIR, parseObj).map((duct) => ({ ...duct, group: 'ducts' })),
+  rename: (name) => ({ 'Corpus cavernosum of penis': 'Corpora cavernosa of penis' })[name] ?? name,
+  ratio: 0.5,
+};
+
 const ASSETS = [
   { file: 'skin.glb', elements: [SKIN], ratio: 0.35 },
   { file: 'skeletal.glb', elements: range(3152, 3395), extras: ['coccyx.obj'], ratio: 0.5 },
@@ -420,7 +440,15 @@ const ASSETS = [
     ratio: 0.25,
   },
   { file: 'nervous-inner-ear.glb', elements: [], load: () => nervousParts().filter((p) => INNER_EAR.test(p.name)), ratio: 0.25 },
+  // Added after the nerves, so the models built before it stay as they were.
+  REPRODUCTIVE,
 ];
+
+// `--only <file>` builds just that asset. The assets before it are read from
+// their committed GLBs instead of rebuilt (a full build takes over an hour),
+// so it is placed against the skin, bones and parts it yields to as shown.
+const ONLY = process.argv.includes('--only') ? process.argv[process.argv.indexOf('--only') + 1] : undefined;
+if (ONLY && !ASSETS.some((a) => a.file === ONLY)) throw new Error(`--only: no asset ${ONLY}`);
 
 /** BodyParts3D bone meshes (mm) by English name, for nervous-model.mjs. */
 function skeletalBones() {
@@ -850,7 +878,15 @@ mkdirSync(OUT_DIR, { recursive: true });
 
 const available = new Set(readdirSync(OBJ_DIR).map((f) => f.replace(/\.obj$/, '')));
 
-for (const asset of ASSETS) {
+for (const asset of ASSETS.slice(0, ONLY ? ASSETS.findIndex((a) => a.file === ONLY) + 1 : undefined)) {
+  if (ONLY && asset.file !== ONLY) {
+    const meshes = await readModel(join(OUT_DIR, asset.file));
+    shown.set(
+      asset.file,
+      meshes.map((m) => ({ name: m.name, of: m.extras.of, positions: untransform(m.positions.map((v) => v / 1000)), indices: m.indices })),
+    );
+    continue;
+  }
   const doc = new Document();
   const buffer = doc.createBuffer();
   const scene = doc.createScene(asset.file.replace(/\.glb$/, ''));

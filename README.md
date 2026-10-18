@@ -6,7 +6,7 @@ Free interactive 3D atlas of the human body with per-system highlighting.
 
 The page shows a see-through glass model of an adult male body that you can rotate, zoom and pan with a mouse or with touch. On a keyboard, W/S move forward and back, A/D slide left and right, Q/E move down and up, and holding Shift goes faster; mouse rotation then orbits around wherever you moved to. The keys do nothing while you are typing in a text field or menu, or holding Ctrl, Cmd or Alt. Turning on a body system in the filter panel lights up its parts in color. Clicking or tapping a part shows its name and a short description. Zoom in very close and parts near the camera are cut away, so you can see into bone to buried parts; parts smaller than about 1.5 cm stay whole.
 
-It ships the **Skeletal**, **Nervous**, **Circulatory**, **Joints & connective tissue**, **Digestive**, **Muscular**, **Respiratory** and **Lymphatic** systems. Every bone, brain region, named nerve, artery, vein, ligament, joint capsule, cartilage pad, fascia, digestive organ, skeletal muscle, airway part, lymph node group and lymphoid organ in the model is a separate, clickable part with its own name and description. A system's model downloads when its filter is first switched on, except Skeletal, which loads in the background at startup.
+It ships the **Skeletal**, **Nervous**, **Circulatory**, **Joints & connective tissue**, **Digestive**, **Muscular**, **Respiratory**, **Lymphatic** and **Reproductive (male)** systems. Every bone, brain region, named nerve, artery, vein, ligament, joint capsule, cartilage pad, fascia, digestive organ, skeletal muscle, airway part, lymph node group, lymphoid organ and reproductive organ in the model is a separate, clickable part with its own name and description. A system's model downloads when its filter is first switched on, except Skeletal, which loads in the background at startup.
 
 Every system also lists what it leaves out and why (not in the free models, too small to model, shown in another system, and so on) in a "Not shown" panel under its filter, so nothing is hidden silently.
 
@@ -40,6 +40,7 @@ npm run preview   # serve dist/ locally
 | `src/data/muscular.json` | Muscular layer: every muscle's description, action and depth, the tendon sub-group, the exercise presets for the movement view, and the fiber-haze effect |
 | `src/data/respiratory.json` | Respiratory layer: airway, bronchial tree, lung lobe and diaphragm descriptions in five sub-groups, and the air-sac haze |
 | `src/data/lymphatic.json` | Lymphatic layer: the spleen, thymus, palatine tonsils and every lymph node group, in seven sub-groups by body region, and the "Follow the lymph" tour |
+| `src/data/reproductive.json` | Reproductive (male) layer: the testes, epididymides, sperm ducts, seminal vesicles, prostate and penis, in four sub-groups |
 | `src/search.js`, `src/search-ui.js`, `src/search-select.js` | Part search: the index and matching, the search box, and what picking a result does (including where the camera goes) |
 | `src/mesh-names.json`, `scripts/mesh-names.mjs` | Every mesh name in each layer's models, so the search can list parts before their model loads; generated from the GLBs (`npm run mesh-names`, run by `npm run build-models`) |
 | `src/not-shown.js` | The collapsible "Not shown" panel built from each layer's `notShown` list |
@@ -50,9 +51,10 @@ npm run preview   # serve dist/ locally
 | `scripts/build-models.mjs` | Converts the OBJ meshes to meshopt-compressed GLB files |
 | `scripts/extract-z-anatomy.py`, `data-sources/z-anatomy/` | Blender script and its output: parts BodyParts3D lacks (the coccyx, the auditory ossicles in `ossicles/`, the nervous system in `nervous/`, most ligaments, joint capsules, menisci and fasciae in `connective-tissue.obj.gz`, the lung lobes, nasal cavity, sinuses and pharynx in `respiratory.obj.gz`, and the lymph nodes and palatine tonsils in `lymphatic.obj.gz`), taken from Z-Anatomy |
 | `scripts/muscular-model.mjs` | Builds the muscles: BodyParts3D's plus the ones it lacks from Z-Anatomy (fitted onto the BodyParts3D skeleton), with each muscle's tendons split off as parts of their own |
-| `scripts/export-z-anatomy.py`, `data-sources/z-anatomy/muscular/` | Blender script that exports chosen Z-Anatomy objects as OBJ files, and the muscles it exported (listed in `objects.txt`) |
+| `scripts/export-z-anatomy.py`, `data-sources/z-anatomy/muscular/`, `data-sources/z-anatomy/reproductive/` | Blender script that exports chosen Z-Anatomy objects as OBJ files (curves as JSON polylines), the muscles it exported (listed in `objects.txt`), and the ejaculatory ducts with the prostate and seminal glands used to place them |
 | `scripts/nervous-model.mjs` | Fits the Z-Anatomy nervous system onto the BodyParts3D skeleton, keeps nerves under the skin and out of solid bone, and turns nerve curves into tubes |
 | `scripts/lymphatic-model.mjs` | Sizes the Z-Anatomy lymph nodes and moves any that the fit left in bone or outside the skin |
+| `scripts/reproductive-model.mjs` | Places the Z-Anatomy ejaculatory ducts by fitting its prostate and seminal glands onto BodyParts3D's, and turns them into tubes |
 | `scripts/settle.mjs` | Build step that moves every layer's simplified meshes under the skin, out of solid bone and out of the parts they yield to |
 | `scripts/check-placement.mjs`, `scripts/placement.mjs` | Checks every layer's built model against the skin, the bones and the other layers (see "Placement check" below) |
 | `scripts/passages.mjs`, `scripts/overlaps.mjs` | Where a part may lie inside a bone (real openings, attachments, known residuals), and where parts of different systems may overlap (nested anatomy, yields, known clipping) |
@@ -120,11 +122,13 @@ The **lung lobes, nasal cavity, paranasal sinuses** (frontal, sphenoidal and the
 
 The **lymph nodes** and the two **palatine tonsils** come from Z-Anatomy too, because BodyParts3D has only the spleen and the thymus (which are taken from it). `scripts/extract-z-anatomy.py` writes every mesh in Z-Anatomy's lymphoid-organs collection to `data-sources/z-anatomy/lymphatic.obj.gz`, moved onto the BodyParts3D skeleton the same way as the connective tissue and tagged with its body region. The build (`scripts/lymphatic-model.mjs`) then draws each node at least 6 mm across, closer to a typical node's size than Z-Anatomy's 2.5 mm spheres, and moves any node left in bone or outside the skin out of it as a whole.
 
+The two **ejaculatory ducts** come from Z-Anatomy too, because BodyParts3D has the rest of the male reproductive organs (the testes, epididymides, deferent ducts, seminal vesicles, prostate, corpora cavernosa, corpus spongiosum and glans) but not these. Z-Anatomy draws them as curves. `scripts/export-z-anatomy.py` writes them, with Z-Anatomy's prostate and seminal glands, to `data-sources/z-anatomy/reproductive/`; `scripts/reproductive-model.mjs` fits those glands rigidly onto the BodyParts3D prostate and seminal vesicles (about 1 mm RMS), moves the ducts with that fit and turns each into a tube.
+
 The two **parotid glands** come from Z-Anatomy as well, because BodyParts3D has the other salivary glands but not these. `scripts/extract-z-anatomy.py` extracts them into `data-sources/z-anatomy/parotid-gland-left.obj` and `parotid-gland-right.obj`, and the build moves each one so that the submandibular gland next to it lines up with the BodyParts3D one.
 
 The **muscles** come from BodyParts3D: every element its IS-A tree files as a muscle, a head or a part of one, plus the muscle sets, trapezius parts and free-standing tendons listed in `scripts/muscular-model.mjs`. Paired muscles BodyParts3D models on one side only are mirrored to the other. The muscles BodyParts3D lacks (latissimus dorsi, rectus abdominis, the internal oblique and transversus abdominis, quadratus lumborum, the muscles of facial expression and of chewing, multifidus, and a few in the foot) come from Z-Anatomy: `scripts/export-z-anatomy.py` exports them to `data-sources/z-anatomy/muscular/`, and the build fits them onto the BodyParts3D skeleton with the same bone-by-bone warp as the nervous system. The build then splits each muscle's tendons off as separate parts: stretches of the mesh much thinner than the muscle's belly that reach a bone. That split is an approximation from the shape alone; muscles that end in skin, fascia or other muscles (such as the face's) are left whole. Each muscle's depth for the peel-away slider and its role in each exercise are this project's own simplified grouping.
 
-Because of those ShareAlike parts, **`public/models/skeletal.glb`, `public/models/nervous.glb`, `public/models/joints.glb`, `public/models/digestive.glb`, `public/models/muscular.glb`, `public/models/respiratory.glb`, `public/models/lymphatic.glb` and `data-sources/z-anatomy/` (apart from `ossicles/` and the inner-ear nerve entries in `nervous/nerves.json`) are distributed under CC BY-SA 4.0**. `public/models/skin.glb` and `public/models/circulatory.glb` are under CC BY 4.0. The Allen atlas nuclei in `nervous.glb` are CC BY 4.0 material included in it. The site credits these sources in its footer, notes that the Z-Anatomy parts were modified, and states that the skeletal, nervous, joints, digestive, muscular, respiratory and lymphatic models are CC BY-SA 4.0.
+Because of those ShareAlike parts, **`public/models/skeletal.glb`, `public/models/nervous.glb`, `public/models/joints.glb`, `public/models/digestive.glb`, `public/models/muscular.glb`, `public/models/respiratory.glb`, `public/models/lymphatic.glb`, `public/models/reproductive.glb` and `data-sources/z-anatomy/` (apart from `ossicles/` and the inner-ear nerve entries in `nervous/nerves.json`) are distributed under CC BY-SA 4.0**. `public/models/skin.glb` and `public/models/circulatory.glb` are under CC BY 4.0. The Allen atlas nuclei in `nervous.glb` are CC BY 4.0 material included in it. The site credits these sources in its footer, notes that the Z-Anatomy parts were modified, and states that the skeletal, nervous, joints, digestive, muscular, respiratory, lymphatic and reproductive models are CC BY-SA 4.0.
 
 The **inner-ear nerves** (the cochlear, vestibular and vestibulocochlear (VIII) nerves and the chorda tympani of each side) also come from Z-Anatomy, which may have adapted them from **[“Anatomy of the Inner Ear”](https://sketchfab.com/3d-models/anatomy-of-the-inner-ear-f80bda64666c4b8aaac8f63b7b82a0a0)** by Annie Campbell, University of Dundee School of Medicine. That model is itself a derivative of “3D Ear” by W. Robert J. Funnell, PhD, Sam Daniel, MD, CM and Daren Nicolson, MD, CM at McGill University. It is licensed [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/), which allows **non-commercial use only**. So that the restriction stays with those parts only, they ship separately: **`public/models/nervous-inner-ear.glb` and the inner-ear nerve entries in `data-sources/z-anatomy/nervous/nerves.json` (Cochlear nerve, Vestibular nerve, Vestibulocochlear nerve (VIII) and Chorda tympani, both sides) are distributed under CC BY-NC-SA 4.0 and may not be used commercially.** Body Atlas is a free, non-commercial site. The footer credits Dundee, McGill and Z-Anatomy, notes the changes and states that the inner-ear nerve model is non-commercial.
 
@@ -134,11 +138,13 @@ The part descriptions in `src/data/` are original text written for this project.
 
 ```sh
 npm run fetch-data     # downloads ~142 MB (BodyParts3D and the Allen brain atlas) into .cache/ (gitignored) and checks their SHA-256
-npm run build-models   # writes public/models/skin.glb, skeletal.glb, skeletal-ossicles.glb, circulatory.glb, joints.glb, muscular.glb, digestive.glb, respiratory.glb, lymphatic.glb, nervous.glb and nervous-inner-ear.glb, then src/mesh-names.json, then runs the placement check
+npm run build-models   # writes public/models/skin.glb, skeletal.glb, skeletal-ossicles.glb, circulatory.glb, joints.glb, muscular.glb, digestive.glb, respiratory.glb, lymphatic.glb, nervous.glb, nervous-inner-ear.glb and reproductive.glb, then src/mesh-names.json, then runs the placement check
 npm run check-placement   # the placement check on its own (a few minutes)
 ```
 
-The generated GLB files come to about 21.1 MB in total (circulatory.glb is about 4.8 MB, muscular.glb about 4.3 MB, digestive.glb about 1.5 MB, joints.glb about 1.4 MB, respiratory.glb about 1.2 MB, lymphatic.glb about 0.9 MB); each system's file downloads only when its filter is first turned on. They are committed, so a normal build does not need the source data.
+A full model build takes over an hour. To rebuild one model, run `node scripts/build-models.mjs --only <file>` (e.g. `--only reproductive.glb`), then `npm run mesh-names` and `npm run check-placement`: the models listed before it in `ASSETS` are read from their committed GLBs instead of being rebuilt, and nothing after it is built.
+
+The generated GLB files come to about 21.2 MB in total (circulatory.glb is about 4.8 MB, muscular.glb about 4.3 MB, digestive.glb about 1.5 MB, joints.glb about 1.4 MB, respiratory.glb about 1.2 MB, lymphatic.glb about 0.9 MB, reproductive.glb under 0.1 MB); each system's file downloads only when its filter is first turned on. They are committed, so a normal build does not need the source data.
 
 `data-sources/z-anatomy/` is committed too. To regenerate it, run `npm run fetch-data` (the registration needs the BodyParts3D meshes), download `Z-Anatomy.zip` from the Z-Anatomy repository, unzip it, and run its `Startup.blend` through Blender 4.x or later (it needs about 9 GB of memory and a few minutes):
 
@@ -147,11 +153,12 @@ blender -b --factory-startup --disable-autoexec Z-Anatomy/Startup.blend \
   --python scripts/extract-z-anatomy.py -- data-sources/z-anatomy .cache/bodyparts3d/obj
 ```
 
-The Z-Anatomy muscles in `data-sources/z-anatomy/muscular/` come from a lighter export that loads only the objects listed in `objects.txt` (a few GB of memory):
+The Z-Anatomy muscles in `data-sources/z-anatomy/muscular/` and the ejaculatory ducts in `data-sources/z-anatomy/reproductive/` come from a lighter export that loads only the objects it is given (a few GB of memory):
 
 ```sh
 blender -b --factory-startup --disable-autoexec --python scripts/export-z-anatomy.py -- \
-  Z-Anatomy/Startup.blend data-sources/z-anatomy "names:muscular=data-sources/z-anatomy/muscular/objects.txt"
+  Z-Anatomy/Startup.blend data-sources/z-anatomy "names:muscular=data-sources/z-anatomy/muscular/objects.txt" \
+  'objects:reproductive=^(Prostate|Seminal gland\.[lr]|Ejaculatory duct\.[lr])$'
 ```
 
 ### Placement check
@@ -256,3 +263,15 @@ The Lymphatic layer shows the lymphoid organs and every lymph node group the fre
 Each group is one clickable part, drawn as Z-Anatomy draws it: a few representative nodes, not every node of the roughly 450 to 600 in an adult. Nodes are drawn at least 6 mm across.
 
 Neither free model has the lymphatic vessels, the thoracic duct, the cisterna chyli or the right lymphatic duct, nor the adenoids or the lingual and tubal tonsils, so the layer's "Not shown" panel lists them. **Follow the lymph** sends a glowing pulse from the lower leg through the groin, pelvic, abdominal and chest nodes to the base of the neck, where lymph returns to the blood. It jumps from group to group in straight lines, standing in for the vessels it cannot show, and its caption says so.
+
+### Reproductive coverage
+
+The Reproductive (male) layer shows every male reproductive organ the free models have, in four colour-coded groups, each with a checkbox to show or hide it:
+
+- **Testes & epididymides**: both testes and the epididymis on the back of each.
+- **Sperm ducts**: the deferent ducts (vas deferens), from the epididymis up through the groin and behind the bladder, and the two ejaculatory ducts through the prostate (from Z-Anatomy; they are drawn a little thicker than life so they stay visible).
+- **Seminal vesicles & prostate**.
+- **Penis**: the corpora cavernosa (BodyParts3D models the two as one part, with their crura on the pubic arch), the corpus spongiosum and the glans.
+
+Neither free model has the scrotum as a part of its own (the glass skin shell covers it), the bulbourethral glands, the coverings of the spermatic cord and the cremaster muscle, the tunica vaginalis, the foreskin, or the bulbospongiosus and ischiocavernosus muscles, so the layer's "Not shown" panel lists them, along with the parts too small to model and the urethra and the vessels and nerves that other systems show.
+

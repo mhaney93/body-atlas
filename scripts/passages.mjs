@@ -32,6 +32,7 @@ export const PASSAGES = [
   ['joints', /./, /./, 'attachment at the bone surface', 3],
   ['respiratory', /^diaphragm$/i, /./, 'attachment at the bone surface', 3],
   ['digestive', /pharynx/i, /./, 'attachment at the bone surface', 3],
+  ['reproductive', /^corpora cavernosa/i, /hip bone$/i, 'the crura of the penis attach along the ischiopubic rami', 3],
   ['digestive', /incisor|canine|premolar|molar/i, /^mandible$|maxilla$/i, 'dental alveoli (tooth sockets)', 9],
   ['digestive', /gum$/i, /^mandible$|maxilla$|palatine bone$|^vomer$/i, 'gums over the alveolar processes', 3],
   // The paranasal sinuses are air spaces hollowed out of these bones, and
@@ -80,6 +81,7 @@ export const RESIDUALS = [
   ['joints', /iliopsoas fascia/i, /hip bone$/i, 'the fitted sheet of fascia lining the iliac fossa', 11],
   ['digestive', /gum$/i, /^mandible$|maxilla$/i, 'gums wrapped tightly around the alveolar processes', 6],
   ['digestive', /parotid gland/i, /^mandible$|temporal bone$/i, 'the parotid gland wraps the ramus of the mandible', 4],
+  ['reproductive', /^corpora cavernosa/i, /hip bone$/i, 'the crura of the penis wrapped along the ischiopubic rami, where BodyParts3D sinks them 4.8 mm into the bone in the source data', 5],
   ['digestive', /colon|cecum|esophagus/i, /hip bone$|^intervertebral disk/i, 'pressed against the pelvis and spine', 2.5],
   ['circulatory', /basilic vein/i, /humerus$/i, 'BodyParts3D\'s basilic vein dips into the humerus above the elbow in the source data', 5.5],
   ['circulatory', /subclavian|axillary|suprascapular/i, /clavicle$/i, 'squeezed between the clavicle and the first rib', 4.5],

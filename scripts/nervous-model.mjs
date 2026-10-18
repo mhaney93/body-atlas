@@ -56,7 +56,7 @@ const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a
 const norm = (a) => scale(a, 1 / (Math.hypot(...a) || 1));
 const dist2 = (a, b) => (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2 + (a[2] - b[2]) ** 2;
 const centroid = (pts) => scale(pts.reduce(add, [0, 0, 0]), 1 / pts.length);
-const apply = ({ R, t }, p) => [
+export const apply = ({ R, t }, p) => [
   R[0] * p[0] + R[1] * p[1] + R[2] * p[2] + t[0],
   R[3] * p[0] + R[4] * p[1] + R[5] * p[2] + t[1],
   R[6] * p[0] + R[7] * p[1] + R[8] * p[2] + t[2],
@@ -173,7 +173,7 @@ function rigidFit(a, b) {
 }
 
 /** Rigidly registers `src` points onto the `dst` point cloud (trimmed ICP). */
-function icp(src, dst) {
+export function icp(src, dst) {
   const grid = new Grid(dst, 6);
   let T = { R: [1, 0, 0, 0, 1, 0, 0, 0, 1], t: sub(centroid(dst), centroid(src)) };
   let rms = Infinity;
@@ -194,7 +194,7 @@ function icp(src, dst) {
   return { ...T, rms };
 }
 
-function pointsOf(positions) {
+export function pointsOf(positions) {
   const out = [];
   for (let i = 0; i < positions.length; i += 3) out.push([positions[i], positions[i + 1], positions[i + 2]]);
   return out;
@@ -420,7 +420,7 @@ function strongest(best, bestLen, move, weight) {
 }
 
 /** Parallel-transport tube around a polyline of [x, y, z, r] points (mm). */
-function tube(line, positions, indices) {
+export function tube(line, positions, indices) {
   const pts = line.map((p) => p.slice(0, 3));
   const n = pts.length;
   const tangents = pts.map((_, i) => norm(sub(pts[Math.min(i + 1, n - 1)], pts[Math.max(i - 1, 0)])));
