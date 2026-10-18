@@ -155,7 +155,7 @@ blender -b --factory-startup --disable-autoexec Z-Anatomy/Startup.blend \
   --python scripts/extract-z-anatomy.py -- data-sources/z-anatomy .cache/bodyparts3d/obj
 ```
 
-The Z-Anatomy muscles in `data-sources/z-anatomy/muscular/` the ejaculatory ducts in `data-sources/z-anatomy/reproductive/` and the renal pelves and kidneys in `data-sources/z-anatomy/urinary/` (listed in its `objects.txt`) come from a lighter export that loads only the objects it is given (a few GB of memory):
+The Z-Anatomy muscles in `data-sources/z-anatomy/muscular/`, the ejaculatory ducts in `data-sources/z-anatomy/reproductive/` and the renal pelves and kidneys in `data-sources/z-anatomy/urinary/` (listed in its `objects.txt`) come from a lighter export that loads only the objects it is given (a few GB of memory):
 
 ```sh
 blender -b --factory-startup --disable-autoexec --python scripts/export-z-anatomy.py -- \
