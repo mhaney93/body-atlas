@@ -8,6 +8,7 @@ import { notShownPanel } from './not-shown.js';
 import { buildIndex } from './search.js';
 import { searchBox } from './search-ui.js';
 import { stretchPanel } from './stretch-panel.js';
+import { stretchingMode } from './stretching-mode.js';
 import { fadeNoteKeeper, searchSelector } from './search-select.js';
 import meshNames from './mesh-names.json';
 
@@ -65,8 +66,25 @@ new ResizeObserver(() => {
   document.documentElement.style.setProperty('--credit-height', `${credit.offsetHeight}px`);
 }).observe(credit);
 
-/** "Stretch it" in a muscle's info panel (src/stretch-panel.js). */
-const stretch = stretchPanel(viewer, $('info-stretch'), layers.find((l) => l.posable === 'soft'));
+const muscularLayer = layers.find((l) => l.posable === 'soft');
+/**
+ * Stretching mode (src/stretching-mode.js): every stretch, head to toe,
+ * across the systems, on the shared stepper bar. It ends a guide or tour.
+ */
+const stretching = stretchingMode(viewer, {
+  muscular: muscularLayer,
+  showMuscles: () => (active.has(muscularLayer.id) ? viewer.preloadLayer(muscularLayer) : setLayer(muscularLayer, true)),
+  onStart() {
+    guideStepper.stop();
+    tours.forEach((t) => t.stop());
+  },
+});
+$('layer-list').after(stretching.element);
+
+/** "Stretch it" in a muscle's info panel (src/stretch-panel.js), with a way into Stretching mode. */
+const stretch = stretchPanel(viewer, $('info-stretch'), muscularLayer, {
+  openMode: (key, side) => stretching.open(key, side).catch((err) => console.error(err)),
+});
 
 $('info-close').addEventListener('click', () => viewer.select(null));
 $('reset-view').addEventListener('click', () => viewer.resetView());
@@ -239,12 +257,20 @@ for (const layer of layers) {
   button.querySelector('.label').textContent = layer.name;
   toggles.set(layer.id, button);
   const extras = layerExtras(layer);
-  const guide = guideControls(viewer, layer, guideStepper, { onStart: () => tours.forEach((t) => t.stop()) });
+  const guide = guideControls(viewer, layer, guideStepper, {
+    onStart() {
+      tours.forEach((t) => t.stop());
+      stretching.stop();
+    },
+  });
   extras.append(guide.element);
   const tour = layer.tour && tourControls(viewer, layer);
   if (tour) {
     tours.set(layer.id, tour);
-    tour.element.addEventListener('click', () => guideStepper.stop());
+    tour.element.addEventListener('click', () => {
+      guideStepper.stop();
+      stretching.stop();
+    });
     extras.append(tour.element);
   }
   const notShown = notShownPanel(layer, layerHost);

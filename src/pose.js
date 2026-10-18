@@ -282,3 +282,21 @@ export function opTurn(op, rig) {
 export function posedPoint(matrices, segId, point) {
   return point.clone().applyMatrix4(matrices.get(segId));
 }
+
+/**
+ * A box around everything the ops move, at the start of the stretch and at
+ * its full extent: each moving segment's joint and end, so the camera can
+ * frame the whole pose. Empty when nothing turns.
+ */
+export function poseBox(rig, ops) {
+  const box = new THREE.Box3();
+  const start = poseMatrices(rig, ops, 0);
+  const full = poseMatrices(rig, ops, 1);
+  const moving = new Set(ops.filter((op) => op.plane === 'glide' || opTurn(op, rig) || opStart(op, rig)).map((op) => op.seg));
+  for (const seg of rig.segments.values()) if (seg.parent && moving.has(seg.parent)) moving.add(seg.id);
+  for (const id of moving) {
+    const seg = rig.segments.get(id);
+    for (const p of [seg.pivot, seg.end]) box.expandByPoint(posedPoint(start, id, p)).expandByPoint(posedPoint(full, id, p));
+  }
+  return box;
+}

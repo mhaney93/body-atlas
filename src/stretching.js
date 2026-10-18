@@ -34,6 +34,84 @@ export const MIRROR = Object.fromEntries(
 /** Sections of the head-to-toe run, in order; `optIn` stretches (face, eyes, tongue) only run when asked for. */
 export const GROUPS = ['neck', 'jaw', 'face', 'eye', 'shoulder', 'arm', 'hand', 'trunk', 'hip', 'leg'];
 
+/** Each section's name in Stretching mode. */
+export const GROUP_NAMES = {
+  neck: 'Neck', jaw: 'Jaw and tongue', face: 'Face', eye: 'Eyes', shoulder: 'Shoulder', arm: 'Arm',
+  hand: 'Hand', trunk: 'Trunk and breathing', hip: 'Hip and thigh', leg: 'Leg and foot',
+};
+
+/** A joint's short name on a stretch card; `joints[joint].name` in the data is the full one. */
+export const JOINT_NAMES = {
+  head: 'Head', neck: 'Neck', trunk: 'Trunk', ribs: 'Ribs', scapula: 'Shoulder blade', clavicle: 'Collarbone',
+  shoulder: 'Shoulder', elbow: 'Elbow', forearm: 'Forearm', wrist: 'Wrist', fingers: 'Finger knuckles',
+  'finger-joints': 'Finger joints', 'finger-spread': 'Fingers', palm: 'Palm', 'thumb-base': 'Thumb base',
+  'thumb-knuckle': 'Thumb knuckle', 'thumb-tip': 'Thumb end joint', hip: 'Hip', knee: 'Knee', shin: 'Shin (knee bent)',
+  ankle: 'Ankle', subtalar: 'Heel', toes: 'Toe knuckles', 'toe-joints': 'Toe joints', 'toe-spread': 'Toes',
+  arch: 'Arch', jaw: 'Jaw', hyoid: 'Hyoid', tongue: 'Tongue', eye: 'Eyes', face: 'Face', 'pelvic-floor': 'Pelvic floor',
+};
+
+/**
+ * What a direction asks you to do, in words (a joint's own wording first:
+ * "neck.ext" bends the neck back where "knee.ext" straightens the knee).
+ * `{toward}` and `{away}` are filled with the side: the posed side for a
+ * one-side stretch, the left for one done once ("turn the head to the left").
+ */
+const DIRECTION_WORDS = {
+  flex: 'bend (flexion)', ext: 'straighten (extension)', abd: 'out to the side (abduction)', add: 'in across the midline (adduction)',
+  ir: 'turn in (internal rotation)', er: 'turn out (external rotation)', hzadd: 'across the body (horizontal adduction)',
+  hzabd: 'back and out (horizontal abduction)', pro: 'palm down (pronation)', sup: 'palm up (supination)',
+  rd: 'toward the thumb (radial deviation)', ud: 'toward the little finger (ulnar deviation)', elev: 'up (elevation)',
+  dep: 'down (depression)', protr: 'forward (protraction)', retr: 'back (retraction)', uprot: 'turn up (upward rotation)',
+  dnrot: 'turn down (downward rotation)', sbi: 'side-bend to the {toward}', sbc: 'side-bend to the {away}',
+  roti: 'turn to the {toward}', rotc: 'turn to the {away}', inv: 'sole in (inversion)', ev: 'sole out (eversion)',
+  df: 'toes up (dorsiflexion)', pf: 'point the foot (plantarflexion)', open: 'open', close: 'close', fwd: 'jut forward',
+  back: 'pull back', lati: 'shift to the {toward}', latc: 'shift to the {away}', inh: 'breathe in fully', exh: 'breathe out fully',
+  opp: 'across to the little finger (opposition)', repos: 'back out to the side (reposition)', spread: 'spread apart',
+  squeeze: 'squeeze together', drop: 'let go and drop', flat: 'flatten',
+  'head.flex': 'nod forward (flexion)', 'head.ext': 'tip back (extension)', 'neck.flex': 'bend forward (flexion)',
+  'neck.ext': 'bend back (extension)', 'trunk.flex': 'round forward (flexion)', 'trunk.ext': 'arch back (extension)',
+  'wrist.flex': 'bend toward the palm (flexion)', 'wrist.ext': 'bend back (extension)', 'fingers.flex': 'bend (flexion)',
+  'toes.ext': 'pull up (extension)', 'toes.flex': 'curl down (flexion)', 'toe-joints.ext': 'straighten (extension)',
+  'toe-joints.flex': 'curl (flexion)', 'thumb-base.flex': 'across the palm (flexion)', 'thumb-base.ext': 'out in line with the palm (extension)',
+  'thumb-base.abd': 'up away from the palm (abduction)', 'thumb-base.add': 'back against the palm (adduction)',
+  'ribs.elev': 'lift (breathing in)', 'ribs.dep': 'lower (breathing out)', 'arch.drop': 'let the arch flatten',
+  'palm.flat': 'flatten the hollow of the palm', 'pelvic-floor.drop': 'let it relax and drop',
+  'tongue.out': 'stick out and up toward the nose', 'tongue.back': 'curl back along the roof of the mouth',
+  'eye.up': 'look up', 'eye.down': 'look down', 'eye.in': 'look to the {away}', 'eye.out': 'look to the {toward}',
+  'eye.upin': 'look up and to the {away}', 'eye.upout': 'look up and to the {toward}', 'eye.downin': 'look down and to the {away}',
+  'eye.downout': 'look down and to the {toward}', 'eye.lidclose': 'close the eyes gently',
+  'face.browsdown': 'frown, brows down', 'face.browsup': 'raise the brows', 'face.eyeswide': 'open the eyes wide',
+  'face.flare': 'flare the nostrils', 'face.lipswide': 'stretch the lips wide', 'face.lowerlipdown': 'pull the lower lip down',
+  'face.pout': 'pout', 'face.pucker': 'pucker the lips', 'face.puff': 'puff the cheeks out', 'face.smile': 'smile wide',
+  'face.sniff': 'wrinkle the nose up',
+};
+
+const OTHER_SIDE = { left: 'right', right: 'left' };
+
+/**
+ * A move in words for the card: { joint: "Hip", action: "bend (flexion)",
+ * angle: 80 } (angle only where the move sets one). `side` fills "turn to the …".
+ */
+export function describeMove(code, side = 'left') {
+  const { joint, dir, angle } = parseMove(code);
+  const words = DIRECTION_WORDS[`${joint}.${dir}`] ?? DIRECTION_WORDS[dir];
+  if (!words) throw new Error(`no words for "${code}"`);
+  return {
+    joint: JOINT_NAMES[joint] ?? joint,
+    action: words.replace('{toward}', side).replace('{away}', OTHER_SIDE[side]),
+    angle,
+  };
+}
+
+/**
+ * A hold the card can time ("30 s x 2" → 30 s, 2 rounds), or null for one
+ * counted another way (reps, breaths, "2 s each").
+ */
+export function holdTimer(hold) {
+  const [, seconds, rounds] = /^(\d+) s x (\d+)$/.exec(hold ?? '') ?? [];
+  return seconds ? { seconds: Number(seconds), rounds: Number(rounds) } : null;
+}
+
 export { STRETCHING };
 
 /** "hip.flex:80" → { joint: "hip", dir: "flex", angle: 80 } (angle is optional, in degrees). */
@@ -130,6 +208,50 @@ export function isStretched(key, seen, data = STRETCHING) {
   if (!shown.length) return false;
   if (!entry.actions?.length) return true;
   return entry.actions.every((action) => reversedOnBothSides(action, shown));
+}
+
+/**
+ * The sides on which a variant, done on `side`, lengthens the muscle `key`
+ * (one of its targets). A one-side stretch lengthens that side's. One done
+ * once for both sides lengthens a side's muscle where that side's moves
+ * (movesFor) reverse one of its actions: both sides for the butterfly, but
+ * only the right splenius when the head turns left. A lengthen-only muscle,
+ * which has no actions to reverse, is lengthened on both.
+ */
+export function stretchedSides(key, stretch, variant, side, data = STRETCHING) {
+  if (isSided(stretch, variant)) return [side];
+  const actions = data.muscles[key]?.actions;
+  if (!actions?.length) return ['left', 'right'];
+  return ['left', 'right'].filter((s) => actions.some((action) => reverses(action, movesFor(stretch, variant, s))));
+}
+
+/**
+ * Stretching mode's progress, once the variants in `seen` (refs) are done:
+ * muscles stretched out of those the run can stretch (opt-in sections only
+ * when `optIn`), how many more the opt-in sections would add, each section's
+ * variants done, and the muscles that can't be stretched with the reason.
+ */
+export function coverage(seen, { optIn = false } = {}, data = STRETCHING) {
+  const run = runOrder({ optIn }, data);
+  const inRun = new Set(run.map(({ ref }) => ref));
+  const reachable = (key) =>
+    data.muscles[key].stretches?.some((ref) => variantsOf(ref, data).some(({ stretch, variant }) => inRun.has(variantRef(stretch, variant))));
+  const stretchable = Object.keys(data.muscles).filter((key) => !data.muscles[key].cannot);
+  const counted = stretchable.filter(reachable);
+  const done = new Set([...seen].filter((ref) => inRun.has(ref)));
+  return {
+    stretched: counted.filter((key) => isStretched(key, done, data)).length,
+    total: counted.length,
+    optInMore: stretchable.length - counted.length,
+    groups: GROUPS.map((group) => {
+      const refs = run.filter(({ stretch }) => stretch.group === group).map(({ ref }) => ref);
+      return { group, name: GROUP_NAMES[group], done: refs.filter((ref) => done.has(ref)).length, total: refs.length };
+    }).filter((g) => g.total),
+    cannot: Object.keys(data.muscles)
+      .filter((key) => data.muscles[key].cannot)
+      .sort()
+      .map((key) => ({ key, reason: data.muscles[key].cannot })),
+  };
 }
 
 /**

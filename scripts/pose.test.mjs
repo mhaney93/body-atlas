@@ -287,6 +287,22 @@ test('both-limb stretches draw an arrow on each side', () => {
   poser.stop();
 });
 
+test('the pose box holds every moving joint from the start of the stretch to its end', () => {
+  const p1 = S.STRETCHING.stretches.find((st) => st.id === 'P1');
+  const ops = P.variantOps(p1, p1.variants[0], 'right');
+  const box = P.poseBox(rig, ops);
+  const full = P.poseMatrices(rig, ops, 1);
+  for (const id of ['right-thigh', 'right-shank', 'right-foot']) {
+    assert.ok(box.containsPoint(seg(id).end), `${id} at rest`);
+    assert.ok(box.containsPoint(P.posedPoint(full, id, seg(id).end)), `${id} posed`);
+  }
+  // The other leg and the arms stay out of it.
+  assert.ok(!box.containsPoint(seg('left-shank').end) && !box.containsPoint(seg('left-forearm').end));
+  // Words only (the tongue): nothing to frame.
+  const tg1 = S.STRETCHING.stretches.find((st) => st.id === 'TG1');
+  assert.ok(P.poseBox(rig, P.variantOps(tg1, tg1.variants[0], 'left')).isEmpty());
+});
+
 test('setup moves hold the limb but never count toward a muscle being stretched', () => {
   // The doorway stretch bends the elbow to rest the forearm on the frame; that doesn't stretch the triceps.
   const s1 = S.STRETCHING.stretches.find((st) => st.id === 'S1');
