@@ -193,8 +193,8 @@
           "id": "a",
           "label": "nod chin in, then down",
           "moves": [
-            "head.flex",
-            "neck.flex"
+            "head.flex:20",
+            "neck.flex:10"
           ]
         }
       ]
@@ -216,7 +216,7 @@
           "moves": [
             "head.flex",
             "neck.flex",
-            "trunk.flex"
+            "trunk.flex:15"
           ]
         }
       ]
@@ -236,10 +236,10 @@
           "id": "a",
           "label": "ear away, nose slightly toward stretched side",
           "moves": [
-            "neck.sbc",
-            "neck.roti",
-            "neck.flex",
-            "head.flex",
+            "neck.sbc:40",
+            "neck.roti:20",
+            "neck.flex:20",
+            "head.flex:10",
             "scapula.dep",
             "scapula.dnrot"
           ]
@@ -260,10 +260,14 @@
         {
           "id": "a",
           "label": "nose toward opposite armpit, hand behind head",
+          "setup": [
+            "shoulder.abd:140",
+            "elbow.flex:140"
+          ],
           "moves": [
-            "neck.sbc",
-            "neck.rotc",
-            "neck.flex",
+            "neck.sbc:30",
+            "neck.rotc:45",
+            "neck.flex:30",
             "scapula.dep",
             "scapula.uprot"
           ]
@@ -286,9 +290,9 @@
           "id": "a",
           "label": "ear away, chin up and away (front scalene)",
           "moves": [
-            "neck.sbc",
-            "neck.ext",
-            "neck.roti",
+            "neck.sbc:35",
+            "neck.ext:20",
+            "neck.roti:30",
             "ribs.exh",
             "ribs.dep"
           ]
@@ -297,7 +301,7 @@
           "id": "b",
           "label": "ear away, chin level (middle scalene)",
           "moves": [
-            "neck.sbc",
+            "neck.sbc:40",
             "ribs.exh",
             "ribs.dep"
           ]
@@ -306,9 +310,9 @@
           "id": "c",
           "label": "ear away, chin toward opposite shoulder (back scalene)",
           "moves": [
-            "neck.sbc",
-            "neck.rotc",
-            "neck.flex",
+            "neck.sbc:35",
+            "neck.rotc:30",
+            "neck.flex:20",
             "ribs.exh",
             "ribs.dep"
           ]
@@ -331,10 +335,10 @@
           "id": "a",
           "label": "ear away, turn toward, look up",
           "moves": [
-            "neck.sbc",
-            "neck.roti",
-            "neck.ext",
-            "head.flex"
+            "neck.sbc:30",
+            "neck.roti:40",
+            "neck.ext:25",
+            "head.flex:10"
           ]
         }
       ]
@@ -353,8 +357,8 @@
           "id": "a",
           "label": "look up, lips closed, tongue on palate",
           "moves": [
-            "neck.ext",
-            "head.ext",
+            "neck.ext:40",
+            "head.ext:20",
             "jaw.close"
           ]
         }
@@ -374,16 +378,16 @@
           "id": "a",
           "label": "turn the head to the left",
           "moves": [
-            "neck.roti",
-            "head.roti"
+            "neck.roti:50",
+            "head.roti:30"
           ]
         },
         {
           "id": "b",
           "label": "turn the head to the right",
           "moves": [
-            "neck.rotc",
-            "head.rotc"
+            "neck.rotc:50",
+            "head.rotc:30"
           ]
         }
       ]
@@ -718,11 +722,15 @@
         {
           "id": "a",
           "label": "sit back on heels, arms forward, back rounded",
+          "setup": [
+            "knee.flex:135",
+            "ankle.pf:40"
+          ],
           "moves": [
-            "trunk.flex",
-            "neck.flex",
-            "shoulder.flex",
-            "hip.flex",
+            "trunk.flex:45",
+            "neck.flex:20",
+            "shoulder.flex:170",
+            "hip.flex:120",
             "scapula.protr",
             "scapula.uprot"
           ]
@@ -744,8 +752,8 @@
           "id": "a",
           "label": "lying face down, press the chest up, hips down",
           "moves": [
-            "trunk.ext",
-            "hip.ext",
+            "trunk.ext:25",
+            "hip.ext:20",
             "ribs.inh",
             "ribs.elev"
           ]
@@ -768,13 +776,13 @@
           "id": "a",
           "label": "reach up and over to the other side, breathe out",
           "moves": [
-            "trunk.sbc",
-            "shoulder.flex",
-            "shoulder.er",
+            "trunk.sbc:25",
+            "shoulder.flex:170",
+            "shoulder.er:30",
             "scapula.uprot",
             "ribs.exh",
             "ribs.dep",
-            "hip.add"
+            "hip.add:10"
           ]
         }
       ]
@@ -821,7 +829,7 @@
           "moves": [
             "ribs.exh",
             "ribs.dep",
-            "trunk.flex"
+            "trunk.flex:10"
           ]
         }
       ]
@@ -842,7 +850,7 @@
           "moves": [
             "ribs.inh",
             "ribs.elev",
-            "trunk.ext"
+            "trunk.ext:10"
           ]
         }
       ]
@@ -860,20 +868,27 @@
         {
           "id": "a",
           "label": "deep squat, breathe in and let the pelvic floor drop",
+          "setup": [
+            "knee.flex:130",
+            "ankle.df:20"
+          ],
           "moves": [
             "pelvic-floor.drop",
-            "hip.flex",
-            "hip.abd"
+            "hip.flex:110",
+            "hip.abd:30"
           ]
         },
         {
           "id": "b",
           "label": "happy baby (on your back, knees to armpits)",
+          "setup": [
+            "knee.flex:90"
+          ],
           "moves": [
             "pelvic-floor.drop",
-            "hip.flex",
-            "hip.abd",
-            "hip.er"
+            "hip.flex:120",
+            "hip.abd:40",
+            "hip.er:30"
           ]
         }
       ]
@@ -893,32 +908,41 @@
         {
           "id": "a",
           "label": "elbow below shoulder (about 60 degrees)",
+          "setup": [
+            "elbow.flex:90"
+          ],
           "moves": [
-            "shoulder.hzabd",
-            "shoulder.ext",
-            "shoulder.er",
-            "shoulder.abd",
+            "shoulder.hzabd:30",
+            "shoulder.ext:10",
+            "shoulder.er:60",
+            "shoulder.abd:60",
             "scapula.retr"
           ]
         },
         {
           "id": "b",
           "label": "elbow at shoulder height (90 degrees)",
+          "setup": [
+            "elbow.flex:90"
+          ],
           "moves": [
-            "shoulder.hzabd",
-            "shoulder.er",
-            "shoulder.abd",
+            "shoulder.hzabd:30",
+            "shoulder.er:90",
+            "shoulder.abd:90",
             "scapula.retr"
           ]
         },
         {
           "id": "c",
           "label": "elbow above shoulder (about 135 degrees)",
+          "setup": [
+            "elbow.flex:90"
+          ],
           "moves": [
-            "shoulder.hzabd",
-            "shoulder.flex",
-            "shoulder.er",
-            "shoulder.abd",
+            "shoulder.hzabd:30",
+            "shoulder.flex:15",
+            "shoulder.er:45",
+            "shoulder.abd:120",
             "scapula.retr",
             "scapula.elev",
             "scapula.uprot"
@@ -942,10 +966,10 @@
           "id": "a",
           "label": "arm across the chest",
           "moves": [
-            "shoulder.hzadd",
-            "shoulder.flex",
+            "shoulder.hzadd:45",
+            "shoulder.flex:90",
             "scapula.protr",
-            "shoulder.add"
+            "shoulder.add:10"
           ]
         }
       ]
@@ -966,14 +990,14 @@
           "id": "a",
           "label": "arms overhead, palms up, sit hips back and side-bend away",
           "moves": [
-            "shoulder.flex",
-            "shoulder.er",
-            "shoulder.abd",
+            "shoulder.flex:160",
+            "shoulder.er:30",
+            "shoulder.abd:15",
             "scapula.uprot",
             "scapula.elev",
-            "trunk.sbc",
-            "trunk.flex",
-            "elbow.flex"
+            "trunk.sbc:20",
+            "trunk.flex:20",
+            "elbow.flex:110"
           ]
         }
       ]
@@ -993,9 +1017,13 @@
         {
           "id": "a",
           "label": "lying on the side, forearm lowered toward the floor",
+          "setup": [
+            "shoulder.flex:90",
+            "elbow.flex:90"
+          ],
           "moves": [
-            "shoulder.ir",
-            "shoulder.hzadd"
+            "shoulder.ir:60",
+            "shoulder.hzadd:30"
           ]
         }
       ]
@@ -1014,9 +1042,12 @@
         {
           "id": "a",
           "label": "elbow at the side, forearm turned out (stick or door frame)",
+          "setup": [
+            "elbow.flex:90"
+          ],
           "moves": [
-            "shoulder.er",
-            "shoulder.abd"
+            "shoulder.er:60",
+            "shoulder.abd:10"
           ]
         }
       ]
@@ -1036,12 +1067,12 @@
           "id": "a",
           "label": "arms straight behind, palms down, lift",
           "moves": [
-            "shoulder.ext",
+            "shoulder.ext:45",
             "elbow.ext",
             "forearm.pro",
             "scapula.retr",
-            "shoulder.add",
-            "shoulder.ir"
+            "shoulder.add:10",
+            "shoulder.ir:20"
           ]
         }
       ]
@@ -1060,10 +1091,13 @@
         {
           "id": "a",
           "label": "hand up the back",
+          "setup": [
+            "elbow.flex:120"
+          ],
           "moves": [
-            "shoulder.add",
-            "shoulder.ir",
-            "shoulder.ext",
+            "shoulder.add:10",
+            "shoulder.ir:70",
+            "shoulder.ext:30",
             "scapula.dnrot"
           ]
         }
@@ -1083,21 +1117,30 @@
         {
           "id": "a",
           "label": "hug yourself, shoulders down, upper back rounded",
+          "setup": [
+            "shoulder.flex:90",
+            "shoulder.hzadd:45",
+            "elbow.flex:110"
+          ],
           "moves": [
             "scapula.protr",
             "scapula.dep",
             "scapula.uprot",
-            "trunk.flex"
+            "trunk.flex:15"
           ]
         },
         {
           "id": "b",
           "label": "reach across toward the opposite hip, shoulder shrugged",
+          "setup": [
+            "shoulder.flex:35",
+            "shoulder.hzadd:30"
+          ],
           "moves": [
             "scapula.protr",
             "scapula.elev",
             "scapula.dnrot",
-            "shoulder.add"
+            "shoulder.add:15"
           ]
         }
       ]
@@ -1116,12 +1159,16 @@
         {
           "id": "a",
           "label": "hand behind back, blade squeezed down and in",
+          "setup": [
+            "elbow.flex:90",
+            "shoulder.ir:70"
+          ],
           "moves": [
             "scapula.retr",
             "scapula.dnrot",
             "scapula.dep",
-            "shoulder.ext",
-            "shoulder.add"
+            "shoulder.ext:30",
+            "shoulder.add:10"
           ]
         }
       ]
@@ -1164,9 +1211,9 @@
           "id": "a",
           "label": "hand on wall behind, thumb down, turn away",
           "moves": [
-            "shoulder.ext",
-            "shoulder.hzabd",
-            "shoulder.abd",
+            "shoulder.ext:10",
+            "shoulder.hzabd:30",
+            "shoulder.abd:90",
             "elbow.ext",
             "forearm.pro"
           ]
@@ -1188,10 +1235,10 @@
           "id": "a",
           "label": "elbow up, hand down the back",
           "moves": [
-            "shoulder.flex",
-            "elbow.flex",
+            "shoulder.flex:160",
+            "elbow.flex:140",
             "scapula.uprot",
-            "shoulder.er"
+            "shoulder.er:20"
           ]
         }
       ]
@@ -1210,6 +1257,9 @@
         {
           "id": "a",
           "label": "palm fully up, elbow straight",
+          "setup": [
+            "shoulder.flex:60"
+          ],
           "moves": [
             "forearm.sup",
             "elbow.ext"
@@ -1218,6 +1268,9 @@
         {
           "id": "b",
           "label": "palm fully down, elbow straight",
+          "setup": [
+            "shoulder.flex:60"
+          ],
           "moves": [
             "forearm.pro",
             "elbow.ext"
@@ -1240,6 +1293,9 @@
         {
           "id": "a",
           "label": "elbow straight, palm up, wrist and fingers back",
+          "setup": [
+            "shoulder.flex:90"
+          ],
           "moves": [
             "wrist.ext",
             "fingers.ext",
@@ -1254,6 +1310,9 @@
         {
           "id": "b",
           "label": "same, hand tipped toward the little finger",
+          "setup": [
+            "shoulder.flex:90"
+          ],
           "moves": [
             "wrist.ext",
             "wrist.ud",
@@ -1264,6 +1323,9 @@
         {
           "id": "c",
           "label": "same, hand tipped toward the thumb",
+          "setup": [
+            "shoulder.flex:90"
+          ],
           "moves": [
             "wrist.ext",
             "wrist.rd",
@@ -1288,6 +1350,9 @@
         {
           "id": "a",
           "label": "elbow straight, palm down, fist curled, wrist down",
+          "setup": [
+            "shoulder.flex:90"
+          ],
           "moves": [
             "wrist.flex",
             "fingers.flex",
@@ -1299,12 +1364,16 @@
         {
           "id": "b",
           "label": "same, hand tipped toward the little finger, thumb tucked",
+          "setup": [
+            "shoulder.flex:90",
+            "forearm.pro:80"
+          ],
           "moves": [
             "wrist.flex",
             "wrist.ud",
             "thumb-base.flex",
             "thumb-base.add",
-            "thumb-knuckle.flex",
+            "thumb-knuckle.flex:40",
             "thumb-tip.flex",
             "elbow.ext"
           ]
@@ -1312,6 +1381,10 @@
         {
           "id": "c",
           "label": "same, hand tipped toward the thumb",
+          "setup": [
+            "shoulder.flex:90",
+            "forearm.pro:80"
+          ],
           "moves": [
             "wrist.flex",
             "wrist.rd",
@@ -1334,9 +1407,13 @@
         {
           "id": "a",
           "label": "knuckles straight, finger joints bent",
+          "setup": [
+            "shoulder.flex:45",
+            "elbow.flex:90"
+          ],
           "moves": [
-            "fingers.ext",
-            "finger-joints.flex"
+            "fingers.ext:10",
+            "finger-joints.flex:90"
           ]
         }
       ]
@@ -1355,14 +1432,22 @@
         {
           "id": "a",
           "label": "spread the fingers wide (palm on table)",
+          "setup": [
+            "shoulder.flex:45",
+            "elbow.flex:90"
+          ],
           "moves": [
             "finger-spread.spread",
-            "fingers.ext"
+            "fingers.ext:10"
           ]
         },
         {
           "id": "b",
           "label": "squeeze the fingers together and cross them",
+          "setup": [
+            "shoulder.flex:45",
+            "elbow.flex:90"
+          ],
           "moves": [
             "finger-spread.squeeze"
           ]
@@ -1383,6 +1468,10 @@
         {
           "id": "a",
           "label": "thumb pulled away from the index finger",
+          "setup": [
+            "shoulder.flex:45",
+            "elbow.flex:90"
+          ],
           "moves": [
             "thumb-base.abd",
             "thumb-base.ext",
@@ -1406,6 +1495,10 @@
         {
           "id": "a",
           "label": "palm flattened, thumb back and little finger back",
+          "setup": [
+            "shoulder.flex:45",
+            "elbow.flex:90"
+          ],
           "moves": [
             "palm.flat",
             "thumb-base.repos",
@@ -1433,7 +1526,7 @@
           "id": "a",
           "label": "lying on the back, straight leg raised (strap)",
           "moves": [
-            "hip.flex",
+            "hip.flex:80",
             "knee.ext"
           ]
         },
@@ -1441,20 +1534,20 @@
           "id": "b",
           "label": "same, leg across the midline, foot turned in",
           "moves": [
-            "hip.flex",
-            "hip.add",
+            "hip.flex:75",
+            "hip.add:15",
             "knee.ext",
-            "hip.ir"
+            "hip.ir:15"
           ]
         },
         {
           "id": "c",
           "label": "same, leg out to the side, foot turned out",
           "moves": [
-            "hip.flex",
-            "hip.abd",
+            "hip.flex:75",
+            "hip.abd:20",
             "knee.ext",
-            "hip.er"
+            "hip.er:20"
           ]
         }
       ]
@@ -1476,7 +1569,7 @@
           "label": "heel toward buttock, knee pointing down",
           "moves": [
             "knee.flex",
-            "hip.ext"
+            "hip.ext:10"
           ]
         }
       ]
@@ -1496,28 +1589,34 @@
         {
           "id": "a",
           "label": "back knee down, tuck pelvis, shift forward",
+          "setup": [
+            "knee.flex:90"
+          ],
           "moves": [
-            "hip.ext",
-            "trunk.ext",
-            "hip.ir"
+            "hip.ext:25",
+            "trunk.ext:10",
+            "hip.ir:10"
           ]
         },
         {
           "id": "b",
           "label": "same, arm up and side-bend away",
+          "setup": [
+            "knee.flex:90"
+          ],
           "moves": [
-            "hip.ext",
-            "trunk.sbc",
-            "trunk.ext",
-            "trunk.rotc",
-            "shoulder.flex"
+            "hip.ext:25",
+            "trunk.sbc:20",
+            "trunk.ext:10",
+            "trunk.rotc:15",
+            "shoulder.flex:160"
           ]
         },
         {
           "id": "c",
           "label": "same, back heel pulled up (couch stretch)",
           "moves": [
-            "hip.ext",
+            "hip.ext:20",
             "knee.flex"
           ]
         },
@@ -1525,9 +1624,9 @@
           "id": "d",
           "label": "same, back knee out to the side (thigh in)",
           "moves": [
-            "hip.ext",
-            "hip.add",
-            "hip.er",
+            "hip.ext:20",
+            "hip.add:15",
+            "hip.er:20",
             "knee.ext"
           ]
         }
@@ -1548,10 +1647,13 @@
           "id": "a",
           "sided": false,
           "label": "soles together, knees down (butterfly)",
+          "setup": [
+            "knee.flex:120"
+          ],
           "moves": [
-            "hip.abd",
-            "hip.er",
-            "hip.flex"
+            "hip.abd:45",
+            "hip.er:45",
+            "hip.flex:90"
           ]
         },
         {
@@ -1559,17 +1661,17 @@
           "sided": false,
           "label": "legs wide, knees straight (straddle)",
           "moves": [
-            "hip.abd",
+            "hip.abd:40",
             "knee.ext",
-            "hip.flex"
+            "hip.flex:90"
           ]
         },
         {
           "id": "c",
           "label": "side lunge, straight leg turned up",
           "moves": [
-            "hip.abd",
-            "hip.ext",
+            "hip.abd:40",
+            "hip.ext:5",
             "knee.ext"
           ]
         }
@@ -1589,10 +1691,13 @@
         {
           "id": "a",
           "label": "ankle on the other knee, thigh pulled toward the opposite shoulder",
+          "setup": [
+            "knee.flex:100"
+          ],
           "moves": [
-            "hip.flex",
-            "hip.er",
-            "hip.add"
+            "hip.flex:100",
+            "hip.er:45",
+            "hip.add:15"
           ]
         }
       ]
@@ -1612,10 +1717,10 @@
           "id": "a",
           "label": "bent knee pulled toward the opposite shoulder",
           "moves": [
-            "hip.flex",
-            "hip.add",
-            "hip.ir",
-            "knee.flex"
+            "hip.flex:110",
+            "hip.add:20",
+            "hip.ir:15",
+            "knee.flex:110"
           ]
         }
       ]
@@ -1635,18 +1740,25 @@
           "id": "a",
           "sided": false,
           "label": "lying, knees bent wide, let both knees fall inward",
+          "setup": [
+            "hip.flex:45",
+            "knee.flex:90"
+          ],
           "moves": [
-            "hip.ir",
-            "hip.add"
+            "hip.ir:30",
+            "hip.add:10"
           ]
         },
         {
           "id": "b",
           "label": "lying face down, thigh slightly out, knee bent, foot falls outward",
+          "setup": [
+            "knee.flex:90"
+          ],
           "moves": [
-            "hip.ir",
-            "hip.ext",
-            "hip.abd"
+            "hip.ir:40",
+            "hip.ext:10",
+            "hip.abd:10"
           ]
         }
       ]
@@ -1666,10 +1778,10 @@
           "id": "a",
           "label": "stretched leg crossed behind, hip pushed out",
           "moves": [
-            "hip.add",
-            "hip.ext",
-            "hip.er",
-            "trunk.sbc"
+            "hip.add:20",
+            "hip.ext:15",
+            "hip.er:15",
+            "trunk.sbc:15"
           ]
         }
       ]
@@ -1719,10 +1831,13 @@
         {
           "id": "a",
           "label": "lunge at a wall, back knee straight, heel down",
+          "setup": [
+            "hip.ext:20"
+          ],
           "moves": [
             "ankle.df",
             "knee.ext",
-            "subtalar.ev"
+            "subtalar.ev:5"
           ]
         }
       ]
@@ -1741,10 +1856,13 @@
         {
           "id": "a",
           "label": "same, back knee bent",
+          "setup": [
+            "hip.ext:10"
+          ],
           "moves": [
             "ankle.df",
-            "knee.flex",
-            "subtalar.ev"
+            "knee.flex:30",
+            "subtalar.ev:5"
           ]
         }
       ]
@@ -1769,7 +1887,7 @@
             "toe-joints.ext",
             "knee.ext",
             "arch.drop",
-            "subtalar.ev"
+            "subtalar.ev:5"
           ]
         },
         {
@@ -1781,7 +1899,7 @@
             "arch.drop",
             "toe-spread.spread",
             "ankle.df",
-            "subtalar.ev"
+            "subtalar.ev:5"
           ]
         }
       ]
@@ -1804,7 +1922,7 @@
             "ankle.pf",
             "toes.flex",
             "toe-joints.flex",
-            "subtalar.ev"
+            "subtalar.ev:10"
           ]
         },
         {
@@ -1814,7 +1932,7 @@
             "ankle.pf",
             "toes.flex",
             "toe-joints.flex",
-            "subtalar.inv"
+            "subtalar.inv:20"
           ]
         }
       ]

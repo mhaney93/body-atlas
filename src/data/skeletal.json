@@ -3,6 +3,7 @@
   "name": "Skeletal",
   "color": "#ffc861",
   "asset": "models/skeletal.glb",
+  "posable": "bones",
   "extraAssets": ["models/skeletal-ossicles.glb"],
   "preload": true,
   "summary": "The adult skeleton has about 206 bones. It supports and shapes the body, protects organs such as the brain, heart and lungs, anchors the muscles that move us, stores minerals and makes blood cells in the marrow.",

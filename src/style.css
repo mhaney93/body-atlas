@@ -670,6 +670,42 @@ body {
   margin-top: 0;
 }
 
+/* "Stretch it" (src/stretch-panel.js): the stretches that lengthen the selected muscle. */
+.info .stretch {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--panel-border);
+}
+
+.info .stretch .kicker {
+  color: var(--layer-color);
+}
+
+.stretch-list {
+  display: grid;
+  gap: 6px;
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.85rem;
+}
+
+.stretch-list .tour-button {
+  margin-top: 0;
+  text-align: left;
+}
+
+.info .stretch-how p,
+.info .stretch-note {
+  margin-top: 8px;
+  font-size: 0.85rem;
+}
+
+.info .stretch-how .label,
+.info .stretch-note {
+  color: var(--muted);
+}
+
 .summary {
   margin: 12px 0 0;
   font-size: 0.85rem;
@@ -699,6 +735,10 @@ body {
   right: var(--gutter);
   width: 320px;
   padding-right: 40px;
+  /* A muscle's stretch list can make it tall: scroll, never cover the credits. */
+  max-height: calc(100dvh - 2 * var(--gutter) - var(--credit-height, 40px));
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .info .kicker {
@@ -910,6 +950,7 @@ body {
     width: auto;
     bottom: calc(max(10px, env(safe-area-inset-bottom)) + var(--credit-height, 40px) + 8px);
     z-index: 2;
+    max-height: 42svh;
   }
 
   /* Under the title, full width; matches drop down over the view, not the whole screen. */
