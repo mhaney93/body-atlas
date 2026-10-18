@@ -226,7 +226,7 @@ The Muscular layer shows every skeletal muscle in the model: about 245 named mus
 
 ### Stretching data
 
-`src/stretches.json` holds every stretch, written as data so a test can prove nothing is missed. A muscle's info panel already offers its stretches ("Stretch it"); the cross-system Stretching mode that steps through all of them comes next. Read the data only through `src/stretching.js`.
+`src/stretches.json` holds every stretch, written as data so a test can prove nothing is missed. A muscle's info panel already offers its stretches ("Stretch it"); the rest of the stretching work is listed in "Stretching: delivered and upcoming" below. Read the data only through `src/stretching.js`.
 
 - `stretches`: each has an `id` (e.g. `P1`), a `name`, a head-to-toe `group`, a `kind` (`stretch` through a joint, or `lengthen` for an opposite movement with no proven stretch effect), a `position`, `how`, an optional `cue`, a `hold` (per side when `sided`), `sided` when it is done one side at a time (a variant can override it; read it through `isSided`), `contractRelax` when an end-range contract-relax suits it, `optIn` for the face, eye and tongue items, and one or more `variants` (`a`, `b`…). A variant is a `label`, its `moves` and, optionally, `setup` moves that hold the limb where the stretch is done (the doorway stretch's bent elbow) and count for nothing in the coverage check. A variant is one pose: it never moves a joint both ways, and the shin only rotates with the knee bent. A non-sided variant that turns a midline part or the eyes one way ("turn the head to the left") is written for the left side; `movesFor` mirrors it for the right, so each such pose is shown once and the coverage check needs both directions.
 - A move or action is `"<joint>.<direction>"`, e.g. `"hip.flex"`, optionally with an angle (`"hip.flex:80"`). Directions are relative to the muscle's own side (`sbi` = side-bend toward it, `rotc` = turn away from it); `OPPOSITE` in `src/stretching.js` lists them. `joints` names each joint and gives its normal range in degrees where a source does (AAOS, see `sources`).
@@ -242,6 +242,22 @@ The Muscular layer shows every skeletal muscle in the model: about 245 named mus
 - A layer with `"posable": "bones"` (Skeletal) loads its meshes bound rigidly to their segment; one with `"posable": "soft"` (Muscular) loads them on the same skeleton, and the first pose that could move a part gives it skin weights: each vertex follows its nearest bone within its region's segments (`REGION_FAMILIES`), blended across the joint, so a muscle that crosses a joint bends with it. While nothing is posed, these skinned meshes draw, bound and pick exactly like plain meshes.
 - `src/pose.js` turns each move into segment turns (`DIRECTIONS`: hip flexion takes the thigh's direction toward the front, pronation turns the palm toward the midline…). Joints with no bone to turn (the ribs, face, eyes, tongue, palm, foot arch, hyoid and pelvic floor) are left unposed, and the card gives their stretch in words.
 - `npm test` (`scripts/pose.test.mjs`) checks the pivots against the bones and between the sides, that each direction turns the right way, that every variant poses on both sides within the joints' normal ranges, and that a posed part moves, bends at its joint and is picked where it is drawn.
+
+### Stretching: delivered and upcoming
+
+The stretching work ships in stages. Delivered so far:
+
+- The stretch data for every Muscular part (see "Stretching data"): a stretch for every action of every stretchable muscle, the lengthen-only items labelled as such, and the muscles that can't be stretched listed with a reason.
+- "Stretch it" in a muscle's info panel, with How, Hold and Cue, playing each variant as a pose of the bones and muscles with an arrow at each moving joint, forearm rotation included (see "Stretch poses"). It plays on the selected muscle's side.
+
+Upcoming, in later stages:
+
+- The cross-system **Stretching mode**: every stretch, head to toe, stepped through with the arrow keys, one step per variant with a Left/Right toggle, and the face, eye and tongue lengthen-only items (`optIn`) as an opt-in section.
+- The optional end-range contract-relax (isometric) fold-out on each stretch card (`contractRelax` is already in the data).
+- Arrows for moves a pose can't show: breathing, face, tongue and pelvic floor (the unposed joints in "Stretch poses"); until then their cards give the move in words.
+- Spine mobility moves in the Joints & connective tissue layer, and the joint-only stretches (ankle talar glide / knee-to-wall, thoracic extension over a roller, open-book thoracic rotation, cat-camel, hip long-axis distraction, hip posterior glide / rock-back, inferior shoulder glide, CARs).
+- Nerve glides for the median, radial, ulnar, sciatic and femoral nerves as sliders, with tensioners as a second variant.
+- The 11 foam-rolling cards as an opt-in section, honestly labelled (it eases soreness and briefly adds range, probably via the nervous system; it does not release fascia).
 
 ### Joints & connective tissue coverage
 
