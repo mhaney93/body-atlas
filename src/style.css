@@ -441,6 +441,85 @@ body {
   font-size: 0.72rem;
 }
 
+/* The stepper bar (src/stepper.js), e.g. the Guide stepping through a system's parts. */
+.stepper {
+  bottom: calc(max(10px, env(safe-area-inset-bottom)) + var(--credit-height, 30px) + 56px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(360px, calc(100% - 2 * var(--gutter)));
+  padding: 10px 40px 10px 14px;
+  z-index: 3;
+}
+
+.stepper .kicker {
+  margin: 0 0 2px;
+  color: var(--layer-color);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.stepper-title {
+  margin: 0 0 8px;
+  font-size: 0.95rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stepper-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.stepper-arrow {
+  width: 44px;
+  height: 36px;
+  border: 1px solid var(--layer-color);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--layer-color) 12%, transparent);
+  color: var(--text);
+  font: inherit;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.stepper-arrow:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--layer-color) 24%, transparent);
+}
+
+.stepper-arrow:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.stepper-count {
+  min-width: 6em;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* The guide's keys show in the hint only while it runs. */
+.hint-guide {
+  display: none;
+}
+
+@media (hover: hover) and (pointer: fine) and (min-width: 701px) {
+  body.stepping .hint-guide {
+    display: block;
+    margin-top: 2px;
+  }
+}
+
+.guide-button {
+  margin-right: 6px;
+}
+
 .layer-controls {
   display: grid;
   gap: 10px;
@@ -867,6 +946,16 @@ body {
   }
 
   .tour-caption .tour-note {
+    display: none;
+  }
+
+  /* The filter bar or info sheet is at the bottom on phones, so the stepper goes up top. */
+  .stepper {
+    top: calc(max(var(--gutter), env(safe-area-inset-top)) + 98px);
+    bottom: auto;
+  }
+
+  body.stepping .hint {
     display: none;
   }
 

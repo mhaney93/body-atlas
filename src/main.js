@@ -1,5 +1,7 @@
 import { APPROXIMATE_LABEL, LAYERS, NOT_SHOWN_REASONS, SHELL_ASSET, partInfo } from './layers.js';
 import { tourControls } from './tour.js';
+import { guideControls } from './guide.js';
+import { Stepper, stepperBar } from './stepper.js';
 import { Viewer } from './viewer.js';
 import { buildLayerControls } from './layer-controls.js';
 import { notShownPanel } from './not-shown.js';
@@ -73,6 +75,8 @@ const toggles = new Map();
 /** Sub-group show/hide checkboxes (layer `groupToggles`) by "<layer id>/<group id>". */
 const groupBoxes = new Map();
 const layerById = (id) => layers.find((l) => l.id === id);
+/** Each layer's tour controls, by layer id, so the guide can stop a running tour. */
+const tours = new Map();
 
 /** Lets a layer's extras name another layer and switch it on. */
 const layerHost = {
@@ -201,6 +205,22 @@ function renderSummary() {
     : 'Drag to rotate · scroll or pinch to zoom · right-drag or two fingers to pan';
 }
 
+/**
+ * The Guide (src/guide.js): steps through every part of one system, picking
+ * each as a search result would (switching on whatever hides it, framing it
+ * and opening its info), driven by the reusable stepper bar and ←/→/Esc.
+ */
+const guideStepper = new Stepper({
+  onStep: (part) => pickResult({ kind: 'part', layerId: part.layerId, meshName: part.meshName }).catch((err) => console.error(err)),
+}).listen(window);
+document.body.append(
+  stepperBar(guideStepper, {
+    kicker: (s) => `Guide · ${layerById(s.current.layerId).name}`,
+    title: (part) => part.meshName,
+    color: (s) => layerById(s.current.layerId).color,
+  }),
+);
+
 for (const layer of layers) {
   const li = document.createElement('li');
   const button = document.createElement('button');
@@ -212,13 +232,22 @@ for (const layer of layers) {
   button.querySelector('.label').textContent = layer.name;
   toggles.set(layer.id, button);
   const extras = layerExtras(layer);
+  const guide = guideControls(viewer, layer, guideStepper, { onStart: () => tours.forEach((t) => t.stop()) });
+  extras.append(guide.element);
   const tour = layer.tour && tourControls(viewer, layer);
-  if (tour) extras.append(tour.element);
+  if (tour) {
+    tours.set(layer.id, tour);
+    tour.element.addEventListener('click', () => guideStepper.stop());
+    extras.append(tour.element);
+  }
   const notShown = notShownPanel(layer, layerHost);
   if (notShown) extras.append(notShown);
   const sync = () => {
     const on = active.has(layer.id);
-    if (!on) tour?.stop();
+    if (!on) {
+      tour?.stop();
+      guide.stop();
+    }
     button.setAttribute('aria-pressed', String(on));
     extras.hidden = !on || !extras.childElementCount;
     applyEffects(layer);
