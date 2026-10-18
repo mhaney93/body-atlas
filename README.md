@@ -240,7 +240,7 @@ The Muscular layer shows every skeletal muscle in the model: about 245 named mus
 
 - The models have no skeleton of their own, so `src/rig.js` builds one from the bones when the Skeletal model loads. Each segment (pelvis, lumbar and thoracic spine, two neck segments, head, jaw, and per side the shoulder girdle, upper arm, forearm, a forearm twist, hand, thumb and finger phalanges, thigh, shank, foot and toe phalanges) owns the bones in it and turns about a pivot found from their shape: the femoral and humeral heads by a sphere fit, the elbow above the end of the humerus, the knee at the femoral condyles, the ankle between the malleoli, each knuckle at its bone's head.
 - A layer with `"posable": "bones"` (Skeletal) loads its meshes bound rigidly to their segment; one with `"posable": "soft"` (Muscular) loads them on the same skeleton, and the first pose that could move a part gives it skin weights: each vertex follows its nearest bone within its region's segments (`REGION_FAMILIES`), blended across the joint, so a muscle that crosses a joint bends with it. While nothing is posed, these skinned meshes draw, bound and pick exactly like plain meshes.
-- `src/pose.js` turns each move into segment turns (`DIRECTIONS`: hip flexion takes the thigh's direction toward the front, pronation turns the palm toward the midline…). Joints with no bone to turn (the ribs, face, eyes, tongue, palm, foot arch, hyoid and pelvic floor) are left unposed, and the card gives their stretch in words.
+- `src/pose.js` turns each move into segment turns (`DIRECTIONS`: hip flexion takes the thigh's direction toward the front, pronation turns the palm toward the midline…). Turns at one joint compose in the joint coordinate system's order (rotation about the segment's length, then side-to-side, then front-back), so a flexed thigh can still swing out. A variant done with both limbs at once (the butterfly, child's pose) moves both alike. The forearm rests palm forward, already past thumb-forward: pronation turns from there, and supination, already at its end, stays put, with no arrow. Joints with no bone to turn (the ribs, face, eyes, tongue, palm, foot arch, hyoid and pelvic floor) are left unposed, and the card gives their stretch in words.
 - `npm test` (`scripts/pose.test.mjs`) checks the pivots against the bones and between the sides, that each direction turns the right way, that every variant poses on both sides within the joints' normal ranges, and that a posed part moves, bends at its joint and is picked where it is drawn.
 
 ### Stretching: delivered and upcoming
@@ -248,7 +248,7 @@ The Muscular layer shows every skeletal muscle in the model: about 245 named mus
 The stretching work ships in stages. Delivered so far:
 
 - The stretch data for every Muscular part (see "Stretching data"): a stretch for every action of every stretchable muscle, the lengthen-only items labelled as such, and the muscles that can't be stretched listed with a reason.
-- "Stretch it" in a muscle's info panel, with How, Hold and Cue, playing each variant as a pose of the bones and muscles with an arrow at each moving joint, forearm rotation included (see "Stretch poses"). It plays on the selected muscle's side.
+- "Stretch it" in a muscle's info panel, with How, Hold and Cue, playing each variant as a pose of the bones and muscles with an arrow at each moving joint, forearm rotation included (see "Stretch poses"). It plays on the selected muscle's side, or on both limbs for a stretch done with both at once.
 
 Upcoming, in later stages:
 

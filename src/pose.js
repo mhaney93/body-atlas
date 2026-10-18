@@ -31,8 +31,14 @@ export const DEFAULT_ANGLE = {
   'jaw.open': 25, 'jaw.close': 0, 'jaw.fwd': 6, 'jaw.back': 2, 'jaw.lati': 8, 'jaw.latc': 8,
 };
 
-/** Order the turns at one joint are made in: front-back, then side-to-side, then about the vertical, then about the segment's own length. */
-const ORDER = { sagittal: 0, frontal: 1, transverse: 2, axial: 3, glide: 4 };
+/**
+ * Order the turns at one joint compose in, innermost first: about the
+ * segment's own length, side-to-side, front-back, then about the vertical.
+ * Side-to-side inside front-back is the joint coordinate system's order
+ * (Grood & Suntay 1983; ISB, Wu et al. 2002): the butterfly's flexed thigh
+ * still swings out, where abducting after flexing would only spin it.
+ */
+const ORDER = { axial: 0, frontal: 1, sagittal: 2, transverse: 3, glide: 4 };
 
 /**
  * What each direction does to which segments. A rotation turns the segment so
@@ -150,10 +156,11 @@ const SIDED_SEGMENT = /^(girdle|upperarm|forearm|twist|hand|thumb\d|(index|middl
  * The turns a variant makes on one side, as a list of
  * { seg, ref, toward, plane, angle } (or { seg, glide, angle } for the jaw):
  * its setup moves (holding the limb where the stretch is done) then its own
- * moves. A variant done once for both sides is posed as written (left side).
+ * moves. A variant done once for both sides is posed as written (left side)
+ * at the midline, and moves both limbs alike (the butterfly's two thighs).
  */
 export function variantOps(stretch, variant, side, data = STRETCHING) {
-  const poseSide = isSided(stretch, variant) ? side : 'left';
+  const sides = isSided(stretch, variant) ? [side] : ['left', 'right'];
   const ops = [];
   const setup = new Set(variant.setup ?? []);
   for (const code of [...setup, ...variant.moves]) {
@@ -165,8 +172,11 @@ export function variantOps(stretch, variant, side, data = STRETCHING) {
     // The forearm rests palm forward, already turned palm-up: pronation starts from there.
     const offset = joint === 'forearm' ? { pro: 1, sup: -1 }[dir] : 0;
     for (const spec of specs) {
-      const seg = SIDED_SEGMENT.test(spec.seg) ? `${poseSide}-${spec.seg}` : spec.seg;
-      ops.push({ ...spec, seg, side: poseSide, code, total, angle: total * (spec.share ?? 1), restOffset: offset, setup: setup.has(code) });
+      const limb = SIDED_SEGMENT.test(spec.seg);
+      for (const poseSide of limb ? sides : sides.slice(0, 1)) {
+        const seg = limb ? `${poseSide}-${spec.seg}` : spec.seg;
+        ops.push({ ...spec, seg, side: poseSide, code, total, angle: total * (spec.share ?? 1), restOffset: offset, setup: setup.has(code) });
+      }
     }
   }
   return ops;
@@ -226,7 +236,7 @@ export function poseMatrices(rig, ops, fraction = 1) {
       out.set(seg.id, parent.clone());
       continue;
     }
-    // Turns in the body's frame compose on the outside; turns about the segment's own length on the inside.
+    // Each turn is about a body axis and composes outside the ones before it, so the axial turn goes first, about the segment's rest length.
     const rot = new THREE.Quaternion();
     const shift = new THREE.Vector3();
     for (const op of mine) {
@@ -234,10 +244,8 @@ export function poseMatrices(rig, ops, fraction = 1) {
         shift.addScaledVector(vector(op.glide, op.seg, op.side, rig), (op.angle / 1000) * fraction);
         continue;
       }
-      const angle = THREE.MathUtils.degToRad(op.angle * fraction + (op.restOffset ? op.restOffset * restTurn(op, rig) * fraction : 0));
-      const q = new THREE.Quaternion().setFromAxisAngle(opAxis(op, rig), angle);
-      if (op.plane === 'axial') rot.multiply(q);
-      else rot.premultiply(q);
+      const angle = THREE.MathUtils.degToRad(opTurn(op, rig) * fraction);
+      rot.premultiply(new THREE.Quaternion().setFromAxisAngle(opAxis(op, rig), angle));
     }
     const local = new THREE.Matrix4()
       .makeTranslation(seg.pivot.x + shift.x, seg.pivot.y + shift.y, seg.pivot.z + shift.z)
@@ -248,9 +256,15 @@ export function poseMatrices(rig, ops, fraction = 1) {
   return out;
 }
 
-/** The forearm's rest turn (degrees of supination past thumb-forward), which a pronation must first undo. */
-function restTurn(op, rig) {
-  return rig.frames.forearmRest[op.side] ?? 0;
+/**
+ * How far (degrees) an op turns its segment from rest at the full stretch.
+ * The forearm rests palm forward, already supinated past thumb-forward
+ * (frames.forearmRest): pronation first undoes that, and a supination the
+ * rest pose is already past stays put rather than turning back toward pronation.
+ */
+export function opTurn(op, rig) {
+  if (!op.restOffset) return op.angle;
+  return Math.max(0, op.angle + op.restOffset * (rig.frames.forearmRest[op.side] ?? 0));
 }
 
 /** Where a rest-pose point of segment `segId` is once posed. */

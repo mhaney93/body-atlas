@@ -76,6 +76,24 @@ function endAfter(moves, side, id) {
   return P.posedPoint(P.poseMatrices(rig, ops, 1), id, seg(id).end);
 }
 
+/** A Poser over the skeleton alone, for its arrows. */
+function bonePoser() {
+  const scene = new THREE.Scene();
+  const skeletal = new THREE.Group();
+  for (const [name, m] of bones) {
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(m.positions, 3));
+    const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
+    mesh.userData = { name, ...m.extras };
+    skeletal.add(mesh);
+  }
+  scene.add(skeletal);
+  const poser = new V.Poser(scene, { region: () => undefined, side: () => null });
+  poser.setBones(skeletal);
+  poser.adopt({ posable: 'bones' }, skeletal);
+  return poser;
+}
+
 test('every bone belongs to a segment, and every segment the rig needs has bones', () => {
   assert.deepEqual([...bones.keys()].filter((name) => !R.segmentOfBone(name)), []);
   const owned = new Set([...bones.keys()].map(R.segmentOfBone));
@@ -175,6 +193,85 @@ test('posed moves are real, with an angle, and no joint is posed past its normal
       }
     }
   assert.deepEqual(bad, []);
+});
+
+test('a stretch done with both limbs at once poses both sides alike', () => {
+  const bad = [];
+  let checked = 0;
+  for (const st of S.STRETCHING.stretches)
+    for (const v of st.variants) {
+      // Both-sides variants that are the same for each side (the butterfly; not a head turn, which mirrors).
+      if (S.isSided(st, v) || S.movesFor(st, v, 'right').some((code, i) => code !== v.moves[i])) continue;
+      for (const side of ['left', 'right']) {
+        const ops = P.variantOps(st, v, side);
+        const limbs = ops.filter((op) => /^(left|right)-/.test(op.seg));
+        if (!limbs.length) continue;
+        checked++;
+        const m = P.poseMatrices(rig, ops, 1);
+        for (const def of R.SEGMENTS.filter((d) => d.side === 'left')) {
+          const right = def.id.replace('left', 'right');
+          const l = P.posedPoint(m, def.id, seg(def.id).end);
+          const r = P.posedPoint(m, right, seg(right).end);
+          if (mirror(l).distanceTo(r) > 0.03) bad.push(`${st.id}${v.id} (${side}): ${def.id} ${l.toArray()} vs ${right} ${r.toArray()}`);
+        }
+      }
+    }
+  assert.ok(checked >= 18, `only ${checked} both-limb poses checked`);
+  assert.deepEqual(bad, []);
+  // The butterfly takes both thighs out to the side.
+  const p4 = S.STRETCHING.stretches.find((st) => st.id === 'P4');
+  const m = P.poseMatrices(rig, P.variantOps(p4, p4.variants[0], 'left'), 1);
+  assert.ok(P.posedPoint(m, 'right-thigh', seg('right-thigh').end).x < seg('right-thigh').end.x - 0.1);
+  assert.ok(P.posedPoint(m, 'left-thigh', seg('left-thigh').end).x > seg('left-thigh').end.x + 0.1);
+});
+
+test('the forearm turns the way its move says, and its arrow sweeps as far as the hand turns', () => {
+  const poser = bonePoser();
+  const rot = (m) => new THREE.Matrix4().extractRotation(m);
+  let checked = 0;
+  for (const st of S.STRETCHING.stretches)
+    for (const v of st.variants) {
+      if (!v.moves.some((code) => code.startsWith('forearm.'))) continue;
+      for (const side of ['left', 'right']) {
+        const ops = P.variantOps(st, v, side);
+        const m = P.poseMatrices(rig, ops, 1);
+        poser.start(ops, { still: true });
+        for (const op of ops.filter((o) => o.code.startsWith('forearm.') && !o.setup)) {
+          // The palm's turn about the forearm, measured from where the forearm alone would carry it.
+          const palmar = rig.frames.hand[op.side].palmar;
+          const forearm = rot(m.get(`${op.side}-forearm`));
+          const from = palmar.clone().applyMatrix4(forearm);
+          const to = palmar.clone().applyMatrix4(rot(m.get(op.seg)));
+          const axis = P.opAxis(op, rig).applyMatrix4(forearm).normalize();
+          const turned = THREE.MathUtils.radToDeg(Math.atan2(axis.dot(from.clone().cross(to)), from.dot(to)));
+          const name = `${st.id}${v.id} ${op.side} ${op.code}`;
+          // Positive is the named way: a supination never turns the palm back toward pronation.
+          assert.ok(turned > -1, `${name} turns ${turned}° the wrong way`);
+          assert.ok(Math.abs(turned - P.opTurn(op, rig)) < 1, `${name}: hand turns ${turned}°, opTurn ${P.opTurn(op, rig)}°`);
+          const arrow = poser.arrows.children.find((a) => a.userData.code === op.code && a.userData.side === op.side);
+          if (turned < 1) assert.equal(arrow, undefined, `${name}: arrow over a hand that doesn't turn`);
+          else assert.ok(arrow && Math.abs(arrow.userData.sweep - turned) < 1, `${name}: arrow ${arrow?.userData.sweep}° over a ${turned}° turn`);
+          checked++;
+        }
+        // Every arrow belongs to a move on the side it is drawn.
+        for (const a of poser.arrows.children) assert.ok(ops.some((op) => op.code === a.userData.code && op.side === a.userData.side));
+        poser.stop();
+      }
+    }
+  assert.ok(checked >= 18, `only ${checked} forearm turns checked`);
+  // From the palm-forward rest, pronation turns the hand most of a half turn; supination is already there.
+  const turn = (code) => P.opTurn(P.variantOps({ id: 'T', sided: true, variants: [] }, { id: 'a', moves: [code] }, 'right')[0], rig);
+  assert.ok(turn('forearm.pro') > 150 && turn('forearm.sup') === 0);
+});
+
+test('both-limb stretches draw an arrow on each side', () => {
+  const poser = bonePoser();
+  const p4 = S.STRETCHING.stretches.find((st) => st.id === 'P4');
+  poser.start(P.variantOps(p4, p4.variants[0], 'right'), { still: true });
+  const sides = (code) => poser.arrows.children.filter((a) => a.userData.code === code).map((a) => a.userData.side).sort();
+  assert.deepEqual(sides('hip.abd:45'), ['left', 'right']);
+  assert.deepEqual(sides('hip.flex:90'), ['left', 'right']);
+  poser.stop();
 });
 
 test('setup moves hold the limb but never count toward a muscle being stretched', () => {

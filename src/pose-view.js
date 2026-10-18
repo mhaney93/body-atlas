@@ -8,7 +8,7 @@
 // stays where it is, a ghost of the starting position.
 import * as THREE from 'three';
 import { buildRig, candidateSegments, indexBones, segmentOfBone, SEGMENTS, SEGMENT_INDEX, skinWeights } from './rig.js';
-import { opAxis, poseMatrices } from './pose.js';
+import { opAxis, opTurn, poseMatrices } from './pose.js';
 
 const LOOP = { into: 1.6, hold: 2.4, out: 1.2, rest: 0.8 }; // seconds
 const ARROW_COLOR = '#9fd8ff';
@@ -286,19 +286,26 @@ export class Poser {
     return new THREE.Sphere(world.center.clone().applyMatrix4(inv), world.radius / scale);
   }
 
-  /** One curved arrow per move (not per setup move), at its joint, showing the way it turns. */
+  /**
+   * One curved arrow per move and side (not per setup move), at its joint,
+   * sweeping as far as the pose turns it there; a move that turns nothing
+   * (a supination the palm-forward rest is already past) gets none.
+   */
   #drawArrows(ops, full) {
     this.arrows.clear();
     const material = new THREE.MeshBasicMaterial({ color: ARROW_COLOR, transparent: true, opacity: 0.9, depthTest: false });
     const seen = new Set();
     for (const op of ops) {
-      if (op.setup || op.plane === 'glide' || !op.angle || seen.has(op.code)) continue;
-      seen.add(op.code);
+      const key = `${op.code} ${op.side}`;
+      // A joint shared over several segments (the spine's) turns by its whole angle, drawn once.
+      const sweep = opTurn(op, this.rig) / (op.share ?? 1);
+      if (op.setup || op.plane === 'glide' || sweep < 1 || seen.has(key)) continue;
+      seen.add(key);
       const seg = this.rig.segments.get(op.seg);
       const parent = seg.parent ? full.get(seg.parent) : new THREE.Matrix4();
       const rot = new THREE.Matrix4().extractRotation(parent);
       const axis = opAxis(op, this.rig).applyMatrix4(rot).normalize();
-      const angle = THREE.MathUtils.degToRad(Math.min(op.total, 150));
+      const angle = THREE.MathUtils.degToRad(Math.min(sweep, 300));
       let center;
       let start;
       let radius;
@@ -314,7 +321,9 @@ export class Poser {
         start = seg.dir.clone().applyMatrix4(rot);
       }
       start.addScaledVector(axis, -start.dot(axis)).normalize();
-      this.arrows.add(arcArrow(center, axis, start, angle, radius, material));
+      const arrow = arcArrow(center, axis, start, angle, radius, material);
+      arrow.userData = { code: op.code, side: op.side, seg: op.seg, sweep: Math.min(sweep, 300) };
+      this.arrows.add(arrow);
     }
   }
 }

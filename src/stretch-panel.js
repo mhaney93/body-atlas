@@ -5,7 +5,7 @@
 import { canonical } from './layers.js';
 import { variantOps } from './pose.js';
 import { sideOf } from './search.js';
-import { STRETCHING, targetsOf, variantRef, variantsOf } from './stretching.js';
+import { STRETCHING, isSided, movesFor, targetsOf, variantRef, variantsOf } from './stretching.js';
 
 /** The stretching entry of a Muscular mesh (a tendon uses its muscle's). */
 export function stretchEntry(mesh) {
@@ -36,16 +36,21 @@ export function stretchPanel(viewer, el, layer) {
     el.querySelector('.stretch-how')?.replaceChildren();
   }
 
-  /** The parts the variant stretches on the side shown (and the midline). */
+  /**
+   * The parts the variant stretches on the side shown and the midline; both
+   * sides for a variant done with both at once that is the same for each
+   * (the butterfly, not a head turn, which mirrors).
+   */
   function targets(stretch, variant, side) {
     const keys = new Set(targetsOf(stretch, variant));
+    const both = !isSided(stretch, variant) && movesFor(stretch, variant, 'right').every((code, i) => code === variant.moves[i]);
     const group = viewer.layers.get(layer.id)?.group;
     const meshes = [];
     group?.traverse((o) => {
       if (!o.isMesh || o.userData.haze) return;
       const name = o.userData.of ?? o.userData.name ?? o.name;
       const own = sideOf(name);
-      if (keys.has(canonical(name)) && (!own || own === side)) meshes.push(o);
+      if (keys.has(canonical(name)) && (!own || both || own === side)) meshes.push(o);
     });
     return meshes;
   }
