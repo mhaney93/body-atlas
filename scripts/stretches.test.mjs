@@ -122,6 +122,10 @@ test('a pose done once for both sides is mirrored for the right side', () => {
   assert.deepEqual(s.movesFor(n8, left, 'right'), ['neck.rotc', 'head.rotc']);
   const p4 = s.STRETCHING.stretches.find((st) => st.id === 'P4');
   assert.deepEqual(s.movesFor(p4, p4.variants[0], 'right'), p4.variants[0].moves);
+  const tg1 = s.STRETCHING.stretches.find((st) => st.id === 'TG1');
+  for (const side of ['left', 'right']) assert.deepEqual(s.movesFor(tg1, tg1.variants[0], side), ['tongue.out']);
+  const e1 = s.STRETCHING.stretches.find((st) => st.id === 'E1');
+  assert.deepEqual(s.movesFor(e1, e1.variants.find((v) => v.id === 'c'), 'right'), ['eye.out']);
   // Turning only to the left stretches the left semispinalis capitis's rotation, not the right one's.
   const key = 'semispinalis capitis';
   assert.equal(s.isStretched(key, new Set(['N2', 'N8a'])), false);
@@ -150,6 +154,11 @@ test('the run goes head to toe through every variant once, opt-in ones only when
   assert.ok(main.length < full.length);
   const groups = main.map((r) => s.GROUPS.indexOf(r.stretch.group));
   assert.deepEqual(groups, [...groups].sort((a, b) => a - b));
+  const foot = ['ankle', 'subtalar', 'toes', 'toe-joints', 'toe-spread', 'arch'];
+  const leg = [...new Set(main.filter((r) => r.stretch.group === 'leg').map((r) => r.stretch))];
+  const touchesFoot = (st) => st.variants.some((v) => v.moves.some((m) => foot.includes(s.parseMove(m).joint)));
+  const firstFoot = leg.findIndex(touchesFoot);
+  assert.ok(firstFoot > 0 && leg.slice(firstFoot).every(touchesFoot), 'knee-only leg stretches come before the ankle and toes');
 });
 
 test('watching the whole run stretches every stretchable muscle; none of the cannot list', () => {

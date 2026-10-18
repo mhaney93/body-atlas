@@ -1675,6 +1675,36 @@
       ]
     },
     {
+      "id": "C7",
+      "name": "Shin rotation, knee bent",
+      "group": "leg",
+      "kind": "stretch",
+      "sided": true,
+      "position": "seated",
+      "how": "Sit with the knee bent to 90 degrees and the thigh still; turn the foot and shin out, or in, as far as they go.",
+      "cue": "The shin only turns while the knee is bent; with the knee straight the turn comes from the hip.",
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "knee bent, foot and shin turned out",
+          "moves": [
+            "knee.flex:90",
+            "shin.er"
+          ]
+        },
+        {
+          "id": "b",
+          "label": "knee bent, foot and shin turned in",
+          "moves": [
+            "knee.flex:90",
+            "shin.ir"
+          ]
+        }
+      ]
+    },
+    {
       "id": "C1",
       "name": "Calf stretch, back knee straight",
       "group": "leg",
@@ -1841,36 +1871,6 @@
           "label": "toes squeezed together",
           "moves": [
             "toe-spread.squeeze"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "C7",
-      "name": "Shin rotation, knee bent",
-      "group": "leg",
-      "kind": "stretch",
-      "sided": true,
-      "position": "seated",
-      "how": "Sit with the knee bent to 90 degrees and the thigh still; turn the foot and shin out, or in, as far as they go.",
-      "cue": "The shin only turns while the knee is bent; with the knee straight the turn comes from the hip.",
-      "hold": "30 s x 2",
-      "contractRelax": true,
-      "variants": [
-        {
-          "id": "a",
-          "label": "knee bent, foot and shin turned out",
-          "moves": [
-            "knee.flex:90",
-            "shin.er"
-          ]
-        },
-        {
-          "id": "b",
-          "label": "knee bent, foot and shin turned in",
-          "moves": [
-            "knee.flex:90",
-            "shin.ir"
           ]
         }
       ]

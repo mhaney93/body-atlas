@@ -19,14 +19,16 @@ export const OPPOSITE = Object.fromEntries(
 );
 
 /**
- * Directions that swap between the two sides when a midline part (head, neck,
+ * Moves that swap between the two sides when a midline part (head, neck,
  * trunk, jaw) or both eyes move one way: turning the head left rotates the left
  * side's muscles toward their own side and the right side's away from theirs.
+ * Side-relative directions mirror at any joint; the eye's in/out only at the eye.
  */
 export const MIRROR = Object.fromEntries(
-  [['roti', 'rotc'], ['sbi', 'sbc'], ['lati', 'latc'], ['in', 'out'], ['downin', 'downout'], ['upin', 'upout']].flatMap(
-    ([a, b]) => [[a, b], [b, a]],
-  ),
+  [
+    ['roti', 'rotc'], ['sbi', 'sbc'], ['lati', 'latc'],
+    ['eye.in', 'eye.out'], ['eye.downin', 'eye.downout'], ['eye.upin', 'eye.upout'],
+  ].flatMap(([a, b]) => [[a, b], [b, a]]),
 );
 
 /** Sections of the head-to-toe run, in order; `optIn` stretches (face, eyes, tongue) only run when asked for. */
@@ -79,7 +81,9 @@ export function movesFor(stretch, variant, side) {
   if (side === 'left' || isSided(stretch, variant)) return variant.moves;
   return variant.moves.map((code) => {
     const { joint, dir } = parseMove(code);
-    return MIRROR[dir] ? code.replace(`${joint}.${dir}`, `${joint}.${MIRROR[dir]}`) : code;
+    const move = `${joint}.${dir}`;
+    const mirrored = MIRROR[move] ?? (MIRROR[dir] && `${joint}.${MIRROR[dir]}`);
+    return mirrored ? code.replace(move, mirrored) : code;
   });
 }
 
