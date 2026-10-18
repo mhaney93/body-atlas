@@ -904,6 +904,354 @@ body {
   display: none !important;
 }
 
+/* Stretching mode (src/stretching-mode.js): the coverage panel takes the filters' place, the card the info panel's. */
+.stretch-entry {
+  display: block;
+  margin-top: 12px;
+}
+
+body.stretching .filters,
+body.stretching .info {
+  display: none;
+}
+
+.stretch-bar {
+  width: min(420px, calc(100% - 2 * var(--gutter)));
+}
+
+.stretch-strip {
+  display: flex;
+  gap: 2px;
+  height: 4px;
+  margin: 0 0 8px;
+}
+
+.stretch-strip .seg {
+  flex: 1 1 0;
+  overflow: hidden;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.stretch-strip .seg > span {
+  display: block;
+  height: 100%;
+  background: var(--layer-color);
+}
+
+.stretch-coverage {
+  top: 140px;
+  left: var(--gutter);
+  width: 260px;
+  max-height: calc(100dvh - 140px - var(--credit-height, 40px) - 16px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  font-size: 0.85rem;
+}
+
+.stretch-card {
+  top: var(--gutter);
+  right: var(--gutter);
+  width: 340px;
+  padding-right: 40px;
+  max-height: calc(100dvh - 2 * var(--gutter) - var(--credit-height, 40px));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  font-size: 0.85rem;
+}
+
+.stretch-card .kicker,
+.stretch-coverage .kicker {
+  margin: 0 0 4px;
+  color: var(--layer-color);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.stretch-card h2 {
+  margin: 0 0 2px;
+  font-size: 1.2rem;
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--text);
+}
+
+.stretch-card p {
+  margin: 8px 0 0;
+  line-height: 1.5;
+}
+
+.stretch-card .stretch-variant,
+.stretch-card .stretch-cue,
+.stretch-card .stretch-safety,
+.stretch-coverage .stretch-note {
+  color: var(--muted);
+}
+
+.stretch-card .stretch-variant {
+  margin-top: 0;
+}
+
+.stretch-card .approx {
+  display: inline-block;
+  padding: 1px 6px;
+  border: 1px dashed var(--muted);
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.stretch-card .stretch-safety {
+  font-size: 0.75rem;
+}
+
+.stretch-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.stretch-chip,
+.stretch-side {
+  min-height: 32px;
+  padding: 4px 10px;
+  border: 1px solid var(--panel-border);
+  border-radius: 7px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.8rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.stretch-chip[aria-pressed='true'],
+.stretch-side[aria-pressed='true'] {
+  border-color: var(--layer-color);
+  background: color-mix(in srgb, var(--layer-color) 18%, transparent);
+  color: var(--text);
+}
+
+.stretch-section {
+  margin-top: 12px;
+}
+
+.stretch-card .stretch-label {
+  margin: 0 0 4px;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.stretch-moves,
+.stretch-targets,
+.stretch-groups,
+.stretch-cannot {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stretch-moves {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.stretch-moves li {
+  padding: 3px 8px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.stretch-moves li.setup {
+  color: var(--muted);
+  font-style: italic;
+}
+
+.stretch-targets {
+  display: grid;
+  gap: 2px;
+}
+
+.stretch-targets li::before {
+  content: '';
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: var(--layer-color);
+  box-shadow: 0 0 6px var(--layer-color);
+}
+
+.stretch-more {
+  margin-top: 8px;
+}
+
+.stretch-more summary {
+  color: var(--accent);
+  cursor: pointer;
+}
+
+.stretch-hold {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+  margin-top: 12px;
+}
+
+.stretch-hold .tour-button {
+  margin-top: 0;
+}
+
+.stretch-hold-text {
+  color: var(--muted);
+}
+
+.stretch-sides {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.stretch-card .stretch-timer-status {
+  margin-top: 6px;
+  font-variant-numeric: tabular-nums;
+}
+
+.stretch-card .stretch-timer-status:empty {
+  display: none;
+}
+
+.stretch-done {
+  display: block;
+}
+
+.stretch-progress-open,
+.stretch-progress-close {
+  display: none;
+}
+
+.stretch-total {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.stretch-total .count,
+.stretch-group .count {
+  font-variant-numeric: tabular-nums;
+}
+
+.stretch-meter {
+  height: 6px;
+  margin: 6px 0;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.stretch-meter span {
+  display: block;
+  height: 100%;
+  background: var(--layer-color);
+}
+
+.stretch-coverage .stretch-note {
+  margin: 0 0 10px;
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.stretch-groups {
+  display: grid;
+  gap: 2px;
+}
+
+.stretch-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 30px;
+  padding: 2px 6px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.stretch-group:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.stretch-group .dot {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--layer-color);
+  border-radius: 50%;
+}
+
+.stretch-group.complete .dot {
+  background: var(--layer-color);
+}
+
+.stretch-group.current {
+  font-weight: 600;
+}
+
+.stretch-group .name {
+  flex: 1;
+}
+
+.stretch-group .count {
+  color: var(--muted);
+}
+
+.stretch-coverage .effect {
+  margin-top: 10px;
+}
+
+.stretch-cannot {
+  display: grid;
+  gap: 6px;
+  margin-top: 6px;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.stretch-cannot strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+@media (hover: hover) and (pointer: fine) and (min-width: 701px) {
+  body.stretching .hint-guide {
+    display: none;
+  }
+
+  body.stretching .hint-stretch {
+    display: block;
+    margin-top: 2px;
+  }
+}
+
+.hint-stretch {
+  display: none;
+}
+
 /* Phones: filters become a compact bar at the bottom, info a sheet above it. */
 @media (max-width: 700px) {
   .brand h1 {
@@ -1004,5 +1352,40 @@ body {
   body.touring .hint,
   body.touring .filters {
     display: none;
+  }
+
+  /* Stretching mode: the bar takes the search box's place, the card is the bottom sheet below it, and the progress panel replaces the card when asked for. */
+  body.stretching .search,
+  body.stretching .hint {
+    display: none;
+  }
+
+  .stretch-bar {
+    top: calc(max(var(--gutter), env(safe-area-inset-top)) + 50px);
+  }
+
+  .stretch-card,
+  .stretch-coverage {
+    top: auto;
+    left: var(--gutter);
+    right: var(--gutter);
+    width: auto;
+    bottom: calc(max(10px, env(safe-area-inset-bottom)) + var(--credit-height, 40px) + 8px);
+    z-index: 2;
+    max-height: max(120px, min(42svh, calc(100svh - max(10px, env(safe-area-inset-bottom)) - var(--credit-height, 40px) - 200px)));
+  }
+
+  .stretch-coverage {
+    padding-right: 40px;
+  }
+
+  body:not(.stretch-progress) .stretch-coverage,
+  body.stretch-progress .stretch-card {
+    display: none;
+  }
+
+  .stretch-progress-open,
+  .stretch-progress-close {
+    display: block;
   }
 }

@@ -571,6 +571,26 @@ export class Viewer {
     this.#fly(position, new THREE.Vector3().copy(view.target));
   }
 
+  /**
+   * Flies the camera to frame a world-space box (see frameView), as focusOn
+   * frames a part, without selecting or fading anything.
+   */
+  frameBox(box) {
+    if (box.isEmpty()) return;
+    const sphere = box.getBoundingSphere(new THREE.Sphere());
+    const view = frameView({
+      center: sphere.center,
+      radius: sphere.radius,
+      camera: this.camera.position,
+      fov: this.camera.fov,
+      aspect: this.camera.aspect,
+      minDistance: FOCUS_MIN_DISTANCE,
+      raise: this.camera.aspect < 0.8 ? 0.2 : 0,
+      maxDistance: this.controls.maxDistance,
+    });
+    this.#fly(new THREE.Vector3().copy(view.position), new THREE.Vector3().copy(view.target));
+  }
+
   /** Shows the parts focusOn() faded again. */
   clearFaded() {
     this.#setFaded([]);
