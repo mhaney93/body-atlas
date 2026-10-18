@@ -12,6 +12,10 @@ Every system also lists what it leaves out and why (not in the free models, too 
 
 The search box above the filters finds any part by name, ignoring case and accents and allowing a typo or two; a few parts also answer to everyday names such as "kneecap" or "windpipe". Paired parts list both sides, and a part two systems show (the pancreas is in Digestive and Endocrine, say) is listed under each. Picking a part turns its system on, shows its sub-group and lowers the peel slider if they were hiding it, flies the camera to it, fades whatever stands in front of it (the info panel says how many parts and can show them again) and opens its info as a click would. Searching for a part the site leaves out, such as the substantia nigra, says it is not shown and why. Press `/` to jump to the box; ↑/↓ and Enter pick a match and Esc closes the list. While you type in it, W/A/S/D type letters instead of moving the camera.
 
+Each system's filter has a **Guide** button that steps through every part of that system, head to toe, so you can read the whole system without clicking or hunting for parts. It selects the first part as a click (or a search pick) would, flying the camera to it, fading what is in front and opening its description, and a bar shows ‹ › arrows with an "n / total" count so you know nothing was skipped. The → and ← keys step forward and back and Esc (or the bar's ×, or the button again) ends it; the keys are left alone while you type in a text field, move the peel slider or hold a modifier. Paired parts come left then right, one after the other, and parts a system borrows from another (the pancreas in Endocrine, say) are included. The stepper bar (`src/stepper.js`) knows nothing about parts, so other step-through modes can reuse it.
+
+![Guide stepping through the skeleton](docs/screenshots/guide-skeletal.png)
+
 It is a static site with no backend, so it costs nothing to host. Vercel builds every push: pull requests get preview deployments, and `main` deploys to production at https://body-atlas-hd.vercel.app.
 
 ## Development
@@ -36,6 +40,7 @@ npm run preview   # serve dist/ locally
 | `src/data/circulatory.json` | Circulatory layer: as above, plus artery/vein/heart sub-groups, blood-flow direction, and the capillary-glow effect |
 | `src/data/joints.json` | Joints & connective tissue layer: as above, plus sub-groups you can show or hide and parts shared with the Skeletal layer |
 | `src/data/digestive.json` | Digestive layer: as above, plus its two decorative hazes and the "Follow the food" tour |
+| `src/stepper.js`, `src/guide.js` | The reusable previous/next stepper (state, ←/→/Esc keys, its bar) and the per-system Guide that drives it: the head-to-toe part order and the Guide button |
 | `src/tour.js` | A layer's guided tour: a glowing pulse that travels its parts in order, with a caption per stage |
 | `src/data/muscular.json` | Muscular layer: every muscle's description, action and depth, the tendon sub-group, the exercise presets for the movement view, and the fiber-haze effect |
 | `src/data/respiratory.json` | Respiratory layer: airway, bronchial tree, lung lobe and diaphragm descriptions in five sub-groups, and the air-sac haze |

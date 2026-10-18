@@ -480,6 +480,22 @@ export class Viewer {
   }
 
   /**
+   * Every clickable part of a loaded layer (its own meshes and the ones it
+   * shares from another layer) as { meshName, center }, `center` being the
+   * middle of its bounding box in world space; [] before the layer loads.
+   */
+  partCenters(layerId) {
+    const parts = [];
+    const box = new THREE.Box3();
+    this.layers.get(layerId)?.group?.traverse((o) => {
+      if (!o.isMesh || o.userData.haze) return;
+      const { x, y, z } = box.setFromObject(o).getCenter(new THREE.Vector3());
+      parts.push({ meshName: o.userData.name ?? o.name, center: { x, y, z } });
+    });
+    return parts;
+  }
+
+  /**
    * Selects a part and flies the camera to frame it (see frameView), fading
    * every visible part in front of it from there, so a buried part shows.
    * The fade lasts until the selection changes or clearFaded() is called.
