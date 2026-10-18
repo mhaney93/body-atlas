@@ -35,6 +35,7 @@ export const NESTED = [
   ['nervous', /sciatic|posterior femoral cutaneous|gluteal|pudendal/i, 'joints', /piriformis fascia/i, 'these nerves leave the pelvis just beneath piriformis, through its fascia', 8],
   ['joints', /fascia|septum|aponeurosis|retinaculum|tract/i, 'muscular', /./, 'fascia wraps and divides the muscles', 10],
   ['circulatory', /splenic (artery|vein)/i, 'lymphatic', /^spleen$/i, 'the splenic vessels branch into the spleen at its hilum', 15],
+  ['urinary', /^urethra$/i, 'reproductive', /^prostate$|corpus spongiosum|^glans penis$/i, 'the urethra runs through the prostate and down the corpus spongiosum to the glans', 12],
   ['circulatory', /renal|segmental artery/i, 'urinary', /kidney$|ureter$/i, 'the renal vessels branch into the kidney at its hilum, beside the start of the ureter', 20],
 ];
 
