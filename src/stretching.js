@@ -18,6 +18,17 @@ export const OPPOSITE = Object.fromEntries(
   ].flatMap(([a, b]) => [[a, b], [b, a]]),
 );
 
+/**
+ * Directions that swap between the two sides when a midline part (head, neck,
+ * trunk, jaw) or both eyes move one way: turning the head left rotates the left
+ * side's muscles toward their own side and the right side's away from theirs.
+ */
+export const MIRROR = Object.fromEntries(
+  [['roti', 'rotc'], ['sbi', 'sbc'], ['lati', 'latc'], ['in', 'out'], ['downin', 'downout'], ['upin', 'upout']].flatMap(
+    ([a, b]) => [[a, b], [b, a]],
+  ),
+);
+
 /** Sections of the head-to-toe run, in order; `optIn` stretches (face, eyes, tongue) only run when asked for. */
 export const GROUPS = ['neck', 'jaw', 'face', 'eye', 'shoulder', 'arm', 'hand', 'trunk', 'hip', 'leg'];
 
@@ -58,6 +69,27 @@ export function isSided(stretch, variant) {
   return variant.sided ?? stretch.sided ?? false;
 }
 
+/**
+ * A variant's moves as one side's muscles see them. A sided variant is done on
+ * the chosen side, so its moves are that side's; a variant done once for both
+ * sides ("turn the head to the left") is written for the left side, and the
+ * right side gets the mirror.
+ */
+export function movesFor(stretch, variant, side) {
+  if (side === 'left' || isSided(stretch, variant)) return variant.moves;
+  return variant.moves.map((code) => {
+    const { joint, dir } = parseMove(code);
+    return MIRROR[dir] ? code.replace(`${joint}.${dir}`, `${joint}.${MIRROR[dir]}`) : code;
+  });
+}
+
+/** Is `action` reversed on each side by one of the `shown` variants? */
+function reversedOnBothSides(action, shown) {
+  return ['left', 'right'].every((side) =>
+    reverses(action, shown.flatMap(({ stretch, variant }) => movesFor(stretch, variant, side))),
+  );
+}
+
 /** "P1" + "a" → "P1a"; a stretch with one variant is named by its id alone. */
 export function variantRef(stretch, variant) {
   return stretch.variants.length > 1 ? `${stretch.id}${variant.id}` : stretch.id;
@@ -67,8 +99,8 @@ export function variantRef(stretch, variant) {
 export function unreversedActions(key, data = STRETCHING) {
   const entry = data.muscles[key];
   if (!entry?.actions) return [];
-  const moves = entry.stretches.flatMap((ref) => variantsOf(ref, data).flatMap(({ variant }) => variant.moves));
-  return entry.actions.filter((action) => !reverses(action, moves));
+  const shown = entry.stretches.flatMap((ref) => variantsOf(ref, data));
+  return entry.actions.filter((action) => !reversedOnBothSides(action, shown));
 }
 
 /** The muscles (part keys) that list this variant among their stretches, sorted. */
@@ -93,8 +125,7 @@ export function isStretched(key, seen, data = STRETCHING) {
   );
   if (!shown.length) return false;
   if (!entry.actions?.length) return true;
-  const moves = shown.flatMap(({ variant }) => variant.moves);
-  return entry.actions.every((action) => reverses(action, moves));
+  return entry.actions.every((action) => reversedOnBothSides(action, shown));
 }
 
 /**

@@ -114,6 +114,22 @@ test('sided is a boolean, and holds leave "each side" to it', () => {
   assert.deepEqual(sided('P4'), [false, false, true]);
 });
 
+test('a pose done once for both sides is mirrored for the right side', () => {
+  const n8 = s.STRETCHING.stretches.find((st) => st.id === 'N8');
+  const [left] = n8.variants;
+  assert.equal(s.isSided(n8, left), false);
+  assert.deepEqual(s.movesFor(n8, left, 'left'), ['neck.roti', 'head.roti']);
+  assert.deepEqual(s.movesFor(n8, left, 'right'), ['neck.rotc', 'head.rotc']);
+  const p4 = s.STRETCHING.stretches.find((st) => st.id === 'P4');
+  assert.deepEqual(s.movesFor(p4, p4.variants[0], 'right'), p4.variants[0].moves);
+  // Turning only to the left stretches the left semispinalis capitis's rotation, not the right one's.
+  const key = 'semispinalis capitis';
+  assert.equal(s.isStretched(key, new Set(['N2', 'N8a'])), false);
+  assert.equal(s.isStretched(key, new Set(['N2', 'N8a', 'N8b'])), true);
+  const data = { ...s.STRETCHING, muscles: { [key]: { ...s.STRETCHING.muscles[key], stretches: ['N2', 'N8a'] } } };
+  assert.deepEqual(s.unreversedActions(key, data), ['neck.rotc']);
+});
+
 test('joint ranges are whole degrees for directions the joint has', () => {
   const bad = [];
   for (const [id, j] of Object.entries(s.STRETCHING.joints)) {

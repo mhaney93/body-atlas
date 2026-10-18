@@ -2,7 +2,7 @@
   "sources": [
     "Joint ranges: American Academy of Orthopaedic Surgeons, Joint Motion (1965), as tabulated at https://goniometer.io/range-of-motion; trunk from WikEM https://wikem.org/wiki/Joint_ROM_(Table); shin rotation at 90 degrees of knee flexion from https://jeo-esska.springeropen.com/articles/10.1186/s40634-018-0141-9/tables/2; shin rotation needs the knee bent, as the straight knee locks (screw-home mechanism): https://www.physio-pedia.com/Screw_Home_Mechanism",
     "Muscle actions: Kenhub https://www.kenhub.com/en/library/anatomy-en/ and TeachMeAnatomy https://teachmeanatomy.info/, checked against each part's flow text in src/data/muscular.json",
-    "Two-joint stretch positions: ExRx https://exrx.net/Lists/Directory and learnmuscles https://learnmuscles.com/; figure-4 is hip flexion, abduction and external rotation (the FABER position): https://www.physio-pedia.com/FABER_Test",
+    "Two-joint stretch positions: ExRx https://exrx.net/Lists/Directory and learnmuscles https://learnmuscles.com/; figure-4 piriformis stretch is hip flexion, adduction and external rotation (Park, Shim and Chung 2017, J Phys Ther Sci 29(10):1811): https://pmc.ncbi.nlm.nih.gov/articles/PMC5684014/",
     "Hold times: ACSM (Garber et al. 2011), via Page 2012 https://pmc.ncbi.nlm.nih.gov/articles/PMC3273886/; jaw: Rocabado 6x6 https://en.irct.ir/trial/76578"
   ],
   "joints": {
@@ -366,14 +366,13 @@
       "group": "neck",
       "kind": "stretch",
       "position": "seated",
-      "how": "Turn the head as far as is comfortable to one side.",
-      "sided": true,
+      "how": "Turn the head as far as is comfortable to the left, then to the right.",
       "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
           "id": "a",
-          "label": "turn toward the stretched side, to look over that shoulder",
+          "label": "turn the head to the left",
           "moves": [
             "neck.roti",
             "head.roti"
@@ -381,7 +380,7 @@
         },
         {
           "id": "b",
-          "label": "turn away from the stretched side, to look over the other shoulder",
+          "label": "turn the head to the right",
           "moves": [
             "neck.rotc",
             "head.rotc"
@@ -457,21 +456,20 @@
       "group": "jaw",
       "kind": "stretch",
       "position": "seated",
-      "how": "Teeth slightly apart (a pencil between the front teeth helps); slide the jaw to one side.",
-      "sided": true,
+      "how": "Teeth slightly apart (a pencil between the front teeth helps); slide the jaw to the left, then to the right.",
       "hold": "5 s x 6",
       "contractRelax": true,
       "variants": [
         {
           "id": "a",
-          "label": "jaw slides toward the stretched side",
+          "label": "jaw slides to the left",
           "moves": [
             "jaw.lati"
           ]
         },
         {
           "id": "b",
-          "label": "jaw slides away from the stretched side",
+          "label": "jaw slides to the right",
           "moves": [
             "jaw.latc"
           ]
@@ -639,12 +637,10 @@
       "position": "seated",
       "how": "Keep the head still and move only the eyes to each end point.",
       "cue": "Lengthens each eye muscle by looking the opposite way; this is range of motion, not a stretch with any known benefit.",
-      "sided": true,
       "hold": "2 s each",
       "variants": [
         {
           "id": "a",
-          "sided": false,
           "label": "look up",
           "moves": [
             "eye.up"
@@ -652,7 +648,6 @@
         },
         {
           "id": "b",
-          "sided": false,
           "label": "look down",
           "moves": [
             "eye.down"
@@ -660,49 +655,48 @@
         },
         {
           "id": "c",
-          "label": "look toward the nose",
+          "label": "look right",
           "moves": [
             "eye.in"
           ]
         },
         {
           "id": "d",
-          "label": "look away from the nose",
+          "label": "look left",
           "moves": [
             "eye.out"
           ]
         },
         {
           "id": "e",
-          "label": "look down and in",
+          "label": "look down and to the right",
           "moves": [
             "eye.downin"
           ]
         },
         {
           "id": "f",
-          "label": "look up and in",
+          "label": "look up and to the right",
           "moves": [
             "eye.upin"
           ]
         },
         {
           "id": "g",
-          "label": "look down and out",
+          "label": "look down and to the left",
           "moves": [
             "eye.downout"
           ]
         },
         {
           "id": "h",
-          "label": "look up and out",
+          "label": "look up and to the left",
           "moves": [
             "eye.upout"
           ]
         },
         {
           "id": "i",
-          "sided": false,
           "label": "close the eyes gently",
           "moves": [
             "eye.lidclose"
@@ -791,21 +785,20 @@
       "group": "trunk",
       "kind": "stretch",
       "position": "seated",
-      "how": "Sit tall (or lie with knees bent and let them fall to one side) and turn the chest to one side.",
-      "sided": true,
+      "how": "Sit tall (or lie with knees bent and let them fall to one side) and turn the chest to the left, then to the right.",
       "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
           "id": "a",
-          "label": "turn the chest toward the stretched side",
+          "label": "turn the chest to the left",
           "moves": [
             "trunk.roti"
           ]
         },
         {
           "id": "b",
-          "label": "turn the chest away from the stretched side",
+          "label": "turn the chest to the right",
           "moves": [
             "trunk.rotc"
           ]
@@ -1588,19 +1581,18 @@
       "group": "hip",
       "kind": "stretch",
       "position": "floor",
-      "how": "Lie on the back, cross one ankle over the other knee and pull the bottom thigh toward you.",
-      "cue": "With the hip bent past 90 degrees, turning the leg out lengthens piriformis.",
+      "how": "Lie on the back, cross one ankle over the other knee and pull the bottom thigh toward the opposite shoulder.",
       "sided": true,
       "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
           "id": "a",
-          "label": "ankle on the other knee, pull the thigh toward the chest",
+          "label": "ankle on the other knee, thigh pulled toward the opposite shoulder",
           "moves": [
             "hip.flex",
             "hip.er",
-            "hip.abd"
+            "hip.add"
           ]
         }
       ]
@@ -2563,7 +2555,7 @@
       ],
       "stretches": [
         "N2",
-        "N8b"
+        "N8"
       ]
     },
     "longissimus cervicis": {
@@ -2610,7 +2602,7 @@
       ],
       "stretches": [
         "N2",
-        "N8a"
+        "N8"
       ]
     },
     "semispinalis cervicis": {
@@ -2620,7 +2612,7 @@
       ],
       "stretches": [
         "N2",
-        "N8a"
+        "N8"
       ]
     },
     "semispinalis thoracis": {
@@ -2630,7 +2622,7 @@
       ],
       "stretches": [
         "T1",
-        "T4a"
+        "T4"
       ]
     },
     "multifidus cervicis": {
@@ -2640,7 +2632,7 @@
       ],
       "stretches": [
         "N2",
-        "N8a"
+        "N8"
       ]
     },
     "multifidus thoracis": {
@@ -2650,7 +2642,7 @@
       ],
       "stretches": [
         "T1",
-        "T4a"
+        "T4"
       ]
     },
     "multifidus lumborum": {
@@ -2667,7 +2659,7 @@
         "neck.ext"
       ],
       "stretches": [
-        "N8a",
+        "N8",
         "N2"
       ]
     },
@@ -2677,7 +2669,7 @@
         "trunk.ext"
       ],
       "stretches": [
-        "T4a",
+        "T4",
         "T1"
       ]
     },
@@ -2687,7 +2679,7 @@
         "trunk.ext"
       ],
       "stretches": [
-        "T4a",
+        "T4",
         "T1"
       ],
       "note": "Mostly a position sensor; a twist lengthens it only slightly."
@@ -2762,7 +2754,7 @@
       "stretches": [
         "B1",
         "T3",
-        "T4a"
+        "T4"
       ]
     },
     "set of levatores costarum longi": {
@@ -2774,7 +2766,7 @@
       "stretches": [
         "B1",
         "T3",
-        "T4a"
+        "T4"
       ]
     },
     "levator scapulae": {
@@ -2837,7 +2829,7 @@
       ],
       "stretches": [
         "N2",
-        "N8b"
+        "N8"
       ]
     },
     "splenius cervicis": {
@@ -2847,7 +2839,7 @@
       ],
       "stretches": [
         "N2",
-        "N8b"
+        "N8"
       ]
     },
     "rectus capitis posterior major": {
@@ -2857,7 +2849,7 @@
       ],
       "stretches": [
         "N1",
-        "N8b"
+        "N8"
       ]
     },
     "rectus capitis posterior minor": {
@@ -2883,7 +2875,7 @@
         "head.roti"
       ],
       "stretches": [
-        "N8b"
+        "N8"
       ]
     },
     "rectus capitis anterior": {
@@ -2918,7 +2910,7 @@
       ],
       "stretches": [
         "N7",
-        "N8a"
+        "N8"
       ]
     },
     "superior oblique part of longus colli": {
@@ -2928,7 +2920,7 @@
       ],
       "stretches": [
         "N7",
-        "N8b"
+        "N8"
       ]
     },
     "vertical intermediate part of longus colli": {
@@ -3057,7 +3049,7 @@
       "stretches": [
         "J1",
         "J2",
-        "J3a"
+        "J3"
       ]
     },
     "inferior head of lateral pterygoid": {
@@ -3068,7 +3060,7 @@
       ],
       "stretches": [
         "J2",
-        "J3a"
+        "J3"
       ]
     },
     "superior head of lateral pterygoid": {
@@ -3088,7 +3080,7 @@
       ],
       "stretches": [
         "J1",
-        "J3b"
+        "J3"
       ]
     },
     "genioglossus": {
@@ -3230,38 +3222,44 @@
       "lengthenOnly": true,
       "stretches": [
         "E1b",
-        "E1g"
+        "E1g",
+        "E1e"
       ]
     },
     "inferior rectus": {
       "lengthenOnly": true,
       "stretches": [
         "E1a",
-        "E1h"
+        "E1h",
+        "E1f"
       ]
     },
     "medial rectus": {
       "lengthenOnly": true,
       "stretches": [
-        "E1d"
+        "E1d",
+        "E1c"
       ]
     },
     "lateral rectus": {
       "lengthenOnly": true,
       "stretches": [
-        "E1c"
+        "E1c",
+        "E1d"
       ]
     },
     "superior oblique": {
       "lengthenOnly": true,
       "stretches": [
-        "E1f"
+        "E1f",
+        "E1h"
       ]
     },
     "inferior oblique": {
       "lengthenOnly": true,
       "stretches": [
-        "E1e"
+        "E1e",
+        "E1g"
       ]
     },
     "levator palpebrae superioris": {
@@ -3294,7 +3292,7 @@
       "stretches": [
         "T2",
         "T3",
-        "T4a"
+        "T4"
       ]
     },
     "internal oblique": {
@@ -3307,7 +3305,7 @@
       "stretches": [
         "T2",
         "T3",
-        "T4b"
+        "T4"
       ]
     },
     "transversus abdominis": {
@@ -3390,7 +3388,6 @@
       ],
       "stretches": [
         "P8",
-        "P5",
         "P7a"
       ],
       "note": "Front fibres turn the thigh in, back fibres turn it out."
@@ -3401,8 +3398,7 @@
         "hip.ir"
       ],
       "stretches": [
-        "P8",
-        "P5"
+        "P8"
       ]
     },
     "tensor fasciae latae": {
