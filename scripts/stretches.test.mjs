@@ -76,16 +76,52 @@ test('stretches have unique ids, a known section and kind, and every variant len
     if (ids.has(st.id)) bad.push(`${st.id}: duplicate id`);
     ids.add(st.id);
     if (!s.GROUPS.includes(st.group)) bad.push(`${st.id}: unknown group ${st.group}`);
-    if (!['stretch', 'lengthen'].includes(st.kind)) bad.push(`${st.id}: unknown kind ${st.kind}`);
+    if (!['stretch', 'lengthen', 'joint', 'glide', 'roll'].includes(st.kind)) bad.push(`${st.id}: unknown kind ${st.kind}`);
     if (!st.name || !st.how || !st.hold || !st.variants?.length) bad.push(`${st.id}: needs name, how, hold and variants`);
+    if (st.optIn && !s.OPT_IN[st.optIn]) bad.push(`${st.id}: unknown opt-in section ${st.optIn}`);
     const vids = st.variants.map((v) => v.id);
     if (new Set(vids).size !== vids.length || vids.some((v) => !/^[a-z]$/.test(v))) bad.push(`${st.id}: variant ids must be unique letters`);
     for (const v of st.variants) {
-      if (!v.label || !v.moves?.length) bad.push(`${st.id}${v.id}: needs a label and moves`);
-      if (!s.targetsOf(st, v).length) bad.push(`${st.id}${v.id}: lengthens no muscle`);
+      // A rolling card shows a position the model can't take (lying on a roller): words only.
+      if (!v.label || (!v.moves?.length && st.kind !== 'roll')) bad.push(`${st.id}${v.id}: needs a label and moves`);
+      if (['stretch', 'lengthen'].includes(st.kind) && !s.targetsOf(st, v).length) bad.push(`${st.id}${v.id}: lengthens no muscle`);
     }
   }
   assert.deepEqual(bad, []);
+});
+
+test('joint moves, nerve glides and rolling cards name real parts of their layers, with the evidence', () => {
+  const extras = s.STRETCHING.stretches.filter((st) => ['joint', 'glide', 'roll'].includes(st.kind));
+  const home = { joint: ['joints', 'joint'], glide: ['nervous', 'nerve'], roll: ['joints', 'roll'] };
+  const bad = [];
+  for (const st of extras) {
+    const [layer, group] = home[st.kind];
+    if (st.layer !== layer || st.group !== group) bad.push(`${st.id}: a ${st.kind} lives in ${layer}, section ${group}`);
+    if (!st.evidence?.trim()) bad.push(`${st.id}: needs an evidence note`);
+    // None of these lengthens a muscle toward the muscle coverage.
+    if (Object.values(s.STRETCHING.muscles).some((e) => e.stretches?.some((ref) => ref === st.id || ref.startsWith(st.id) && /^[a-z]$/.test(ref.slice(st.id.length)))))
+      bad.push(`${st.id}: listed as a muscle's stretch`);
+    for (const v of st.variants) {
+      const parts = s.partsOf(st, v);
+      if (!parts[layer]?.length) bad.push(`${st.id}${v.id}: shows no ${layer} part`);
+      for (const [id, keys] of Object.entries(parts)) {
+        const known = layers.LAYERS.find((l) => l.id === id)?.parts ?? {};
+        for (const key of keys) if (!known[key]) bad.push(`${st.id}${v.id}: no ${id} part "${key}"`);
+      }
+    }
+  }
+  assert.deepEqual(bad, []);
+  const count = (kind) => extras.filter((st) => st.kind === kind).length;
+  assert.deepEqual([count('joint'), count('glide'), count('roll')], [8, 5, 11]);
+  // Each glide is a slider first, then a tensioner labelled as the harder option.
+  for (const st of extras.filter((x) => x.kind === 'glide')) {
+    assert.deepEqual(st.variants.map((v) => v.label.split(/[:,]/)[0]), ['slider', 'tensioner'], st.id);
+    assert.match(st.variants[1].label, /only if the slider feels easy/);
+    assert.match(st.cue, /never hold/);
+  }
+  // Rolling is opt-in, and every card says it does not release fascia.
+  assert.ok(extras.filter((x) => x.kind === 'roll').every((x) => x.optIn === 'rolling'));
+  assert.match(s.ROLLING_NOTE, /does not .break up. fascia/);
 });
 
 test('each variant is one pose: no joint moved both ways, and the shin only turns with the knee bent', () => {
@@ -152,6 +188,13 @@ test('the run goes head to toe through every variant once, opt-in ones only when
   const main = s.runOrder();
   assert.ok(main.every((r) => !r.stretch.optIn));
   assert.ok(main.length < full.length);
+  // Each opt-in section adds only its own items.
+  for (const section of Object.keys(s.OPT_IN)) {
+    const added = s.runOrder({ optIn: [section] }).filter((r) => r.stretch.optIn);
+    assert.ok(added.length && added.every((r) => r.stretch.optIn === section), section);
+  }
+  // After the muscle stretches, head to toe: the joint and spine moves, the nerve glides, then rolling.
+  assert.deepEqual([...new Set(full.map((ref) => s.variantsOf(ref)[0].stretch.group))].slice(-3), ['joint', 'nerve', 'roll']);
   const groups = main.map((r) => s.GROUPS.indexOf(r.stretch.group));
   assert.deepEqual(groups, [...groups].sort((a, b) => a - b));
   const foot = ['ankle', 'subtalar', 'toes', 'toe-joints', 'toe-spread', 'arch'];

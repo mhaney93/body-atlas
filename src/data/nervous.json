@@ -4,6 +4,7 @@
   "color": "#b58cff",
   "asset": "models/nervous.glb",
   "extraAssets": ["models/nervous-inner-ear.glb"],
+  "posable": "soft",
   "summary": "The nervous system is the body's control and messaging network. The brain and spinal cord process information, and the nerves branching from them carry signals to and from every muscle, organ and patch of skin.",
   "effects": [
     {

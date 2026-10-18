@@ -1007,6 +1007,16 @@ body.stretching .info {
   font-size: 0.75rem;
 }
 
+.stretch-card .stretch-evidence {
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+.stretch-card .stretch-evidence .label {
+  color: var(--text);
+}
+
 .stretch-chips {
   display: flex;
   flex-wrap: wrap;

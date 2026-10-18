@@ -102,8 +102,9 @@ export function segmentOfBone(meshName) {
 
 /**
  * The segment families a soft part of each region may follow; a sided part
- * follows only its own side's limb segments. Muscular regions, plus the
- * Skeletal ones for completeness.
+ * follows only its own side's limb segments. The regions of the soft layers
+ * (Muscular, Joints & connective tissue, Nervous), plus the Skeletal ones for
+ * completeness; a region not listed may follow any segment.
  */
 export const REGION_FAMILIES = {
   Head: ['head'],
@@ -129,6 +130,27 @@ export const REGION_FAMILIES = {
   Leg: ['thigh', 'shank', 'foot', 'toes'],
   Ankle: ['shank', 'foot'],
   Foot: ['shank', 'foot', 'toes'],
+  // Joints & connective tissue regions not named above.
+  Spine: ['pelvis', 'lumbar', 'thorax', 'lower-neck', 'upper-neck', 'head'],
+  Skull: ['head'],
+  Thorax: ['thorax', 'lumbar', 'girdle'],
+  Arm: ['girdle', 'upperarm', 'forearm'],
+  Wrist: ['forearm', 'hand', 'thumb', 'fingers'],
+  Knee: ['thigh', 'shank'],
+  // Nervous regions: a nerve follows the bones along its whole course.
+  Brain: ['head'],
+  'Brain coverings': ['head'],
+  'Deep brain': ['head'],
+  'Cranial nerves': ['head', 'mandible', 'upper-neck', 'lower-neck', 'thorax'],
+  'Spinal cord': ['pelvis', 'lumbar', 'thorax', 'lower-neck', 'upper-neck', 'head'],
+  'Spinal nerves': ['pelvis', 'lumbar', 'thorax', 'lower-neck', 'upper-neck'],
+  Trunk: ['pelvis', 'lumbar', 'thorax'],
+  Autonomic: ['pelvis', 'lumbar', 'thorax', 'lower-neck', 'upper-neck', 'head'],
+  'Brachial plexus': ['thorax', 'lower-neck', 'upper-neck', 'girdle', 'upperarm'],
+  'Arm and hand': ['girdle', 'upperarm', 'forearm', 'hand', 'thumb', 'fingers'],
+  'Lumbar plexus': ['pelvis', 'lumbar', 'thigh', 'shank'],
+  'Sacral plexus': ['pelvis', 'lumbar', 'thigh', 'shank'],
+  'Leg and foot': ['pelvis', 'thigh', 'shank', 'foot', 'toes'],
 };
 
 // --- geometry helpers over flat [x, y, z, …] arrays -------------------------

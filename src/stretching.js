@@ -31,14 +31,35 @@ export const MIRROR = Object.fromEntries(
   ].flatMap(([a, b]) => [[a, b], [b, a]]),
 );
 
-/** Sections of the head-to-toe run, in order; `optIn` stretches (face, eyes, tongue) only run when asked for. */
-export const GROUPS = ['neck', 'jaw', 'face', 'eye', 'shoulder', 'arm', 'hand', 'trunk', 'hip', 'leg'];
+/**
+ * Sections of the run, in order: the muscle stretches head to toe, then the
+ * joint and spine moves, the nerve glides and the foam rolling. `optIn`
+ * stretches only run when their opt-in section (OPT_IN) is asked for.
+ */
+export const GROUPS = ['neck', 'jaw', 'face', 'eye', 'shoulder', 'arm', 'hand', 'trunk', 'hip', 'leg', 'joint', 'nerve', 'roll'];
 
 /** Each section's name in Stretching mode. */
 export const GROUP_NAMES = {
   neck: 'Neck', jaw: 'Jaw and tongue', face: 'Face', eye: 'Eyes', shoulder: 'Shoulder', arm: 'Arm',
   hand: 'Hand', trunk: 'Trunk and breathing', hip: 'Hip and thigh', leg: 'Leg and foot',
+  joint: 'Joints and spine', nerve: 'Nerve glides', roll: 'Foam rolling',
 };
+
+/** The opt-in sections a stretch's `optIn` names, with what Stretching mode says about each. */
+export const OPT_IN = {
+  lengthen: { name: 'Face, eyes and tongue', note: 'These lengthen only; none is a proven stretch.' },
+  rolling: { name: 'Foam rolling', note: 'Eases soreness and briefly adds range; it does not release fascia.' },
+};
+
+/** What each kind of item is, on its card. */
+export const KIND_NAMES = {
+  stretch: 'Stretch', lengthen: 'Lengthens only: no proven stretch effect', joint: 'Joint mobility',
+  glide: 'Nerve glide: move in and out, never hold', roll: 'Foam rolling',
+};
+
+/** Printed on every foam-rolling card: what rolling does and doesn't do (Behm & Wilke 2019; Chaudhry 2008). */
+export const ROLLING_NOTE =
+  'Foam rolling can briefly increase range of motion and ease soreness, probably by changing how your nervous system senses the area. It does not ‘break up’ fascia or adhesions; the forces involved are far too small. Roll each area about 30–120 s at a tolerable pressure. Avoid wounds, fractures, inflamed areas or suspected blood clots.';
 
 /** A joint's short name on a stretch card; `joints[joint].name` in the data is the full one. */
 export const JOINT_NAMES = {
@@ -227,8 +248,8 @@ export function stretchedSides(key, stretch, variant, side, data = STRETCHING) {
 
 /**
  * Stretching mode's progress, once the variants in `seen` (refs) are done:
- * muscles stretched out of those the run can stretch (opt-in sections only
- * when `optIn`), how many more the opt-in sections would add, each section's
+ * muscles stretched out of those the run can stretch (opt-in sections as in
+ * runOrder), how many more the opt-in sections would add, each section's
  * variants done, and the muscles that can't be stretched with the reason.
  */
 export function coverage(seen, { optIn = false } = {}, data = STRETCHING) {
@@ -255,14 +276,25 @@ export function coverage(seen, { optIn = false } = {}, data = STRETCHING) {
 }
 
 /**
- * Every variant in run order: by section head to toe (GROUPS), then in the
- * data's order. Opt-in stretches are left out unless `optIn` is set.
+ * Every variant in run order: by section (GROUPS), then in the data's order.
+ * Opt-in stretches run only when their section is asked for: `optIn` is a
+ * list of OPT_IN sections, or true for all of them.
  * @returns {{ stretch: object, variant: object, ref: string }[]}
  */
 export function runOrder({ optIn = false } = {}, data = STRETCHING) {
+  const on = (section) => optIn === true || (Array.isArray(optIn) && optIn.includes(section));
   return GROUPS.flatMap((group) =>
     data.stretches
-      .filter((s) => s.group === group && (optIn || !s.optIn))
+      .filter((s) => s.group === group && (!s.optIn || on(s.optIn)))
       .flatMap((stretch) => stretch.variants.map((variant) => ({ stretch, variant, ref: variantRef(stretch, variant) }))),
   );
+}
+
+/**
+ * The parts a joint move, nerve glide or rolling card shows, by layer id
+ * ({ joints: [...], muscular: [...] }): the variant's own, else its item's.
+ * Empty for a muscle stretch, whose muscles are its targets (targetsOf).
+ */
+export function partsOf(stretch, variant) {
+  return variant.parts ?? stretch.parts ?? {};
 }

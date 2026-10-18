@@ -139,7 +139,7 @@ export function stretchPanel(viewer, el, layer, { openMode } = {}) {
       const note = document.createElement('p');
       note.className = 'stretch-note';
       note.textContent =
-        'The bones and muscles move into the stretch; other systems hide while it plays, and the glass skin stays where you start.';
+        'The bones, muscles, joints and nerves move into the stretch; other systems hide while it plays, and the glass skin stays where you start.';
       el.append(list, how, note);
       if (openMode) {
         const link = document.createElement('button');

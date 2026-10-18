@@ -153,11 +153,16 @@ function store({ fail } = {}) {
 }
 
 test('progress is saved and read back, and a missing, broken or blocked store starts fresh', () => {
-  const fresh = { done: new Set(), optIn: false, ref: null, side: 'left' };
+  const fresh = { done: new Set(), optIn: [], ref: null, side: 'left' };
   const storage = store();
   assert.deepEqual(m.loadProgress(storage), fresh);
-  m.saveProgress(storage, { done: new Set(['N1', 'P1a']), optIn: true, ref: 'P1b', side: 'right' });
-  assert.deepEqual(m.loadProgress(storage), { done: new Set(['N1', 'P1a']), optIn: true, ref: 'P1b', side: 'right' });
+  m.saveProgress(storage, { done: new Set(['N1', 'P1a']), optIn: ['rolling'], ref: 'P1b', side: 'right' });
+  assert.deepEqual(m.loadProgress(storage), { done: new Set(['N1', 'P1a']), optIn: ['rolling'], ref: 'P1b', side: 'right' });
+  // A save from before rolling was opt-in said true for the face, eyes and tongue.
+  storage.data.set('body-atlas:stretching', '{"optIn":true}');
+  assert.deepEqual(m.loadProgress(storage).optIn, ['lengthen']);
+  storage.data.set('body-atlas:stretching', '{"optIn":["rolling","nope","rolling",3]}');
+  assert.deepEqual(m.loadProgress(storage).optIn, ['rolling']);
   // No storage at all, one that throws, or junk in it: a fresh start, never an error.
   assert.deepEqual(m.loadProgress(null), fresh);
   assert.deepEqual(m.loadProgress(store({ fail: 'read' })), fresh);
@@ -167,7 +172,7 @@ test('progress is saved and read back, and a missing, broken or blocked store st
   for (const value of ['{not json', '42', '{"done":"N1","optIn":"yes","side":"up"}', '{"done":[1,"N2",null]}']) {
     junk.data.set('body-atlas:stretching', value);
     const p = m.loadProgress(junk);
-    assert.equal(p.optIn, false);
+    assert.deepEqual(p.optIn, []);
     assert.equal(p.side, 'left');
     assert.ok([...p.done].every((ref) => typeof ref === 'string'));
   }

@@ -66,14 +66,37 @@ new ResizeObserver(() => {
   document.documentElement.style.setProperty('--credit-height', `${credit.offsetHeight}px`);
 }).observe(credit);
 
-const muscularLayer = layers.find((l) => l.posable === 'soft');
+const muscularLayer = layers.find((l) => l.id === 'muscular');
 /**
  * Stretching mode (src/stretching-mode.js): every stretch, head to toe,
  * across the systems, on the shared stepper bar. It ends a guide or tour.
  */
+/** The layers that were on when Stretching mode started, put back when it ends. */
+let layersBeforeStretching = null;
 const stretching = stretchingMode(viewer, {
   muscular: muscularLayer,
-  showMuscles: () => (active.has(muscularLayer.id) ? viewer.preloadLayer(muscularLayer) : setLayer(muscularLayer, true)),
+  layer: (id) => layerById(id),
+  /** Shows exactly these layers (each step's), loading any not yet loaded. */
+  showLayers(ids) {
+    layersBeforeStretching ??= new Set(active);
+    return Promise.all(
+      layers.map((l) => {
+        const on = ids.includes(l.id);
+        if (on !== active.has(l.id)) return setLayer(l, on);
+        return on ? viewer.preloadLayer(l) : null;
+      }),
+    );
+  },
+  restoreLayers() {
+    if (!layersBeforeStretching) return;
+    for (const l of layers) if (layersBeforeStretching.has(l.id) !== active.has(l.id)) setLayer(l, layersBeforeStretching.has(l.id));
+    layersBeforeStretching = null;
+  },
+  showGroup(id, groupId) {
+    const box = groupBoxes.get(`${id}/${groupId}`);
+    if (box) box.checked = true;
+    viewer.setGroupVisible(layerById(id), groupId, true);
+  },
   onStart() {
     guideStepper.stop();
     tours.forEach((t) => t.stop());

@@ -3,7 +3,10 @@
     "Joint ranges: American Academy of Orthopaedic Surgeons, Joint Motion (1965), as tabulated at https://goniometer.io/range-of-motion; trunk from WikEM https://wikem.org/wiki/Joint_ROM_(Table); shin rotation at 90 degrees of knee flexion from https://jeo-esska.springeropen.com/articles/10.1186/s40634-018-0141-9/tables/2; shin rotation needs the knee bent, as the straight knee locks (screw-home mechanism): https://www.physio-pedia.com/Screw_Home_Mechanism",
     "Muscle actions: Kenhub https://www.kenhub.com/en/library/anatomy-en/ and TeachMeAnatomy https://teachmeanatomy.info/, checked against each part's flow text in src/data/muscular.json",
     "Two-joint stretch positions: ExRx https://exrx.net/Lists/Directory and learnmuscles https://learnmuscles.com/; figure-4 piriformis stretch is hip flexion, adduction and external rotation (Park, Shim and Chung 2017, J Phys Ther Sci 29(10):1811): https://pmc.ncbi.nlm.nih.gov/articles/PMC5684014/",
-    "Hold times: ACSM (Garber et al. 2011), via Page 2012 https://pmc.ncbi.nlm.nih.gov/articles/PMC3273886/; jaw: Rocabado 6x6 https://en.irct.ir/trial/76578"
+    "Hold times: ACSM (Garber et al. 2011), via Page 2012 https://pmc.ncbi.nlm.nih.gov/articles/PMC3273886/; jaw: Rocabado 6x6 https://en.irct.ir/trial/76578",
+    "Nerve glides: sliders vs tensioners, Coppieters & Butler 2008 https://research.vu.nl/en/publications/do-sliders-slide-and-tensioners-tension-an-analysis-of-neurodynam/; review, Basson 2017 https://pubmed.ncbi.nlm.nih.gov/28704626/; upper-limb sequences, Physiotutors https://www.physiotutors.com/wiki/upper-limb-nerve-sliders-tensioners/; slump, Physiotutors https://www.physiotutors.com/wiki/slump-test/; sciatic excursion with knee and neck extension, Ellis 2012 https://research.bond.edu.au/en/publications/comparison-of-longitudinal-sciatic-nerve-movement-with-different-/; side-lying femoral glider as practitioners teach it https://theprehabguys.com/vimeo-video/side-lying-femoral-nerve-glider-2/",
+    "Joint-only moves: ankle mobilisation with movement, Vicenzino 2006 https://search.pedro.org.au/search-results/record-detail/16142 (review https://pmc.ncbi.nlm.nih.gov/articles/PMC4483387); hip self-mobilisation evidence level 5, Reiman & Matheson 2013 https://pmc.ncbi.nlm.nih.gov/articles/PMC3811738/; cat-camel, McGill https://www.unm.edu/~lkravitz/Article%20folder/lowbackstability.html; CARs, no outcomes published https://ichgcp.net/clinical-trials-registry/NCT03456050",
+    "Foam rolling: Wiewelhove 2019 https://pubmed.ncbi.nlm.nih.gov/31024339/; Wilke 2020 https://pmc.ncbi.nlm.nih.gov/articles/PMC7919347; Konrad 2022 https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9474417/; mechanism, Behm & Wilke 2019 https://pubmed.ncbi.nlm.nih.gov/31256353/; fascia needs supra-physiological force to deform, Chaudhry 2008 https://pubmed.ncbi.nlm.nih.gov/18723456/; contraindications Delphi https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8622134/"
   ],
   "joints": {
     "head": {
@@ -485,7 +488,7 @@
       "name": "Tongue range",
       "group": "jaw",
       "kind": "lengthen",
-      "optIn": true,
+      "optIn": "lengthen",
       "position": "seated",
       "how": "Stick the tongue out and up toward the nose; then curl it back along the roof of the mouth.",
       "cue": "Lengthens the tongue muscles; not a proven stretch.",
@@ -512,7 +515,7 @@
       "name": "Surprise face",
       "group": "face",
       "kind": "lengthen",
-      "optIn": true,
+      "optIn": "lengthen",
       "position": "seated",
       "how": "Raise the eyebrows high and open the eyes wide.",
       "cue": "Lengthens these muscles by making the opposite expression; there is no evidence it changes them.",
@@ -533,7 +536,7 @@
       "name": "Frown",
       "group": "face",
       "kind": "lengthen",
-      "optIn": true,
+      "optIn": "lengthen",
       "position": "seated",
       "how": "Draw the eyebrows down.",
       "cue": "Lengthens these muscles by making the opposite expression; there is no evidence it changes them.",
@@ -553,7 +556,7 @@
       "name": "Pucker (long \"O\")",
       "group": "face",
       "kind": "lengthen",
-      "optIn": true,
+      "optIn": "lengthen",
       "position": "seated",
       "how": "Push the lips forward into a long O, drawing the mouth corners in.",
       "cue": "Lengthens these muscles by making the opposite expression; there is no evidence it changes them.",
@@ -573,7 +576,7 @@
       "name": "Wide smile, mouth open",
       "group": "face",
       "kind": "lengthen",
-      "optIn": true,
+      "optIn": "lengthen",
       "position": "seated",
       "how": "Smile as wide as you can with the lips apart, then open the mouth.",
       "cue": "Lengthens these muscles by making the opposite expression; there is no evidence it changes them.",
@@ -594,7 +597,7 @@
       "name": "Lower-lip moves (pout, then show the bottom teeth)",
       "group": "face",
       "kind": "lengthen",
-      "optIn": true,
+      "optIn": "lengthen",
       "position": "seated",
       "how": "Push the lower lip up and out, then pull it down to show the bottom teeth.",
       "cue": "Lengthens these muscles by making the opposite expression; there is no evidence it changes them.",
@@ -615,7 +618,7 @@
       "name": "Nose and cheeks (flare, sniff, puff)",
       "group": "face",
       "kind": "lengthen",
-      "optIn": true,
+      "optIn": "lengthen",
       "position": "seated",
       "how": "Flare the nostrils, then sniff them narrow; puff the cheeks with air.",
       "cue": "Lengthens these muscles by making the opposite expression; there is no evidence it changes them.",
@@ -637,7 +640,7 @@
       "name": "Eye range (look to the eight end points)",
       "group": "eye",
       "kind": "lengthen",
-      "optIn": true,
+      "optIn": "lengthen",
       "position": "seated",
       "how": "Keep the head still and move only the eyes to each end point.",
       "cue": "Lengthens each eye muscle by looking the opposite way; this is range of motion, not a stretch with any known benefit.",
@@ -1990,6 +1993,895 @@
           "moves": [
             "toe-spread.squeeze"
           ]
+        }
+      ]
+    },
+    {
+      "id": "M1",
+      "name": "Inferior shoulder glide",
+      "group": "joint",
+      "kind": "joint",
+      "layer": "joints",
+      "position": "seated",
+      "how": "Sit side-on to a table with the forearm resting on it and the arm out at about 60 degrees. Let the shoulder sink down away from the ear, then lean the body gently toward the table so the top of the arm bone glides down in its socket.",
+      "cue": "Keep the neck and shoulder relaxed; it should feel like easing, not stretching.",
+      "sided": true,
+      "hold": "10 slow reps x 2",
+      "evidence": "Used in rehab for a stiff (frozen) shoulder, where joint mobilisation helps; there is no evidence it does anything for a shoulder that already moves freely.",
+      "parts": {
+        "joints": [
+          "articular capsule of glenohumeral joint",
+          "inferior glenohumeral ligament"
+        ]
+      },
+      "variants": [
+        {
+          "id": "a",
+          "label": "arm resting out on a table, shoulder sinking down",
+          "moves": [
+            "shoulder.abd:60",
+            "scapula.dep"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M2",
+      "name": "Thoracic extension over a roller",
+      "group": "joint",
+      "kind": "joint",
+      "layer": "joints",
+      "position": "floor",
+      "how": "Lie on the back with a foam roller across the upper back, hands behind the head and hips on the floor. Breathe out and let the upper back arch over the roller, then roll it one hand-width up or down and repeat.",
+      "cue": "Keep the ribs down and the low back still; the bend should come from the upper back.",
+      "sided": false,
+      "hold": "3 slow breaths at each of 3 levels",
+      "evidence": "Little research of its own; it is safe and reaches the stiff upper back, which most stretches skip.",
+      "parts": {
+        "joints": [
+          "anterior longitudinal ligament",
+          "costotransverse ligament",
+          "radiate ligament of head of rib"
+        ]
+      },
+      "variants": [
+        {
+          "id": "a",
+          "label": "upper back arched over the roller, hands behind the head",
+          "setup": [
+            "shoulder.flex:150",
+            "elbow.flex:120"
+          ],
+          "moves": [
+            "trunk.ext:20"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M3",
+      "name": "Open-book thoracic rotation",
+      "group": "joint",
+      "kind": "joint",
+      "layer": "joints",
+      "position": "floor",
+      "how": "Lie on one side with the hips and knees bent to a right angle and the arms straight out in front, palms together. Keeping the knees together, open the top arm across and turn the upper back toward the ceiling, then close it again.",
+      "cue": "The knees stay stacked so the low back stays put; follow the hand with the eyes.",
+      "sided": true,
+      "hold": "10 slow reps",
+      "evidence": "Taught widely to turn the upper back while the low back stays locked; instructional sources only, no trials.",
+      "parts": {
+        "joints": [
+          "costotransverse ligament",
+          "intertransverse ligaments",
+          "radiate ligament of head of rib"
+        ]
+      },
+      "variants": [
+        {
+          "id": "a",
+          "label": "lying on the other side, the top arm and chest turned open",
+          "setup": [
+            "hip.flex:90",
+            "knee.flex:90",
+            "shoulder.flex:90"
+          ],
+          "moves": [
+            "trunk.roti:30",
+            "shoulder.hzabd:30"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M4",
+      "name": "Cat-camel",
+      "group": "joint",
+      "kind": "joint",
+      "layer": "joints",
+      "position": "kneeling",
+      "how": "On hands and knees, slowly round the whole back up toward the ceiling with the head down, then let it sag gently with the head up. About 6 slow cycles.",
+      "cue": "Move gently through the middle of the range; this eases the spine rather than stretching it.",
+      "sided": false,
+      "hold": "6 slow cycles",
+      "evidence": "Recommended by McGill to move the spine through its range before exercise; expert advice, no trials of its own.",
+      "parts": {
+        "joints": [
+          "supraspinous ligament",
+          "interspinous ligaments",
+          "ligamenta flava",
+          "posterior longitudinal ligament"
+        ]
+      },
+      "variants": [
+        {
+          "id": "a",
+          "label": "cat: back rounded up, head down",
+          "setup": [
+            "hip.flex:90",
+            "knee.flex:90",
+            "shoulder.flex:90"
+          ],
+          "moves": [
+            "trunk.flex:30",
+            "neck.flex:20"
+          ]
+        },
+        {
+          "id": "b",
+          "label": "camel: back sagging, head up",
+          "setup": [
+            "hip.flex:90",
+            "knee.flex:90",
+            "shoulder.flex:90"
+          ],
+          "moves": [
+            "trunk.ext:20",
+            "neck.ext:20"
+          ],
+          "parts": {
+            "joints": [
+              "anterior longitudinal ligament"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "M5",
+      "name": "Hip long-axis distraction (band)",
+      "group": "joint",
+      "kind": "joint",
+      "layer": "joints",
+      "position": "floor",
+      "how": "Lie on the back with a long band looped around the ankle and tied to something solid past the feet. Slide away until the band gently pulls the leg long, then relax the leg and let it draw the hip joint apart.",
+      "cue": "Let the leg go heavy; ease off if anything pinches in the groin.",
+      "sided": true,
+      "hold": "30 s x 3",
+      "evidence": "Expert opinion only: reviews rate hip self-mobilisation evidence level 5, with no direct trials (Reiman & Matheson 2013).",
+      "parts": {
+        "joints": [
+          "articular capsule of hip joint",
+          "zona orbicularis",
+          "descending part of iliofemoral ligament",
+          "transverse part of iliofemoral ligament",
+          "pubofemoral ligament",
+          "ischiofemoral ligament"
+        ]
+      },
+      "variants": [
+        {
+          "id": "a",
+          "label": "leg slightly bent, out and turned out (the hip's loosest position), band pulling it long",
+          "moves": [
+            "hip.flex:30",
+            "hip.abd:30",
+            "hip.er:15"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M6",
+      "name": "Hip rock-back (posterior glide)",
+      "group": "joint",
+      "kind": "joint",
+      "layer": "joints",
+      "position": "kneeling",
+      "how": "On hands and knees, rock the hips slowly back toward the heels and forward again. A band looped around the top of one thigh and pulling backward adds a glide to that hip.",
+      "cue": "Keep the back long; stop the rock before the low back rounds.",
+      "sided": false,
+      "hold": "10 slow reps",
+      "evidence": "Expert opinion only: reviews rate hip self-mobilisation evidence level 5, with no direct trials (Reiman & Matheson 2013).",
+      "parts": {
+        "joints": [
+          "articular capsule of hip joint",
+          "ischiofemoral ligament"
+        ]
+      },
+      "variants": [
+        {
+          "id": "a",
+          "label": "hips rocked back toward the heels",
+          "moves": [
+            "hip.flex:110",
+            "knee.flex:130",
+            "shoulder.flex:150"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M7",
+      "name": "Ankle glide with knee-to-wall (mobilisation with movement)",
+      "group": "joint",
+      "kind": "joint",
+      "layer": "joints",
+      "position": "kneeling",
+      "how": "Half-kneel facing a wall with the front foot a hand-width from it. Loop a band low around the front of the ankle, anchored behind you, so it pulls the ankle bone back. Keeping the heel down, drive the knee forward over the middle toes toward the wall, then back.",
+      "cue": "The heel stays down and the knee tracks over the second toe.",
+      "sided": true,
+      "hold": "10 reps x 3",
+      "evidence": "Moderate: it increased ankle bending in people with stiff ankles after a sprain (Vicenzino 2006, PEDro 7/10).",
+      "parts": {
+        "joints": [
+          "anterior talofibular ligament",
+          "posterior talofibular ligament",
+          "calcaneofibular ligament",
+          "posterior tibiotalar ligament",
+          "tibiocalcaneal ligament"
+        ]
+      },
+      "variants": [
+        {
+          "id": "a",
+          "label": "knee driven forward over the toes, heel down",
+          "setup": [
+            "hip.flex:70",
+            "knee.flex:60"
+          ],
+          "moves": [
+            "ankle.df:20"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M8",
+      "name": "Controlled joint circles (CARs)",
+      "group": "joint",
+      "kind": "joint",
+      "layer": "joints",
+      "position": "standing",
+      "how": "Keeping the rest of the body still, move one joint around the biggest, slowest circle it allows, then the other way. The model shows one point on the circle.",
+      "cue": "Slow and controlled; the circle shrinks wherever the joint is stiff.",
+      "sided": true,
+      "hold": "3 slow circles in both directions",
+      "evidence": "From Functional Range Conditioning; no published outcomes (expert opinion only).",
+      "parts": {
+        "joints": [
+          "articular capsule of glenohumeral joint"
+        ]
+      },
+      "variants": [
+        {
+          "id": "a",
+          "label": "shoulder: arm circled up, back and around",
+          "moves": [
+            "shoulder.flex:170",
+            "shoulder.er:60"
+          ]
+        },
+        {
+          "id": "b",
+          "label": "hip: standing on one leg, the bent knee circled out",
+          "setup": [
+            "knee.flex:90"
+          ],
+          "moves": [
+            "hip.flex:90",
+            "hip.abd:40",
+            "hip.er:40"
+          ],
+          "parts": {
+            "joints": [
+              "articular capsule of hip joint",
+              "zona orbicularis"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G1",
+      "name": "Median nerve glide",
+      "group": "nerve",
+      "kind": "glide",
+      "layer": "nervous",
+      "position": "standing",
+      "how": "Hold the arm out to the side at shoulder height, palm up. Bend the wrist and fingers back while tipping the head toward that shoulder; then let the wrist bend down as the head comes back up.",
+      "cue": "Move smoothly in and out, 10 times; never hold. Stop if tingling or numbness builds or lingers.",
+      "sided": true,
+      "hold": "10 smooth reps",
+      "evidence": "A slider moved the median nerve about twice as far as a tensioner at about an eighth of the strain (Coppieters & Butler 2008). Evidence that nerve glides relieve symptoms is limited and mixed (Basson 2017).",
+      "parts": {
+        "nervous": [
+          "median nerve",
+          "muscular branches of median nerve",
+          "palmar branch of median nerve",
+          "common palmar digital branches of median nerve",
+          "proper palmar digital branches of median nerve"
+        ]
+      },
+      "variants": [
+        {
+          "id": "a",
+          "label": "slider: wrist back as the head tips toward the arm",
+          "setup": [
+            "shoulder.abd:90"
+          ],
+          "moves": [
+            "elbow.ext",
+            "wrist.ext",
+            "fingers.ext",
+            "neck.sbi:20"
+          ]
+        },
+        {
+          "id": "b",
+          "label": "tensioner, only if the slider feels easy: wrist back as the head tips away",
+          "setup": [
+            "shoulder.abd:90"
+          ],
+          "moves": [
+            "elbow.ext",
+            "wrist.ext",
+            "fingers.ext",
+            "neck.sbc:20"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G2",
+      "name": "Ulnar nerve glide",
+      "group": "nerve",
+      "kind": "glide",
+      "layer": "nervous",
+      "position": "standing",
+      "how": "Hold the arm out to the side, palm down. Bend the elbow and the wrist back to bring the hand toward the ear, like a mask over the eye, while tipping the head toward the hand; then straighten as the head comes back up.",
+      "cue": "Move smoothly in and out, 10 times; never hold. Stop if tingling or numbness builds or lingers.",
+      "sided": true,
+      "hold": "10 smooth reps",
+      "evidence": "A slider moved the median nerve about twice as far as a tensioner at about an eighth of the strain (Coppieters & Butler 2008). Evidence that nerve glides relieve symptoms is limited and mixed (Basson 2017).",
+      "parts": {
+        "nervous": [
+          "ulnar nerve",
+          "muscular branches of ulnar nerve",
+          "palmar branch of ulnar nerve",
+          "dorsal branch of ulnar nerve",
+          "superficial branch of ulnar nerve",
+          "deep branch of ulnar nerve"
+        ]
+      },
+      "variants": [
+        {
+          "id": "a",
+          "label": "slider: hand to the ear as the head tips toward it",
+          "setup": [
+            "shoulder.abd:90",
+            "forearm.pro"
+          ],
+          "moves": [
+            "elbow.flex:120",
+            "wrist.ext",
+            "neck.sbi:20"
+          ]
+        },
+        {
+          "id": "b",
+          "label": "tensioner, only if the slider feels easy: hand to the ear as the head tips away",
+          "setup": [
+            "shoulder.abd:90",
+            "forearm.pro"
+          ],
+          "moves": [
+            "elbow.flex:120",
+            "wrist.ext",
+            "neck.sbc:20"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G3",
+      "name": "Radial nerve glide",
+      "group": "nerve",
+      "kind": "glide",
+      "layer": "nervous",
+      "position": "standing",
+      "how": "Let the arm hang a little away from the side, turned in with the palm facing back. Drop the shoulder and bend the wrist and fingers down while tipping the head toward that shoulder; then release the wrist as the head comes back up.",
+      "cue": "Move smoothly in and out, 10 times; never hold. Stop if tingling or numbness builds or lingers.",
+      "sided": true,
+      "hold": "10 smooth reps",
+      "evidence": "A slider moved the median nerve about twice as far as a tensioner at about an eighth of the strain (Coppieters & Butler 2008). Evidence that nerve glides relieve symptoms is limited and mixed (Basson 2017).",
+      "parts": {
+        "nervous": [
+          "radial nerve",
+          "muscular branches of radial nerve",
+          "deep branch of radial nerve",
+          "superficial branch of radial nerve",
+          "dorsal digital branches of radial nerve",
+          "posterior cord of brachial plexus"
+        ]
+      },
+      "variants": [
+        {
+          "id": "a",
+          "label": "slider: wrist bent down as the head tips toward the arm",
+          "setup": [
+            "shoulder.abd:20",
+            "shoulder.ir:40",
+            "forearm.pro"
+          ],
+          "moves": [
+            "scapula.dep",
+            "elbow.ext",
+            "wrist.flex",
+            "fingers.flex",
+            "neck.sbi:20"
+          ]
+        },
+        {
+          "id": "b",
+          "label": "tensioner, only if the slider feels easy: wrist bent down as the head tips away",
+          "setup": [
+            "shoulder.abd:20",
+            "shoulder.ir:40",
+            "forearm.pro"
+          ],
+          "moves": [
+            "scapula.dep",
+            "elbow.ext",
+            "wrist.flex",
+            "fingers.flex",
+            "neck.sbc:20"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G4",
+      "name": "Sciatic nerve glide (seated slump)",
+      "group": "nerve",
+      "kind": "glide",
+      "layer": "nervous",
+      "position": "seated",
+      "how": "Sit on the edge of a chair, slumped slightly. Straighten one knee while looking up; then bend the knee back down as the chin drops.",
+      "cue": "Move smoothly in and out, 10 times; never hold. Stop if tingling or numbness builds or lingers.",
+      "sided": true,
+      "hold": "10 smooth reps",
+      "evidence": "A slider moved the median nerve about twice as far as a tensioner at about an eighth of the strain (Coppieters & Butler 2008). Evidence that nerve glides relieve symptoms is limited and mixed (Basson 2017). Straightening the knee while looking up moved the sciatic nerve furthest in an ultrasound study (Ellis 2012).",
+      "parts": {
+        "nervous": [
+          "sciatic nerve",
+          "tibial nerve",
+          "common fibular nerve"
+        ]
+      },
+      "variants": [
+        {
+          "id": "a",
+          "label": "slider: knee straightened while looking up",
+          "setup": [
+            "trunk.flex:20"
+          ],
+          "moves": [
+            "hip.flex:80",
+            "knee.ext",
+            "neck.ext:20"
+          ]
+        },
+        {
+          "id": "b",
+          "label": "tensioner, only if the slider feels easy: knee straightened and toes pulled up with the chin down",
+          "setup": [
+            "trunk.flex:30"
+          ],
+          "moves": [
+            "hip.flex:80",
+            "knee.ext",
+            "ankle.df:15",
+            "neck.flex:30"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G5",
+      "name": "Femoral nerve glide (side-lying)",
+      "group": "nerve",
+      "kind": "glide",
+      "layer": "nervous",
+      "position": "floor",
+      "how": "Lie on the other side with the bottom knee drawn up. Bend the top knee, holding the foot (or a strap), and take the thigh slightly back while tipping the head back; then let the knee come forward as the head comes down.",
+      "cue": "Move smoothly in and out, 10 times; never hold. Stop if tingling or numbness builds or lingers.",
+      "sided": true,
+      "hold": "10 smooth reps",
+      "evidence": "A slider moved the median nerve about twice as far as a tensioner at about an eighth of the strain (Coppieters & Butler 2008). Evidence that nerve glides relieve symptoms is limited and mixed (Basson 2017). There is no published protocol for a femoral slider: this one follows the slider principle as practitioners teach it.",
+      "parts": {
+        "nervous": [
+          "femoral nerve",
+          "anterior cutaneous branches of femoral nerve"
+        ]
+      },
+      "variants": [
+        {
+          "id": "a",
+          "label": "slider: knee bent and thigh back as the head tips back",
+          "moves": [
+            "hip.ext:10",
+            "knee.flex:90",
+            "neck.ext:20"
+          ]
+        },
+        {
+          "id": "b",
+          "label": "tensioner, only if the slider feels easy: knee bent and thigh back with the chin down",
+          "moves": [
+            "hip.ext:15",
+            "knee.flex:110",
+            "neck.flex:30"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R1",
+      "name": "Foam roll: calves",
+      "group": "roll",
+      "kind": "roll",
+      "layer": "joints",
+      "optIn": "rolling",
+      "position": "floor",
+      "how": "Sit with a roller under one calf and the hands behind you. Lift the hips and roll slowly from below the knee to above the ankle; cross the other leg on top for more pressure.",
+      "sided": true,
+      "hold": "60 s x 1",
+      "evidence": "About 4% more range for a short time before exercise and a little less soreness after it (Wiewelhove 2019); no better than stretching for range (Wilke 2020).",
+      "parts": {
+        "muscular": [
+          "lateral head of gastrocnemius",
+          "medial head of gastrocnemius",
+          "soleus"
+        ],
+        "joints": [
+          "crural fascia"
+        ]
+      },
+      "variants": [
+        {
+          "id": "a",
+          "label": "roll slowly along it",
+          "moves": []
+        }
+      ]
+    },
+    {
+      "id": "R2",
+      "name": "Foam roll: hamstrings",
+      "group": "roll",
+      "kind": "roll",
+      "layer": "joints",
+      "optIn": "rolling",
+      "position": "floor",
+      "how": "Sit with the roller under one thigh and the hands behind you; roll slowly from just above the knee to below the buttock.",
+      "sided": true,
+      "hold": "60 s x 1",
+      "evidence": "About 4% more range for a short time before exercise and a little less soreness after it (Wiewelhove 2019); no better than stretching for range (Wilke 2020).",
+      "parts": {
+        "muscular": [
+          "long head of biceps femoris",
+          "short head of biceps femoris",
+          "semitendinosus",
+          "semimembranosus"
+        ],
+        "joints": [
+          "fascia lata"
+        ]
+      },
+      "variants": [
+        {
+          "id": "a",
+          "label": "roll slowly along it",
+          "moves": []
+        }
+      ]
+    },
+    {
+      "id": "R3",
+      "name": "Foam roll: quadriceps",
+      "group": "roll",
+      "kind": "roll",
+      "layer": "joints",
+      "optIn": "rolling",
+      "position": "floor",
+      "how": "Lie face down propped on the forearms with the roller under one thigh; roll slowly from above the knee to the hip.",
+      "sided": true,
+      "hold": "60 s x 1",
+      "evidence": "About 4% more range for a short time before exercise and a little less soreness after it (Wiewelhove 2019); no better than stretching for range (Wilke 2020).",
+      "parts": {
+        "muscular": [
+          "rectus femoris",
+          "vastus lateralis",
+          "vastus medialis",
+          "vastus intermedius"
+        ],
+        "joints": [
+          "fascia lata"
+        ]
+      },
+      "variants": [
+        {
+          "id": "a",
+          "label": "roll slowly along it",
+          "moves": []
+        }
+      ]
+    },
+    {
+      "id": "R4",
+      "name": "Foam roll: outer thigh",
+      "group": "roll",
+      "kind": "roll",
+      "layer": "joints",
+      "optIn": "rolling",
+      "position": "floor",
+      "how": "Lie on one side propped on the forearm with the roller under the outside of the thigh, the top foot on the floor in front for support; roll between the hip and the knee.",
+      "cue": "The iliotibial band itself is far too stiff to lengthen or loosen; rolling here works on the muscles beside it.",
+      "sided": true,
+      "hold": "60 s x 1",
+      "evidence": "About 4% more range for a short time before exercise and a little less soreness after it (Wiewelhove 2019); no better than stretching for range (Wilke 2020).",
+      "parts": {
+        "muscular": [
+          "vastus lateralis",
+          "tensor fasciae latae"
+        ],
+        "joints": [
+          "iliotibial tract",
+          "fascia lata"
+        ]
+      },
+      "variants": [
+        {
+          "id": "a",
+          "label": "roll slowly along it",
+          "moves": []
+        }
+      ]
+    },
+    {
+      "id": "R5",
+      "name": "Foam roll: inner thigh",
+      "group": "roll",
+      "kind": "roll",
+      "layer": "joints",
+      "optIn": "rolling",
+      "position": "floor",
+      "how": "Lie face down with one knee out to the side and bent, the roller under the inner thigh; roll from above the knee toward the groin.",
+      "sided": true,
+      "hold": "60 s x 1",
+      "evidence": "About 4% more range for a short time before exercise and a little less soreness after it (Wiewelhove 2019); no better than stretching for range (Wilke 2020).",
+      "parts": {
+        "muscular": [
+          "adductor longus",
+          "adductor brevis",
+          "adductor magnus",
+          "gracilis",
+          "pectineus"
+        ],
+        "joints": [
+          "fascia lata",
+          "medial femoral intermuscular septum"
+        ]
+      },
+      "variants": [
+        {
+          "id": "a",
+          "label": "roll slowly along it",
+          "moves": []
+        }
+      ]
+    },
+    {
+      "id": "R6",
+      "name": "Ball roll: buttock",
+      "group": "roll",
+      "kind": "roll",
+      "layer": "joints",
+      "optIn": "rolling",
+      "position": "floor",
+      "how": "Sit on a massage ball under one buttock, that ankle crossed over the other knee; roll in small circles over the tender spots.",
+      "sided": true,
+      "hold": "60 s x 1",
+      "evidence": "About 4% more range for a short time before exercise and a little less soreness after it (Wiewelhove 2019); no better than stretching for range (Wilke 2020).",
+      "parts": {
+        "muscular": [
+          "gluteus maximus",
+          "gluteus medius",
+          "piriformis"
+        ],
+        "joints": [
+          "piriformis fascia"
+        ]
+      },
+      "variants": [
+        {
+          "id": "a",
+          "label": "ball under one buttock",
+          "moves": []
+        }
+      ]
+    },
+    {
+      "id": "R7",
+      "name": "Foam roll: upper back",
+      "group": "roll",
+      "kind": "roll",
+      "layer": "joints",
+      "optIn": "rolling",
+      "position": "floor",
+      "how": "Lie on the back with the roller across the upper back, arms crossed over the chest and hips lifted; roll slowly between the shoulder blades and the bottom of the ribs.",
+      "cue": "Stay on the upper back; do not roll the low back or the neck.",
+      "sided": false,
+      "hold": "60 s x 1",
+      "evidence": "About 4% more range for a short time before exercise and a little less soreness after it (Wiewelhove 2019); no better than stretching for range (Wilke 2020).",
+      "parts": {
+        "muscular": [
+          "rhomboid major",
+          "rhomboid minor",
+          "transverse part of trapezius",
+          "ascending part of trapezius",
+          "iliocostalis thoracis",
+          "longissimus thoracis",
+          "spinalis thoracis"
+        ],
+        "joints": [
+          "posterior layer of thoracolumbar fascia"
+        ]
+      },
+      "variants": [
+        {
+          "id": "a",
+          "label": "roll slowly along it",
+          "moves": []
+        }
+      ]
+    },
+    {
+      "id": "R8",
+      "name": "Foam roll: side of the back (lats)",
+      "group": "roll",
+      "kind": "roll",
+      "layer": "joints",
+      "optIn": "rolling",
+      "position": "floor",
+      "how": "Lie on one side with the bottom arm overhead and the roller under the armpit; roll slowly down the side of the back to the bottom of the ribs.",
+      "sided": true,
+      "hold": "60 s x 1",
+      "evidence": "About 4% more range for a short time before exercise and a little less soreness after it (Wiewelhove 2019); no better than stretching for range (Wilke 2020).",
+      "parts": {
+        "muscular": [
+          "latissimus dorsi",
+          "teres major"
+        ],
+        "joints": [
+          "posterior layer of thoracolumbar fascia"
+        ]
+      },
+      "variants": [
+        {
+          "id": "a",
+          "label": "roll slowly along it",
+          "moves": []
+        }
+      ]
+    },
+    {
+      "id": "R9",
+      "name": "Ball roll: chest",
+      "group": "roll",
+      "kind": "roll",
+      "layer": "joints",
+      "optIn": "rolling",
+      "position": "standing",
+      "how": "Stand facing a wall with a massage ball between the wall and the front of the shoulder, below the collarbone; lean in and roll slowly across the chest.",
+      "sided": true,
+      "hold": "60 s x 1",
+      "evidence": "About 4% more range for a short time before exercise and a little less soreness after it (Wiewelhove 2019); no better than stretching for range (Wilke 2020).",
+      "parts": {
+        "muscular": [
+          "clavicular part of pectoralis major",
+          "sternocostal part of pectoralis major",
+          "abdominal part of pectoralis major",
+          "pectoralis minor"
+        ],
+        "joints": [
+          "pectoral fascia",
+          "clavipectoral fascia"
+        ]
+      },
+      "variants": [
+        {
+          "id": "a",
+          "label": "ball against a wall, under the collarbone",
+          "moves": []
+        }
+      ]
+    },
+    {
+      "id": "R10",
+      "name": "Roll: forearms",
+      "group": "roll",
+      "kind": "roll",
+      "layer": "joints",
+      "optIn": "rolling",
+      "position": "kneeling",
+      "how": "Kneel with the forearm resting on the roller, palm down, and roll from the wrist to the elbow; turn the palm up to roll the other side.",
+      "sided": true,
+      "hold": "60 s x 1",
+      "evidence": "About 4% more range for a short time before exercise and a little less soreness after it (Wiewelhove 2019); no better than stretching for range (Wilke 2020).",
+      "parts": {
+        "muscular": [
+          "brachioradialis",
+          "flexor carpi radialis",
+          "flexor digitorum superficialis",
+          "palmaris longus",
+          "humeral head of flexor carpi ulnaris",
+          "extensor carpi radialis longus",
+          "extensor carpi radialis brevis",
+          "extensor digitorum",
+          "extensor carpi ulnaris"
+        ],
+        "joints": [
+          "antebrachial fascia"
+        ]
+      },
+      "variants": [
+        {
+          "id": "a",
+          "label": "roll slowly along it",
+          "moves": []
+        }
+      ]
+    },
+    {
+      "id": "R11",
+      "name": "Ball roll: sole of the foot",
+      "group": "roll",
+      "kind": "roll",
+      "layer": "joints",
+      "optIn": "rolling",
+      "position": "seated",
+      "how": "Stand or sit with a ball under one foot and roll it slowly from the heel to the ball of the foot.",
+      "sided": true,
+      "hold": "60 s x 1",
+      "evidence": "About 4% more range for a short time before exercise and a little less soreness after it (Wiewelhove 2019); no better than stretching for range (Wilke 2020).",
+      "parts": {
+        "muscular": [
+          "flexor digitorum brevis",
+          "abductor hallucis",
+          "abductor digiti minimi of foot",
+          "flexor accessorius"
+        ],
+        "joints": [
+          "plantar aponeurosis"
+        ]
+      },
+      "variants": [
+        {
+          "id": "a",
+          "label": "ball under the sole",
+          "moves": []
         }
       ]
     }
