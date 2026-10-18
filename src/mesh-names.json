@@ -2814,5 +2814,15 @@
   "Right incus",
   "Left stapes",
   "Right stapes"
+ ],
+ "urinary": [
+  "Left kidney",
+  "Right kidney",
+  "Left ureter",
+  "Right ureter",
+  "Urinary bladder",
+  "Urethra",
+  "Left renal pelvis",
+  "Right renal pelvis"
  ]
 }

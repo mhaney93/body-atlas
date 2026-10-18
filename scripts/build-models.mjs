@@ -391,6 +391,41 @@ const REPRODUCTIVE = {
   ratio: 0.5,
 };
 
+
+// Urinary system. BodyParts3D has the kidneys, ureters, bladder and urethra;
+// the renal pelvis of each kidney, with its calyces, comes from Z-Anatomy
+// (data-sources/z-anatomy/urinary/, exported by export-z-anatomy.py). Z-Anatomy's
+// kidneys are BodyParts3D's moved elsewhere in one piece, so each pelvis is
+// moved by the offset that puts its Z-Anatomy kidney back onto the BodyParts3D one.
+const URINARY = {
+  file: 'urinary.glb',
+  elements: ['FJ3145', 'FJ3147', 'FJ3144', 'FJ3146', 'FJ3149', 'FJ3148'], // kidneys, ureters, bladder, urethra
+  load: () => renalPelves(join(Z_ANATOMY_DIR, 'urinary')),
+  // Parts the "follow the urine" pulse travels along, rather than through their centre.
+  centerlines: ['Left ureter', 'Right ureter', 'Urethra'],
+  ratio: 0.5,
+};
+
+/** The Z-Anatomy renal pelves, moved into the BodyParts3D kidneys (mm). */
+function renalPelves(dir) {
+  const centroid = (p) => [0, 1, 2].map((k) => p.filter((_, i) => i % 3 === k).reduce((a, b) => a + b, 0) / (p.length / 3));
+  return [['l', 'Left', 'FJ3145'], ['r', 'Right', 'FJ3147']].map(([side, Side, kidney]) => {
+    const bp3d = parseObj(join(OBJ_DIR, `${kidney}.obj`)).positions;
+    const zKidney = parseObj(join(dir, `Kidney.${side}.obj`)).positions.map((v) => v * 1000);
+    // The kidneys' centres give the offset to within a few tenths of a mm
+    // (Z-Anatomy edited a handful of vertices of the right one).
+    const offset = centroid(bp3d).map((c, k) => c - centroid(zKidney)[k]);
+    const pelvis = parseObj(join(dir, `Renal pelvis.${side}.obj`));
+    return {
+      ...pelvis,
+      id: `urinary/Renal pelvis.${side}`,
+      name: `${Side} renal pelvis`,
+      source: 'z-anatomy',
+      positions: pelvis.positions.map((v, i) => v * 1000 + offset[i % 3]),
+    };
+  });
+}
+
 const ASSETS = [
   { file: 'skin.glb', elements: [SKIN], ratio: 0.35 },
   { file: 'skeletal.glb', elements: range(3152, 3395), extras: ['coccyx.obj'], ratio: 0.5 },
@@ -422,6 +457,7 @@ const ASSETS = [
   DIGESTIVE,
   RESPIRATORY,
   LYMPHATIC,
+  URINARY,
   // BodyParts3D has no spinal cord or peripheral nerves and only part of the
   // cortex, so the system comes from Z-Anatomy (see nervous-model.mjs), apart
   // from the deep brain structures BodyParts3D has (DEEP_BRAIN) and the small

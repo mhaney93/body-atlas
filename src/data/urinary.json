@@ -1,0 +1,114 @@
+{
+  "id": "urinary",
+  "name": "Urinary",
+  "color": "#5cb8ff",
+  "asset": "models/urinary.glb",
+  "summary": "The urinary system cleans the blood and gets rid of the waste as urine. The two kidneys filter the blood, the ureters carry the urine down to the bladder, which stores it, and the urethra carries it out of the body.",
+  "groups": {
+    "kidneys": {
+      "label": "Kidneys",
+      "color": "#6fb7ff",
+      "opacity": 0.4
+    },
+    "pelvis": {
+      "label": "Renal pelvis & calyces",
+      "color": "#ffd166"
+    },
+    "ureters": {
+      "label": "Ureters",
+      "color": "#ffe38a"
+    },
+    "bladder": {
+      "label": "Bladder",
+      "color": "#ffbe4d",
+      "opacity": 0.6
+    },
+    "urethra": {
+      "label": "Urethra",
+      "color": "#ff9f43"
+    }
+  },
+  "tour": {
+    "label": "Follow the urine",
+    "note": "Typical figures for a healthy adult. They vary a lot with how much you drink.",
+    "total": "About 1 to 2 litres of urine a day, from about 180 litres of filtered blood plasma",
+    "stages": [
+      {
+        "name": "Kidney",
+        "parts": ["Left kidney"],
+        "caption": "Blood is filtered all the time in about a million tiny units in each kidney (too small to model); almost all the water is taken back, and what is left becomes urine.",
+        "seconds": 4
+      },
+      {
+        "name": "Renal pelvis",
+        "parts": ["Left renal pelvis"],
+        "caption": "Urine drips from the kidney tissue into the cup-shaped calyces and gathers in the renal pelvis.",
+        "seconds": 2.5
+      },
+      {
+        "name": "Ureter",
+        "parts": ["Left ureter"],
+        "caption": "Waves of muscle squeeze it down the ureter in small spurts, every few seconds.",
+        "seconds": 4
+      },
+      {
+        "name": "Bladder",
+        "parts": ["Urinary bladder"],
+        "caption": "The bladder stretches to store it, usually for a few hours, until it holds a few hundred millilitres.",
+        "seconds": 4
+      },
+      {
+        "name": "Urethra",
+        "parts": ["Urethra"],
+        "caption": "When you urinate, the bladder wall squeezes, the sphincter muscles relax and the urine leaves through the urethra.",
+        "seconds": 3
+      }
+    ]
+  },
+  "notShown": [
+    { "name": "Renal cortex, medulla and pyramids", "reason": "no-model", "note": "The kidney's outer and inner layers. Neither source model separates them, so each kidney is one solid part." },
+    { "name": "Nephrons", "reason": "too-small", "note": "The roughly one million filtering units in each kidney, each far too small to model." },
+    { "name": "Renal capsule, fat and fascia", "reason": "no-model", "note": "The tough coat, the cushion of fat and the sheet of fascia around each kidney." },
+    { "name": "Layers of the bladder wall and the trigone", "reason": "no-model", "note": "The detrusor muscle, the lining and the triangle between the ureter openings and the urethra. The bladder is one part." },
+    { "name": "Urethral sphincters", "reason": "no-model", "note": "The rings of muscle at the bladder neck and around the urethra below the prostate that hold urine in." },
+    { "name": "Renal arteries and veins", "reason": "other-system", "layer": "circulatory", "note": "The vessels that bring blood to the kidneys to be filtered and take it back." },
+    { "name": "Lymph nodes around the bladder", "reason": "other-system", "layer": "lymphatic" },
+    { "name": "Pelvic floor muscles", "reason": "other-system", "layer": "muscular", "note": "They support the bladder and help hold urine in." },
+    { "name": "Adrenal glands", "reason": "other-system", "system": "endocrine", "note": "They sit on top of the kidneys but make hormones, not urine." },
+    { "name": "Prostate", "reason": "other-system", "layer": "reproductive", "note": "It wraps the first part of the urethra, just below the bladder." },
+    { "name": "Nerves of the kidneys and bladder", "reason": "no-model", "note": "The renal and vesical nerve plexuses. Neither source model has them." }
+  ],
+  "parts": {
+    "left kidney": {
+      "region": "Back of the abdomen",
+      "group": "kidneys",
+      "description": "A bean-shaped organ about the size of a fist, against the back wall of the abdomen under the lower ribs. Together the two kidneys filter about 180 litres of blood plasma a day, keeping what the body needs and turning waste and extra water into urine."
+    },
+    "right kidney": {
+      "region": "Back of the abdomen",
+      "group": "kidneys",
+      "description": "A bean-shaped organ about the size of a fist that filters the blood and makes urine. It usually sits a little lower than the left kidney, because the liver lies above it."
+    },
+    "renal pelvis": {
+      "region": "Kidney",
+      "group": "pelvis",
+      "description": "The funnel in the middle of the kidney where urine collects, fed by cup-shaped branches called calyces. From here the urine flows out into the ureter."
+    },
+    "ureter": {
+      "region": "Abdomen and pelvis",
+      "group": "ureters",
+      "description": "A narrow muscular tube, about 25 to 30 cm long, that carries urine from the kidney down to the bladder. Waves of muscle contraction push the urine along in small spurts."
+    },
+    "urinary bladder": {
+      "region": "Pelvis",
+      "group": "bladder",
+      "aliases": ["bladder"],
+      "description": "A hollow, stretchy muscular bag low in the pelvis, behind the pubic bone, that stores urine until you empty it. It holds about 300 to 500 ml when comfortably full; this model shows it nearly empty."
+    },
+    "urethra": {
+      "region": "Pelvis and penis",
+      "group": "urethra",
+      "description": "The tube that carries urine from the bladder out of the body; in a man it is about 20 cm long and runs through the prostate and the length of the penis. It also carries semen, so it is shared with the reproductive system."
+    }
+  }
+}
