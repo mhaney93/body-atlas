@@ -1,8 +1,8 @@
 {
   "sources": [
-    "Joint ranges: American Academy of Orthopaedic Surgeons, Joint Motion (1965), as tabulated at https://goniometer.io/range-of-motion; trunk from WikEM https://wikem.org/wiki/Joint_ROM_(Table); shin rotation at 90 degrees of knee flexion from https://jeo-esska.springeropen.com/articles/10.1186/s40634-018-0141-9/tables/2",
+    "Joint ranges: American Academy of Orthopaedic Surgeons, Joint Motion (1965), as tabulated at https://goniometer.io/range-of-motion; trunk from WikEM https://wikem.org/wiki/Joint_ROM_(Table); shin rotation at 90 degrees of knee flexion from https://jeo-esska.springeropen.com/articles/10.1186/s40634-018-0141-9/tables/2; shin rotation needs the knee bent, as the straight knee locks (screw-home mechanism): https://www.physio-pedia.com/Screw_Home_Mechanism",
     "Muscle actions: Kenhub https://www.kenhub.com/en/library/anatomy-en/ and TeachMeAnatomy https://teachmeanatomy.info/, checked against each part's flow text in src/data/muscular.json",
-    "Two-joint stretch positions: ExRx https://exrx.net/Lists/Directory and learnmuscles https://learnmuscles.com/",
+    "Two-joint stretch positions: ExRx https://exrx.net/Lists/Directory and learnmuscles https://learnmuscles.com/; figure-4 is hip flexion, abduction and external rotation (the FABER position): https://www.physio-pedia.com/FABER_Test",
     "Hold times: ACSM (Garber et al. 2011), via Page 2012 https://pmc.ncbi.nlm.nih.gov/articles/PMC3273886/; jaw: Rocabado 6x6 https://en.irct.ir/trial/76578"
   ],
   "joints": {
@@ -186,7 +186,7 @@
       "position": "seated",
       "how": "Sit tall. Glide the chin straight back, then nod it down as if making a double chin.",
       "cue": "Feel it at the base of the skull.",
-      "hold": "30 s x 2 each side",
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -207,7 +207,7 @@
       "position": "seated",
       "how": "Let the chin drop toward the chest; let the upper back round slightly.",
       "cue": "Hands can rest on the back of the head; no pulling.",
-      "hold": "30 s x 2 each side",
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -228,7 +228,8 @@
       "kind": "stretch",
       "position": "seated",
       "how": "Sit on one hand to hold the shoulder down. Tip the opposite ear toward the opposite shoulder, chin slightly down.",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -252,7 +253,8 @@
       "kind": "stretch",
       "position": "seated",
       "how": "Turn the head 45 degrees away and look down toward that armpit. Rest the same-side hand on the back of the head (elbow up).",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -276,7 +278,8 @@
       "position": "seated",
       "how": "Hold the collarbone down with the opposite hand, breathe out, then tip the head away.",
       "cue": "Stop if the arm tingles: that is the brachial plexus, not muscle.",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -320,7 +323,8 @@
       "position": "seated",
       "how": "Hold the collarbone down. Tip the head away, turn the face toward the stretched side, then tilt the head back while keeping a slight chin tuck.",
       "cue": "Small range; move slowly.",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -343,7 +347,7 @@
       "position": "seated",
       "how": "Sit tall, close the lips and press the tongue to the roof of the mouth, then look up to the ceiling.",
       "cue": "Keep the jaw closed: that lengthens the muscles under the chin as well.",
-      "hold": "30 s x 2 each side",
+      "hold": "30 s x 2",
       "variants": [
         {
           "id": "a",
@@ -362,17 +366,24 @@
       "group": "neck",
       "kind": "stretch",
       "position": "seated",
-      "how": "Turn the head as far as is comfortable to one side, then the other.",
-      "hold": "30 s x 2 each side",
+      "how": "Turn the head as far as is comfortable to one side.",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
           "id": "a",
-          "label": "turn to look over the shoulder (each way)",
+          "label": "turn toward the stretched side, to look over that shoulder",
           "moves": [
             "neck.roti",
+            "head.roti"
+          ]
+        },
+        {
+          "id": "b",
+          "label": "turn away from the stretched side, to look over the other shoulder",
+          "moves": [
             "neck.rotc",
-            "head.roti",
             "head.rotc"
           ]
         }
@@ -385,12 +396,13 @@
       "kind": "stretch",
       "position": "seated",
       "how": "Tip one ear toward the shoulder without turning the face.",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
           "id": "a",
-          "label": "ear toward shoulder (each way)",
+          "label": "ear toward the opposite shoulder",
           "moves": [
             "neck.sbc",
             "head.sbc"
@@ -445,15 +457,22 @@
       "group": "jaw",
       "kind": "stretch",
       "position": "seated",
-      "how": "Teeth slightly apart (a pencil between the front teeth helps); slide the jaw to one side, then the other.",
-      "hold": "5 s x 6 each way",
+      "how": "Teeth slightly apart (a pencil between the front teeth helps); slide the jaw to one side.",
+      "sided": true,
+      "hold": "5 s x 6",
       "contractRelax": true,
       "variants": [
         {
           "id": "a",
-          "label": "jaw slides to each side",
+          "label": "jaw slides toward the stretched side",
           "moves": [
-            "jaw.lati",
+            "jaw.lati"
+          ]
+        },
+        {
+          "id": "b",
+          "label": "jaw slides away from the stretched side",
+          "moves": [
             "jaw.latc"
           ]
         }
@@ -468,7 +487,7 @@
       "position": "seated",
       "how": "Stick the tongue out and up toward the nose; then curl it back along the roof of the mouth.",
       "cue": "Lengthens the tongue muscles; not a proven stretch.",
-      "hold": "30 s x 2 each side",
+      "hold": "30 s x 2",
       "variants": [
         {
           "id": "a",
@@ -620,10 +639,12 @@
       "position": "seated",
       "how": "Keep the head still and move only the eyes to each end point.",
       "cue": "Lengthens each eye muscle by looking the opposite way; this is range of motion, not a stretch with any known benefit.",
+      "sided": true,
       "hold": "2 s each",
       "variants": [
         {
           "id": "a",
+          "sided": false,
           "label": "look up",
           "moves": [
             "eye.up"
@@ -631,6 +652,7 @@
         },
         {
           "id": "b",
+          "sided": false,
           "label": "look down",
           "moves": [
             "eye.down"
@@ -680,6 +702,7 @@
         },
         {
           "id": "i",
+          "sided": false,
           "label": "close the eyes gently",
           "moves": [
             "eye.lidclose"
@@ -695,7 +718,7 @@
       "position": "kneeling",
       "how": "Kneel, sit back toward the heels and walk the hands forward, letting the whole back round.",
       "cue": "Breathe into the back of the ribs.",
-      "hold": "30 s x 2 each side",
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -720,7 +743,7 @@
       "position": "floor",
       "how": "Lie face down, hands under the shoulders; press the chest up, letting the hips and belly stay down. Breathe in.",
       "cue": "Stop if pain travels down a leg.",
-      "hold": "30 s x 2 each side",
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -743,7 +766,8 @@
       "position": "standing",
       "how": "Stand, raise one arm and reach up and over to the other side; breathe out fully at the end.",
       "cue": "Lengthens the diaphragm and intercostals on the open side as well.",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -767,15 +791,22 @@
       "group": "trunk",
       "kind": "stretch",
       "position": "seated",
-      "how": "Sit tall (or lie with knees bent and let them fall to one side) and turn the chest to one side, then the other.",
-      "hold": "30 s x 2 each side",
+      "how": "Sit tall (or lie with knees bent and let them fall to one side) and turn the chest to one side.",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
           "id": "a",
-          "label": "rotate the trunk each way",
+          "label": "turn the chest toward the stretched side",
           "moves": [
-            "trunk.roti",
+            "trunk.roti"
+          ]
+        },
+        {
+          "id": "b",
+          "label": "turn the chest away from the stretched side",
+          "moves": [
             "trunk.rotc"
           ]
         }
@@ -862,7 +893,8 @@
       "position": "standing",
       "how": "Forearm on a door frame, step through until the front of the shoulder and chest stretch. Change the arm height to move the stretch.",
       "cue": "Keep the shoulder blade drawn back, not the arm bone pushed forward.",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -909,7 +941,8 @@
       "position": "standing",
       "how": "Bring one arm across the chest and hold it above the elbow with the other hand.",
       "cue": "Keep the shoulder blade flat (not hitched up).",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -932,7 +965,8 @@
       "position": "standing",
       "how": "Kneel with the elbows on a bench (palms together, elbows bent) and sit the hips back; or hang from a bar.",
       "cue": "Bending the elbows adds the long head of triceps.",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -959,7 +993,8 @@
       "position": "floor",
       "how": "Lie on the side with the bottom arm forward at shoulder height, elbow bent; gently press the forearm down.",
       "cue": "Gentle: it loads the back of the joint capsule too.",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -979,7 +1014,8 @@
       "kind": "stretch",
       "position": "standing",
       "how": "Elbow at the side and bent 90 degrees; turn the forearm outward against a door frame or with a stick.",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -1000,7 +1036,7 @@
       "position": "standing",
       "how": "Clasp the hands behind you with straight elbows and lift them away from the back.",
       "cue": "Turning the palms down adds biceps.",
-      "hold": "30 s x 2 each side",
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -1024,7 +1060,8 @@
       "kind": "stretch",
       "position": "standing",
       "how": "Hold a towel behind the back; the top hand gently pulls the bottom hand up the spine.",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -1046,7 +1083,8 @@
       "kind": "stretch",
       "position": "standing",
       "how": "Wrap the arms around yourself (or hold a post) and round the upper back, letting the shoulder blades slide apart.",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -1078,7 +1116,8 @@
       "kind": "stretch",
       "position": "standing",
       "how": "Put the back of the hand on the lower back and draw the shoulder blade back and toward the spine.",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -1102,7 +1141,7 @@
       "position": "standing",
       "how": "Shrug the shoulders up and back and breathe in.",
       "cue": "A gentle range move for subclavius and the lower trapezius.",
-      "hold": "30 s x 2 each side",
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -1124,7 +1163,8 @@
       "kind": "stretch",
       "position": "standing",
       "how": "Place the hand on a wall behind you at shoulder height, thumb down, and turn the body away.",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -1147,7 +1187,8 @@
       "kind": "stretch",
       "position": "standing",
       "how": "Raise the arm, bend the elbow so the hand drops behind the head, and ease the elbow back with the other hand.",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -1169,7 +1210,8 @@
       "kind": "stretch",
       "position": "standing",
       "how": "With the elbow straight, turn the palm up as far as it goes; then turn it down. The other hand can help at the wrist.",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -1198,7 +1240,8 @@
       "position": "standing",
       "how": "Arm straight in front, palm up; with the other hand pull the fingers (and thumb) back.",
       "cue": "Tipping the hand to each side shifts the stretch between the wrist flexors.",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -1245,7 +1288,8 @@
       "position": "standing",
       "how": "Arm straight in front, palm down; make a loose fist and bend the wrist down with the other hand.",
       "cue": "Thumb-tucked variant (b) is gentle only: it is also the De Quervain test position.",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -1290,7 +1334,8 @@
       "kind": "stretch",
       "position": "seated",
       "how": "Keep the big knuckles straight and bend the middle and end finger joints (a hook); press gently on the bent fingers.",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -1310,7 +1355,8 @@
       "kind": "stretch",
       "position": "seated",
       "how": "Palm flat on a table, spread the fingers as wide as they go; then press them together and cross them.",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -1337,7 +1383,8 @@
       "kind": "stretch",
       "position": "seated",
       "how": "Use the other hand to ease the thumb away from the index finger, opening the web space.",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -1359,7 +1406,8 @@
       "kind": "stretch",
       "position": "seated",
       "how": "Press the palm flat on a table and ease the thumb and little finger back and out of the palm.",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -1384,7 +1432,8 @@
       "position": "floor",
       "how": "Lie on the back and raise one straight leg with a strap until the back of the thigh stretches.",
       "cue": "Keep the knee straight and the pelvis down; ankle relaxed (pulling the toes up adds the sciatic nerve: see the sciatic glide).",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -1402,7 +1451,6 @@
             "hip.flex",
             "hip.add",
             "knee.ext",
-            "shin.ir",
             "hip.ir"
           ]
         },
@@ -1413,7 +1461,6 @@
             "hip.flex",
             "hip.abd",
             "knee.ext",
-            "shin.er",
             "hip.er"
           ]
         }
@@ -1427,7 +1474,8 @@
       "position": "standing",
       "how": "Stand on one leg (hold something) and draw the heel toward the buttock, knees together.",
       "cue": "Tuck the pelvis under to add rectus femoris.",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -1448,7 +1496,8 @@
       "position": "kneeling",
       "how": "Kneel on one knee, tuck the pelvis under and shift forward until the front of the back hip stretches.",
       "cue": "Do not arch the low back.",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -1498,11 +1547,13 @@
       "kind": "stretch",
       "position": "floor",
       "how": "Sit with the soles together and let the knees fall; then sit with straight legs wide apart and lean forward.",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
           "id": "a",
+          "sided": false,
           "label": "soles together, knees down (butterfly)",
           "moves": [
             "hip.abd",
@@ -1512,6 +1563,7 @@
         },
         {
           "id": "b",
+          "sided": false,
           "label": "legs wide, knees straight (straddle)",
           "moves": [
             "hip.abd",
@@ -1538,7 +1590,8 @@
       "position": "floor",
       "how": "Lie on the back, cross one ankle over the other knee and pull the bottom thigh toward you.",
       "cue": "With the hip bent past 90 degrees, turning the leg out lengthens piriformis.",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -1547,8 +1600,7 @@
           "moves": [
             "hip.flex",
             "hip.er",
-            "hip.abd",
-            "hip.add"
+            "hip.abd"
           ]
         }
       ]
@@ -1560,7 +1612,8 @@
       "kind": "stretch",
       "position": "floor",
       "how": "Lie on the back and pull one bent knee toward the opposite shoulder.",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -1582,11 +1635,13 @@
       "kind": "stretch",
       "position": "floor",
       "how": "Lie on the back with the feet wide and let both knees drop in toward each other.",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
           "id": "a",
+          "sided": false,
           "label": "lying, knees bent wide, let both knees fall inward",
           "moves": [
             "hip.ir",
@@ -1611,7 +1666,8 @@
       "kind": "stretch",
       "position": "standing",
       "how": "Cross the stretched leg behind the other and push that hip out to the side, leaning the trunk away.",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -1634,7 +1690,8 @@
       "position": "standing",
       "how": "Hands on a wall, step one foot back, keep that knee straight and press the heel down.",
       "cue": "Point the back foot straight ahead.",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -1655,7 +1712,8 @@
       "kind": "stretch",
       "position": "standing",
       "how": "From C1, bend the back knee while keeping the heel down; the stretch moves low in the calf.",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -1676,7 +1734,8 @@
       "kind": "stretch",
       "position": "standing",
       "how": "Put the ball of the foot and toes up against a wall with the heel on the floor; lean in. Then pull the big toe up and out with your hand.",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -1712,7 +1771,8 @@
       "kind": "stretch",
       "position": "kneeling",
       "how": "Kneel and sit back on the tops of the feet, or stand and rest the top of the curled toes on the floor behind you.",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -1744,7 +1804,8 @@
       "kind": "stretch",
       "position": "seated",
       "how": "Seated, hold the foot and turn the sole inward, then outward, with the foot pulled up.",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -1772,7 +1833,8 @@
       "kind": "stretch",
       "position": "seated",
       "how": "Lace the fingers between the toes and spread them; then squeeze the toes together.",
-      "hold": "30 s x 2 each side",
+      "sided": true,
+      "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
@@ -1787,6 +1849,36 @@
           "label": "toes squeezed together",
           "moves": [
             "toe-spread.squeeze"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C7",
+      "name": "Shin rotation, knee bent",
+      "group": "leg",
+      "kind": "stretch",
+      "sided": true,
+      "position": "seated",
+      "how": "Sit with the knee bent to 90 degrees and the thigh still; turn the foot and shin out, or in, as far as they go.",
+      "cue": "The shin only turns while the knee is bent; with the knee straight the turn comes from the hip.",
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "knee bent, foot and shin turned out",
+          "moves": [
+            "knee.flex:90",
+            "shin.er"
+          ]
+        },
+        {
+          "id": "b",
+          "label": "knee bent, foot and shin turned in",
+          "moves": [
+            "knee.flex:90",
+            "shin.ir"
           ]
         }
       ]
@@ -2471,7 +2563,7 @@
       ],
       "stretches": [
         "N2",
-        "N8"
+        "N8b"
       ]
     },
     "longissimus cervicis": {
@@ -2518,7 +2610,7 @@
       ],
       "stretches": [
         "N2",
-        "N8"
+        "N8a"
       ]
     },
     "semispinalis cervicis": {
@@ -2528,7 +2620,7 @@
       ],
       "stretches": [
         "N2",
-        "N8"
+        "N8a"
       ]
     },
     "semispinalis thoracis": {
@@ -2538,7 +2630,7 @@
       ],
       "stretches": [
         "T1",
-        "T4"
+        "T4a"
       ]
     },
     "multifidus cervicis": {
@@ -2548,7 +2640,7 @@
       ],
       "stretches": [
         "N2",
-        "N8"
+        "N8a"
       ]
     },
     "multifidus thoracis": {
@@ -2558,7 +2650,7 @@
       ],
       "stretches": [
         "T1",
-        "T4"
+        "T4a"
       ]
     },
     "multifidus lumborum": {
@@ -2575,7 +2667,7 @@
         "neck.ext"
       ],
       "stretches": [
-        "N8",
+        "N8a",
         "N2"
       ]
     },
@@ -2585,7 +2677,7 @@
         "trunk.ext"
       ],
       "stretches": [
-        "T4",
+        "T4a",
         "T1"
       ]
     },
@@ -2595,7 +2687,7 @@
         "trunk.ext"
       ],
       "stretches": [
-        "T4",
+        "T4a",
         "T1"
       ],
       "note": "Mostly a position sensor; a twist lengthens it only slightly."
@@ -2670,7 +2762,7 @@
       "stretches": [
         "B1",
         "T3",
-        "T4"
+        "T4a"
       ]
     },
     "set of levatores costarum longi": {
@@ -2682,7 +2774,7 @@
       "stretches": [
         "B1",
         "T3",
-        "T4"
+        "T4a"
       ]
     },
     "levator scapulae": {
@@ -2745,7 +2837,7 @@
       ],
       "stretches": [
         "N2",
-        "N8"
+        "N8b"
       ]
     },
     "splenius cervicis": {
@@ -2755,7 +2847,7 @@
       ],
       "stretches": [
         "N2",
-        "N8"
+        "N8b"
       ]
     },
     "rectus capitis posterior major": {
@@ -2765,7 +2857,7 @@
       ],
       "stretches": [
         "N1",
-        "N8"
+        "N8b"
       ]
     },
     "rectus capitis posterior minor": {
@@ -2791,7 +2883,7 @@
         "head.roti"
       ],
       "stretches": [
-        "N8"
+        "N8b"
       ]
     },
     "rectus capitis anterior": {
@@ -2826,7 +2918,7 @@
       ],
       "stretches": [
         "N7",
-        "N8"
+        "N8a"
       ]
     },
     "superior oblique part of longus colli": {
@@ -2836,7 +2928,7 @@
       ],
       "stretches": [
         "N7",
-        "N8"
+        "N8b"
       ]
     },
     "vertical intermediate part of longus colli": {
@@ -2965,7 +3057,7 @@
       "stretches": [
         "J1",
         "J2",
-        "J3"
+        "J3a"
       ]
     },
     "inferior head of lateral pterygoid": {
@@ -2976,7 +3068,7 @@
       ],
       "stretches": [
         "J2",
-        "J3"
+        "J3a"
       ]
     },
     "superior head of lateral pterygoid": {
@@ -2996,7 +3088,7 @@
       ],
       "stretches": [
         "J1",
-        "J3"
+        "J3b"
       ]
     },
     "genioglossus": {
@@ -3202,7 +3294,7 @@
       "stretches": [
         "T2",
         "T3",
-        "T4"
+        "T4a"
       ]
     },
     "internal oblique": {
@@ -3215,7 +3307,7 @@
       "stretches": [
         "T2",
         "T3",
-        "T4"
+        "T4b"
       ]
     },
     "transversus abdominis": {
@@ -3496,7 +3588,7 @@
       ],
       "stretches": [
         "P1a",
-        "P1c"
+        "C7a"
       ]
     },
     "semimembranosus": {
@@ -3507,7 +3599,7 @@
       ],
       "stretches": [
         "P1a",
-        "P1c"
+        "C7a"
       ]
     },
     "long head of biceps femoris": {
@@ -3518,7 +3610,8 @@
       ],
       "stretches": [
         "P1a",
-        "P1b"
+        "P1b",
+        "C7b"
       ]
     },
     "short head of biceps femoris": {
@@ -3527,7 +3620,8 @@
         "shin.er"
       ],
       "stretches": [
-        "P1b"
+        "P1b",
+        "C7b"
       ]
     },
     "lateral head of gastrocnemius": {
@@ -3581,7 +3675,8 @@
         "knee.flex"
       ],
       "stretches": [
-        "P1c"
+        "P1c",
+        "C7a"
       ]
     },
     "tibialis anterior": {

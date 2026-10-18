@@ -88,6 +88,32 @@ test('stretches have unique ids, a known section and kind, and every variant len
   assert.deepEqual(bad, []);
 });
 
+test('each variant is one pose: no joint moved both ways, and the shin only turns with the knee bent', () => {
+  const bad = [];
+  for (const st of s.STRETCHING.stretches)
+    for (const v of st.variants) {
+      const moves = v.moves.map(s.parseMove);
+      for (const m of moves)
+        if (moves.some((o) => o.joint === m.joint && o.dir === s.OPPOSITE[m.dir])) bad.push(`${st.id}${v.id}: ${m.joint} both ways`);
+      if (moves.some((m) => m.joint === 'shin') && !moves.some((m) => m.joint === 'knee' && m.dir === 'flex'))
+        bad.push(`${st.id}${v.id}: shin rotation with the knee not bent`);
+    }
+  assert.deepEqual(bad, []);
+});
+
+test('sided is a boolean, and holds leave "each side" to it', () => {
+  const bad = [];
+  for (const st of s.STRETCHING.stretches) {
+    if (/each (side|way)/.test(st.hold)) bad.push(`${st.id}: hold says "${st.hold}"`);
+    for (const v of [st, ...st.variants]) if ('sided' in v && typeof v.sided !== 'boolean') bad.push(`${st.id}: sided ${v.sided}`);
+  }
+  assert.deepEqual(bad, []);
+  const sided = (ref) => s.variantsOf(ref).map(({ stretch, variant }) => s.isSided(stretch, variant));
+  assert.deepEqual(sided('N2'), [false]);
+  assert.deepEqual(sided('P1'), [true, true, true]);
+  assert.deepEqual(sided('P4'), [false, false, true]);
+});
+
 test('joint ranges are whole degrees for directions the joint has', () => {
   const bad = [];
   for (const [id, j] of Object.entries(s.STRETCHING.joints)) {
@@ -122,13 +148,14 @@ test('watching the whole run stretches every stretchable muscle; none of the can
 
 test('a two-joint muscle is not counted stretched from a variant that leaves one of its actions alone', () => {
   // Semitendinosus bends the knee, extends the hip and turns the bent knee's shin inward: the
-  // straight-leg raise (P1a) reverses the first two; only the foot-out variant (P1c) adds the third.
+  // straight-leg raise (P1a) reverses the first two; only the bent-knee shin turn out (C7a) adds the third.
   const key = 'semitendinosus';
   assert.deepEqual(s.unreversedActions(key), []);
   assert.equal(s.isStretched(key, new Set()), false);
   assert.equal(s.isStretched(key, new Set(['P2'])), false);
   assert.equal(s.isStretched(key, new Set(['P1a'])), false);
-  assert.equal(s.isStretched(key, new Set(['P1a', 'P1c'])), true);
+  assert.equal(s.isStretched(key, new Set(['P1a', 'P1c'])), false);
+  assert.equal(s.isStretched(key, new Set(['P1a', 'C7a'])), true);
   assert.equal(s.reverses('knee.flex', ['knee.ext']), true);
   assert.equal(s.reverses('knee.flex', ['hip.flex']), false);
   assert.deepEqual(s.parseMove('hip.flex:80'), { joint: 'hip', dir: 'flex', angle: 80 });

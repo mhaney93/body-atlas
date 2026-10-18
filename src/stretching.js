@@ -4,8 +4,8 @@
 // muscle's action is written "<joint>.<direction>" (e.g. "hip.flex"), relative
 // to the muscle's own side; a stretch variant's moves use the same codes, so a
 // move reverses an action when it is the opposite direction at the same joint.
-// Stretching mode, the part info panel and scripts/stretches.test.mjs all go
-// through here.
+// The upcoming Stretching mode, the part info panel and
+// scripts/stretches.test.mjs all go through here.
 import STRETCHING from './stretches.json';
 
 /** Each direction and its opposite ("sbi" = side-bend to its own side, "rotc" = rotate to the other side). */
@@ -51,6 +51,11 @@ export function variantsOf(ref, data = STRETCHING) {
   const stretch = data.stretches.find((s) => s.id === id);
   const variant = stretch?.variants.find((v) => v.id === vid);
   return variant ? [{ stretch, variant }] : [];
+}
+
+/** Whether a variant is done one side at a time (the Left/Right toggle); a variant's own `sided` overrides its stretch's. */
+export function isSided(stretch, variant) {
+  return variant.sided ?? stretch.sided ?? false;
 }
 
 /** "P1" + "a" → "P1a"; a stretch with one variant is named by its id alone. */
