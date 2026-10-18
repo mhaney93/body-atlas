@@ -125,12 +125,17 @@ export function describeMove(code, side = 'left') {
 }
 
 /**
- * A hold the card can time ("30 s x 2" → 30 s, 2 rounds), or null for one
- * counted another way (reps, breaths, "2 s each").
+ * How long to hold a stretch, in words for the card: "30 s x 2" → "Hold 30 s,
+ * 2 times", "3 slow breaths" → "Hold for 3 slow breaths", a rolling card's
+ * "60 s x 1" → "Roll for 60 s"; one counted another way (reps, "2 s each")
+ * reads as written.
  */
-export function holdTimer(hold) {
-  const [, seconds, rounds] = /^(\d+) s x (\d+)$/.exec(hold ?? '') ?? [];
-  return seconds ? { seconds: Number(seconds), rounds: Number(rounds) } : null;
+export function holdText({ hold = '', kind }) {
+  const [, seconds, rounds] = /^(\d+) s x (\d+)$/.exec(hold) ?? [];
+  if (seconds && kind === 'roll') return `Roll for ${seconds} s${rounds > 1 ? `, ${rounds} times` : ''}`;
+  if (seconds) return `Hold ${seconds} s${rounds > 1 ? `, ${rounds} times` : ''}`;
+  if (/^\d+ slow breaths\b/.test(hold)) return `Hold for ${hold}`;
+  return hold.charAt(0).toUpperCase() + hold.slice(1);
 }
 
 export { STRETCHING };

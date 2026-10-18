@@ -1117,27 +1117,14 @@ body.stretching .info {
   margin-top: 12px;
 }
 
-.stretch-hold .tour-button {
-  margin-top: 0;
-}
-
 .stretch-hold-text {
-  color: var(--muted);
+  font-weight: 600;
 }
 
 .stretch-sides {
   display: flex;
   gap: 4px;
   margin-left: auto;
-}
-
-.stretch-card .stretch-timer-status {
-  margin-top: 6px;
-  font-variant-numeric: tabular-nums;
-}
-
-.stretch-card .stretch-timer-status:empty {
-  display: none;
 }
 
 .stretch-done {
@@ -1229,7 +1216,8 @@ body.stretching .info {
   color: var(--muted);
 }
 
-.stretch-coverage .effect {
+.stretch-coverage .effect,
+.stretch-card .stretch-skeleton {
   margin-top: 10px;
 }
 

@@ -308,6 +308,7 @@ for (const layer of layers) {
     extras.hidden = !on || !extras.childElementCount;
     applyEffects(layer);
     renderSummary();
+    stretching.layerSwitched(layer.id, on);
   };
   syncs.set(layer.id, sync);
   button.addEventListener('click', () => setLayer(layer, !active.has(layer.id)));
