@@ -4,7 +4,9 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import { EFFECTS } from './effects.js';
 import { KeyboardNav } from './keyboard-nav.js';
-import { partGroupId, sharedEntry } from './layers.js';
+import { partGroupId, partInfo, sharedEntry } from './layers.js';
+import { Poser } from './pose-view.js';
+import { sideOf } from './search.js';
 import { frameView } from './search-select.js';
 
 const BODY_HEIGHT = 1.72; // metres, roughly; the models stand on y = 0
@@ -162,10 +164,12 @@ export class Viewer {
    *   onSelect?: (sel: {layer: object, mesh: THREE.Mesh} | null) => void,
    *   partColor?: (layer: object, meshName: string) => string | undefined,
    *   onFadedChange?: (count: number) => void,
+   *   poseBones?: object,
    * }} [options] `partColor` can give a part its own highlight color instead of the layer's;
-   *   `onFadedChange` hears how many parts are faded (see focusOn) whenever that set changes.
+   *   `onFadedChange` hears how many parts are faded (see focusOn) whenever that set changes;
+   *   `poseBones` is the layer whose bones the stretching poses are built on (`posable: "bones"`).
    */
-  constructor(container, { onSelect, partColor, onFadedChange } = {}) {
+  constructor(container, { onSelect, partColor, onFadedChange, poseBones } = {}) {
     this.container = container;
     this.onSelect = onSelect ?? (() => {});
     this.onFadedChange = onFadedChange ?? (() => {});
@@ -215,6 +219,12 @@ export class Viewer {
 
     const scene = new THREE.Scene();
     this.scene = scene;
+    this.poseBones = poseBones;
+    // Stretching poses (src/pose-view.js): the posable layers' parts follow one skeleton.
+    this.poser = new Poser(scene, {
+      region: (layer, mesh) => partInfo(layer, mesh.userData.name ?? mesh.name, mesh.userData.group, undefined, mesh.userData.of).region,
+      side: (mesh) => sideOf(mesh.userData.name ?? mesh.name),
+    });
 
     const camera = new THREE.PerspectiveCamera(35, 1, 0.01, 50);
     camera.position.set(0.8, 1.1, 3.6);
@@ -253,6 +263,7 @@ export class Viewer {
       this.time.value = timer.getElapsed();
       const dt = Math.min(timer.getDelta(), 0.1);
       for (const fn of this.frameCallbacks) fn(dt);
+      this.poser.update(dt);
       if (this.keys.moving) {
         this.flight?.();
         this.#moveByKeys(dt);
@@ -314,10 +325,14 @@ export class Viewer {
     entry.promise = Promise.all([
       Promise.all(urls.map((url) => this.loader.loadAsync(url))),
       ...sources.map((source) => this.preloadLayer(source)),
+      // A soft posable layer needs the bones its parts follow.
+      layer.posable === 'soft' && this.poseBones ? this.preloadLayer(this.poseBones) : null,
     ]).then(([gltfs, ...sourceGroups]) => {
       const group = new THREE.Group();
       group.add(...gltfs.map((gltf) => gltf.scene));
-      sourceGroups.forEach((sourceGroup, i) => group.add(...this.#sharedCopies(layer, sources[i].id, sourceGroup)));
+      if (layer.posable === 'bones') this.poser.setBones(group);
+      if (layer.posable && this.poser.skeleton) this.poser.adopt(layer, group);
+      sources.forEach((source, i) => group.add(...this.#sharedCopies(layer, source.id, sourceGroups[i])));
       group.visible = false;
       group.updateMatrixWorld(true);
       const box = new THREE.Box3();
@@ -372,7 +387,7 @@ export class Viewer {
     const group = visible ? await this.preloadLayer(layer) : this.layers.get(layer.id)?.group;
     if (!group) return;
     // The layer may have been toggled again while it was downloading.
-    group.visible = this.wanted.get(layer.id);
+    group.visible = this.#layerShown(layer);
     if (!group.visible) {
       if ([...this.faded].some((m) => m.userData.layerId === layer.id)) {
         this.#setFaded([...this.faded].filter((m) => m.userData.layerId !== layer.id));
@@ -399,10 +414,44 @@ export class Viewer {
           : this.shell;
       if (!visible || !source) return;
       fx = EFFECTS[effect.type](source, effect, { cut: cutUniform });
+      // An effect laid over a layer's parts would stay behind while they move in a pose.
+      fx.onLayer = source !== this.shell;
       this.scene.add(fx.object);
       this.effects.set(effect.id, fx);
     }
-    fx.object.visible = visible;
+    fx.wanted = visible;
+    fx.object.visible = visible && !(fx.onLayer && this.poser.active);
+  }
+
+  /**
+   * Plays a stretch pose: `ops` from variantOps (src/pose.js), looping into
+   * the stretch and back (held still for reduced motion). Only the posable
+   * layers move, so the others, and effects laid over layers, hide until
+   * stopPose(); the glass skin stays put as a ghost of the starting position.
+   */
+  showPose(ops) {
+    this.poser.start(ops, { still: this.reducedMotion.matches });
+    this.#applyPoseHiding();
+  }
+
+  /** Ends a pose (showPose): everything returns to rest and reappears. */
+  stopPose() {
+    this.poser.stop();
+    this.#applyPoseHiding();
+  }
+
+  /** Whether a layer is drawn: toggled on, and posable or no pose playing. */
+  #layerShown(layer) {
+    return !!this.wanted.get(layer.id) && (!this.poser.active || !!layer.posable);
+  }
+
+  #applyPoseHiding() {
+    for (const { layer, group } of this.layers.values()) {
+      if (!group) continue;
+      group.visible = this.#layerShown(layer);
+      if (!group.visible && this.hovered?.userData.layerId === layer.id) this.#setHovered(null);
+    }
+    for (const fx of this.effects.values()) fx.object.visible = !!fx.wanted && !(fx.onLayer && this.poser.active);
   }
 
   /** The meshes of a loaded layer with these names, or null if the layer hasn't loaded. */

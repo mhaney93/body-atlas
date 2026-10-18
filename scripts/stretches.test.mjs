@@ -118,8 +118,8 @@ test('a pose done once for both sides is mirrored for the right side', () => {
   const n8 = s.STRETCHING.stretches.find((st) => st.id === 'N8');
   const [left] = n8.variants;
   assert.equal(s.isSided(n8, left), false);
-  assert.deepEqual(s.movesFor(n8, left, 'left'), ['neck.roti', 'head.roti']);
-  assert.deepEqual(s.movesFor(n8, left, 'right'), ['neck.rotc', 'head.rotc']);
+  assert.deepEqual(s.movesFor(n8, left, 'left'), ['neck.roti:50', 'head.roti:30']);
+  assert.deepEqual(s.movesFor(n8, left, 'right'), ['neck.rotc:50', 'head.rotc:30']);
   const p4 = s.STRETCHING.stretches.find((st) => st.id === 'P4');
   assert.deepEqual(s.movesFor(p4, p4.variants[0], 'right'), p4.variants[0].moves);
   const tg1 = s.STRETCHING.stretches.find((st) => st.id === 'TG1');

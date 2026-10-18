@@ -7,6 +7,7 @@ import { buildLayerControls } from './layer-controls.js';
 import { notShownPanel } from './not-shown.js';
 import { buildIndex } from './search.js';
 import { searchBox } from './search-ui.js';
+import { stretchPanel } from './stretch-panel.js';
 import { fadeNoteKeeper, searchSelector } from './search-select.js';
 import meshNames from './mesh-names.json';
 
@@ -25,12 +26,14 @@ for (const layer of layers) {
 
 const info = $('info');
 const viewer = new Viewer($('stage'), {
+  poseBones: layers.find((l) => l.posable === 'bones'),
   partColor: (layer, meshName) => partInfo(layer, meshName).color,
   onFadedChange: (count) => fadeNotes.fadedChanged(count),
   onSelect(selection) {
     hideInfoNote();
     if (!selection) {
       info.hidden = true;
+      stretch.hide();
       return;
     }
     const { layer, mesh } = selection;
@@ -49,6 +52,7 @@ const viewer = new Viewer($('stage'), {
     $('info-approx').hidden = !part.approximate;
     $('info-approx').textContent = part.approximate ? APPROXIMATE_LABEL : '';
     showRole(layer, mesh);
+    stretch.show(layer, mesh);
     info.hidden = false;
   },
 });
@@ -60,6 +64,9 @@ const credit = document.querySelector('.credit');
 new ResizeObserver(() => {
   document.documentElement.style.setProperty('--credit-height', `${credit.offsetHeight}px`);
 }).observe(credit);
+
+/** "Stretch it" in a muscle's info panel (src/stretch-panel.js). */
+const stretch = stretchPanel(viewer, $('info-stretch'), layers.find((l) => l.posable === 'soft'));
 
 $('info-close').addEventListener('click', () => viewer.select(null));
 $('reset-view').addEventListener('click', () => viewer.resetView());

@@ -3,6 +3,7 @@
   "name": "Muscular",
   "color": "#f2705a",
   "asset": "models/muscular.glb",
+  "posable": "soft",
   "flowLabel": "Action",
   "summary": "Skeletal muscles pull on bones to move the body, hold its posture and steady its joints.",
   "groupToggles": true,
