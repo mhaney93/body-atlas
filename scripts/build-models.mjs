@@ -16,7 +16,7 @@ import { loadAllen, placeNuclei } from './allen-model.mjs';
 import { loadNervous } from './nervous-model.mjs';
 import { settleLymphatic } from './lymphatic-model.mjs';
 import { yieldsTo } from './overlaps.mjs';
-import { Body, layerOf, readModel, REFERENCE_LAYER, SKIN_ASSET } from './placement.mjs';
+import { Body, layerOf, REFERENCE_LAYER, SKIN_ASSET } from './placement.mjs';
 import { loadEjaculatoryDucts } from './reproductive-model.mjs';
 import { settle } from './settle.mjs';
 import { Solid } from './solid.mjs';
@@ -443,12 +443,6 @@ const ASSETS = [
   // Added after the nerves, so the models built before it stay as they were.
   REPRODUCTIVE,
 ];
-
-// `--only <file>` builds just that asset. The assets before it are read from
-// their committed GLBs instead of rebuilt (a full build takes over an hour),
-// so it is placed against the skin, bones and parts it yields to as shown.
-const ONLY = process.argv.includes('--only') ? process.argv[process.argv.indexOf('--only') + 1] : undefined;
-if (ONLY && !ASSETS.some((a) => a.file === ONLY)) throw new Error(`--only: no asset ${ONLY}`);
 
 /** BodyParts3D bone meshes (mm) by English name, for nervous-model.mjs. */
 function skeletalBones() {
@@ -878,15 +872,7 @@ mkdirSync(OUT_DIR, { recursive: true });
 
 const available = new Set(readdirSync(OBJ_DIR).map((f) => f.replace(/\.obj$/, '')));
 
-for (const asset of ASSETS.slice(0, ONLY ? ASSETS.findIndex((a) => a.file === ONLY) + 1 : undefined)) {
-  if (ONLY && asset.file !== ONLY) {
-    const meshes = await readModel(join(OUT_DIR, asset.file));
-    shown.set(
-      asset.file,
-      meshes.map((m) => ({ name: m.name, of: m.extras.of, positions: untransform(m.positions.map((v) => v / 1000)), indices: m.indices })),
-    );
-    continue;
-  }
+for (const asset of ASSETS) {
   const doc = new Document();
   const buffer = doc.createBuffer();
   const scene = doc.createScene(asset.file.replace(/\.glb$/, ''));
