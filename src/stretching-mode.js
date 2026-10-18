@@ -10,10 +10,10 @@
 // the same without it.
 import { isTypingTarget } from './keyboard-nav.js';
 import { canonical } from './layers.js';
-import { poseBox, variantOps } from './pose.js';
+import { poseBox } from './pose.js';
 import { sideOf } from './search.js';
 import { Stepper, stepperBar } from './stepper.js';
-import { stretchedMeshes } from './stretch-panel.js';
+import { demo, stretchedMeshes } from './stretch-panel.js';
 import {
   GROUP_NAMES,
   KIND_NAMES,
@@ -32,8 +32,10 @@ import {
 import * as THREE from 'three';
 
 const STORAGE_KEY = 'body-atlas:stretching';
-/** Half the smallest box (m) the camera frames a stretch in. */
+/** Half the smallest box (m) the camera frames a stretch in: a body region, or the head for the jaw, face and eyes. */
 const MIN_FRAME = 0.22;
+const HEAD_FRAME = 0.1;
+const HEAD_GROUPS = new Set(['jaw', 'face', 'eye']);
 /** Target muscles listed on the card before the rest fold away. */
 const SHOWN_TARGETS = 8;
 /** What each kind of item works, as the card's list heading. */
@@ -293,8 +295,8 @@ export function stretchingMode(viewer, { muscular, layer, showLayers, restoreLay
   }
 
   function present(item, side, ids) {
-    const ops = variantOps(item.stretch, item.variant, side);
-    if (ops.length) viewer.showPose(ops);
+    const { ops, cues } = demo(viewer, muscular, item.stretch, item.variant, side);
+    if (ops.length || cues.length) viewer.showPose(ops, cues);
     else viewer.stopPose();
     // The parts the step works lit, the rest of their layers faded to a ghost so deep ones show.
     const lit = litMeshes(item, side);
@@ -311,9 +313,10 @@ export function stretchingMode(viewer, { muscular, layer, showLayers, restoreLay
     // Parts with no bone to turn (the face, eyes, tongue) and rolling are framed by the parts they work.
     if (box.isEmpty()) for (const meshes of lit.values()) for (const mesh of meshes) box.expandByObject(mesh);
     if (!box.isEmpty()) {
-      // Never closer than a body region, so the stretch shows in context.
+      // Never closer than a body region (the head, for the jaw, face and eyes), so the stretch shows in context.
+      const half = HEAD_GROUPS.has(item.stretch.group) ? HEAD_FRAME : MIN_FRAME;
       const center = box.getCenter(new THREE.Vector3());
-      box.expandByPoint(center.clone().addScalar(MIN_FRAME)).expandByPoint(center.clone().subScalar(MIN_FRAME));
+      box.expandByPoint(center.clone().addScalar(half)).expandByPoint(center.clone().subScalar(half));
     }
     viewer.frameBox(box);
   }

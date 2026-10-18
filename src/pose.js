@@ -183,7 +183,7 @@ export function variantOps(stretch, variant, side, data = STRETCHING) {
 }
 
 /** A named direction for one segment of the rig, in the rest pose. */
-function vector(name, seg, side, rig) {
+export function vector(name, seg, side, rig) {
   const hand = rig.frames.hand[side];
   switch (name) {
     case 'up': return UP;

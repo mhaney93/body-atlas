@@ -447,3 +447,87 @@ test('nerves and joint parts follow the limb, so a glide or joint move shows the
   poser.stop();
   assert.ok(centre(sciatic).distanceTo(restNerve) < 1e-6);
 });
+
+/** The rest centre of the muscles `keys` on `side` (null: both), from the built model, as the viewer finds it. */
+function muscleCenter(keys, side) {
+  const want = new Set(keys);
+  const box = new THREE.Box3();
+  for (const [name, m] of muscles) {
+    if (m.extras.of || !want.has(L.canonical(name))) continue;
+    if (side && !new RegExp(`\\b${side}\\b`, 'i').test(name)) continue;
+    box.union(new THREE.Box3().setFromArray(m.positions));
+  }
+  return box.isEmpty() ? null : box.getCenter(new THREE.Vector3());
+}
+
+test('every move no bone can show has arrows, at muscles that exist, pointing the way it goes', async () => {
+  const C = await server.ssrLoadModule('/src/cues.js');
+  const muscular = L.LAYERS.find((l) => l.id === 'muscular');
+  const bad = [];
+  for (const [code, specs] of Object.entries(C.CUES)) {
+    if (!P.UNPOSED.has(S.parseMove(code).joint)) bad.push(`${code}: has a bone to turn`);
+    for (const spec of specs) for (const key of spec.at) if (!muscular.parts[key]) bad.push(`${code}: no muscle "${key}"`);
+  }
+  for (const st of S.STRETCHING.stretches)
+    for (const v of st.variants) {
+      const unposed = [...(v.setup ?? []), ...v.moves].filter((c) => P.UNPOSED.has(S.parseMove(c).joint));
+      for (const code of unposed) if (!C.CUES[code.split(':')[0]]) bad.push(`${st.id}${v.id}: no arrow for ${code}`);
+      for (const side of ['left', 'right']) {
+        const cues = C.variantCues(st, v, side, rig, muscleCenter);
+        if (unposed.length && !cues.length) bad.push(`${st.id}${v.id} ${side}: no arrows drawn`);
+        for (const c of cues) if (Math.abs(c.dir.length() - 1) > 1e-6 || !rig.segments.has(c.seg)) bad.push(`${st.id}${v.id}: bad cue ${c.code}`);
+      }
+    }
+  assert.deepEqual(bad, []);
+  const stretch = (id) => S.STRETCHING.stretches.find((st) => st.id === id);
+  const cuesOf = (id, vid, side = 'left') => {
+    const st = stretch(id);
+    return C.variantCues(st, st.variants.find((v) => v.id === vid), side, rig, muscleCenter);
+  };
+  // Raised brows point up; a wide smile pulls each corner of the mouth out to its own side.
+  assert.ok(cuesOf('F1', 'a').filter((c) => c.code === 'face.browsup').every((c) => c.dir.y > 0.95));
+  const wide = cuesOf('F4', 'a').filter((c) => c.code === 'face.lipswide');
+  assert.equal(wide.length, 2);
+  for (const c of wide) assert.ok(Math.sign(c.dir.x) === Math.sign(c.center.x), 'out to its own side');
+  // Both eyes look the same way: "eye.in", written for the left eye, is a look to the right (the body's right is −x).
+  const look = cuesOf('E1', 'c');
+  assert.equal(look.length, 2);
+  for (const c of look) assert.ok(c.dir.x < -0.95, `look ${c.dir.toArray()}`);
+  // Breathing in, the diaphragm goes down; breathing out it rises. The pelvic floor drops.
+  assert.ok(cuesOf('B2', 'a').find((c) => c.code === 'ribs.inh').dir.y < -0.95);
+  assert.ok(cuesOf('B1', 'a').find((c) => c.code === 'ribs.exh').dir.y > 0.95);
+  assert.ok(cuesOf('PF1', 'a').filter((c) => c.code === 'pelvic-floor.drop').every((c) => c.dir.y < -0.95));
+  // A one-side stretch's arrows are on that side only (the flattened palm, right hand).
+  const palm = cuesOf('H4', 'a', 'right').filter((c) => c.code === 'palm.flat');
+  assert.ok(palm.length === 2 && palm.every((c) => c.center.x < 0 && c.seg === 'right-hand'));
+});
+
+test('the arrows ride with the pose, the jaw opens through its chin and its glide gets an arrow', async () => {
+  const C = await server.ssrLoadModule('/src/cues.js');
+  const poser = bonePoser();
+  // Eyes only: no bone turns, yet the pose shows, with an arrow at each eye.
+  const e1 = S.STRETCHING.stretches.find((st) => st.id === 'E1');
+  const eyeCues = C.variantCues(e1, e1.variants[0], 'left', rig, muscleCenter);
+  poser.start(P.variantOps(e1, e1.variants[0], 'left'), { still: true, cues: eyeCues });
+  assert.ok(poser.active);
+  assert.equal(poser.arrows.children.filter((a) => a.userData.cue).length, 2);
+  poser.stop();
+  // The flattened palm's arrows go where the bent elbow carries the hand.
+  const h4 = S.STRETCHING.stretches.find((st) => st.id === 'H4');
+  const ops = P.variantOps(h4, h4.variants[0], 'right');
+  const cues = C.variantCues(h4, h4.variants[0], 'right', rig, muscleCenter).filter((c) => c.code === 'palm.flat');
+  poser.start(ops, { still: true, cues });
+  const hand = P.poseMatrices(rig, ops, 1).get('right-hand');
+  for (const a of poser.arrows.children.filter((x) => x.userData.cue)) {
+    const want = cues.find((c) => c.code === a.userData.code && c.seg === a.userData.seg && c.center.clone().applyMatrix4(hand).distanceTo(a.userData.from) < 1e-9);
+    assert.ok(want, 'arrow at the posed hand');
+  }
+  poser.stop();
+  // Controlled jaw opening: the arc passes through the chin, and the forward glide is a straight arrow at the chin.
+  const j1 = S.STRETCHING.stretches.find((st) => st.id === 'J1');
+  poser.start(P.variantOps(j1, j1.variants[0], 'left'), { still: true });
+  const arc = poser.arrows.children.find((a) => a.userData.code === 'jaw.open');
+  assert.ok(Math.abs(arc.userData.radius - seg('mandible').length) < 1e-9);
+  assert.ok(poser.arrows.children.some((a) => a.userData.code === 'jaw.fwd' && a.userData.glide));
+  poser.stop();
+});

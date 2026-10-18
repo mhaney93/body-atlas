@@ -3,6 +3,8 @@
 // (Viewer.showPose) on the muscle's own side, with the muscles it stretches
 // lit; or, for a muscle that can't be stretched, why not.
 import { canonical } from './layers.js';
+import * as THREE from 'three';
+import { CUES, variantCues } from './cues.js';
 import { variantOps } from './pose.js';
 import { sideOf } from './search.js';
 import { STRETCHING, stretchedSides, targetsOf, variantRef, variantsOf } from './stretching.js';
@@ -35,9 +37,35 @@ export function stretchedMeshes(group, stretch, variant, side) {
   return meshes;
 }
 
-/** Whether a variant turns any joint (some, such as the face's, are words only). */
+/**
+ * The rest-pose centre of the muscles `keys` in a loaded Muscular `group`, on
+ * `side` (null: both sides together), or null if none is there: where a cue
+ * arrow (src/cues.js) starts.
+ */
+export function cueCenters(group) {
+  return (keys, side) => {
+    const want = new Set(keys);
+    const box = new THREE.Box3();
+    group?.traverse((o) => {
+      if (!o.isMesh || o.userData.haze || o.userData.of) return;
+      const name = o.userData.name ?? o.name;
+      if (want.has(canonical(name)) && (!side || sideOf(name) === side)) box.expandByObject(o);
+    });
+    return box.isEmpty() ? null : box.getCenter(new THREE.Vector3());
+  };
+}
+
+/** The pose and arrows a variant is shown with on `side`: its joint turns, and cues for the moves no bone shows. */
+export function demo(viewer, layer, stretch, variant, side) {
+  const rig = viewer.poser.rig;
+  const cues = rig ? variantCues(stretch, variant, side, rig, cueCenters(viewer.layers.get(layer.id)?.group)) : [];
+  return { ops: variantOps(stretch, variant, side), cues };
+}
+
+/** Whether a variant can be shown: it turns a joint or has a cue arrow (every move does; this guards against data that doesn't). */
 export function moves(stretch, variant) {
-  return variantOps(stretch, variant, 'left').some((op) => op.angle && !op.setup);
+  const codes = [...(variant.setup ?? []), ...variant.moves];
+  return variantOps(stretch, variant, 'left').some((op) => op.angle && !op.setup) || codes.some((code) => CUES[code.split(':')[0]]);
 }
 
 /**
@@ -65,7 +93,8 @@ export function stretchPanel(viewer, el, layer, { openMode } = {}) {
     stop();
     if (again) return;
     playing = { ref };
-    viewer.showPose(variantOps(stretch, variant, side));
+    const { ops, cues } = demo(viewer, layer, stretch, variant, side);
+    viewer.showPose(ops, cues);
     viewer.emphasize(stretchedMeshes(viewer.layers.get(layer.id)?.group, stretch, variant, side));
     button.textContent = button.dataset.label.replace('▶', '■ Stop:');
     const how = el.querySelector('.stretch-how');
