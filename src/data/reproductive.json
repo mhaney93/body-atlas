@@ -20,7 +20,7 @@
     { "name": "Bulbospongiosus and ischiocavernosus muscles", "reason": "no-model", "note": "The small perineal muscles that wrap the root of the penis and help with erection and ejaculation. Neither source model has a mesh for them." },
     { "name": "Seminiferous tubules and rete testis", "reason": "too-small", "note": "The coiled tubes, several hundred in each testis, where sperm are made, and the network of channels that collects the sperm and passes them to the epididymis." },
     { "name": "Sperm cells and semen", "reason": "too-small", "note": "A sperm cell is about 0.05 mm long; a healthy adult makes millions every day." },
-    { "name": "Male urethra", "reason": "other-system", "system": "urinary", "note": "The tube that runs from the bladder through the prostate and the corpus spongiosum to the tip of the glans. In men it carries semen as well as urine; the ejaculatory ducts open into it inside the prostate." },
+    { "name": "Male urethra", "reason": "other-system", "layer": "urinary", "note": "The tube that runs from the bladder through the prostate and the corpus spongiosum to the tip of the glans. In men it carries semen as well as urine; the ejaculatory ducts open into it inside the prostate." },
     { "name": "Testicular arteries and veins", "reason": "other-system", "layer": "circulatory", "note": "They run down from the abdomen in the spermatic cord to each testis." },
     { "name": "Dorsal arteries and veins of the penis", "reason": "other-system", "layer": "circulatory" },
     { "name": "Pudendal nerve and genital branch of the genitofemoral nerve", "reason": "other-system", "layer": "nervous", "note": "The nerves that supply the penis, the scrotum and the cremaster muscle." }

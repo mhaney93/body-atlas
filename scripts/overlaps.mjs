@@ -35,6 +35,8 @@ export const NESTED = [
   ['nervous', /sciatic|posterior femoral cutaneous|gluteal|pudendal/i, 'joints', /piriformis fascia/i, 'these nerves leave the pelvis just beneath piriformis, through its fascia', 8],
   ['joints', /fascia|septum|aponeurosis|retinaculum|tract/i, 'muscular', /./, 'fascia wraps and divides the muscles', 10],
   ['circulatory', /splenic (artery|vein)/i, 'lymphatic', /^spleen$/i, 'the splenic vessels branch into the spleen at its hilum', 15],
+  ['urinary', /^urethra$/i, 'reproductive', /^prostate$|corpus spongiosum|^glans penis$/i, 'the urethra runs through the prostate and down the corpus spongiosum to the glans', 12],
+  ['circulatory', /renal|segmental artery/i, 'urinary', /kidney$|ureter$/i, 'the renal vessels branch into the kidney at its hilum, beside the start of the ureter', 20],
 ];
 
 /**
@@ -55,6 +57,9 @@ export const KNOWN = [
   ['circulatory', /aorta/i, 'digestive', /^esophagus$/i, 'the aorta and esophagus run side by side and overlap in BodyParts3D', 7],
   ['circulatory', /femoral vein/i, 'muscular', /adductor longus/i, 'the femoral vessels lie on adductor longus and overlap it in BodyParts3D', 9],
   ['circulatory', /brachiocephalic vein/i, 'muscular', /sternothyroid/i, 'the vein lies just behind the muscle and overlaps it in BodyParts3D', 6.5],
+  // Moving the kidney out of psoas crumples its simplified mesh at the hilum.
+  ['urinary', /kidney$/i, 'muscular', /psoas major/i, 'BodyParts3D\'s kidneys overlap psoas major, on which they lie, in the source data', 10.5],
+  ['urinary', /kidney$/i, 'joints', /iliopsoas fascia/i, 'the kidneys pressed into the fitted sheet of fascia over psoas', 11.5],
   // lymphatic-model.mjs moves the lymph nodes out of bone and skin only; the
   // build does not yet move them out of the organs and vessels they drain.
   // Lymph node clusters are drawn 6 mm across.
@@ -78,6 +83,7 @@ export const YIELDS = [
   ['respiratory', /lobe of (left|right) lung$/i, 'muscular', /diaphragm|transversus (abdominis|thoracis)|intercostal|subcostal/i, 'the lungs lie above the diaphragm and inside the chest wall'],
   // Nerves run beside the gut and the great vessels, not through them.
   ['nervous', /nerve|trunk|plexus|ganglia|ganglion/i, 'digestive', /colon|cecum|appendix|ileum|jejunum|duodenum|stomach|esophagus|rectum|liver/i, 'nerves run beside the gut, not through it'],
+  ['nervous', /nerve|trunk|plexus|ganglia|ganglion/i, 'urinary', /kidney$|ureter$|bladder$|^urethra$/i, 'nerves run behind and beside the kidneys, ureters and bladder, not through them'],
   ['nervous', /nerve|trunk|plexus|ganglia|ganglion/i, 'circulatory', /aorta|vena cava|pulmonary trunk|^(left|right) pulmonary artery$/i, 'nerves run beside the great vessels, not through them'],
 ];
 
