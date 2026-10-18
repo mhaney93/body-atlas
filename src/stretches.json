@@ -1,0 +1,4013 @@
+{
+  "sources": [
+    "Joint ranges: American Academy of Orthopaedic Surgeons, Joint Motion (1965), as tabulated at https://goniometer.io/range-of-motion; trunk from WikEM https://wikem.org/wiki/Joint_ROM_(Table); shin rotation at 90 degrees of knee flexion from https://jeo-esska.springeropen.com/articles/10.1186/s40634-018-0141-9/tables/2; shin rotation needs the knee bent, as the straight knee locks (screw-home mechanism): https://www.physio-pedia.com/Screw_Home_Mechanism",
+    "Muscle actions: Kenhub https://www.kenhub.com/en/library/anatomy-en/ and TeachMeAnatomy https://teachmeanatomy.info/, checked against each part's flow text in src/data/muscular.json",
+    "Two-joint stretch positions: ExRx https://exrx.net/Lists/Directory and learnmuscles https://learnmuscles.com/; figure-4 piriformis stretch is hip flexion, adduction and external rotation (Park, Shim and Chung 2017, J Phys Ther Sci 29(10):1811): https://pmc.ncbi.nlm.nih.gov/articles/PMC5684014/",
+    "Hold times: ACSM (Garber et al. 2011), via Page 2012 https://pmc.ncbi.nlm.nih.gov/articles/PMC3273886/; jaw: Rocabado 6x6 https://en.irct.ir/trial/76578"
+  ],
+  "joints": {
+    "head": {
+      "name": "Head on the neck (top two neck joints)"
+    },
+    "neck": {
+      "name": "Neck (cervical spine)",
+      "rom": {
+        "flex": 45,
+        "ext": 45,
+        "sbi": 45,
+        "sbc": 45,
+        "roti": 60,
+        "rotc": 60
+      }
+    },
+    "trunk": {
+      "name": "Trunk (thoracic and lumbar spine)",
+      "rom": {
+        "flex": 45,
+        "ext": 25,
+        "sbi": 25,
+        "sbc": 25,
+        "roti": 30,
+        "rotc": 30
+      }
+    },
+    "ribs": {
+      "name": "Ribs (breathing)"
+    },
+    "scapula": {
+      "name": "Shoulder blade"
+    },
+    "clavicle": {
+      "name": "Collarbone"
+    },
+    "shoulder": {
+      "name": "Shoulder joint",
+      "rom": {
+        "flex": 180,
+        "ext": 60,
+        "abd": 180,
+        "add": 40,
+        "er": 90,
+        "ir": 70
+      }
+    },
+    "elbow": {
+      "name": "Elbow",
+      "rom": {
+        "flex": 150,
+        "ext": 0
+      }
+    },
+    "forearm": {
+      "name": "Forearm rotation",
+      "rom": {
+        "pro": 80,
+        "sup": 80
+      }
+    },
+    "wrist": {
+      "name": "Wrist",
+      "rom": {
+        "flex": 80,
+        "ext": 70,
+        "rd": 20,
+        "ud": 30
+      }
+    },
+    "fingers": {
+      "name": "Finger knuckles (MCP joints)",
+      "rom": {
+        "flex": 90
+      }
+    },
+    "finger-joints": {
+      "name": "Middle and end finger joints (PIP and DIP)",
+      "rom": {
+        "flex": 100
+      }
+    },
+    "finger-spread": {
+      "name": "Finger spread"
+    },
+    "palm": {
+      "name": "Palm cupping"
+    },
+    "thumb-base": {
+      "name": "Base of the thumb (CMC joint)"
+    },
+    "thumb-knuckle": {
+      "name": "Thumb knuckle (MCP joint)",
+      "rom": {
+        "flex": 50
+      }
+    },
+    "thumb-tip": {
+      "name": "Thumb end joint (IP joint)",
+      "rom": {
+        "flex": 80
+      }
+    },
+    "hip": {
+      "name": "Hip",
+      "rom": {
+        "flex": 120,
+        "ext": 30,
+        "abd": 45,
+        "add": 30,
+        "er": 45,
+        "ir": 45
+      }
+    },
+    "knee": {
+      "name": "Knee",
+      "rom": {
+        "flex": 135,
+        "ext": 0
+      }
+    },
+    "shin": {
+      "name": "Shin rotation (knee bent)",
+      "rom": {
+        "ir": 25,
+        "er": 39
+      }
+    },
+    "ankle": {
+      "name": "Ankle",
+      "rom": {
+        "df": 20,
+        "pf": 50
+      }
+    },
+    "subtalar": {
+      "name": "Below the ankle (sole in and out)",
+      "rom": {
+        "inv": 35,
+        "ev": 15
+      }
+    },
+    "toes": {
+      "name": "Toe knuckles (MTP joints)"
+    },
+    "toe-joints": {
+      "name": "Toe joints (IP joints)"
+    },
+    "toe-spread": {
+      "name": "Toe spread"
+    },
+    "arch": {
+      "name": "Arch of the foot"
+    },
+    "jaw": {
+      "name": "Jaw"
+    },
+    "hyoid": {
+      "name": "Hyoid bone"
+    },
+    "tongue": {
+      "name": "Tongue"
+    },
+    "eye": {
+      "name": "Eye"
+    },
+    "face": {
+      "name": "Face"
+    },
+    "pelvic-floor": {
+      "name": "Pelvic floor"
+    }
+  },
+  "stretches": [
+    {
+      "id": "N1",
+      "name": "Chin-tuck nod",
+      "group": "neck",
+      "kind": "stretch",
+      "position": "seated",
+      "how": "Sit tall. Glide the chin straight back, then nod it down as if making a double chin.",
+      "cue": "Feel it at the base of the skull.",
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "nod chin in, then down",
+          "moves": [
+            "head.flex",
+            "neck.flex"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "N2",
+      "name": "Neck flexion (chin to chest)",
+      "group": "neck",
+      "kind": "stretch",
+      "position": "seated",
+      "how": "Let the chin drop toward the chest; let the upper back round slightly.",
+      "cue": "Hands can rest on the back of the head; no pulling.",
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "chin to chest",
+          "moves": [
+            "head.flex",
+            "neck.flex",
+            "trunk.flex"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "N3",
+      "name": "Upper-trapezius stretch",
+      "group": "neck",
+      "kind": "stretch",
+      "position": "seated",
+      "how": "Sit on one hand to hold the shoulder down. Tip the opposite ear toward the opposite shoulder, chin slightly down.",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "ear away, nose slightly toward stretched side",
+          "moves": [
+            "neck.sbc",
+            "neck.roti",
+            "neck.flex",
+            "head.flex",
+            "scapula.dep",
+            "scapula.dnrot"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "N4",
+      "name": "Levator scapulae stretch",
+      "group": "neck",
+      "kind": "stretch",
+      "position": "seated",
+      "how": "Turn the head 45 degrees away and look down toward that armpit. Rest the same-side hand on the back of the head (elbow up).",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "nose toward opposite armpit, hand behind head",
+          "moves": [
+            "neck.sbc",
+            "neck.rotc",
+            "neck.flex",
+            "scapula.dep",
+            "scapula.uprot"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "N5",
+      "name": "Scalene stretch",
+      "group": "neck",
+      "kind": "stretch",
+      "position": "seated",
+      "how": "Hold the collarbone down with the opposite hand, breathe out, then tip the head away.",
+      "cue": "Stop if the arm tingles: that is the brachial plexus, not muscle.",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "ear away, chin up and away (front scalene)",
+          "moves": [
+            "neck.sbc",
+            "neck.ext",
+            "neck.roti",
+            "ribs.exh",
+            "ribs.dep"
+          ]
+        },
+        {
+          "id": "b",
+          "label": "ear away, chin level (middle scalene)",
+          "moves": [
+            "neck.sbc",
+            "ribs.exh",
+            "ribs.dep"
+          ]
+        },
+        {
+          "id": "c",
+          "label": "ear away, chin toward opposite shoulder (back scalene)",
+          "moves": [
+            "neck.sbc",
+            "neck.rotc",
+            "neck.flex",
+            "ribs.exh",
+            "ribs.dep"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "N6",
+      "name": "Sternocleidomastoid stretch",
+      "group": "neck",
+      "kind": "stretch",
+      "position": "seated",
+      "how": "Hold the collarbone down. Tip the head away, turn the face toward the stretched side, then tilt the head back while keeping a slight chin tuck.",
+      "cue": "Small range; move slowly.",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "ear away, turn toward, look up",
+          "moves": [
+            "neck.sbc",
+            "neck.roti",
+            "neck.ext",
+            "head.flex"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "N7",
+      "name": "Neck extension, mouth closed (front of neck)",
+      "group": "neck",
+      "kind": "stretch",
+      "position": "seated",
+      "how": "Sit tall, close the lips and press the tongue to the roof of the mouth, then look up to the ceiling.",
+      "cue": "Keep the jaw closed: that lengthens the muscles under the chin as well.",
+      "hold": "30 s x 2",
+      "variants": [
+        {
+          "id": "a",
+          "label": "look up, lips closed, tongue on palate",
+          "moves": [
+            "neck.ext",
+            "head.ext",
+            "jaw.close"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "N8",
+      "name": "Neck rotation",
+      "group": "neck",
+      "kind": "stretch",
+      "position": "seated",
+      "how": "Turn the head as far as is comfortable to the left, then to the right.",
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "turn the head to the left",
+          "moves": [
+            "neck.roti",
+            "head.roti"
+          ]
+        },
+        {
+          "id": "b",
+          "label": "turn the head to the right",
+          "moves": [
+            "neck.rotc",
+            "head.rotc"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "N9",
+      "name": "Neck side-bend",
+      "group": "neck",
+      "kind": "stretch",
+      "position": "seated",
+      "how": "Tip one ear toward the shoulder without turning the face.",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "ear toward the opposite shoulder",
+          "moves": [
+            "neck.sbc",
+            "head.sbc"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "J1",
+      "name": "Controlled jaw opening",
+      "group": "jaw",
+      "kind": "stretch",
+      "position": "seated",
+      "how": "Rest the tongue on the roof of the mouth and open as far as you can without it leaving; then open fully.",
+      "cue": "No clicking or pain; small range is fine.",
+      "hold": "6 reps x 6 / day (Rocabado)",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "hinge open with tongue on palate, then open fully (the jaw slides forward)",
+          "moves": [
+            "jaw.open",
+            "jaw.fwd"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "J2",
+      "name": "Jaw retrusion",
+      "group": "jaw",
+      "kind": "stretch",
+      "position": "seated",
+      "how": "Teeth slightly apart, gently draw the jaw straight back.",
+      "hold": "5 s x 6",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "teeth slightly apart, jaw drawn straight back",
+          "moves": [
+            "jaw.back",
+            "jaw.close"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "J3",
+      "name": "Side-to-side jaw glide",
+      "group": "jaw",
+      "kind": "stretch",
+      "position": "seated",
+      "how": "Teeth slightly apart (a pencil between the front teeth helps); slide the jaw to the left, then to the right.",
+      "hold": "5 s x 6",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "jaw slides to the left",
+          "moves": [
+            "jaw.lati"
+          ]
+        },
+        {
+          "id": "b",
+          "label": "jaw slides to the right",
+          "moves": [
+            "jaw.latc"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "TG1",
+      "name": "Tongue range",
+      "group": "jaw",
+      "kind": "lengthen",
+      "optIn": true,
+      "position": "seated",
+      "how": "Stick the tongue out and up toward the nose; then curl it back along the roof of the mouth.",
+      "cue": "Lengthens the tongue muscles; not a proven stretch.",
+      "hold": "30 s x 2",
+      "variants": [
+        {
+          "id": "a",
+          "label": "tongue out and up",
+          "moves": [
+            "tongue.out"
+          ]
+        },
+        {
+          "id": "b",
+          "label": "tongue curled back",
+          "moves": [
+            "tongue.back"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F1",
+      "name": "Surprise face",
+      "group": "face",
+      "kind": "lengthen",
+      "optIn": true,
+      "position": "seated",
+      "how": "Raise the eyebrows high and open the eyes wide.",
+      "cue": "Lengthens these muscles by making the opposite expression; there is no evidence it changes them.",
+      "hold": "5 s x 3",
+      "variants": [
+        {
+          "id": "a",
+          "label": "surprise face",
+          "moves": [
+            "face.browsup",
+            "face.eyeswide"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F2",
+      "name": "Frown",
+      "group": "face",
+      "kind": "lengthen",
+      "optIn": true,
+      "position": "seated",
+      "how": "Draw the eyebrows down.",
+      "cue": "Lengthens these muscles by making the opposite expression; there is no evidence it changes them.",
+      "hold": "5 s x 3",
+      "variants": [
+        {
+          "id": "a",
+          "label": "frown",
+          "moves": [
+            "face.browsdown"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F3",
+      "name": "Pucker (long \"O\")",
+      "group": "face",
+      "kind": "lengthen",
+      "optIn": true,
+      "position": "seated",
+      "how": "Push the lips forward into a long O, drawing the mouth corners in.",
+      "cue": "Lengthens these muscles by making the opposite expression; there is no evidence it changes them.",
+      "hold": "5 s x 3",
+      "variants": [
+        {
+          "id": "a",
+          "label": "pucker (long \"o\")",
+          "moves": [
+            "face.pucker"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F4",
+      "name": "Wide smile, mouth open",
+      "group": "face",
+      "kind": "lengthen",
+      "optIn": true,
+      "position": "seated",
+      "how": "Smile as wide as you can with the lips apart, then open the mouth.",
+      "cue": "Lengthens these muscles by making the opposite expression; there is no evidence it changes them.",
+      "hold": "5 s x 3",
+      "variants": [
+        {
+          "id": "a",
+          "label": "wide smile, mouth open",
+          "moves": [
+            "face.smile",
+            "face.lipswide"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F5",
+      "name": "Lower-lip moves (pout, then show the bottom teeth)",
+      "group": "face",
+      "kind": "lengthen",
+      "optIn": true,
+      "position": "seated",
+      "how": "Push the lower lip up and out, then pull it down to show the bottom teeth.",
+      "cue": "Lengthens these muscles by making the opposite expression; there is no evidence it changes them.",
+      "hold": "5 s x 3",
+      "variants": [
+        {
+          "id": "a",
+          "label": "lower-lip moves (pout, then show the bottom teeth)",
+          "moves": [
+            "face.pout",
+            "face.lowerlipdown"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F6",
+      "name": "Nose and cheeks (flare, sniff, puff)",
+      "group": "face",
+      "kind": "lengthen",
+      "optIn": true,
+      "position": "seated",
+      "how": "Flare the nostrils, then sniff them narrow; puff the cheeks with air.",
+      "cue": "Lengthens these muscles by making the opposite expression; there is no evidence it changes them.",
+      "hold": "5 s x 3",
+      "variants": [
+        {
+          "id": "a",
+          "label": "nose and cheeks (flare, sniff, puff)",
+          "moves": [
+            "face.flare",
+            "face.sniff",
+            "face.puff"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E1",
+      "name": "Eye range (look to the eight end points)",
+      "group": "eye",
+      "kind": "lengthen",
+      "optIn": true,
+      "position": "seated",
+      "how": "Keep the head still and move only the eyes to each end point.",
+      "cue": "Lengthens each eye muscle by looking the opposite way; this is range of motion, not a stretch with any known benefit.",
+      "hold": "2 s each",
+      "variants": [
+        {
+          "id": "a",
+          "label": "look up",
+          "moves": [
+            "eye.up"
+          ]
+        },
+        {
+          "id": "b",
+          "label": "look down",
+          "moves": [
+            "eye.down"
+          ]
+        },
+        {
+          "id": "c",
+          "label": "look right",
+          "moves": [
+            "eye.in"
+          ]
+        },
+        {
+          "id": "d",
+          "label": "look left",
+          "moves": [
+            "eye.out"
+          ]
+        },
+        {
+          "id": "e",
+          "label": "look down and to the right",
+          "moves": [
+            "eye.downin"
+          ]
+        },
+        {
+          "id": "f",
+          "label": "look up and to the right",
+          "moves": [
+            "eye.upin"
+          ]
+        },
+        {
+          "id": "g",
+          "label": "look down and to the left",
+          "moves": [
+            "eye.downout"
+          ]
+        },
+        {
+          "id": "h",
+          "label": "look up and to the left",
+          "moves": [
+            "eye.upout"
+          ]
+        },
+        {
+          "id": "i",
+          "label": "close the eyes gently",
+          "moves": [
+            "eye.lidclose"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T1",
+      "name": "Child's pose / rounded back (spinal flexion)",
+      "group": "trunk",
+      "kind": "stretch",
+      "position": "kneeling",
+      "how": "Kneel, sit back toward the heels and walk the hands forward, letting the whole back round.",
+      "cue": "Breathe into the back of the ribs.",
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "sit back on heels, arms forward, back rounded",
+          "moves": [
+            "trunk.flex",
+            "neck.flex",
+            "shoulder.flex",
+            "hip.flex",
+            "scapula.protr",
+            "scapula.uprot"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T2",
+      "name": "Prone press-up (spinal extension)",
+      "group": "trunk",
+      "kind": "stretch",
+      "position": "floor",
+      "how": "Lie face down, hands under the shoulders; press the chest up, letting the hips and belly stay down. Breathe in.",
+      "cue": "Stop if pain travels down a leg.",
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "lying face down, press the chest up, hips down",
+          "moves": [
+            "trunk.ext",
+            "hip.ext",
+            "ribs.inh",
+            "ribs.elev"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T3",
+      "name": "Standing side-bend, arm overhead (breathe out)",
+      "group": "trunk",
+      "kind": "stretch",
+      "position": "standing",
+      "how": "Stand, raise one arm and reach up and over to the other side; breathe out fully at the end.",
+      "cue": "Lengthens the diaphragm and intercostals on the open side as well.",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "reach up and over to the other side, breathe out",
+          "moves": [
+            "trunk.sbc",
+            "shoulder.flex",
+            "shoulder.er",
+            "scapula.uprot",
+            "ribs.exh",
+            "ribs.dep",
+            "hip.add"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T4",
+      "name": "Seated or lying trunk twist",
+      "group": "trunk",
+      "kind": "stretch",
+      "position": "seated",
+      "how": "Sit tall (or lie with knees bent and let them fall to one side) and turn the chest to the left, then to the right.",
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "turn the chest to the left",
+          "moves": [
+            "trunk.roti"
+          ]
+        },
+        {
+          "id": "b",
+          "label": "turn the chest to the right",
+          "moves": [
+            "trunk.rotc"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "B1",
+      "name": "Full breath out",
+      "group": "trunk",
+      "kind": "lengthen",
+      "position": "seated",
+      "how": "Breathe out slowly and completely, letting the ribs sink and the belly draw in.",
+      "cue": "Lengthens the breathing-in muscles; not a proven stretch.",
+      "hold": "3 slow breaths",
+      "variants": [
+        {
+          "id": "a",
+          "label": "empty the lungs fully, ribs down",
+          "moves": [
+            "ribs.exh",
+            "ribs.dep",
+            "trunk.flex"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "B2",
+      "name": "Full breath in",
+      "group": "trunk",
+      "kind": "lengthen",
+      "position": "seated",
+      "how": "Breathe in as fully as you can, letting the ribs widen and the belly relax outward.",
+      "cue": "Lengthens the breathing-out muscles; not a proven stretch.",
+      "hold": "3 slow breaths",
+      "variants": [
+        {
+          "id": "a",
+          "label": "fill the lungs fully, ribs up and out, belly out",
+          "moves": [
+            "ribs.inh",
+            "ribs.elev",
+            "trunk.ext"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PF1",
+      "name": "Deep squat with belly breathing (pelvic floor)",
+      "group": "trunk",
+      "kind": "lengthen",
+      "position": "floor",
+      "how": "Sink into a supported deep squat (or happy baby). On each breath in, let the pelvic floor relax and drop; do not push or strain.",
+      "cue": "Pain, urgency or heaviness: see a pelvic-health physio.",
+      "hold": "5 slow breaths",
+      "variants": [
+        {
+          "id": "a",
+          "label": "deep squat, breathe in and let the pelvic floor drop",
+          "moves": [
+            "pelvic-floor.drop",
+            "hip.flex",
+            "hip.abd"
+          ]
+        },
+        {
+          "id": "b",
+          "label": "happy baby (on your back, knees to armpits)",
+          "moves": [
+            "pelvic-floor.drop",
+            "hip.flex",
+            "hip.abd",
+            "hip.er"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S1",
+      "name": "Doorway chest stretch",
+      "group": "shoulder",
+      "kind": "stretch",
+      "position": "standing",
+      "how": "Forearm on a door frame, step through until the front of the shoulder and chest stretch. Change the arm height to move the stretch.",
+      "cue": "Keep the shoulder blade drawn back, not the arm bone pushed forward.",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "elbow below shoulder (about 60 degrees)",
+          "moves": [
+            "shoulder.hzabd",
+            "shoulder.ext",
+            "shoulder.er",
+            "shoulder.abd",
+            "scapula.retr"
+          ]
+        },
+        {
+          "id": "b",
+          "label": "elbow at shoulder height (90 degrees)",
+          "moves": [
+            "shoulder.hzabd",
+            "shoulder.er",
+            "shoulder.abd",
+            "scapula.retr"
+          ]
+        },
+        {
+          "id": "c",
+          "label": "elbow above shoulder (about 135 degrees)",
+          "moves": [
+            "shoulder.hzabd",
+            "shoulder.flex",
+            "shoulder.er",
+            "shoulder.abd",
+            "scapula.retr",
+            "scapula.elev",
+            "scapula.uprot"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S2",
+      "name": "Cross-body shoulder stretch",
+      "group": "shoulder",
+      "kind": "stretch",
+      "position": "standing",
+      "how": "Bring one arm across the chest and hold it above the elbow with the other hand.",
+      "cue": "Keep the shoulder blade flat (not hitched up).",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "arm across the chest",
+          "moves": [
+            "shoulder.hzadd",
+            "shoulder.flex",
+            "scapula.protr",
+            "shoulder.add"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S3",
+      "name": "Overhead lat stretch",
+      "group": "shoulder",
+      "kind": "stretch",
+      "position": "standing",
+      "how": "Kneel with the elbows on a bench (palms together, elbows bent) and sit the hips back; or hang from a bar.",
+      "cue": "Bending the elbows adds the long head of triceps.",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "arms overhead, palms up, sit hips back and side-bend away",
+          "moves": [
+            "shoulder.flex",
+            "shoulder.er",
+            "shoulder.abd",
+            "scapula.uprot",
+            "scapula.elev",
+            "trunk.sbc",
+            "trunk.flex",
+            "elbow.flex"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S4",
+      "name": "Shoulder internal-rotation stretch (sleeper)",
+      "group": "shoulder",
+      "kind": "stretch",
+      "position": "floor",
+      "how": "Lie on the side with the bottom arm forward at shoulder height, elbow bent; gently press the forearm down.",
+      "cue": "Gentle: it loads the back of the joint capsule too.",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "lying on the side, forearm lowered toward the floor",
+          "moves": [
+            "shoulder.ir",
+            "shoulder.hzadd"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S5",
+      "name": "Shoulder external-rotation stretch",
+      "group": "shoulder",
+      "kind": "stretch",
+      "position": "standing",
+      "how": "Elbow at the side and bent 90 degrees; turn the forearm outward against a door frame or with a stick.",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "elbow at the side, forearm turned out (stick or door frame)",
+          "moves": [
+            "shoulder.er",
+            "shoulder.abd"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S6",
+      "name": "Hands clasped behind the back",
+      "group": "shoulder",
+      "kind": "stretch",
+      "position": "standing",
+      "how": "Clasp the hands behind you with straight elbows and lift them away from the back.",
+      "cue": "Turning the palms down adds biceps.",
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "arms straight behind, palms down, lift",
+          "moves": [
+            "shoulder.ext",
+            "elbow.ext",
+            "forearm.pro",
+            "scapula.retr",
+            "shoulder.add",
+            "shoulder.ir"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S7",
+      "name": "Towel behind the back (shoulder adduction + internal rotation)",
+      "group": "shoulder",
+      "kind": "stretch",
+      "position": "standing",
+      "how": "Hold a towel behind the back; the top hand gently pulls the bottom hand up the spine.",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "hand up the back",
+          "moves": [
+            "shoulder.add",
+            "shoulder.ir",
+            "shoulder.ext",
+            "scapula.dnrot"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S8",
+      "name": "Upper-back round (shoulder blades apart)",
+      "group": "shoulder",
+      "kind": "stretch",
+      "position": "standing",
+      "how": "Wrap the arms around yourself (or hold a post) and round the upper back, letting the shoulder blades slide apart.",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "hug yourself, shoulders down, upper back rounded",
+          "moves": [
+            "scapula.protr",
+            "scapula.dep",
+            "scapula.uprot",
+            "trunk.flex"
+          ]
+        },
+        {
+          "id": "b",
+          "label": "reach across toward the opposite hip, shoulder shrugged",
+          "moves": [
+            "scapula.protr",
+            "scapula.elev",
+            "scapula.dnrot",
+            "shoulder.add"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S9",
+      "name": "Shoulder-blade squeeze down and back",
+      "group": "shoulder",
+      "kind": "stretch",
+      "position": "standing",
+      "how": "Put the back of the hand on the lower back and draw the shoulder blade back and toward the spine.",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "hand behind back, blade squeezed down and in",
+          "moves": [
+            "scapula.retr",
+            "scapula.dnrot",
+            "scapula.dep",
+            "shoulder.ext",
+            "shoulder.add"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S10",
+      "name": "Shoulder shrug back (collarbone up)",
+      "group": "shoulder",
+      "kind": "stretch",
+      "position": "standing",
+      "how": "Shrug the shoulders up and back and breathe in.",
+      "cue": "A gentle range move for subclavius and the lower trapezius.",
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "shrug up and back, breathe in",
+          "moves": [
+            "clavicle.elev",
+            "scapula.elev",
+            "scapula.retr",
+            "ribs.inh"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "A1",
+      "name": "Biceps wall stretch",
+      "group": "arm",
+      "kind": "stretch",
+      "position": "standing",
+      "how": "Place the hand on a wall behind you at shoulder height, thumb down, and turn the body away.",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "hand on wall behind, thumb down, turn away",
+          "moves": [
+            "shoulder.ext",
+            "shoulder.hzabd",
+            "shoulder.abd",
+            "elbow.ext",
+            "forearm.pro"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "A2",
+      "name": "Overhead triceps stretch",
+      "group": "arm",
+      "kind": "stretch",
+      "position": "standing",
+      "how": "Raise the arm, bend the elbow so the hand drops behind the head, and ease the elbow back with the other hand.",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "elbow up, hand down the back",
+          "moves": [
+            "shoulder.flex",
+            "elbow.flex",
+            "scapula.uprot",
+            "shoulder.er"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "A3",
+      "name": "Forearm rotation end range",
+      "group": "arm",
+      "kind": "stretch",
+      "position": "standing",
+      "how": "With the elbow straight, turn the palm up as far as it goes; then turn it down. The other hand can help at the wrist.",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "palm fully up, elbow straight",
+          "moves": [
+            "forearm.sup",
+            "elbow.ext"
+          ]
+        },
+        {
+          "id": "b",
+          "label": "palm fully down, elbow straight",
+          "moves": [
+            "forearm.pro",
+            "elbow.ext"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "A4",
+      "name": "Wrist and finger flexor stretch",
+      "group": "arm",
+      "kind": "stretch",
+      "position": "standing",
+      "how": "Arm straight in front, palm up; with the other hand pull the fingers (and thumb) back.",
+      "cue": "Tipping the hand to each side shifts the stretch between the wrist flexors.",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "elbow straight, palm up, wrist and fingers back",
+          "moves": [
+            "wrist.ext",
+            "fingers.ext",
+            "finger-joints.ext",
+            "elbow.ext",
+            "forearm.sup",
+            "thumb-knuckle.ext",
+            "thumb-tip.ext",
+            "thumb-base.ext"
+          ]
+        },
+        {
+          "id": "b",
+          "label": "same, hand tipped toward the little finger",
+          "moves": [
+            "wrist.ext",
+            "wrist.ud",
+            "elbow.ext",
+            "forearm.sup"
+          ]
+        },
+        {
+          "id": "c",
+          "label": "same, hand tipped toward the thumb",
+          "moves": [
+            "wrist.ext",
+            "wrist.rd",
+            "elbow.ext",
+            "forearm.sup"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "A5",
+      "name": "Wrist and finger extensor stretch",
+      "group": "arm",
+      "kind": "stretch",
+      "position": "standing",
+      "how": "Arm straight in front, palm down; make a loose fist and bend the wrist down with the other hand.",
+      "cue": "Thumb-tucked variant (b) is gentle only: it is also the De Quervain test position.",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "elbow straight, palm down, fist curled, wrist down",
+          "moves": [
+            "wrist.flex",
+            "fingers.flex",
+            "finger-joints.flex",
+            "elbow.ext",
+            "forearm.pro"
+          ]
+        },
+        {
+          "id": "b",
+          "label": "same, hand tipped toward the little finger, thumb tucked",
+          "moves": [
+            "wrist.flex",
+            "wrist.ud",
+            "thumb-base.flex",
+            "thumb-base.add",
+            "thumb-knuckle.flex",
+            "thumb-tip.flex",
+            "elbow.ext"
+          ]
+        },
+        {
+          "id": "c",
+          "label": "same, hand tipped toward the thumb",
+          "moves": [
+            "wrist.flex",
+            "wrist.rd",
+            "elbow.ext"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "H1",
+      "name": "Hand intrinsic stretch (hook fist)",
+      "group": "hand",
+      "kind": "stretch",
+      "position": "seated",
+      "how": "Keep the big knuckles straight and bend the middle and end finger joints (a hook); press gently on the bent fingers.",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "knuckles straight, finger joints bent",
+          "moves": [
+            "fingers.ext",
+            "finger-joints.flex"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "H2",
+      "name": "Finger spread and squeeze",
+      "group": "hand",
+      "kind": "stretch",
+      "position": "seated",
+      "how": "Palm flat on a table, spread the fingers as wide as they go; then press them together and cross them.",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "spread the fingers wide (palm on table)",
+          "moves": [
+            "finger-spread.spread",
+            "fingers.ext"
+          ]
+        },
+        {
+          "id": "b",
+          "label": "squeeze the fingers together and cross them",
+          "moves": [
+            "finger-spread.squeeze"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "H3",
+      "name": "Thumb web-space stretch",
+      "group": "hand",
+      "kind": "stretch",
+      "position": "seated",
+      "how": "Use the other hand to ease the thumb away from the index finger, opening the web space.",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "thumb pulled away from the index finger",
+          "moves": [
+            "thumb-base.abd",
+            "thumb-base.ext",
+            "thumb-knuckle.ext",
+            "finger-spread.spread"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "H4",
+      "name": "Flat palm, thumb and little finger back",
+      "group": "hand",
+      "kind": "stretch",
+      "position": "seated",
+      "how": "Press the palm flat on a table and ease the thumb and little finger back and out of the palm.",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "palm flattened, thumb back and little finger back",
+          "moves": [
+            "palm.flat",
+            "thumb-base.repos",
+            "thumb-base.ext",
+            "thumb-base.add",
+            "thumb-knuckle.ext",
+            "fingers.ext"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P1",
+      "name": "Hamstring stretch (straight-leg raise)",
+      "group": "hip",
+      "kind": "stretch",
+      "position": "floor",
+      "how": "Lie on the back and raise one straight leg with a strap until the back of the thigh stretches.",
+      "cue": "Keep the knee straight and the pelvis down; ankle relaxed (pulling the toes up adds the sciatic nerve: see the sciatic glide).",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "lying on the back, straight leg raised (strap)",
+          "moves": [
+            "hip.flex",
+            "knee.ext"
+          ]
+        },
+        {
+          "id": "b",
+          "label": "same, leg across the midline, foot turned in",
+          "moves": [
+            "hip.flex",
+            "hip.add",
+            "knee.ext",
+            "hip.ir"
+          ]
+        },
+        {
+          "id": "c",
+          "label": "same, leg out to the side, foot turned out",
+          "moves": [
+            "hip.flex",
+            "hip.abd",
+            "knee.ext",
+            "hip.er"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P2",
+      "name": "Standing quad stretch",
+      "group": "hip",
+      "kind": "stretch",
+      "position": "standing",
+      "how": "Stand on one leg (hold something) and draw the heel toward the buttock, knees together.",
+      "cue": "Tuck the pelvis under to add rectus femoris.",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "heel toward buttock, knee pointing down",
+          "moves": [
+            "knee.flex",
+            "hip.ext"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P3",
+      "name": "Half-kneeling hip-flexor stretch",
+      "group": "hip",
+      "kind": "stretch",
+      "position": "kneeling",
+      "how": "Kneel on one knee, tuck the pelvis under and shift forward until the front of the back hip stretches.",
+      "cue": "Do not arch the low back.",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "back knee down, tuck pelvis, shift forward",
+          "moves": [
+            "hip.ext",
+            "trunk.ext",
+            "hip.ir"
+          ]
+        },
+        {
+          "id": "b",
+          "label": "same, arm up and side-bend away",
+          "moves": [
+            "hip.ext",
+            "trunk.sbc",
+            "trunk.ext",
+            "trunk.rotc",
+            "shoulder.flex"
+          ]
+        },
+        {
+          "id": "c",
+          "label": "same, back heel pulled up (couch stretch)",
+          "moves": [
+            "hip.ext",
+            "knee.flex"
+          ]
+        },
+        {
+          "id": "d",
+          "label": "same, back knee out to the side (thigh in)",
+          "moves": [
+            "hip.ext",
+            "hip.add",
+            "hip.er",
+            "knee.ext"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P4",
+      "name": "Butterfly / wide-leg adductor stretch",
+      "group": "hip",
+      "kind": "stretch",
+      "position": "floor",
+      "how": "Sit with the soles together and let the knees fall; then sit with straight legs wide apart and lean forward.",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "sided": false,
+          "label": "soles together, knees down (butterfly)",
+          "moves": [
+            "hip.abd",
+            "hip.er",
+            "hip.flex"
+          ]
+        },
+        {
+          "id": "b",
+          "sided": false,
+          "label": "legs wide, knees straight (straddle)",
+          "moves": [
+            "hip.abd",
+            "knee.ext",
+            "hip.flex"
+          ]
+        },
+        {
+          "id": "c",
+          "label": "side lunge, straight leg turned up",
+          "moves": [
+            "hip.abd",
+            "hip.ext",
+            "knee.ext"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P5",
+      "name": "Figure-4 / pigeon",
+      "group": "hip",
+      "kind": "stretch",
+      "position": "floor",
+      "how": "Lie on the back, cross one ankle over the other knee and pull the bottom thigh toward the opposite shoulder.",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "ankle on the other knee, thigh pulled toward the opposite shoulder",
+          "moves": [
+            "hip.flex",
+            "hip.er",
+            "hip.add"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P6",
+      "name": "Knee to opposite shoulder",
+      "group": "hip",
+      "kind": "stretch",
+      "position": "floor",
+      "how": "Lie on the back and pull one bent knee toward the opposite shoulder.",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "bent knee pulled toward the opposite shoulder",
+          "moves": [
+            "hip.flex",
+            "hip.add",
+            "hip.ir",
+            "knee.flex"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P7",
+      "name": "Hip internal-rotation stretch",
+      "group": "hip",
+      "kind": "stretch",
+      "position": "floor",
+      "how": "Lie on the back with the feet wide and let both knees drop in toward each other.",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "sided": false,
+          "label": "lying, knees bent wide, let both knees fall inward",
+          "moves": [
+            "hip.ir",
+            "hip.add"
+          ]
+        },
+        {
+          "id": "b",
+          "label": "lying face down, thigh slightly out, knee bent, foot falls outward",
+          "moves": [
+            "hip.ir",
+            "hip.ext",
+            "hip.abd"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P8",
+      "name": "Standing cross-behind (outer hip)",
+      "group": "hip",
+      "kind": "stretch",
+      "position": "standing",
+      "how": "Cross the stretched leg behind the other and push that hip out to the side, leaning the trunk away.",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "stretched leg crossed behind, hip pushed out",
+          "moves": [
+            "hip.add",
+            "hip.ext",
+            "hip.er",
+            "trunk.sbc"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C7",
+      "name": "Shin rotation, knee bent",
+      "group": "leg",
+      "kind": "stretch",
+      "sided": true,
+      "position": "seated",
+      "how": "Sit with the knee bent to 90 degrees and the thigh still; turn the foot and shin out, or in, as far as they go.",
+      "cue": "The shin only turns while the knee is bent; with the knee straight the turn comes from the hip.",
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "knee bent, foot and shin turned out",
+          "moves": [
+            "knee.flex:90",
+            "shin.er"
+          ]
+        },
+        {
+          "id": "b",
+          "label": "knee bent, foot and shin turned in",
+          "moves": [
+            "knee.flex:90",
+            "shin.ir"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C1",
+      "name": "Calf stretch, back knee straight",
+      "group": "leg",
+      "kind": "stretch",
+      "position": "standing",
+      "how": "Hands on a wall, step one foot back, keep that knee straight and press the heel down.",
+      "cue": "Point the back foot straight ahead.",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "lunge at a wall, back knee straight, heel down",
+          "moves": [
+            "ankle.df",
+            "knee.ext",
+            "subtalar.ev"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C2",
+      "name": "Calf stretch, back knee bent",
+      "group": "leg",
+      "kind": "stretch",
+      "position": "standing",
+      "how": "From C1, bend the back knee while keeping the heel down; the stretch moves low in the calf.",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "same, back knee bent",
+          "moves": [
+            "ankle.df",
+            "knee.flex",
+            "subtalar.ev"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C3",
+      "name": "Toes-up calf and sole stretch",
+      "group": "leg",
+      "kind": "stretch",
+      "position": "standing",
+      "how": "Put the ball of the foot and toes up against a wall with the heel on the floor; lean in. Then pull the big toe up and out with your hand.",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "toes up against the wall, knee straight",
+          "moves": [
+            "ankle.df",
+            "toes.ext",
+            "toe-joints.ext",
+            "knee.ext",
+            "arch.drop",
+            "subtalar.ev"
+          ]
+        },
+        {
+          "id": "b",
+          "label": "big toe pulled up and out, arch flattened",
+          "moves": [
+            "toes.ext",
+            "toe-joints.ext",
+            "arch.drop",
+            "toe-spread.spread",
+            "ankle.df",
+            "subtalar.ev"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C4",
+      "name": "Shin stretch (top of the foot)",
+      "group": "leg",
+      "kind": "stretch",
+      "position": "kneeling",
+      "how": "Kneel and sit back on the tops of the feet, or stand and rest the top of the curled toes on the floor behind you.",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "foot pointed, toes curled, sole turned out",
+          "moves": [
+            "ankle.pf",
+            "toes.flex",
+            "toe-joints.flex",
+            "subtalar.ev"
+          ]
+        },
+        {
+          "id": "b",
+          "label": "foot pointed, toes curled, sole turned in",
+          "moves": [
+            "ankle.pf",
+            "toes.flex",
+            "toe-joints.flex",
+            "subtalar.inv"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C5",
+      "name": "Ankle roll-in and roll-out",
+      "group": "leg",
+      "kind": "stretch",
+      "position": "seated",
+      "how": "Seated, hold the foot and turn the sole inward, then outward, with the foot pulled up.",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "sole turned in, foot up (outer ankle)",
+          "moves": [
+            "subtalar.inv",
+            "ankle.df"
+          ]
+        },
+        {
+          "id": "b",
+          "label": "sole turned out, foot up (inner ankle)",
+          "moves": [
+            "subtalar.ev",
+            "ankle.df"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C6",
+      "name": "Toe spread and squeeze",
+      "group": "leg",
+      "kind": "stretch",
+      "position": "seated",
+      "how": "Lace the fingers between the toes and spread them; then squeeze the toes together.",
+      "sided": true,
+      "hold": "30 s x 2",
+      "contractRelax": true,
+      "variants": [
+        {
+          "id": "a",
+          "label": "fingers laced between the toes, toes spread",
+          "moves": [
+            "toe-spread.spread"
+          ]
+        },
+        {
+          "id": "b",
+          "label": "toes squeezed together",
+          "moves": [
+            "toe-spread.squeeze"
+          ]
+        }
+      ]
+    }
+  ],
+  "muscles": {
+    "abdominal part of pectoralis major": {
+      "actions": [
+        "shoulder.add",
+        "shoulder.ir",
+        "shoulder.ext",
+        "shoulder.hzadd"
+      ],
+      "stretches": [
+        "S1c",
+        "S3"
+      ]
+    },
+    "clavicular part of pectoralis major": {
+      "actions": [
+        "shoulder.flex",
+        "shoulder.hzadd",
+        "shoulder.ir",
+        "shoulder.add"
+      ],
+      "stretches": [
+        "S1a",
+        "S6"
+      ]
+    },
+    "sternocostal part of pectoralis major": {
+      "actions": [
+        "shoulder.add",
+        "shoulder.hzadd",
+        "shoulder.ir",
+        "shoulder.ext"
+      ],
+      "stretches": [
+        "S1b",
+        "S1c",
+        "S3"
+      ]
+    },
+    "pectoralis minor": {
+      "actions": [
+        "scapula.protr",
+        "scapula.dep",
+        "scapula.dnrot",
+        "ribs.elev"
+      ],
+      "stretches": [
+        "S1c",
+        "S10",
+        "B1"
+      ]
+    },
+    "serratus anterior": {
+      "actions": [
+        "scapula.protr",
+        "scapula.uprot",
+        "ribs.elev"
+      ],
+      "stretches": [
+        "S9",
+        "B1"
+      ]
+    },
+    "subclavius": {
+      "actions": [
+        "clavicle.dep"
+      ],
+      "stretches": [
+        "S10"
+      ]
+    },
+    "diaphragm": {
+      "lengthenOnly": true,
+      "stretches": [
+        "B1",
+        "T3"
+      ],
+      "note": "Breathing out fully (with a side-bend) lengthens it; not a proven stretch."
+    },
+    "external intercostal muscle": {
+      "lengthenOnly": true,
+      "stretches": [
+        "B1",
+        "T3",
+        "T4"
+      ]
+    },
+    "internal intercostal muscle": {
+      "lengthenOnly": true,
+      "stretches": [
+        "B2",
+        "T4"
+      ]
+    },
+    "innermost intercostal muscle": {
+      "lengthenOnly": true,
+      "stretches": [
+        "B2"
+      ]
+    },
+    "transversus thoracis": {
+      "lengthenOnly": true,
+      "stretches": [
+        "B2"
+      ]
+    },
+    "acromial part of deltoid": {
+      "actions": [
+        "shoulder.abd"
+      ],
+      "stretches": [
+        "S2",
+        "S7"
+      ]
+    },
+    "clavicular part of deltoid": {
+      "actions": [
+        "shoulder.flex",
+        "shoulder.ir",
+        "shoulder.hzadd"
+      ],
+      "stretches": [
+        "S1a",
+        "S6",
+        "A1"
+      ]
+    },
+    "spinal part of deltoid": {
+      "actions": [
+        "shoulder.ext",
+        "shoulder.er",
+        "shoulder.hzabd"
+      ],
+      "stretches": [
+        "S2",
+        "S4"
+      ]
+    },
+    "infraspinatus": {
+      "actions": [
+        "shoulder.er",
+        "shoulder.hzabd"
+      ],
+      "stretches": [
+        "S2",
+        "S4"
+      ]
+    },
+    "teres minor": {
+      "actions": [
+        "shoulder.er",
+        "shoulder.hzabd"
+      ],
+      "stretches": [
+        "S2",
+        "S4"
+      ]
+    },
+    "subscapularis": {
+      "actions": [
+        "shoulder.ir",
+        "shoulder.add"
+      ],
+      "stretches": [
+        "S5",
+        "S3"
+      ]
+    },
+    "supraspinatus": {
+      "actions": [
+        "shoulder.abd",
+        "shoulder.er"
+      ],
+      "stretches": [
+        "S7"
+      ]
+    },
+    "teres major": {
+      "actions": [
+        "shoulder.ext",
+        "shoulder.add",
+        "shoulder.ir"
+      ],
+      "stretches": [
+        "S3"
+      ]
+    },
+    "brachialis": {
+      "actions": [
+        "elbow.flex"
+      ],
+      "stretches": [
+        "A3a",
+        "A1"
+      ]
+    },
+    "coracobrachialis": {
+      "actions": [
+        "shoulder.flex",
+        "shoulder.add"
+      ],
+      "stretches": [
+        "S1a",
+        "S6"
+      ]
+    },
+    "long head of biceps brachii": {
+      "actions": [
+        "elbow.flex",
+        "forearm.sup",
+        "shoulder.flex",
+        "shoulder.abd"
+      ],
+      "stretches": [
+        "A1",
+        "S6"
+      ]
+    },
+    "short head of biceps brachii": {
+      "actions": [
+        "elbow.flex",
+        "forearm.sup",
+        "shoulder.flex",
+        "shoulder.add"
+      ],
+      "stretches": [
+        "A1",
+        "S6"
+      ]
+    },
+    "long head of triceps brachii": {
+      "actions": [
+        "elbow.ext",
+        "shoulder.ext",
+        "shoulder.add"
+      ],
+      "stretches": [
+        "A2",
+        "S3"
+      ]
+    },
+    "lateral head of triceps brachii": {
+      "actions": [
+        "elbow.ext"
+      ],
+      "stretches": [
+        "A2"
+      ]
+    },
+    "medial head of triceps brachii": {
+      "actions": [
+        "elbow.ext"
+      ],
+      "stretches": [
+        "A2"
+      ]
+    },
+    "anconeus": {
+      "actions": [
+        "elbow.ext"
+      ],
+      "stretches": [
+        "A2"
+      ]
+    },
+    "abductor pollicis longus": {
+      "actions": [
+        "thumb-base.abd",
+        "thumb-base.ext",
+        "wrist.rd",
+        "wrist.ext"
+      ],
+      "stretches": [
+        "A5b"
+      ]
+    },
+    "brachioradialis": {
+      "actions": [
+        "elbow.flex"
+      ],
+      "stretches": [
+        "A1",
+        "A3a",
+        "A3b"
+      ],
+      "note": "Brings the forearm to thumb-up from either end, so both rotations lengthen it a little."
+    },
+    "extensor carpi radialis brevis": {
+      "actions": [
+        "wrist.ext",
+        "wrist.rd"
+      ],
+      "stretches": [
+        "A5a",
+        "A5b"
+      ]
+    },
+    "extensor carpi radialis longus": {
+      "actions": [
+        "wrist.ext",
+        "wrist.rd",
+        "elbow.flex"
+      ],
+      "stretches": [
+        "A5b"
+      ]
+    },
+    "extensor carpi ulnaris": {
+      "actions": [
+        "wrist.ext",
+        "wrist.ud"
+      ],
+      "stretches": [
+        "A5c"
+      ]
+    },
+    "extensor digiti minimi": {
+      "actions": [
+        "fingers.ext",
+        "finger-joints.ext",
+        "wrist.ext"
+      ],
+      "stretches": [
+        "A5a"
+      ]
+    },
+    "extensor digitorum": {
+      "actions": [
+        "fingers.ext",
+        "finger-joints.ext",
+        "wrist.ext"
+      ],
+      "stretches": [
+        "A5a"
+      ]
+    },
+    "extensor indicis": {
+      "actions": [
+        "fingers.ext",
+        "finger-joints.ext",
+        "wrist.ext"
+      ],
+      "stretches": [
+        "A5a"
+      ]
+    },
+    "extensor pollicis brevis": {
+      "actions": [
+        "thumb-knuckle.ext",
+        "thumb-base.ext",
+        "wrist.rd"
+      ],
+      "stretches": [
+        "A5b"
+      ]
+    },
+    "extensor pollicis longus": {
+      "actions": [
+        "thumb-tip.ext",
+        "thumb-knuckle.ext",
+        "thumb-base.ext",
+        "wrist.ext"
+      ],
+      "stretches": [
+        "A5b"
+      ],
+      "note": "It can also help draw the thumb in toward the index finger."
+    },
+    "flexor carpi radialis": {
+      "actions": [
+        "wrist.flex",
+        "wrist.rd"
+      ],
+      "stretches": [
+        "A4b"
+      ]
+    },
+    "flexor digitorum profundus": {
+      "actions": [
+        "finger-joints.flex",
+        "fingers.flex",
+        "wrist.flex"
+      ],
+      "stretches": [
+        "A4a"
+      ]
+    },
+    "flexor digitorum superficialis": {
+      "actions": [
+        "finger-joints.flex",
+        "fingers.flex",
+        "wrist.flex"
+      ],
+      "stretches": [
+        "A4a"
+      ]
+    },
+    "flexor pollicis longus": {
+      "actions": [
+        "thumb-tip.flex",
+        "thumb-knuckle.flex",
+        "wrist.flex"
+      ],
+      "stretches": [
+        "A4a"
+      ]
+    },
+    "humeral head of flexor carpi ulnaris": {
+      "actions": [
+        "wrist.flex",
+        "wrist.ud",
+        "elbow.flex"
+      ],
+      "stretches": [
+        "A4c"
+      ]
+    },
+    "ulnar head of flexor carpi ulnaris": {
+      "actions": [
+        "wrist.flex",
+        "wrist.ud"
+      ],
+      "stretches": [
+        "A4c"
+      ]
+    },
+    "humeral head of pronator teres": {
+      "actions": [
+        "forearm.pro",
+        "elbow.flex"
+      ],
+      "stretches": [
+        "A3a",
+        "A4a"
+      ]
+    },
+    "ulnar head of pronator teres": {
+      "actions": [
+        "forearm.pro"
+      ],
+      "stretches": [
+        "A3a"
+      ]
+    },
+    "palmaris longus": {
+      "actions": [
+        "wrist.flex"
+      ],
+      "stretches": [
+        "A4a"
+      ]
+    },
+    "pronator quadratus": {
+      "actions": [
+        "forearm.pro"
+      ],
+      "stretches": [
+        "A3a"
+      ]
+    },
+    "supinator": {
+      "actions": [
+        "forearm.sup"
+      ],
+      "stretches": [
+        "A3b"
+      ]
+    },
+    "abductor digiti minimi of hand": {
+      "actions": [
+        "finger-spread.spread",
+        "fingers.flex"
+      ],
+      "stretches": [
+        "H2b",
+        "H4"
+      ],
+      "note": "Squeeze the little finger in, with the knuckle straight."
+    },
+    "abductor pollicis brevis": {
+      "actions": [
+        "thumb-base.abd",
+        "thumb-knuckle.flex",
+        "thumb-base.opp"
+      ],
+      "stretches": [
+        "H4"
+      ]
+    },
+    "flexor digiti minimi brevis of hand": {
+      "actions": [
+        "fingers.flex"
+      ],
+      "stretches": [
+        "H4"
+      ]
+    },
+    "flexor pollicis brevis": {
+      "actions": [
+        "thumb-knuckle.flex",
+        "thumb-base.flex",
+        "thumb-base.opp"
+      ],
+      "stretches": [
+        "H4"
+      ]
+    },
+    "superficial head of flexor pollicis brevis": {
+      "actions": [
+        "thumb-knuckle.flex",
+        "thumb-base.flex",
+        "thumb-base.opp"
+      ],
+      "stretches": [
+        "H4"
+      ]
+    },
+    "oblique head of adductor pollicis": {
+      "actions": [
+        "thumb-base.add"
+      ],
+      "stretches": [
+        "H3"
+      ]
+    },
+    "transverse head of adductor pollicis": {
+      "actions": [
+        "thumb-base.add"
+      ],
+      "stretches": [
+        "H3"
+      ]
+    },
+    "opponens digiti minimi of hand": {
+      "actions": [
+        "palm.cup"
+      ],
+      "stretches": [
+        "H4"
+      ]
+    },
+    "opponens pollicis": {
+      "actions": [
+        "thumb-base.opp",
+        "thumb-base.flex"
+      ],
+      "stretches": [
+        "H4"
+      ]
+    },
+    "set of dorsal interossei of hand": {
+      "actions": [
+        "finger-spread.spread",
+        "fingers.flex",
+        "finger-joints.ext"
+      ],
+      "stretches": [
+        "H2b",
+        "H1"
+      ]
+    },
+    "set of palmar interossei of hand": {
+      "actions": [
+        "finger-spread.squeeze",
+        "fingers.flex",
+        "finger-joints.ext"
+      ],
+      "stretches": [
+        "H2a",
+        "H1"
+      ]
+    },
+    "set of lumbricals of hand": {
+      "actions": [
+        "fingers.flex",
+        "finger-joints.ext"
+      ],
+      "stretches": [
+        "H1"
+      ]
+    },
+    "descending part of trapezius": {
+      "actions": [
+        "scapula.elev",
+        "scapula.uprot",
+        "neck.sbi",
+        "neck.rotc",
+        "neck.ext"
+      ],
+      "stretches": [
+        "N3"
+      ]
+    },
+    "transverse part of trapezius": {
+      "actions": [
+        "scapula.retr"
+      ],
+      "stretches": [
+        "S8a"
+      ]
+    },
+    "ascending part of trapezius": {
+      "actions": [
+        "scapula.dep",
+        "scapula.uprot"
+      ],
+      "stretches": [
+        "S8b"
+      ]
+    },
+    "latissimus dorsi": {
+      "actions": [
+        "shoulder.ext",
+        "shoulder.add",
+        "shoulder.ir",
+        "trunk.sbi"
+      ],
+      "stretches": [
+        "S3",
+        "T3"
+      ]
+    },
+    "rhomboid major": {
+      "actions": [
+        "scapula.retr",
+        "scapula.elev",
+        "scapula.dnrot"
+      ],
+      "stretches": [
+        "S8a"
+      ]
+    },
+    "rhomboid minor": {
+      "actions": [
+        "scapula.retr",
+        "scapula.elev",
+        "scapula.dnrot"
+      ],
+      "stretches": [
+        "S8a"
+      ]
+    },
+    "iliocostalis cervicis": {
+      "actions": [
+        "neck.ext",
+        "neck.sbi"
+      ],
+      "stretches": [
+        "N2",
+        "N9"
+      ]
+    },
+    "iliocostalis thoracis": {
+      "actions": [
+        "trunk.ext",
+        "trunk.sbi"
+      ],
+      "stretches": [
+        "T1",
+        "T3"
+      ]
+    },
+    "iliocostalis lumborum": {
+      "actions": [
+        "trunk.ext",
+        "trunk.sbi"
+      ],
+      "stretches": [
+        "T1",
+        "T3"
+      ]
+    },
+    "longissimus capitis": {
+      "actions": [
+        "head.ext",
+        "neck.ext",
+        "neck.roti"
+      ],
+      "stretches": [
+        "N2",
+        "N8"
+      ]
+    },
+    "longissimus cervicis": {
+      "actions": [
+        "neck.ext",
+        "neck.sbi"
+      ],
+      "stretches": [
+        "N2",
+        "N9"
+      ]
+    },
+    "longissimus thoracis": {
+      "actions": [
+        "trunk.ext",
+        "trunk.sbi"
+      ],
+      "stretches": [
+        "T1",
+        "T3"
+      ]
+    },
+    "spinalis cervicis": {
+      "actions": [
+        "neck.ext"
+      ],
+      "stretches": [
+        "N2"
+      ]
+    },
+    "spinalis thoracis": {
+      "actions": [
+        "trunk.ext"
+      ],
+      "stretches": [
+        "T1"
+      ]
+    },
+    "semispinalis capitis": {
+      "actions": [
+        "head.ext",
+        "neck.ext",
+        "neck.rotc"
+      ],
+      "stretches": [
+        "N2",
+        "N8"
+      ]
+    },
+    "semispinalis cervicis": {
+      "actions": [
+        "neck.ext",
+        "neck.rotc"
+      ],
+      "stretches": [
+        "N2",
+        "N8"
+      ]
+    },
+    "semispinalis thoracis": {
+      "actions": [
+        "trunk.ext",
+        "trunk.rotc"
+      ],
+      "stretches": [
+        "T1",
+        "T4"
+      ]
+    },
+    "multifidus cervicis": {
+      "actions": [
+        "neck.ext",
+        "neck.rotc"
+      ],
+      "stretches": [
+        "N2",
+        "N8"
+      ]
+    },
+    "multifidus thoracis": {
+      "actions": [
+        "trunk.ext",
+        "trunk.rotc"
+      ],
+      "stretches": [
+        "T1",
+        "T4"
+      ]
+    },
+    "multifidus lumborum": {
+      "actions": [
+        "trunk.ext"
+      ],
+      "stretches": [
+        "T1"
+      ]
+    },
+    "cervical rotator": {
+      "actions": [
+        "neck.rotc",
+        "neck.ext"
+      ],
+      "stretches": [
+        "N8",
+        "N2"
+      ]
+    },
+    "thoracic rotator": {
+      "actions": [
+        "trunk.rotc",
+        "trunk.ext"
+      ],
+      "stretches": [
+        "T4",
+        "T1"
+      ]
+    },
+    "lumbar rotator": {
+      "actions": [
+        "trunk.rotc",
+        "trunk.ext"
+      ],
+      "stretches": [
+        "T4",
+        "T1"
+      ],
+      "note": "Mostly a position sensor; a twist lengthens it only slightly."
+    },
+    "interspinalis thoracis": {
+      "actions": [
+        "trunk.ext"
+      ],
+      "stretches": [
+        "T1"
+      ]
+    },
+    "set of interspinales lumborum": {
+      "actions": [
+        "trunk.ext"
+      ],
+      "stretches": [
+        "T1"
+      ]
+    },
+    "lateral lumbar intertransversarius": {
+      "actions": [
+        "trunk.sbi"
+      ],
+      "stretches": [
+        "T3"
+      ]
+    },
+    "medial lumbar intertransversarius": {
+      "actions": [
+        "trunk.sbi"
+      ],
+      "stretches": [
+        "T3"
+      ]
+    },
+    "quadratus lumborum": {
+      "actions": [
+        "trunk.sbi",
+        "trunk.ext",
+        "ribs.dep"
+      ],
+      "stretches": [
+        "T3",
+        "T1",
+        "B2"
+      ]
+    },
+    "serratus posterior inferior": {
+      "actions": [
+        "ribs.dep"
+      ],
+      "stretches": [
+        "B2",
+        "T3"
+      ]
+    },
+    "serratus posterior superior": {
+      "actions": [
+        "ribs.elev"
+      ],
+      "stretches": [
+        "B1"
+      ]
+    },
+    "set of levatores costarum breves": {
+      "actions": [
+        "ribs.elev",
+        "trunk.sbi",
+        "trunk.rotc"
+      ],
+      "stretches": [
+        "B1",
+        "T3",
+        "T4"
+      ]
+    },
+    "set of levatores costarum longi": {
+      "actions": [
+        "ribs.elev",
+        "trunk.sbi",
+        "trunk.rotc"
+      ],
+      "stretches": [
+        "B1",
+        "T3",
+        "T4"
+      ]
+    },
+    "levator scapulae": {
+      "actions": [
+        "scapula.elev",
+        "scapula.dnrot",
+        "neck.sbi",
+        "neck.roti"
+      ],
+      "stretches": [
+        "N4"
+      ]
+    },
+    "sternocleidomastoid": {
+      "actions": [
+        "neck.sbi",
+        "neck.rotc",
+        "neck.flex",
+        "head.ext"
+      ],
+      "stretches": [
+        "N6"
+      ]
+    },
+    "scalenus anterior": {
+      "actions": [
+        "ribs.elev",
+        "neck.sbi",
+        "neck.flex",
+        "neck.rotc"
+      ],
+      "stretches": [
+        "N5a"
+      ]
+    },
+    "scalenus medius": {
+      "actions": [
+        "ribs.elev",
+        "neck.sbi"
+      ],
+      "stretches": [
+        "N5b"
+      ]
+    },
+    "scalenus posterior": {
+      "actions": [
+        "ribs.elev",
+        "neck.sbi",
+        "neck.ext"
+      ],
+      "stretches": [
+        "N5c"
+      ]
+    },
+    "splenius capitis": {
+      "actions": [
+        "head.ext",
+        "neck.ext",
+        "neck.roti"
+      ],
+      "stretches": [
+        "N2",
+        "N8"
+      ]
+    },
+    "splenius cervicis": {
+      "actions": [
+        "neck.ext",
+        "neck.roti"
+      ],
+      "stretches": [
+        "N2",
+        "N8"
+      ]
+    },
+    "rectus capitis posterior major": {
+      "actions": [
+        "head.ext",
+        "head.roti"
+      ],
+      "stretches": [
+        "N1",
+        "N8"
+      ]
+    },
+    "rectus capitis posterior minor": {
+      "actions": [
+        "head.ext"
+      ],
+      "stretches": [
+        "N1"
+      ]
+    },
+    "obliquus capitis superior": {
+      "actions": [
+        "head.ext",
+        "head.sbi"
+      ],
+      "stretches": [
+        "N1",
+        "N9"
+      ]
+    },
+    "obliquus capitis inferior": {
+      "actions": [
+        "head.roti"
+      ],
+      "stretches": [
+        "N8"
+      ]
+    },
+    "rectus capitis anterior": {
+      "actions": [
+        "head.flex"
+      ],
+      "stretches": [
+        "N7"
+      ]
+    },
+    "rectus capitis lateralis": {
+      "actions": [
+        "head.sbi"
+      ],
+      "stretches": [
+        "N9"
+      ]
+    },
+    "longus capitis": {
+      "actions": [
+        "head.flex",
+        "neck.flex"
+      ],
+      "stretches": [
+        "N7"
+      ]
+    },
+    "inferior oblique part of longus colli": {
+      "actions": [
+        "neck.flex",
+        "neck.rotc"
+      ],
+      "stretches": [
+        "N7",
+        "N8"
+      ]
+    },
+    "superior oblique part of longus colli": {
+      "actions": [
+        "neck.flex",
+        "neck.roti"
+      ],
+      "stretches": [
+        "N7",
+        "N8"
+      ]
+    },
+    "vertical intermediate part of longus colli": {
+      "actions": [
+        "neck.flex"
+      ],
+      "stretches": [
+        "N7"
+      ]
+    },
+    "set of anterior cervical intertransversarii": {
+      "actions": [
+        "neck.sbi"
+      ],
+      "stretches": [
+        "N9"
+      ]
+    },
+    "set of posterior cervical intertransversarii": {
+      "actions": [
+        "neck.sbi"
+      ],
+      "stretches": [
+        "N9"
+      ]
+    },
+    "set of interspinales cervicis": {
+      "actions": [
+        "neck.ext"
+      ],
+      "stretches": [
+        "N2"
+      ]
+    },
+    "platysma": {
+      "lengthenOnly": true,
+      "stretches": [
+        "N7",
+        "F4"
+      ],
+      "note": "Pulls the mouth corners and lower lip down: smiling widely while looking up lengthens it."
+    },
+    "digastric": {
+      "lengthenOnly": true,
+      "stretches": [
+        "N7"
+      ],
+      "note": "Lengthened by closing the jaw and looking up, which draws the hyoid down; no source describes a stretch for it."
+    },
+    "geniohyoid": {
+      "lengthenOnly": true,
+      "stretches": [
+        "N7"
+      ],
+      "note": "Lengthened by closing the jaw and looking up, which draws the hyoid down; no source describes a stretch for it."
+    },
+    "mylohyoid": {
+      "lengthenOnly": true,
+      "stretches": [
+        "N7"
+      ],
+      "note": "Lengthened by closing the jaw and looking up, which draws the hyoid down; no source describes a stretch for it."
+    },
+    "stylohyoid": {
+      "lengthenOnly": true,
+      "stretches": [
+        "N7"
+      ],
+      "note": "Lengthened by closing the jaw and looking up, which draws the hyoid down; no source describes a stretch for it."
+    },
+    "omohyoid": {
+      "lengthenOnly": true,
+      "stretches": [
+        "N7"
+      ],
+      "note": "Looking up lengthens the front of the neck a little; no source describes a stretch for it."
+    },
+    "sternohyoid": {
+      "actions": [
+        "neck.flex"
+      ],
+      "stretches": [
+        "N7"
+      ],
+      "note": "It also pulls the hyoid down. Extend the neck gently and slowly."
+    },
+    "sternothyroid": {
+      "lengthenOnly": true,
+      "stretches": [
+        "N7"
+      ],
+      "note": "Looking up lengthens the front of the neck a little; no source describes a stretch for it."
+    },
+    "thyrohyoid": {
+      "lengthenOnly": true,
+      "stretches": [
+        "N7"
+      ],
+      "note": "Looking up lengthens the front of the neck a little; no source describes a stretch for it."
+    },
+    "superficial part of masseter": {
+      "actions": [
+        "jaw.close",
+        "jaw.fwd"
+      ],
+      "stretches": [
+        "J1",
+        "J2"
+      ]
+    },
+    "deep part of masseter": {
+      "actions": [
+        "jaw.close",
+        "jaw.back"
+      ],
+      "stretches": [
+        "J1"
+      ]
+    },
+    "medial pterygoid": {
+      "actions": [
+        "jaw.close",
+        "jaw.fwd",
+        "jaw.latc"
+      ],
+      "stretches": [
+        "J1",
+        "J2",
+        "J3"
+      ]
+    },
+    "inferior head of lateral pterygoid": {
+      "actions": [
+        "jaw.fwd",
+        "jaw.open",
+        "jaw.latc"
+      ],
+      "stretches": [
+        "J2",
+        "J3"
+      ]
+    },
+    "superior head of lateral pterygoid": {
+      "actions": [
+        "jaw.fwd"
+      ],
+      "stretches": [
+        "J2"
+      ],
+      "note": "Steadies the disc; retrusion lengthens it."
+    },
+    "temporalis": {
+      "actions": [
+        "jaw.close",
+        "jaw.back",
+        "jaw.lati"
+      ],
+      "stretches": [
+        "J1",
+        "J3"
+      ]
+    },
+    "genioglossus": {
+      "lengthenOnly": true,
+      "stretches": [
+        "TG1b"
+      ]
+    },
+    "hyoglossus": {
+      "lengthenOnly": true,
+      "stretches": [
+        "TG1a"
+      ]
+    },
+    "frontalis": {
+      "lengthenOnly": true,
+      "stretches": [
+        "F2"
+      ]
+    },
+    "occipitalis": {
+      "lengthenOnly": true,
+      "stretches": [
+        "F1"
+      ]
+    },
+    "temporoparietalis": {
+      "lengthenOnly": true,
+      "stretches": [
+        "F2"
+      ],
+      "note": "Barely moves the scalp; frowning lengthens it slightly."
+    },
+    "corrugator supercilii": {
+      "lengthenOnly": true,
+      "stretches": [
+        "F1"
+      ]
+    },
+    "procerus": {
+      "lengthenOnly": true,
+      "stretches": [
+        "F1"
+      ]
+    },
+    "orbital part of orbicularis oculi": {
+      "lengthenOnly": true,
+      "stretches": [
+        "F1"
+      ]
+    },
+    "palpebral part of orbicularis oculi": {
+      "lengthenOnly": true,
+      "stretches": [
+        "F1"
+      ]
+    },
+    "zygomaticus major": {
+      "lengthenOnly": true,
+      "stretches": [
+        "F3"
+      ]
+    },
+    "zygomaticus minor": {
+      "lengthenOnly": true,
+      "stretches": [
+        "F3"
+      ]
+    },
+    "risorius": {
+      "lengthenOnly": true,
+      "stretches": [
+        "F3"
+      ]
+    },
+    "levator anguli oris": {
+      "lengthenOnly": true,
+      "stretches": [
+        "F3"
+      ]
+    },
+    "levator labii superioris": {
+      "lengthenOnly": true,
+      "stretches": [
+        "F3"
+      ]
+    },
+    "levator labii superioris alaeque nasi": {
+      "lengthenOnly": true,
+      "stretches": [
+        "F3",
+        "F6"
+      ]
+    },
+    "buccinator": {
+      "lengthenOnly": true,
+      "stretches": [
+        "F6"
+      ]
+    },
+    "orbicularis oris": {
+      "lengthenOnly": true,
+      "stretches": [
+        "F4"
+      ]
+    },
+    "depressor anguli oris": {
+      "lengthenOnly": true,
+      "stretches": [
+        "F4"
+      ]
+    },
+    "depressor labii inferioris": {
+      "lengthenOnly": true,
+      "stretches": [
+        "F5"
+      ]
+    },
+    "mentalis": {
+      "lengthenOnly": true,
+      "stretches": [
+        "F5"
+      ]
+    },
+    "nasalis": {
+      "lengthenOnly": true,
+      "stretches": [
+        "F6"
+      ]
+    },
+    "depressor septi nasi": {
+      "lengthenOnly": true,
+      "stretches": [
+        "F6"
+      ],
+      "note": "Pulls the nose tip down (sources disagree whether it widens or narrows the nostril); the range is tiny."
+    },
+    "superior rectus": {
+      "lengthenOnly": true,
+      "stretches": [
+        "E1b",
+        "E1g",
+        "E1e"
+      ]
+    },
+    "inferior rectus": {
+      "lengthenOnly": true,
+      "stretches": [
+        "E1a",
+        "E1h",
+        "E1f"
+      ]
+    },
+    "medial rectus": {
+      "lengthenOnly": true,
+      "stretches": [
+        "E1d",
+        "E1c"
+      ]
+    },
+    "lateral rectus": {
+      "lengthenOnly": true,
+      "stretches": [
+        "E1c",
+        "E1d"
+      ]
+    },
+    "superior oblique": {
+      "lengthenOnly": true,
+      "stretches": [
+        "E1f",
+        "E1h"
+      ]
+    },
+    "inferior oblique": {
+      "lengthenOnly": true,
+      "stretches": [
+        "E1e",
+        "E1g"
+      ]
+    },
+    "levator palpebrae superioris": {
+      "lengthenOnly": true,
+      "stretches": [
+        "E1i",
+        "E1b"
+      ]
+    },
+    "common tendinous ring": {
+      "cannot": "A ring of tendon that anchors the four rectus muscles; it does not contract or lengthen."
+    },
+    "rectus abdominis": {
+      "actions": [
+        "trunk.flex",
+        "ribs.dep"
+      ],
+      "stretches": [
+        "T2",
+        "B2"
+      ]
+    },
+    "external oblique": {
+      "actions": [
+        "trunk.flex",
+        "trunk.sbi",
+        "trunk.rotc",
+        "ribs.dep"
+      ],
+      "stretches": [
+        "T2",
+        "T3",
+        "T4"
+      ]
+    },
+    "internal oblique": {
+      "actions": [
+        "trunk.flex",
+        "trunk.sbi",
+        "trunk.roti",
+        "ribs.dep"
+      ],
+      "stretches": [
+        "T2",
+        "T3",
+        "T4"
+      ]
+    },
+    "transversus abdominis": {
+      "lengthenOnly": true,
+      "stretches": [
+        "B2"
+      ],
+      "note": "Only compresses the belly; a full breath in with the belly relaxed lengthens it."
+    },
+    "pyramidalis": {
+      "lengthenOnly": true,
+      "stretches": [
+        "T2"
+      ],
+      "note": "Tenses the midline seam; trunk extension lengthens it slightly."
+    },
+    "psoas major": {
+      "actions": [
+        "hip.flex",
+        "trunk.flex",
+        "trunk.sbi"
+      ],
+      "stretches": [
+        "P3a",
+        "P3b"
+      ]
+    },
+    "iliacus": {
+      "actions": [
+        "hip.flex"
+      ],
+      "stretches": [
+        "P3a"
+      ]
+    },
+    "coccygeus": {
+      "lengthenOnly": true,
+      "stretches": [
+        "PF1"
+      ]
+    },
+    "iliococcygeus": {
+      "lengthenOnly": true,
+      "stretches": [
+        "PF1"
+      ]
+    },
+    "pubococcygeus": {
+      "lengthenOnly": true,
+      "stretches": [
+        "PF1"
+      ]
+    },
+    "puborectalis": {
+      "lengthenOnly": true,
+      "stretches": [
+        "PF1"
+      ]
+    },
+    "external anal sphincter": {
+      "cannot": "A ring-shaped sphincter: it can only relax (as in a reverse Kegel), not be stretched by a position; deliberate stretching is a clinical procedure."
+    },
+    "gluteus maximus": {
+      "actions": [
+        "hip.ext",
+        "hip.er",
+        "hip.abd"
+      ],
+      "stretches": [
+        "P6",
+        "P7a",
+        "T1"
+      ]
+    },
+    "gluteus medius": {
+      "actions": [
+        "hip.abd",
+        "hip.ir",
+        "hip.er"
+      ],
+      "stretches": [
+        "P8",
+        "P7a"
+      ],
+      "note": "Front fibres turn the thigh in, back fibres turn it out."
+    },
+    "gluteus minimus": {
+      "actions": [
+        "hip.abd",
+        "hip.ir"
+      ],
+      "stretches": [
+        "P8"
+      ]
+    },
+    "tensor fasciae latae": {
+      "actions": [
+        "hip.flex",
+        "hip.abd",
+        "hip.ir"
+      ],
+      "stretches": [
+        "P8",
+        "P3d"
+      ]
+    },
+    "piriformis": {
+      "actions": [
+        "hip.er",
+        "hip.abd"
+      ],
+      "stretches": [
+        "P5",
+        "P7a",
+        "P6"
+      ],
+      "note": "Turns the thigh out with the hip straight but in when it is bent past about 90 degrees, so it is stretched by turning in (hip straight) or out (hip bent)."
+    },
+    "gemellus superior": {
+      "actions": [
+        "hip.er"
+      ],
+      "stretches": [
+        "P7a",
+        "P7b"
+      ]
+    },
+    "gemellus inferior": {
+      "actions": [
+        "hip.er"
+      ],
+      "stretches": [
+        "P7a",
+        "P7b"
+      ]
+    },
+    "obturator internus": {
+      "actions": [
+        "hip.er"
+      ],
+      "stretches": [
+        "P7a",
+        "P7b"
+      ]
+    },
+    "obturator externus": {
+      "actions": [
+        "hip.er",
+        "hip.add"
+      ],
+      "stretches": [
+        "P7b"
+      ]
+    },
+    "quadratus femoris": {
+      "actions": [
+        "hip.er",
+        "hip.add"
+      ],
+      "stretches": [
+        "P7b",
+        "P4a"
+      ]
+    },
+    "adductor brevis": {
+      "actions": [
+        "hip.add",
+        "hip.flex"
+      ],
+      "stretches": [
+        "P4c"
+      ]
+    },
+    "adductor longus": {
+      "actions": [
+        "hip.add",
+        "hip.flex"
+      ],
+      "stretches": [
+        "P4c"
+      ]
+    },
+    "adductor magnus": {
+      "actions": [
+        "hip.add",
+        "hip.ext"
+      ],
+      "stretches": [
+        "P4a",
+        "P4b"
+      ]
+    },
+    "adductor minimus": {
+      "actions": [
+        "hip.add",
+        "hip.er"
+      ],
+      "stretches": [
+        "P4a",
+        "P7a"
+      ]
+    },
+    "gracilis": {
+      "actions": [
+        "hip.add",
+        "knee.flex",
+        "hip.flex"
+      ],
+      "stretches": [
+        "P4b",
+        "P1c",
+        "P4c"
+      ]
+    },
+    "pectineus": {
+      "actions": [
+        "hip.add",
+        "hip.flex"
+      ],
+      "stretches": [
+        "P4c",
+        "P3a"
+      ]
+    },
+    "rectus femoris": {
+      "actions": [
+        "knee.ext",
+        "hip.flex"
+      ],
+      "stretches": [
+        "P3c",
+        "P2"
+      ]
+    },
+    "vastus intermedius": {
+      "actions": [
+        "knee.ext"
+      ],
+      "stretches": [
+        "P2"
+      ]
+    },
+    "vastus lateralis": {
+      "actions": [
+        "knee.ext"
+      ],
+      "stretches": [
+        "P2"
+      ]
+    },
+    "vastus medialis": {
+      "actions": [
+        "knee.ext"
+      ],
+      "stretches": [
+        "P2"
+      ]
+    },
+    "sartorius": {
+      "actions": [
+        "hip.flex",
+        "hip.abd",
+        "hip.er",
+        "knee.flex"
+      ],
+      "stretches": [
+        "P3d",
+        "P3a"
+      ]
+    },
+    "semitendinosus": {
+      "actions": [
+        "knee.flex",
+        "hip.ext",
+        "shin.ir"
+      ],
+      "stretches": [
+        "P1a",
+        "C7a"
+      ]
+    },
+    "semimembranosus": {
+      "actions": [
+        "knee.flex",
+        "hip.ext",
+        "shin.ir"
+      ],
+      "stretches": [
+        "P1a",
+        "C7a"
+      ]
+    },
+    "long head of biceps femoris": {
+      "actions": [
+        "knee.flex",
+        "hip.ext",
+        "shin.er"
+      ],
+      "stretches": [
+        "P1a",
+        "P1b",
+        "C7b"
+      ]
+    },
+    "short head of biceps femoris": {
+      "actions": [
+        "knee.flex",
+        "shin.er"
+      ],
+      "stretches": [
+        "P1b",
+        "C7b"
+      ]
+    },
+    "lateral head of gastrocnemius": {
+      "actions": [
+        "ankle.pf",
+        "knee.flex"
+      ],
+      "stretches": [
+        "C1"
+      ]
+    },
+    "medial head of gastrocnemius": {
+      "actions": [
+        "ankle.pf",
+        "knee.flex"
+      ],
+      "stretches": [
+        "C1"
+      ]
+    },
+    "plantaris": {
+      "actions": [
+        "ankle.pf",
+        "knee.flex"
+      ],
+      "stretches": [
+        "C1"
+      ]
+    },
+    "soleus": {
+      "actions": [
+        "ankle.pf"
+      ],
+      "stretches": [
+        "C2"
+      ]
+    },
+    "calcaneal tendon": {
+      "actions": [
+        "ankle.pf"
+      ],
+      "stretches": [
+        "C1",
+        "C2"
+      ],
+      "note": "A tendon, lengthened with the calf muscles."
+    },
+    "popliteus": {
+      "actions": [
+        "shin.ir",
+        "knee.flex"
+      ],
+      "stretches": [
+        "P1c",
+        "C7a"
+      ]
+    },
+    "tibialis anterior": {
+      "actions": [
+        "ankle.df",
+        "subtalar.inv"
+      ],
+      "stretches": [
+        "C4a"
+      ]
+    },
+    "tibialis posterior": {
+      "actions": [
+        "ankle.pf",
+        "subtalar.inv"
+      ],
+      "stretches": [
+        "C5b",
+        "C2"
+      ]
+    },
+    "extensor digitorum longus": {
+      "actions": [
+        "toes.ext",
+        "toe-joints.ext",
+        "ankle.df",
+        "subtalar.ev"
+      ],
+      "stretches": [
+        "C4b"
+      ]
+    },
+    "extensor hallucis longus": {
+      "actions": [
+        "toes.ext",
+        "toe-joints.ext",
+        "ankle.df"
+      ],
+      "stretches": [
+        "C4a"
+      ]
+    },
+    "fibularis tertius": {
+      "actions": [
+        "ankle.df",
+        "subtalar.ev"
+      ],
+      "stretches": [
+        "C4b"
+      ]
+    },
+    "fibularis longus": {
+      "actions": [
+        "ankle.pf",
+        "subtalar.ev"
+      ],
+      "stretches": [
+        "C5a"
+      ],
+      "note": "Also braces the arches."
+    },
+    "fibularis brevis": {
+      "actions": [
+        "ankle.pf",
+        "subtalar.ev"
+      ],
+      "stretches": [
+        "C5a"
+      ]
+    },
+    "flexor digitorum longus": {
+      "actions": [
+        "toes.flex",
+        "toe-joints.flex",
+        "ankle.pf",
+        "subtalar.inv"
+      ],
+      "stretches": [
+        "C3a"
+      ]
+    },
+    "flexor hallucis longus": {
+      "actions": [
+        "toes.flex",
+        "toe-joints.flex",
+        "ankle.pf"
+      ],
+      "stretches": [
+        "C3a",
+        "C3b"
+      ]
+    },
+    "abductor digiti minimi of foot": {
+      "actions": [
+        "toe-spread.spread",
+        "toes.flex"
+      ],
+      "stretches": [
+        "C6b",
+        "C3a"
+      ]
+    },
+    "abductor hallucis": {
+      "actions": [
+        "toe-spread.spread",
+        "toes.flex",
+        "arch.lift"
+      ],
+      "stretches": [
+        "C6b",
+        "C3b"
+      ]
+    },
+    "extensor digitorum brevis": {
+      "actions": [
+        "toes.ext",
+        "toe-joints.ext"
+      ],
+      "stretches": [
+        "C4a"
+      ]
+    },
+    "extensor hallucis brevis": {
+      "actions": [
+        "toes.ext"
+      ],
+      "stretches": [
+        "C4a"
+      ]
+    },
+    "flexor accessorius": {
+      "actions": [
+        "toe-joints.flex"
+      ],
+      "stretches": [
+        "C3a"
+      ]
+    },
+    "flexor digitorum brevis": {
+      "actions": [
+        "toes.flex",
+        "toe-joints.flex",
+        "arch.lift"
+      ],
+      "stretches": [
+        "C3a"
+      ]
+    },
+    "flexor digiti minimi brevis of foot": {
+      "actions": [
+        "toes.flex"
+      ],
+      "stretches": [
+        "C3a"
+      ]
+    },
+    "lateral head of flexor hallucis brevis": {
+      "actions": [
+        "toes.flex"
+      ],
+      "stretches": [
+        "C3b"
+      ]
+    },
+    "medial head of flexor hallucis brevis": {
+      "actions": [
+        "toes.flex"
+      ],
+      "stretches": [
+        "C3b"
+      ]
+    },
+    "oblique head of adductor hallucis": {
+      "actions": [
+        "toe-spread.squeeze",
+        "arch.lift"
+      ],
+      "stretches": [
+        "C3b",
+        "C6a"
+      ]
+    },
+    "transverse head of adductor hallucis": {
+      "actions": [
+        "toe-spread.squeeze"
+      ],
+      "stretches": [
+        "C6a"
+      ]
+    },
+    "opponens digiti minimi of foot": {
+      "actions": [
+        "arch.lift"
+      ],
+      "stretches": [
+        "C3a"
+      ]
+    },
+    "first lumbrical of foot": {
+      "actions": [
+        "toes.flex",
+        "toe-joints.ext"
+      ],
+      "stretches": [
+        "C3a",
+        "C4a"
+      ],
+      "note": "Toes pulled up at the base, then curled at the tips."
+    },
+    "second lumbrical of foot": {
+      "actions": [
+        "toes.flex",
+        "toe-joints.ext"
+      ],
+      "stretches": [
+        "C3a",
+        "C4a"
+      ],
+      "note": "Toes pulled up at the base, then curled at the tips."
+    },
+    "third lumbrical of foot": {
+      "actions": [
+        "toes.flex",
+        "toe-joints.ext"
+      ],
+      "stretches": [
+        "C3a",
+        "C4a"
+      ],
+      "note": "Toes pulled up at the base, then curled at the tips."
+    },
+    "fourth lumbrical of foot": {
+      "actions": [
+        "toes.flex",
+        "toe-joints.ext"
+      ],
+      "stretches": [
+        "C3a",
+        "C4a"
+      ],
+      "note": "Toes pulled up at the base, then curled at the tips."
+    },
+    "first plantar interosseous of foot": {
+      "actions": [
+        "toe-spread.squeeze",
+        "toes.flex"
+      ],
+      "stretches": [
+        "C6a",
+        "C3a"
+      ]
+    },
+    "second plantar interosseous of foot": {
+      "actions": [
+        "toe-spread.squeeze",
+        "toes.flex"
+      ],
+      "stretches": [
+        "C6a",
+        "C3a"
+      ]
+    },
+    "third plantar interosseous of foot": {
+      "actions": [
+        "toe-spread.squeeze",
+        "toes.flex"
+      ],
+      "stretches": [
+        "C6a",
+        "C3a"
+      ]
+    },
+    "set of dorsal interossei of foot": {
+      "actions": [
+        "toe-spread.spread",
+        "toes.flex"
+      ],
+      "stretches": [
+        "C6b",
+        "C3a"
+      ]
+    },
+    "aryepiglotticus": {
+      "cannot": "Inside the voice box: its length is set by breathing and voice pitch, not by any body position. Pitch glides move it, which is voice training, not stretching."
+    },
+    "lateral crico-arytenoid": {
+      "cannot": "Inside the voice box: its length is set by breathing and voice pitch, not by any body position. Pitch glides move it, which is voice training, not stretching."
+    },
+    "oblique arytenoid": {
+      "cannot": "Inside the voice box: its length is set by breathing and voice pitch, not by any body position. Pitch glides move it, which is voice training, not stretching."
+    },
+    "oblique part of cricothyroid": {
+      "cannot": "Inside the voice box: its length is set by breathing and voice pitch, not by any body position. Pitch glides move it, which is voice training, not stretching."
+    },
+    "posterior crico-arytenoid": {
+      "cannot": "Inside the voice box: its length is set by breathing and voice pitch, not by any body position. Pitch glides move it, which is voice training, not stretching."
+    },
+    "straight part of cricothyroid": {
+      "cannot": "Inside the voice box: its length is set by breathing and voice pitch, not by any body position. Pitch glides move it, which is voice training, not stretching."
+    },
+    "thyro-arytenoid": {
+      "cannot": "Inside the voice box: its length is set by breathing and voice pitch, not by any body position. Pitch glides move it, which is voice training, not stretching."
+    },
+    "transverse arytenoid": {
+      "cannot": "Inside the voice box: its length is set by breathing and voice pitch, not by any body position. Pitch glides move it, which is voice training, not stretching."
+    },
+    "vocalis": {
+      "cannot": "Inside the voice box: its length is set by breathing and voice pitch, not by any body position. Pitch glides move it, which is voice training, not stretching."
+    },
+    "inferior pharyngeal constrictor": {
+      "cannot": "Works in the reflex part of swallowing and in breathing; there is no voluntary position that lengthens it."
+    },
+    "middle pharyngeal constrictor": {
+      "cannot": "Works in the reflex part of swallowing and in breathing; there is no voluntary position that lengthens it."
+    },
+    "superior pharyngeal constrictor": {
+      "cannot": "Works in the reflex part of swallowing and in breathing; there is no voluntary position that lengthens it."
+    },
+    "palatopharyngeus": {
+      "cannot": "Works in the reflex part of swallowing and in breathing; there is no voluntary position that lengthens it."
+    },
+    "salpingopharyngeus": {
+      "cannot": "Works in the reflex part of swallowing and in breathing; there is no voluntary position that lengthens it."
+    },
+    "stylopharyngeus": {
+      "cannot": "Works in the reflex part of swallowing and in breathing; there is no voluntary position that lengthens it."
+    },
+    "levator veli palatini": {
+      "cannot": "Works in the reflex part of swallowing and in breathing; there is no voluntary position that lengthens it."
+    },
+    "tensor veli palatini": {
+      "cannot": "Works in the reflex part of swallowing and in breathing; there is no voluntary position that lengthens it. (A yawn stretches the soft palate a little, but cannot be held or aimed.)"
+    },
+    "uvular muscle": {
+      "cannot": "Works in the reflex part of swallowing and in breathing; there is no voluntary position that lengthens it."
+    }
+  }
+}
