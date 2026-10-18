@@ -14,6 +14,7 @@ import { MeshoptEncoder, MeshoptSimplifier } from 'meshoptimizer';
 import { loadMuscular } from './muscular-model.mjs';
 import { loadAllen, placeNuclei } from './allen-model.mjs';
 import { loadNervous } from './nervous-model.mjs';
+import { bridgeNeckVessels } from './circulatory-model.mjs';
 import { settleLymphatic } from './lymphatic-model.mjs';
 import { yieldsTo } from './overlaps.mjs';
 import { Body, layerOf, REFERENCE_LAYER, SKIN_ASSET } from './placement.mjs';
@@ -451,7 +452,18 @@ const ASSETS = [
   { file: 'skin.glb', elements: [SKIN], ratio: 0.35 },
   { file: 'skeletal.glb', elements: range(3152, 3395), extras: ['coccyx.obj'], ratio: 0.5 },
   { file: 'skeletal-ossicles.glb', elements: [], extras: OSSICLES, ratio: 0.5 },
-  { file: 'circulatory.glb', groups: circulatoryGroups(), mergeByName: true, ratio: 0.2, error: 0.002 },
+  // BodyParts3D models the carotid, vertebral and internal jugular vessels of
+  // the neck in pieces; the stretches it lacks are bridged from Z-Anatomy
+  // (see circulatory-model.mjs).
+  {
+    file: 'circulatory.glb',
+    groups: circulatoryGroups(),
+    mergeByName: true,
+    fit: (objs) =>
+      bridgeNeckVessels(objs, join(Z_ANATOMY_DIR, 'circulatory'), join(Z_ANATOMY_DIR, 'nervous', 'landmarks.json'), skeletalBones(), body()),
+    ratio: 0.2,
+    error: 0.002,
+  },
   // Intervertebral discs and costal cartilages are shared from skeletal.glb
   // at runtime (see "shared" in src/data/joints.json), not duplicated here.
   { file: 'joints.glb', elements: CONNECTIVE_TISSUE, load: () => parseRegisteredObjs('connective-tissue.obj.gz'), ratio: 0.25, error: 0.01 },
