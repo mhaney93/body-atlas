@@ -8,7 +8,7 @@
 // stays where it is, a ghost of the starting position.
 import * as THREE from 'three';
 import { buildRig, candidateSegments, indexBones, segmentOfBone, SEGMENTS, SEGMENT_INDEX, skinWeights } from './rig.js';
-import { opAxis, opTurn, poseMatrices } from './pose.js';
+import { opAxis, opStart, opTurn, poseMatrices } from './pose.js';
 
 const LOOP = { into: 1.6, hold: 2.4, out: 1.2, rest: 0.8 }; // seconds
 const ARROW_COLOR = '#9fd8ff';
@@ -288,8 +288,7 @@ export class Poser {
 
   /**
    * One curved arrow per move and side (not per setup move), at its joint,
-   * sweeping as far as the pose turns it there; a move that turns nothing
-   * (a supination the palm-forward rest is already past) gets none.
+   * sweeping as far as the pose turns it there, from where the turn starts.
    */
   #drawArrows(ops, full) {
     this.arrows.clear();
@@ -320,7 +319,7 @@ export class Poser {
         radius = THREE.MathUtils.clamp(seg.length * 0.45, 0.02, 0.16);
         start = seg.dir.clone().applyMatrix4(rot);
       }
-      start.addScaledVector(axis, -start.dot(axis)).normalize();
+      start.addScaledVector(axis, -start.dot(axis)).normalize().applyAxisAngle(axis, THREE.MathUtils.degToRad(opStart(op, this.rig)));
       const arrow = arcArrow(center, axis, start, angle, radius, material);
       arrow.userData = { code: op.code, side: op.side, seg: op.seg, sweep: Math.min(sweep, 300) };
       this.arrows.add(arrow);

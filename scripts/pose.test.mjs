@@ -228,29 +228,41 @@ test('a stretch done with both limbs at once poses both sides alike', () => {
 test('the forearm turns the way its move says, and its arrow sweeps as far as the hand turns', () => {
   const poser = bonePoser();
   const rot = (m) => new THREE.Matrix4().extractRotation(m);
+  // The palm's turn about the forearm, measured from where the forearm alone would carry it.
+  const palmTurn = (m, op) => {
+    const palmar = rig.frames.hand[op.side].palmar;
+    const forearm = rot(m.get(`${op.side}-forearm`));
+    const from = palmar.clone().applyMatrix4(forearm);
+    const to = palmar.clone().applyMatrix4(rot(m.get(op.seg)));
+    const axis = P.opAxis(op, rig).applyMatrix4(forearm).normalize();
+    return THREE.MathUtils.radToDeg(Math.atan2(axis.dot(from.clone().cross(to)), from.dot(to)));
+  };
   let checked = 0;
   for (const st of S.STRETCHING.stretches)
     for (const v of st.variants) {
       if (!v.moves.some((code) => code.startsWith('forearm.'))) continue;
       for (const side of ['left', 'right']) {
         const ops = P.variantOps(st, v, side);
+        const m0 = P.poseMatrices(rig, ops, 0);
         const m = P.poseMatrices(rig, ops, 1);
+        // The loop starts at rest, but for the forearm twist of a supination, which starts thumb-forward.
+        const startsTurned = new Set(ops.filter((op) => op.code.startsWith('forearm.sup')).map((op) => op.seg));
+        for (const g of rig.segments.values()) {
+          if (startsTurned.has(g.id)) continue;
+          const parent = g.parent ? m0.get(g.parent) : new THREE.Matrix4();
+          const local = parent.clone().invert().multiply(m0.get(g.id));
+          assert.ok(local.elements.every((e, i) => Math.abs(e - (i % 5 === 0 ? 1 : 0)) < 1e-9), `${st.id}${v.id} ${side}: ${g.id} is not at rest at the start`);
+        }
         poser.start(ops, { still: true });
         for (const op of ops.filter((o) => o.code.startsWith('forearm.') && !o.setup)) {
-          // The palm's turn about the forearm, measured from where the forearm alone would carry it.
-          const palmar = rig.frames.hand[op.side].palmar;
-          const forearm = rot(m.get(`${op.side}-forearm`));
-          const from = palmar.clone().applyMatrix4(forearm);
-          const to = palmar.clone().applyMatrix4(rot(m.get(op.seg)));
-          const axis = P.opAxis(op, rig).applyMatrix4(forearm).normalize();
-          const turned = THREE.MathUtils.radToDeg(Math.atan2(axis.dot(from.clone().cross(to)), from.dot(to)));
+          // Positive is the named way, from the start of the loop to the full stretch.
+          let turned = palmTurn(m, op) - palmTurn(m0, op);
+          if (turned < -180) turned += 360;
           const name = `${st.id}${v.id} ${op.side} ${op.code}`;
-          // Positive is the named way: a supination never turns the palm back toward pronation.
-          assert.ok(turned > -1, `${name} turns ${turned}° the wrong way`);
+          assert.ok(turned > 1, `${name} turns ${turned}°, not the named way`);
           assert.ok(Math.abs(turned - P.opTurn(op, rig)) < 1, `${name}: hand turns ${turned}°, opTurn ${P.opTurn(op, rig)}°`);
           const arrow = poser.arrows.children.find((a) => a.userData.code === op.code && a.userData.side === op.side);
-          if (turned < 1) assert.equal(arrow, undefined, `${name}: arrow over a hand that doesn't turn`);
-          else assert.ok(arrow && Math.abs(arrow.userData.sweep - turned) < 1, `${name}: arrow ${arrow?.userData.sweep}° over a ${turned}° turn`);
+          assert.ok(arrow && Math.abs(arrow.userData.sweep - turned) < 1, `${name}: arrow ${arrow?.userData.sweep}° over a ${turned}° turn`);
           checked++;
         }
         // Every arrow belongs to a move on the side it is drawn.
@@ -259,9 +271,10 @@ test('the forearm turns the way its move says, and its arrow sweeps as far as th
       }
     }
   assert.ok(checked >= 18, `only ${checked} forearm turns checked`);
-  // From the palm-forward rest, pronation turns the hand most of a half turn; supination is already there.
+  // Pronation turns the hand from the palm-forward rest most of a half turn; supination from thumb-forward back past palm-forward.
   const turn = (code) => P.opTurn(P.variantOps({ id: 'T', sided: true, variants: [] }, { id: 'a', moves: [code] }, 'right')[0], rig);
-  assert.ok(turn('forearm.pro') > 150 && turn('forearm.sup') === 0);
+  assert.ok(turn('forearm.pro') > 150);
+  assert.ok(turn('forearm.sup') > 60 && Math.abs(turn('forearm.sup') - rig.frames.forearmRest.right) < 1);
 });
 
 test('both-limb stretches draw an arrow on each side', () => {

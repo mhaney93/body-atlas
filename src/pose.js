@@ -244,7 +244,7 @@ export function poseMatrices(rig, ops, fraction = 1) {
         shift.addScaledVector(vector(op.glide, op.seg, op.side, rig), (op.angle / 1000) * fraction);
         continue;
       }
-      const angle = THREE.MathUtils.degToRad(opTurn(op, rig) * fraction);
+      const angle = THREE.MathUtils.degToRad(opStart(op, rig) + opTurn(op, rig) * fraction);
       rot.premultiply(new THREE.Quaternion().setFromAxisAngle(opAxis(op, rig), angle));
     }
     const local = new THREE.Matrix4()
@@ -257,14 +257,24 @@ export function poseMatrices(rig, ops, fraction = 1) {
 }
 
 /**
- * How far (degrees) an op turns its segment from rest at the full stretch.
- * The forearm rests palm forward, already supinated past thumb-forward
- * (frames.forearmRest): pronation first undoes that, and a supination the
- * rest pose is already past stays put rather than turning back toward pronation.
+ * Where (degrees from rest, the named way) an op's turn starts. The forearm
+ * rests palm forward, already supinated past thumb-forward
+ * (frames.forearmRest), so a supination starts from thumb-forward and turns
+ * palm-up into the stretch; every other turn starts at rest.
+ */
+export function opStart(op, rig) {
+  return op.restOffset < 0 ? -(rig.frames.forearmRest[op.side] ?? 0) : 0;
+}
+
+/**
+ * How far (degrees) an op turns its segment from its start to the full
+ * stretch. Pronation first undoes the palm-forward rest; a supination turns
+ * from thumb-forward to its range, or to the rest if that is already further.
  */
 export function opTurn(op, rig) {
   if (!op.restOffset) return op.angle;
-  return Math.max(0, op.angle + op.restOffset * (rig.frames.forearmRest[op.side] ?? 0));
+  const rest = rig.frames.forearmRest[op.side] ?? 0;
+  return op.restOffset > 0 ? op.angle + rest : Math.max(rest, op.angle);
 }
 
 /** Where a rest-pose point of segment `segId` is once posed. */
