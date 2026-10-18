@@ -37,6 +37,7 @@ export const NESTED = [
   ['circulatory', /splenic (artery|vein)/i, 'lymphatic', /^spleen$/i, 'the splenic vessels branch into the spleen at its hilum', 15],
   ['urinary', /^urethra$/i, 'reproductive', /^prostate$|corpus spongiosum|^glans penis$/i, 'the urethra runs through the prostate and down the corpus spongiosum to the glans', 12],
   ['circulatory', /renal|segmental artery/i, 'urinary', /kidney$|ureter$/i, 'the renal vessels branch into the kidney at its hilum, beside the start of the ureter', 20],
+  ['circulatory', /suprarenal (artery|vein)/i, 'endocrine', /adrenal gland$/i, 'the suprarenal arteries and veins run into the adrenal glands', 8],
 ];
 
 /**
@@ -60,6 +61,7 @@ export const KNOWN = [
   // Moving the kidney out of psoas crumples its simplified mesh at the hilum.
   ['urinary', /kidney$/i, 'muscular', /psoas major/i, 'BodyParts3D\'s kidneys overlap psoas major, on which they lie, in the source data', 10.5],
   ['urinary', /kidney$/i, 'joints', /iliopsoas fascia/i, 'the kidneys pressed into the fitted sheet of fascia over psoas', 11.5],
+  ['endocrine', /^left adrenal gland$/i, 'urinary', /^left kidney$/i, 'Z-Anatomy\'s fitted left kidney reaches into BodyParts3D\'s left adrenal gland, which sits on its upper pole', 8],
   // lymphatic-model.mjs moves the lymph nodes out of bone and skin only; the
   // build does not yet move them out of the organs and vessels they drain.
   // Lymph node clusters are drawn 6 mm across.
@@ -85,6 +87,8 @@ export const YIELDS = [
   ['nervous', /nerve|trunk|plexus|ganglia|ganglion/i, 'digestive', /colon|cecum|appendix|ileum|jejunum|duodenum|stomach|esophagus|rectum|liver/i, 'nerves run beside the gut, not through it'],
   ['nervous', /nerve|trunk|plexus|ganglia|ganglion/i, 'urinary', /kidney$|ureter$|bladder$|^urethra$/i, 'nerves run behind and beside the kidneys, ureters and bladder, not through them'],
   ['nervous', /nerve|trunk|plexus|ganglia|ganglion/i, 'circulatory', /aorta|vena cava|pulmonary trunk|^(left|right) pulmonary artery$/i, 'nerves run beside the great vessels, not through them'],
+  // BodyParts3D's spleen reaches into its left adrenal gland by up to 11 mm.
+  ['endocrine', /^left adrenal gland$/i, 'lymphatic', /^spleen$/i, 'the left adrenal gland lies in front of the kidney, beside the spleen, not in it'],
 ];
 
 const matches = ([la, pa, lb, pb], a, b) => la === a.layer && pa.test(a.part) && lb === b.layer && pb.test(b.part);

@@ -37,35 +37,52 @@ export function sidelessName(meshName) {
 }
 
 /**
- * Builds the search index.
+ * The name a layer's `shared` entries match ("Left lobe of thymus" → "lobe of
+ * thymus"), as canonical() in layers.js, which this pure module cannot import.
+ */
+const sharedName = (meshName) => meshName.toLowerCase().replace(/^(left|right) /, '').replace(/ of (left|right) /, ' of ');
+
+/**
+ * Builds the search index. A part a layer borrows from another layer's model
+ * (`shared` in its data) is listed under both, so picking it from either
+ * switches that layer on.
  * @param {object[]} layers layer data (src/layers.js LAYERS)
  * @param {Record<string, string[]>} meshNames mesh names per layer id (src/mesh-names.json)
- * @param {(layer: object, meshName: string) => {region?: string, approximate?: boolean}} partInfo region lookup
- * @returns {object[]} entries: `{ kind: 'part', layerId, meshName, name, side, region, approximate, aliases, words }`
+ * @param {(layer: object, meshName: string, groupId?: string, source?: object) => {region?: string, approximate?: boolean}} partInfo region lookup
+ * @returns {object[]} entries: `{ kind: 'part', layerId, meshName, name, side, region, approximate, sharedFrom?, aliases, words }`
  *   or `{ kind: 'notShown', layerId, name, reason, note?, shownIn?, system?, aliases, words }`;
- *   `aliases` come from the part's or not-shown entry's optional `aliases` list
+ *   `aliases` come from the part's or not-shown entry's optional `aliases` list; `sharedFrom` is the id
+ *   of the layer whose model holds a shared part
  */
 export function buildIndex(layers, meshNames, partInfo) {
   const entries = [];
+  const addPart = (layer, meshName, source) => {
+    // A part keyed by its full name (e.g. the heart's "left ventricle") has no side.
+    const own = layer.parts[meshName.toLowerCase()] ?? source?.parts[meshName.toLowerCase()];
+    const side = own ? null : sideOf(meshName);
+    const name = side ? sidelessName(meshName) : meshName;
+    const part = own ?? layer.parts[name.toLowerCase()] ?? source?.parts[name.toLowerCase()];
+    const info = partInfo(layer, meshName, undefined, source);
+    entries.push({
+      kind: 'part',
+      layerId: layer.id,
+      meshName,
+      name,
+      side,
+      region: info.region,
+      approximate: info.approximate,
+      ...(source && { sharedFrom: source.id }),
+      aliases: part?.aliases ?? [],
+      words: [words(meshName), ...(part?.aliases ?? []).map(words)],
+    });
+  };
   for (const layer of layers) {
-    for (const meshName of meshNames[layer.id] ?? []) {
-      // A part keyed by its full name (e.g. the heart's "left ventricle") has no side.
-      const own = layer.parts[meshName.toLowerCase()];
-      const side = own ? null : sideOf(meshName);
-      const name = side ? sidelessName(meshName) : meshName;
-      const part = own ?? layer.parts[name.toLowerCase()];
-      const info = partInfo(layer, meshName);
-      entries.push({
-        kind: 'part',
-        layerId: layer.id,
-        meshName,
-        name,
-        side,
-        region: info.region,
-        approximate: info.approximate,
-        aliases: part?.aliases ?? [],
-        words: [words(meshName), ...(part?.aliases ?? []).map(words)],
-      });
+    for (const meshName of meshNames[layer.id] ?? []) addPart(layer, meshName);
+    for (const { layer: sourceId, match } of layer.shared ?? []) {
+      const source = layers.find((l) => l.id === sourceId);
+      for (const meshName of meshNames[sourceId] ?? []) {
+        if (new RegExp(match).test(sharedName(meshName))) addPart(layer, meshName, source);
+      }
     }
     for (const item of layer.notShown ?? []) {
       entries.push({

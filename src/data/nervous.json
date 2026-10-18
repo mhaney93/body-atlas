@@ -38,7 +38,7 @@
     { "name": "Autonomic plexuses and the enteric nervous system", "reason": "no-model", "note": "The nerve networks around the heart, gut and other organs, and in the gut wall. Only the sympathetic trunks and their branches are shown." },
     { "name": "Small unnamed nerve branches", "reason": "too-small" },
     { "name": "Nerve endings and sensory receptors", "reason": "too-small", "note": "The optional nerve-ending haze hints at where they are densest; it is illustrative, not anatomy." },
-    { "name": "Pituitary and pineal glands", "reason": "other-system", "system": "endocrine" },
+    { "name": "Pituitary and pineal glands", "reason": "other-system", "layer": "endocrine" },
     { "name": "Eyes and inner ears (retina, cochlea, semicircular canals)", "reason": "other-system", "system": "sense organs" }
   ],
   "parts": {
