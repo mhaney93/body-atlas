@@ -330,9 +330,10 @@ export class Viewer {
     ]).then(([gltfs, ...sourceGroups]) => {
       const group = new THREE.Group();
       group.add(...gltfs.map((gltf) => gltf.scene));
-      if (layer.posable === 'bones') this.poser.setBones(group);
-      if (layer.posable && this.poser.skeleton) this.poser.adopt(layer, group);
       sources.forEach((source, i) => group.add(...this.#sharedCopies(layer, source.id, sourceGroups[i])));
+      if (layer.posable === 'bones') this.poser.setBones(group);
+      // Shared parts pose with the layer that shows them (the Joints layer's copies of the discs).
+      if (layer.posable && this.poser.skeleton) this.poser.adopt(layer, group);
       group.visible = false;
       group.updateMatrixWorld(true);
       const box = new THREE.Box3();

@@ -1,22 +1,30 @@
 // Stretching mode: every stretch, head to toe, one step per variant, so you
-// can go through the whole body with the → key and know nothing was missed.
-// It drives the shared Stepper (src/stepper.js) and its bar, poses the model
-// into each variant (Viewer.showPose) with the muscles it lengthens lit, and
-// shows a stretch card (how, hold timer, Left/Right, optional contract-relax),
-// a coverage panel (muscles stretched, each section, what can't be stretched)
-// and a progress strip on the bar. Progress is kept in localStorage when the
-// browser allows it; the mode works the same without it.
+// can go through the whole body with the → key and know nothing was missed;
+// then the joint and spine moves, the nerve glides and (opt-in) foam rolling.
+// It drives the shared Stepper (src/stepper.js) and its bar, shows the layers
+// each step needs, poses the model into each variant (Viewer.showPose) with
+// the parts it works lit, and shows a stretch card (how, hold timer,
+// Left/Right, optional contract-relax), a coverage panel (muscles stretched,
+// each section, what can't be stretched) and a progress strip on the bar.
+// Progress is kept in localStorage when the browser allows it; the mode works
+// the same without it.
 import { isTypingTarget } from './keyboard-nav.js';
+import { canonical } from './layers.js';
 import { poseBox, variantOps } from './pose.js';
+import { sideOf } from './search.js';
 import { Stepper, stepperBar } from './stepper.js';
 import { stretchedMeshes } from './stretch-panel.js';
 import {
   GROUP_NAMES,
+  KIND_NAMES,
+  OPT_IN,
+  ROLLING_NOTE,
   STRETCHING,
   coverage,
   describeMove,
   holdTimer,
   isSided,
+  partsOf,
   runOrder,
   targetsOf,
   variantRef,
@@ -28,6 +36,22 @@ const STORAGE_KEY = 'body-atlas:stretching';
 const MIN_FRAME = 0.22;
 /** Target muscles listed on the card before the rest fold away. */
 const SHOWN_TARGETS = 8;
+/** What each kind of item works, as the card's list heading. */
+const TARGET_LABELS = { stretch: 'Stretches', lengthen: 'Lengthens', joint: 'Moves', glide: 'Glides', roll: 'Rolls' };
+/** The card's last line, by kind. */
+const SAFETY = {
+  glide: 'A gentle pull at most, never pain.',
+  roll: 'Firm but tolerable pressure, never sharp pain.',
+  joint: 'Gentle and slow, never pain.',
+};
+
+/**
+ * The layers a step shows: the bones and muscles, and the layer whose parts
+ * it works (the nerves for a glide, the joints for a joint move or rolling).
+ */
+export function layersFor(stretch, variant) {
+  return [...new Set(['skeletal', 'muscular', ...Object.keys(partsOf(stretch, variant))])];
+}
 
 /** localStorage, or null where reading it throws (blocked site data, some private windows). */
 function browserStorage() {
@@ -40,10 +64,11 @@ function browserStorage() {
 
 /**
  * Saved progress from `storage`: the steps done (doneEntry: a one-side step
- * per side; an older save's bare ref for one counts for neither), whether the opt-in
- * sections run, the step and side last shown. Anything missing, unreadable
- * or malformed reads as a fresh start.
- * @returns {{ done: Set<string>, optIn: boolean, ref: string | null, side: 'left' | 'right' }}
+ * per side; an older save's bare ref for one counts for neither), the opt-in
+ * sections that run (OPT_IN; an older save's true is the face, eyes and
+ * tongue), the step and side last shown. Anything missing, unreadable or
+ * malformed reads as a fresh start.
+ * @returns {{ done: Set<string>, optIn: string[], ref: string | null, side: 'left' | 'right' }}
  */
 export function loadProgress(storage) {
   let saved = null;
@@ -54,7 +79,10 @@ export function loadProgress(storage) {
   }
   return {
     done: new Set(Array.isArray(saved?.done) ? saved.done.filter((ref) => typeof ref === 'string') : []),
-    optIn: saved?.optIn === true,
+    optIn:
+      saved?.optIn === true
+        ? ['lengthen']
+        : [...new Set(Array.isArray(saved?.optIn) ? saved.optIn.filter((section) => Object.hasOwn(OPT_IN, section)) : [])],
     ref: typeof saved?.ref === 'string' ? saved.ref : null,
     side: saved?.side === 'right' ? 'right' : 'left',
   };
@@ -112,21 +140,28 @@ export function clock(seconds) {
  * @param {import('./viewer.js').Viewer} viewer
  * @param {{
  *   muscular: object,
- *   showMuscles: () => Promise<unknown>,
+ *   layer: (id: string) => object,
+ *   showLayers: (ids: string[]) => Promise<unknown>,
+ *   restoreLayers: () => void,
+ *   showGroup: (layerId: string, groupId: string) => void,
  *   onStart?: () => void,
- * }} host the Muscular layer, a function that switches it on (loading it),
- *   and one that runs just before the mode starts (to end a guide or tour)
+ * }} host the Muscular layer; a layer by id; functions that show exactly
+ *   these layers (loading them), put back the ones shown before the mode,
+ *   and show a hidden sub-group through its checkbox; and one that runs just
+ *   before the mode starts (to end a guide or tour)
  * @returns {{ element: HTMLButtonElement, open: (muscleKey?: string, side?: 'left' | 'right') => Promise<void>, stop: () => void, stepper: Stepper }}
  */
-export function stretchingMode(viewer, { muscular, showMuscles, onStart }) {
+export function stretchingMode(viewer, { muscular, layer, showLayers, restoreLayers, showGroup, onStart }) {
   const storage = browserStorage();
   const progress = loadProgress(storage);
   const save = () => saveProgress(storage, { ...progress, ref: stepper.active ? stepper.current.ref : progress.ref });
   /** Index of the step shown last, to tell a step forward (which marks it done) from a jump. */
   let last = -1;
   let timer = null;
-  /** The Muscular layer's movement emphasis before the mode lit its own, put back when it ends. */
-  let emphasisBefore = null;
+  /** Each layer's emphasis (the movement picker's) before the mode lit its own, put back when it ends. */
+  const emphasisBefore = new Map();
+  /** Counts steps shown, so a step whose layers finish loading after the next one started is dropped. */
+  let showing = 0;
 
   const stepper = new Stepper({
     onStep(item, index) {
@@ -139,8 +174,11 @@ export function stretchingMode(viewer, { muscular, showMuscles, onStart }) {
     onStop() {
       stopTimer();
       last = -1;
+      showing++;
       viewer.stopPose();
-      viewer.setEmphasis(muscular.id, emphasisBefore);
+      for (const [id, role] of emphasisBefore) viewer.setEmphasis(id, role);
+      emphasisBefore.clear();
+      restoreLayers();
       card.hidden = true;
       panel.hidden = true;
       document.body.classList.remove('stretching', 'stretch-progress');
@@ -180,7 +218,7 @@ export function stretchingMode(viewer, { muscular, showMuscles, onStart }) {
   entry.title = 'Step through every stretch, head to toe (← → to move, Space to time a hold, Esc to end)';
 
   /** The side a step is shown on: the chosen one for a one-side stretch; the data's (left) otherwise. */
-  const sideOf = (item) => (isSided(item.stretch, item.variant) ? progress.side : 'left');
+  const shownSide = (item) => (isSided(item.stretch, item.variant) ? progress.side : 'left');
 
   function barTitle(item) {
     const variant = item.stretch.variants.length > 1 ? ` · ${item.variant.id}` : '';
@@ -192,21 +230,18 @@ export function stretchingMode(viewer, { muscular, showMuscles, onStart }) {
   async function open(muscleKey, side) {
     if (side) progress.side = side;
     onStart?.();
-    await showMuscles();
+    await showLayers(['skeletal', muscular.id]);
     viewer.select(null);
-    const items = runOrder({ optIn: progress.optIn });
     let ref = progress.ref;
     if (muscleKey) {
       const refs = new Set(STRETCHING.muscles[muscleKey]?.stretches ?? []);
-      const first = items.find(({ stretch, ref: r }) => refs.has(r) || refs.has(stretch.id));
+      const mine = ({ stretch, ref: r }) => refs.has(r) || refs.has(stretch.id);
       // A muscle whose only stretches are opt-in (the face's) switches that section on.
-      if (!first && !progress.optIn && runOrder({ optIn: true }).some(({ stretch, ref: r }) => refs.has(r) || refs.has(stretch.id))) {
-        progress.optIn = true;
-        return open(muscleKey, side);
-      }
+      const first = runOrder({ optIn: progress.optIn }).find(mine) ?? runOrder({ optIn: true }).find(mine);
+      if (first?.stretch.optIn && !progress.optIn.includes(first.stretch.optIn)) progress.optIn = [...progress.optIn, first.stretch.optIn];
       ref = first?.ref ?? ref;
     }
-    if (!stepper.active) emphasisBefore = viewer.display.get(muscular.id)?.role ?? null;
+    const items = runOrder({ optIn: progress.optIn });
     document.body.classList.add('stretching');
     entry.textContent = '■ End stretching mode';
     card.hidden = false;
@@ -215,29 +250,72 @@ export function stretchingMode(viewer, { muscular, showMuscles, onStart }) {
     stepper.start(items, Math.max(0, items.findIndex((item) => item.ref === ref)));
   }
 
-  /** Poses, lights and frames a step and fills the card and panel; a running hold timer stops unless `keepTimer`. */
+  /**
+   * Fills the card and panel for a step, then (once its layers have loaded)
+   * poses, lights and frames it; a running hold timer stops unless `keepTimer`.
+   */
   function show(item, keepTimer = false) {
     if (!keepTimer) stopTimer();
-    const side = sideOf(item);
+    const side = shownSide(item);
+    fillCard(item, side);
+    fillPanel(item);
+    fillStrip();
+    const token = ++showing;
+    const ids = layersFor(item.stretch, item.variant);
+    showLayers(ids)
+      .then(() => token === showing && present(item, side, ids))
+      .catch((err) => console.error(err));
+  }
+
+  /**
+   * The meshes a step works, by layer id: a muscle stretch's lengthened
+   * muscles (on the side it lengthens them), or the parts a joint move,
+   * glide or rolling card names (on the side shown, for a one-side one).
+   */
+  function litMeshes({ stretch, variant }, side) {
+    const lit = new Map();
+    if (stretch.kind === 'stretch' || stretch.kind === 'lengthen') {
+      lit.set(muscular.id, new Set(stretchedMeshes(viewer.layers.get(muscular.id)?.group, stretch, variant, side)));
+    }
+    const sides = isSided(stretch, variant) ? [side] : ['left', 'right'];
+    for (const [id, keys] of Object.entries(partsOf(stretch, variant))) {
+      const want = new Set(keys);
+      const meshes = new Set();
+      viewer.layers.get(id)?.group?.traverse((o) => {
+        if (!o.isMesh || o.userData.haze) return;
+        const name = o.userData.of ?? o.userData.name ?? o.name;
+        const own = sideOf(name);
+        if (want.has(canonical(name)) && (!own || sides.includes(own))) meshes.add(o);
+      });
+      lit.set(id, meshes);
+    }
+    return lit;
+  }
+
+  function present(item, side, ids) {
     const ops = variantOps(item.stretch, item.variant, side);
-    const lit = stretchedMeshes(viewer.layers.get(muscular.id)?.group, item.stretch, item.variant, side);
     if (ops.length) viewer.showPose(ops);
     else viewer.stopPose();
-    // The lengthened muscles lit, the rest faded to a ghost so deep ones show.
-    const litSet = new Set(lit);
-    viewer.setEmphasis(muscular.id, (mesh) => (litSet.has(mesh) ? 'prime' : null));
+    // The parts the step works lit, the rest of their layers faded to a ghost so deep ones show.
+    const lit = litMeshes(item, side);
+    for (const id of ids) {
+      if (id === 'skeletal') continue;
+      if (!emphasisBefore.has(id)) emphasisBefore.set(id, viewer.display.get(id)?.role ?? null);
+      const mine = lit.get(id) ?? new Set();
+      viewer.setEmphasis(id, (mesh) => (mine.has(mesh) ? 'prime' : null));
+      // A lit part in a hidden sub-group (fascia starts hidden) is shown through its checkbox.
+      const groups = new Set([...mine].map((mesh) => mesh.userData.group));
+      for (const g of groups) if (g && !viewer.isGroupVisible(layer(id), g)) showGroup(id, g);
+    }
     const box = viewer.poser.rig && ops.length ? poseBox(viewer.poser.rig, ops) : new THREE.Box3();
-    // Parts with no bone to turn (the face, eyes, tongue) are framed by the muscles they lengthen.
-    if (box.isEmpty()) for (const mesh of lit) box.expandByObject(mesh);
+    // Parts with no bone to turn (the face, eyes, tongue) and rolling are framed by the parts they work.
+    if (box.isEmpty()) for (const meshes of lit.values()) for (const mesh of meshes) box.expandByObject(mesh);
     if (!box.isEmpty()) {
       // Never closer than a body region, so the stretch shows in context.
       const center = box.getCenter(new THREE.Vector3());
       box.expandByPoint(center.clone().addScalar(MIN_FRAME)).expandByPoint(center.clone().subScalar(MIN_FRAME));
     }
     viewer.frameBox(box);
-    fillCard(item, side);
-    fillPanel(item);
-    fillStrip();
   }
 
   function fillCard(item, side) {
@@ -249,7 +327,7 @@ export function stretchingMode(viewer, { muscular, showMuscles, onStart }) {
     card.append(el('p', 'kicker', `Stretching · ${GROUP_NAMES[stretch.group]} · ${ref}`));
     card.append(el('h2', '', stretch.name));
     card.append(el('p', 'stretch-variant', variant.label));
-    if (stretch.kind === 'lengthen') card.append(el('p', 'approx', 'Lengthens only: no proven stretch effect'));
+    if (stretch.kind !== 'stretch') card.append(el('p', 'approx', KIND_NAMES[stretch.kind]));
 
     if (stretch.variants.length > 1) {
       const chips = el('div', 'stretch-chips');
@@ -267,21 +345,24 @@ export function stretchingMode(viewer, { muscular, showMuscles, onStart }) {
       card.append(chips);
     }
 
-    const moves = el('div', 'stretch-section');
-    moves.append(el('p', 'stretch-label', 'Movement'));
-    const list = el('ul', 'stretch-moves');
-    for (const [code, setup] of [...(variant.setup ?? []).map((c) => [c, true]), ...variant.moves.map((c) => [c, false])]) {
-      const { joint, action, angle } = describeMove(code, side);
-      const li = el('li', setup ? 'setup' : '', `${joint} · ${action}${angle !== undefined ? ` ~${angle}°` : ''}`);
-      if (setup) li.title = 'Holds the limb where the stretch is done';
-      list.append(li);
+    const codes = [...(variant.setup ?? []).map((c) => [c, true]), ...variant.moves.map((c) => [c, false])];
+    if (codes.length) {
+      const moves = el('div', 'stretch-section');
+      moves.append(el('p', 'stretch-label', 'Movement'));
+      const list = el('ul', 'stretch-moves');
+      for (const [code, setup] of codes) {
+        const { joint, action, angle } = describeMove(code, side);
+        const li = el('li', setup ? 'setup' : '', `${joint} · ${action}${angle !== undefined ? ` ~${angle}°` : ''}`);
+        if (setup) li.title = 'Holds the limb where the stretch is done';
+        list.append(li);
+      }
+      moves.append(list);
+      card.append(moves);
     }
-    moves.append(list);
-    card.append(moves);
 
-    const keys = targetsOf(stretch, variant);
+    const keys = [...targetsOf(stretch, variant), ...Object.values(partsOf(stretch, variant)).flat()];
     const targets = el('div', 'stretch-section');
-    targets.append(el('p', 'stretch-label', stretch.kind === 'lengthen' ? 'Lengthens' : 'Stretches'));
+    targets.append(el('p', 'stretch-label', TARGET_LABELS[stretch.kind]));
     const names = el('ul', 'stretch-targets');
     for (const key of keys.slice(0, SHOWN_TARGETS)) names.append(el('li', '', sentence(key)));
     targets.append(names);
@@ -297,6 +378,12 @@ export function stretchingMode(viewer, { muscular, showMuscles, onStart }) {
 
     card.append(el('p', 'stretch-how', stretch.how));
     if (stretch.cue) card.append(el('p', 'stretch-cue', stretch.cue));
+    if (stretch.kind === 'roll') card.append(el('p', 'stretch-evidence', ROLLING_NOTE));
+    if (stretch.evidence) {
+      const evidence = el('p', 'stretch-evidence');
+      evidence.append(el('span', 'label', 'Evidence: '), document.createTextNode(stretch.evidence));
+      card.append(evidence);
+    }
 
     const hold = el('div', 'stretch-hold');
     const timed = holdTimer(stretch.hold);
@@ -343,7 +430,7 @@ export function stretchingMode(viewer, { muscular, showMuscles, onStart }) {
       );
       card.append(cr);
     }
-    card.append(el('p', 'stretch-safety', 'Mild tension, never pain. For education only, not medical advice.'));
+    card.append(el('p', 'stretch-safety', `${SAFETY[stretch.kind] ?? 'Mild tension, never pain.'} For education only, not medical advice.`));
     // Phones show the progress panel as a sheet in the card's place.
     card.append(button('link-button stretch-progress-open', 'Progress and what can’t be stretched', () => document.body.classList.add('stretch-progress')));
   }
@@ -352,7 +439,7 @@ export function stretchingMode(viewer, { muscular, showMuscles, onStart }) {
   function markDone(item) {
     const done = card.querySelector('.stretch-done');
     if (done) {
-      const on = progress.done.has(doneEntry(item, sideOf(item)));
+      const on = progress.done.has(doneEntry(item, shownSide(item)));
       done.textContent = on ? '✓ Done (undo)' : 'Mark as done';
       done.setAttribute('aria-pressed', String(on));
     }
@@ -460,7 +547,7 @@ export function stretchingMode(viewer, { muscular, showMuscles, onStart }) {
     meter.setAttribute('aria-valuenow', String(c.stretched));
     panel.append(head, meter);
     const note = [`Plus ${c.cannot.length} that can’t be stretched, listed below.`];
-    if (c.optInMore) note.push(`${c.optInMore} more (face, eyes and tongue) with the section below.`);
+    if (c.optInMore) note.push(`${c.optInMore} more with ${OPT_IN.lengthen.name.toLowerCase()} below.`);
     panel.append(el('p', 'stretch-note', note.join(' ')));
 
     const groups = el('ul', 'stretch-groups');
@@ -472,23 +559,25 @@ export function stretchingMode(viewer, { muscular, showMuscles, onStart }) {
         stepper.go(todo >= 0 ? todo : items.findIndex(({ stretch }) => stretch.group === g.group));
         document.body.classList.remove('stretch-progress');
       });
-      const complete = g.done === g.total;
-      go.classList.toggle('complete', complete);
+      const allDone = g.done === g.total;
+      go.classList.toggle('complete', allDone);
       go.classList.toggle('current', item.stretch.group === g.group);
       if (item.stretch.group === g.group) go.setAttribute('aria-current', 'step');
-      go.append(el('span', 'dot'), el('span', 'name', g.name), el('span', 'count', `${g.done} / ${g.total}${complete ? ' ✓' : ''}`));
+      go.append(el('span', 'dot'), el('span', 'name', g.name), el('span', 'count', `${g.done} / ${g.total}${allDone ? ' ✓' : ''}`));
       li.append(go);
       groups.append(li);
     }
     panel.append(groups);
 
-    const optIn = el('label', 'effect');
-    const box = el('input');
-    box.type = 'checkbox';
-    box.checked = progress.optIn;
-    box.addEventListener('change', () => setOptIn(box.checked));
-    optIn.append(box, el('span', 'effect-name', 'Face, eyes and tongue'), el('span', 'effect-note', 'Opt-in: these lengthen only; none is a proven stretch.'));
-    panel.append(optIn);
+    for (const [section, { name, note: why }] of Object.entries(OPT_IN)) {
+      const optIn = el('label', 'effect');
+      const box = el('input');
+      box.type = 'checkbox';
+      box.checked = progress.optIn.includes(section);
+      box.addEventListener('change', () => setOptIn(section, box.checked));
+      optIn.append(box, el('span', 'effect-name', name), el('span', 'effect-note', `Opt-in: ${why}`));
+      panel.append(optIn);
+    }
 
     const cannot = el('details', 'stretch-more');
     cannot.append(el('summary', '', `Can’t be stretched (${c.cannot.length}) and why`));
@@ -524,11 +613,11 @@ export function stretchingMode(viewer, { muscular, showMuscles, onStart }) {
     }
   }
 
-  /** Adds or drops the opt-in sections, staying on the same stretch (or the nearest one). */
-  function setOptIn(on) {
-    progress.optIn = on;
+  /** Adds or drops an opt-in section, staying on the same stretch (or the nearest one). */
+  function setOptIn(section, on) {
+    progress.optIn = on ? [...new Set([...progress.optIn, section])] : progress.optIn.filter((s) => s !== section);
     const ref = stepper.current.ref;
-    const items = runOrder({ optIn: on });
+    const items = runOrder({ optIn: progress.optIn });
     let at = items.findIndex((item) => item.ref === ref);
     if (at < 0) at = Math.min(stepper.index, items.length - 1);
     last = -1;

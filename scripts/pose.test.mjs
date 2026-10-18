@@ -383,3 +383,67 @@ test('a posed model moves, bends at the joint and is picked where it is drawn', 
   // Unposed, nothing is hit up there.
   assert.equal(ray.intersectObject(legs, true).filter((h) => h.point.y > 0.8 && h.object === vastus).length, 0);
 });
+
+test('nerves and joint parts follow the limb, so a glide or joint move shows them moving', async () => {
+  const nerves = await meshes('nervous.glb');
+  const joints = await meshes('joints.glb');
+  const scene = new THREE.Scene();
+  const nervous = L.LAYERS.find((l) => l.id === 'nervous');
+  const jointsLayer = L.LAYERS.find((l) => l.id === 'joints');
+  assert.equal(nervous.posable, 'soft');
+  assert.equal(jointsLayer.posable, 'soft');
+  const poser = new V.Poser(scene, {
+    region: (layer, mesh) => L.partInfo(layer, mesh.userData.name, mesh.userData.group).region,
+    side: (mesh) => (/\bright\b/i.test(mesh.userData.name) ? 'right' : /\bleft\b/i.test(mesh.userData.name) ? 'left' : null),
+  });
+  const skeletal = new THREE.Group();
+  for (const [name, m] of bones) {
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(m.positions, 3));
+    const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
+    mesh.userData = { name, ...m.extras };
+    skeletal.add(mesh);
+  }
+  scene.add(skeletal);
+  poser.setBones(skeletal);
+  poser.adopt({ posable: 'bones' }, skeletal);
+  const soft = (map, name, layer) => {
+    const m = map.get(name);
+    assert.ok(m, name);
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(m.positions, 3));
+    const g = new THREE.Group();
+    const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
+    mesh.userData = { name, ...m.extras };
+    g.add(mesh);
+    scene.add(g);
+    poser.adopt(layer, g);
+    return g.children[0];
+  };
+  const sciatic = soft(nerves, 'Right sciatic nerve', nervous);
+  const capsule = soft(joints, 'Right articular capsule of hip joint', jointsLayer);
+  const centre = (mesh) => {
+    const v = new THREE.Vector3();
+    const c = new THREE.Vector3();
+    const n = mesh.geometry.getAttribute('position').count;
+    for (let i = 0; i < n; i++) c.add(mesh.getVertexPosition(i, v).applyMatrix4(mesh.matrixWorld));
+    return c.divideScalar(n);
+  };
+  const lowest = (mesh) => {
+    const v = new THREE.Vector3();
+    let min = Infinity;
+    for (let i = 0; i < mesh.geometry.getAttribute('position').count; i++) min = Math.min(min, mesh.getVertexPosition(i, v).applyMatrix4(mesh.matrixWorld).y);
+    return min;
+  };
+  const restNerve = centre(sciatic);
+  const restLow = lowest(sciatic);
+  const restCapsule = centre(capsule);
+  // The seated sciatic slider raises the straight leg: the nerve's end behind the knee rises toward hip height.
+  const g4 = S.STRETCHING.stretches.find((st) => st.id === 'G4');
+  poser.start(P.variantOps(g4, g4.variants[0], 'right'), { still: true });
+  assert.ok(lowest(sciatic) > restLow + 0.2, `sciatic lowest point ${restLow} → ${lowest(sciatic)}`);
+  // The hip capsule wraps the joint it belongs to: it barely moves.
+  assert.ok(centre(capsule).distanceTo(restCapsule) < 0.03);
+  poser.stop();
+  assert.ok(centre(sciatic).distanceTo(restNerve) < 1e-6);
+});

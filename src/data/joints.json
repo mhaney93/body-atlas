@@ -3,6 +3,7 @@
   "name": "Joints & connective tissue",
   "color": "#5fe0c3",
   "asset": "models/joints.glb",
+  "posable": "soft",
   "summary": "Ligaments tie bone to bone and hold joints together. Cartilage pads and discs cushion them, capsules seal them, and sheets of fascia wrap and separate the muscles.",
   "groupToggles": true,
   "groups": {
