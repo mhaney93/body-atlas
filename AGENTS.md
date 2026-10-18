@@ -12,6 +12,7 @@ This file is the project's committed home for project-intrinsic agent knowledge:
 - Page-wide keyboard shortcuts must skip keys while the user types: reuse `isTypingTarget` from `src/keyboard-nav.js` (the WASD movement guard) rather than writing another check.
 - The part search lists meshes from `src/mesh-names.json`, generated from the GLBs (`npm run mesh-names`, also run by `build-models`); `npm test` fails when it is stale. The search moves the camera and fades occluders through `Viewer.focusOn`, and reveals hidden parts only through the existing controls (group checkbox, peel slider), so the UI shows what changed.
 - Step-through modes reuse the generic `Stepper`/`stepperBar` in `src/stepper.js` (←/→/Esc, "n / total"); the per-system Guide (`src/guide.js`) drives it and picks each part through the search's `pickResult` path, so hidden or peeled parts are revealed the same way. `scripts/guide.test.mjs` checks each layer's guide covers exactly its clickable parts.
+- Stretches are data in `src/stretches.json`, read only through `src/stretching.js` (README "Stretching data"); `scripts/stretches.test.mjs` requires an entry for every Muscular part and every action reversed by one of its stretches, so adding or changing a muscle means updating its entry.
 - GLTFLoader turns spaces in node names into underscores, so read the original mesh name from `mesh.userData.name` (a glTF node extra).
 
 ## Maintaining this file

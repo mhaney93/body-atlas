@@ -43,6 +43,7 @@ npm run preview   # serve dist/ locally
 | `src/stepper.js`, `src/guide.js` | The reusable previous/next stepper (state, ←/→/Esc keys, its bar) and the per-system Guide that drives it: the head-to-toe part order and the Guide button |
 | `src/tour.js` | A layer's guided tour: a glowing pulse that travels its parts in order, with a caption per stage |
 | `src/data/muscular.json` | Muscular layer: every muscle's description, action and depth, the tendon sub-group, the exercise presets for the movement view, and the fiber-haze effect |
+| `src/stretches.json`, `src/stretching.js` | Stretching data: a stretch for every muscle, as joint moves per variant, plus each muscle's actions, and the rules that read them (see "Stretching data" below) |
 | `src/data/respiratory.json` | Respiratory layer: airway, bronchial tree, lung lobe and diaphragm descriptions in five sub-groups, and the air-sac haze |
 | `src/data/lymphatic.json` | Lymphatic layer: the spleen, thymus, palatine tonsils and every lymph node group, in seven sub-groups by body region, and the "Follow the lymph" tour |
 | `src/data/reproductive.json` | Reproductive (male) layer: the testes, epididymides, sperm ducts, seminal vesicles, prostate and penis, in four sub-groups |
@@ -218,6 +219,15 @@ The Muscular layer shows every skeletal muscle in the model: about 245 named mus
 - **Peel away** hides the superficial muscles, then the intermediate ones, then the deep ones, down to bone, and offers to switch the Skeletal layer on underneath.
 - **Show me the muscles for…** picks an exercise (squat, lunge, deadlift, glute bridge, calf raise, push-up, bench press, overhead press, pull-up, bent-over row, bicep curl, triceps dip, plank or crunch) and lights up the muscles that do the work: prime movers brightest, synergists dimmer. The lists follow common exercise-science descriptions and are simplified.
 - The optional **Muscle-fiber haze** is a decorative effect, not anatomy: faint glowing streaks drift along each muscle's long axis, not its real fibre directions. The page labels it as an illustrative effect.
+
+### Stretching data
+
+`src/stretches.json` holds the stretches for Stretching mode, written as data so a test can prove nothing is missed. Read it only through `src/stretching.js`.
+
+- `stretches`: each has an `id` (e.g. `P1`), a `name`, a head-to-toe `group`, a `kind` (`stretch` through a joint, or `lengthen` for an opposite movement with no proven stretch effect), a `position`, `how`, an optional `cue`, a `hold`, `contractRelax` when an end-range contract-relax suits it, `optIn` for the face, eye and tongue items, and one or more `variants` (`a`, `b`…). A variant is a `label` and its `moves`.
+- A move or action is `"<joint>.<direction>"`, e.g. `"hip.flex"`, optionally with an angle (`"hip.flex:80"`). Directions are relative to the muscle's own side (`sbi` = side-bend toward it, `rotc` = turn away from it); `OPPOSITE` in `src/stretching.js` lists them. `joints` names each joint and gives its normal range in degrees where a source does (AAOS, see `sources`).
+- `muscles`, keyed like the Muscular layer's `parts`: a stretchable muscle lists its `actions` and the `stretches` (variant refs such as `P1a`, or `P1` for every variant) that lengthen it; a `lengthenOnly` one lists only `stretches`; one that can't be stretched gives the reason in `cannot`.
+- `npm test` (`scripts/stretches.test.mjs`) fails unless every Muscular part has an entry and every action of a stretchable muscle is reversed (the opposite direction at the same joint) by a move of one of its own stretches. When you add or change a muscle, add or update its entry.
 
 ### Joints & connective tissue coverage
 
