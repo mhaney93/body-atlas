@@ -8,16 +8,6 @@ import { after, before, test } from 'node:test';
 import { createServer } from 'vite';
 import { MESH_NAMES_FILE } from './mesh-names.mjs';
 
-/**
- * Meshes still built into two layers' models, each awaiting a model rebuild
- * that drops it from the layer it was filed under second. Keep this list
- * shrinking; never add to it.
- */
-const PENDING = new Map([
-  ['Diaphragm', ['muscular', 'respiratory']],
-  ['External anal sphincter', ['digestive', 'muscular']],
-]);
-
 let server;
 let layers;
 let meshNames;
@@ -39,9 +29,8 @@ test('every mesh ships in one layer only', () => {
   for (const [id, names] of Object.entries(meshNames)) {
     for (const name of names) homes.set(name, [...(homes.get(name) ?? []), id]);
   }
-  const twice = [...homes].filter(([name, ids]) => ids.length > 1 && PENDING.get(name)?.join() !== ids.join());
+  const twice = [...homes].filter(([, ids]) => ids.length > 1);
   assert.deepEqual(twice.map(([name, ids]) => `${name}: ${ids.join(', ')}`), []);
-  for (const name of PENDING.keys()) assert.ok(homes.get(name)?.length > 1, `${name} is fixed: drop it from PENDING`);
 });
 
 test("every part entry describes one of its layer's own meshes", () => {

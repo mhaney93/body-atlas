@@ -25,7 +25,6 @@ export const NESTED = [
   ['muscular', /orbicularis oris|buccinator|mentalis|depressor (labii|anguli)|levator (labii|anguli)|zygomaticus|risorius/i, 'digestive', /^lips$|gum$/i, 'the muscles of the mouth insert into the lips and lie on the gums', 15],
   ['muscular', /pharyngeal constrictor|palatopharyngeus|stylopharyngeus|salpingopharyngeus/i, 'digestive', /^pharynx$/i, 'the pharynx is its constrictor muscles', 30],
   ['muscular', /pharyngeal constrictor|palatopharyngeus|stylopharyngeus|salpingopharyngeus|cricothyroid|arytenoid|vocalis/i, 'respiratory', /pharynx$|cartilage$|conus elasticus/i, 'the pharyngeal and laryngeal muscles wrap the airway and attach to its cartilages', 6],
-  ['muscular', /^diaphragm$/i, 'respiratory', /^diaphragm$/i, 'the same muscle shown in both layers', 30],
   ['nervous', /lingual|hypoglossal|glossopharyngeal/i, 'digestive', /^tongue$/i, 'the nerves of the tongue run into it', 12],
   ['nervous', /inferior alveolar|mental nerve|superior alveolar/i, 'digestive', /gum$|incisor|canine|premolar|molar/i, 'the alveolar nerves run beneath the gums into the teeth', 8],
   ['circulatory', /./, 'nervous', /lobe|insula|cerebellum|brainstem|optic chiasm|optic tract/i, 'the cerebral vessels run in the sulci on the brain surface', 6],

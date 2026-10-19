@@ -30,7 +30,6 @@ export const PASSAGES = [
   // they meet it the simplified meshes overlap a little, which does not show.
   ['muscular', /./, /./, 'attachment at the bone surface', 3],
   ['joints', /./, /./, 'attachment at the bone surface', 3],
-  ['respiratory', /^diaphragm$/i, /./, 'attachment at the bone surface', 3],
   ['digestive', /pharynx/i, /./, 'attachment at the bone surface', 3],
   ['reproductive', /^corpora cavernosa/i, /hip bone$/i, 'the crura of the penis attach along the ischiopubic rami', 3],
   ['senses', /check ligament|trochlea of/i, /./, 'attachment at the bone surface', 3],
@@ -79,7 +78,7 @@ export const RESIDUALS = [
   ['joints', /fascia lata/i, /^coccyx$/i, 'the fascia lata attaching at the coccyx', 4],
   ['joints', /radiocarpal joint|ulnocapitate/i, /ulna$|radius$|capitate$/i, 'the wrist capsule and ligaments wrapped tightly around the joint', 5],
   ['joints', /sternoclavicular|coraco-acromial|head of rib/i, /clavicle$|scapula$|rib$/i, 'small joint discs and ligaments wrapped tightly around their joints', 4],
-  ['respiratory', /^diaphragm$|lobe of (left|right) lung$/i, /rib$|vertebra$|^intervertebral disk/i, 'pressed against the ribs and spine', 3.5],
+  ['respiratory', /lobe of (left|right) lung$/i, /rib$|vertebra$|^intervertebral disk/i, 'pressed against the ribs and spine', 3.5],
   ['muscular', /adductor magnus/i, /femur$/i, 'BodyParts3D\'s adductor magnus sinks 14.5 mm into the femur at the adductor tubercle in the source data', 14],
   ['muscular', /gluteus (medius|minimus)|transversus abdominis|external oblique/i, /hip bone$/i, 'broad muscles attaching along the iliac crest, between the bone and the skin', 7.5],
   ['muscular', /triceps brachii/i, /ulna$/i, 'the triceps tendon inserting on the olecranon', 7],

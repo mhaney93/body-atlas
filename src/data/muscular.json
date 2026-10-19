@@ -353,6 +353,7 @@
     { "name": "Muscles of the perineum and the cremaster", "reason": "no-model", "note": "Such as the bulbospongiosus, ischiocavernosus and transverse perineal muscles." },
     { "name": "Subcostales, depressor supercilii and palmaris brevis", "reason": "no-model" },
     { "name": "Articularis genus", "reason": "not-added", "note": "A small muscle above the knee that Z-Anatomy has." },
+    { "name": "External anal sphincter", "reason": "other-system", "layer": "digestive", "note": "The ring of voluntary muscle that keeps the anus closed; it is in Digestive." },
     { "name": "Muscles inside the eye", "reason": "other-system", "layer": "senses", "note": "The ciliary muscle and the muscles of the iris, shown as part of the ciliary body and the iris." },
     { "name": "Arrector pili", "reason": "too-small", "note": "The tiny muscles that raise each hair." }
   ],
@@ -620,12 +621,6 @@
       "depth": 3,
       "description": "A deep forearm muscle whose tendon hooks around a bony bump on the radius on its way to the thumb tip.",
       "flow": "Straightens the thumb at all its joints and pulls it back"
-    },
-    "external anal sphincter": {
-      "region": "Pelvic floor",
-      "depth": 2,
-      "description": "A ring of voluntary muscle around the anal canal.",
-      "flow": "Keeps the anus closed and can be tightened at will"
     },
     "external intercostal muscle": {
       "region": "Chest",

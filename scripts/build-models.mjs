@@ -341,7 +341,7 @@ const DIGESTIVE = {
 // bronchi and the segmental bronchial trees (each tree is split into several
 // files that share its name, which `mergeByName` joins into one part). The
 // lung lobes, nasal cavity, sinuses and pharynx come from Z-Anatomy. The
-// vocal ligaments stay in joints.glb.
+// vocal ligaments stay in joints.glb and the diaphragm in muscular.glb.
 const RESPIRATORY = {
   file: 'respiratory.glb',
   elements: [
@@ -350,7 +350,6 @@ const RESPIRATORY = {
     'FJ2808', 'FJ2440', 'FJ2770', // thyroid and cricoid cartilages, epiglottis
     'FJ2775', 'FJ2792', 'FJ2776', 'FJ2793', 'FJ2773', 'FJ2795', // arytenoid, corniculate, cuneiform cartilages
     'FJ2777', 'FJ2794', // conus elasticus
-    'FJ3131', // diaphragm
   ],
   load: () => parseRegisteredObjs('respiratory.obj.gz'),
   mergeByName: true,
