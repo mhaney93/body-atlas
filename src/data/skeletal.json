@@ -34,14 +34,17 @@
     },
     "malleus": {
       "region": "Middle ear",
+      "aliases": ["hammer"],
       "description": "The hammer, the first and largest of the three auditory ossicles. Its handle is attached to the eardrum, so it picks up the drum's vibrations and passes them to the incus."
     },
     "incus": {
       "region": "Middle ear",
+      "aliases": ["anvil"],
       "description": "The anvil, the middle auditory ossicle. It links the malleus to the stapes and carries sound vibrations between them."
     },
     "stapes": {
       "region": "Middle ear",
+      "aliases": ["stirrup"],
       "description": "The stirrup, the innermost auditory ossicle and the smallest bone in the body, about 3 mm long. Its footplate fits into the oval window and pushes sound vibrations into the fluid of the inner ear."
     },
     "sphenoid bone": {

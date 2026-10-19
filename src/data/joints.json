@@ -38,7 +38,7 @@
     { "name": "Articular (hyaline) cartilage", "reason": "no-model", "note": "The thin layer that caps the bone ends inside joints. Neither BodyParts3D nor Z-Anatomy models it." },
     { "name": "Bursae", "reason": "not-added", "note": "Small fluid-filled cushions near joints, such as the subacromial and prepatellar bursae. Z-Anatomy has them." },
     { "name": "Tendon sheaths", "reason": "not-added", "note": "Sleeves that let tendons glide at the wrist and ankle. Z-Anatomy has them." },
-    { "name": "Ligaments of the eye", "reason": "not-added", "note": "The suspensory ligament of the lens and the check ligaments. BodyParts3D has them." },
+    { "name": "Ligaments of the eye", "reason": "other-system", "layer": "senses", "note": "The suspensory ligament of the lens and the check ligaments." },
     { "name": "Ligaments of the ear bones", "reason": "no-model" },
     { "name": "Tendons", "reason": "other-system", "layer": "muscular" },
     { "name": "Triradiate cartilage", "reason": "not-in-adult", "note": "A growth cartilage in the hip socket that has turned to bone in an adult." }

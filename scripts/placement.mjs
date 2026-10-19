@@ -11,7 +11,7 @@ import { join } from 'node:path';
 import { NodeIO } from '@gltf-transform/core';
 import { EXTMeshoptCompression, KHRMeshQuantization } from '@gltf-transform/extensions';
 import { MeshoptDecoder } from 'meshoptimizer';
-import { passage } from './passages.mjs';
+import { onSkin, passage, skinResidual } from './passages.mjs';
 import { Envelope, Solid } from './solid.mjs';
 
 const ROOT = join(import.meta.dirname, '..');
@@ -106,6 +106,11 @@ export class Body {
 /** The most mm `part` of `layer` may lie inside `bone`: its real opening's depth, or grazing contact. */
 export function allowedDepth(layer, part, bone) {
   return passage(layer, part, bone)?.depth ?? boneTolerance(layer);
+}
+
+/** The most mm `part` of `layer` may stick out of the skin shell (ON_SKIN or SKIN_RESIDUALS in passages.mjs, else SKIN_TOLERANCE). */
+export function skinTolerance(layer, part) {
+  return Math.max(SKIN_TOLERANCE, onSkin(layer, part)?.depth ?? 0, skinResidual(layer, part)?.depth ?? 0);
 }
 
 /** The most mm a part of `layer` may graze a bone it has no opening into. */

@@ -12,6 +12,7 @@
 // instead of tearing. An edge that still cuts through a bone between two good
 // vertices is split, so its middle can move too. Vertices that share a
 // position (a muscle and its tendon along their seam) move and split as one.
+import { onSkin } from './passages.mjs';
 import { allowedDepth, boneTolerance, SKIN_TOLERANCE } from './placement.mjs';
 
 // How far (mm) a moved vertex ends up beneath the skin, outside a bone it
@@ -127,6 +128,16 @@ export function settle(parts, { layer, body, blockers = () => [] }) {
     if (!blocking.has(key)) blocking.set(key, [...new Map([...own].flatMap((n) => blockers(n)).map((b) => [b.name, b])).values()]);
     return blocking.get(key);
   };
+  // A part on the skin (ON_SKIN) is moved in only where it sticks out further
+  // than it may; everything else wherever it is outside.
+  const skinCache = new Map();
+  const skinLimit = (own, edge) => {
+    const key = [...own].join('\n');
+    if (!skinCache.has(key)) skinCache.set(key, Math.max(0, ...[...own].map((n) => onSkin(layer, n)?.depth ?? 0)));
+    const depth = skinCache.get(key);
+    if (depth) return depth - (edge ? EDGE_MARGIN : MARGIN);
+    return edge ? SKIN_TOLERANCE - EDGE_MARGIN : 0;
+  };
   const allowedCache = new Map();
   const allowed = (own, bone) => {
     const key = `${[...own].join('\n')}\t${bone}`;
@@ -157,7 +168,7 @@ export function settle(parts, { layer, body, blockers = () => [] }) {
     }
     const q = add(p, move);
     const out = body.outside(q);
-    if (out > (edge ? SKIN_TOLERANCE - EDGE_MARGIN : 0)) move = add(move, toward(q, body.skin.depth(q).point, out + SKIN_CLEARANCE));
+    if (out > skinLimit(own, edge)) move = add(move, toward(q, body.skin.depth(q).point, out + SKIN_CLEARANCE));
     return move;
   };
 

@@ -59,6 +59,13 @@ depsgraph = bpy.context.evaluated_depsgraph_get()
 depsgraph.update()
 
 
+# Objects Z-Anatomy adapted, or may have adapted, from the University of
+# Dundee's "Anatomy of the Inner Ear" (CC BY-NC-SA 4.0), whose files say so.
+NON_COMMERCIAL = re.compile(r'^(Cochlea|Vestibule|Tympanic membrane|Auditory tube)\.[lr]$')
+NON_COMMERCIAL_SOURCE = ('adapted from "Anatomy of the Inner Ear" by the University of Dundee School of Medicine, '
+                         'CC BY-NC-SA 4.0')
+
+
 def safe(name):
     return name.replace('/', '_').replace(':', '')
 
@@ -103,8 +110,9 @@ for group, objs in groups:
         m = evaluated.matrix_world
         flip = m.determinant() < 0
         mesh = evaluated.to_mesh()
+        license = NON_COMMERCIAL_SOURCE if NON_COMMERCIAL.match(obj.name) else 'CC BY-SA 4.0'
         lines = [
-            '# Exported from Z-Anatomy (https://www.z-anatomy.com), CC BY-SA 4.0',
+            f'# Exported from Z-Anatomy (https://www.z-anatomy.com), {license}',
             f'# Z-Anatomy name : {obj.name}',
             f'# Parent : {obj.parent.name if obj.parent else ""}',
         ]

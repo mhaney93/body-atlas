@@ -1,0 +1,179 @@
+{
+  "id": "senses",
+  "name": "Sense organs",
+  "color": "#f7a8ff",
+  "asset": "models/senses.glb",
+  "extraAssets": ["models/senses-ear.glb"],
+  "summary": "The eyes and ears turn light and sound into nerve signals for the brain. Each eye bends light through its cornea and lens onto the retina. Each ear funnels sound to the eardrum, three tiny bones pass it to the cochlea, which turns it into signals, and the vestibule and semicircular canals beside it sense balance. Many of these parts are tiny and buried in bone: zoom right in to see them.",
+  "groupToggles": true,
+  "groups": {
+    "coat": {
+      "label": "Sclera & cornea",
+      "color": "#f2f4ff",
+      "opacity": 0.3
+    },
+    "uvea": {
+      "label": "Choroid, iris & retina",
+      "color": "#c46cff"
+    },
+    "lens": {
+      "label": "Lens & eye fluids",
+      "color": "#8fe3ff",
+      "opacity": 0.55
+    },
+    "orbit": {
+      "label": "Eye muscles, eyelids & ligaments",
+      "color": "#ff8a9a"
+    },
+    "lacrimal": {
+      "label": "Tear glands & ducts",
+      "color": "#5cc8ff"
+    },
+    "nerves": {
+      "label": "Nerves of sight & hearing",
+      "color": "#ffd84d"
+    },
+    "outer": {
+      "label": "Outer ear",
+      "color": "#ffb38a",
+      "opacity": 0.35
+    },
+    "middle": {
+      "label": "Eardrum, ear bones & ear tube",
+      "color": "#ffe9b0"
+    },
+    "inner": {
+      "label": "Inner ear",
+      "color": "#7dffb0"
+    }
+  },
+  "shared": [
+    {
+      "layer": "skeletal",
+      "match": "^(malleus|incus|stapes)$",
+      "group": "middle"
+    },
+    {
+      "layer": "muscular",
+      "match": "^((superior|inferior|medial|lateral) rectus|(superior|inferior) oblique|(tendon of )?levator palpebrae superioris|common tendinous ring|palpebral part of orbicularis oculi)$",
+      "group": "orbit"
+    },
+    {
+      "layer": "nervous",
+      "match": "^(optic nerve \\(ii\\)|cochlear nerve|vestibular nerve|vestibulocochlear nerve \\(viii\\))$",
+      "group": "nerves"
+    }
+  ],
+  "notShown": [
+    { "name": "Conjunctiva", "reason": "no-model", "note": "The thin, clear membrane over the white of the eye and the inside of the eyelids." },
+    { "name": "Macula, fovea and optic disc", "reason": "no-model", "note": "The spot of sharpest vision and the blind spot where the optic nerve leaves. BodyParts3D models the retina as one layer without them." },
+    { "name": "Rods and cones", "aliases": ["photoreceptors"], "reason": "too-small", "note": "The light-sensing cells of the retina, about 120 million rods and 6 million cones in each eye." },
+    { "name": "Ciliary muscle and the muscles of the iris", "reason": "no-model", "note": "Shown only as part of the ciliary body and the iris." },
+    { "name": "Posterior chamber of the eye", "reason": "no-model", "note": "The narrow, fluid-filled space between the iris and the lens." },
+    { "name": "Tarsal (meibomian) glands and lacrimal puncta", "reason": "too-small", "note": "The oil glands inside the tarsal plates, and the tiny openings at the inner corner of each eyelid that tears drain into." },
+    { "name": "Eyelid skin, eyelashes and eyebrows", "reason": "other-system", "system": "skin (integumentary)", "note": "The glass skin shell covers the eyelids." },
+    { "name": "Orbital fat", "reason": "no-model", "note": "The fat that cushions the eyeball in its socket." },
+    { "name": "Oculomotor, trochlear and abducens nerves", "reason": "other-system", "layer": "nervous", "note": "The nerves that work the eye muscles." },
+    { "name": "Ciliary ganglion and the ciliary, lacrimal and other orbital nerves", "reason": "not-added", "note": "BodyParts3D has them; they belong with the Nervous layer, which does not show them yet." },
+    { "name": "Optic chiasm and optic tracts", "reason": "other-system", "layer": "nervous", "note": "Where the optic nerves cross and run on into the brain." },
+    { "name": "Arteries and veins of the eye", "reason": "other-system", "layer": "circulatory", "note": "The ophthalmic artery is in the Circulatory layer; the central retinal vessels inside the optic nerve are not modelled." },
+    { "name": "Ear canal (external acoustic meatus)", "aliases": ["ear canal"], "reason": "no-model", "note": "The passage from the outer ear to the eardrum. Neither free model has it as a part of its own." },
+    { "name": "Middle ear cavity and mastoid air cells", "aliases": ["tympanic cavity"], "reason": "no-model", "note": "The air spaces in the temporal bone that hold the ear bones." },
+    { "name": "Stapedius and tensor tympani", "reason": "no-model", "note": "The tiny muscles of the middle ear, which damp loud sounds." },
+    { "name": "Ligaments and joints of the ear bones", "reason": "no-model" },
+    { "name": "Cochlear duct, utricle, saccule and semicircular ducts", "aliases": ["membranous labyrinth"], "reason": "no-model", "note": "The fluid-filled membranous tubes and sacs inside the bony cochlea, vestibule and canals that are shown. Z-Anatomy names them but has no meshes for them." },
+    { "name": "Hair cells and the organ of Corti", "reason": "too-small", "note": "The sensing cells inside the cochlea and the balance organs." },
+    { "name": "Right cochlear nerve", "reason": "not-added", "note": "Z-Anatomy has it, as a mesh without a side in its name that the Nervous layer's export skips; the right vestibular and vestibulocochlear nerves are shown." },
+    { "name": "Olfactory epithelium (smell)", "aliases": ["smell"], "reason": "no-model", "note": "The patch of lining in the roof of the nose that senses smell. The nasal cavity is in the Respiratory layer and the olfactory nerve in the Nervous layer." },
+    { "name": "Taste buds", "aliases": ["taste"], "reason": "too-small", "note": "On the tongue, which is in the Digestive layer." },
+    { "name": "Touch, pain and temperature receptors", "aliases": ["touch"], "reason": "too-small", "note": "Spread through the skin. The Nervous layer's illustrative nerve-ending haze hints at where they are densest." }
+  ],
+  "parts": {
+    "sclera": {
+      "aliases": ["white of the eye"],
+      "description": "The tough white outer coat of the eyeball. It keeps the eye's shape and gives the eye muscles something to pull on."
+    },
+    "cornea": {
+      "description": "The clear dome at the front of the eye. It does most of the focusing, bending light as it enters before the lens fine-tunes it."
+    },
+    "choroid": {
+      "description": "A thin layer packed with blood vessels between the sclera and the retina. It feeds the outer retina, and its dark pigment soaks up stray light."
+    },
+    "ciliary body": {
+      "description": "The ring of tissue behind the iris that holds the lens. Its muscle changes the lens's shape to focus near or far, and it makes the clear fluid in the front of the eye."
+    },
+    "iris": {
+      "description": "The coloured ring around the pupil. Its muscles widen or narrow the pupil to let in more or less light."
+    },
+    "retina": {
+      "description": "The light-sensitive layer lining the back of the eye. Its rods and cones turn light into nerve signals, which leave the eye through the optic nerve."
+    },
+    "lens": {
+      "description": "The clear, flexible lens behind the iris. It changes shape to focus light sharply on the retina, and it stiffens with age, which is why many people need reading glasses after about 40."
+    },
+    "suspensory ligament of lens": {
+      "aliases": ["zonule", "ciliary zonule"],
+      "description": "A ring of fine fibres (the zonule) that holds the lens from the ciliary body. When the ciliary muscle tightens, the fibres slacken and the lens rounds up to focus on near things."
+    },
+    "anterior chamber of eyeball": {
+      "aliases": ["aqueous humour", "aqueous humor"],
+      "description": "The space between the cornea and the iris, filled with clear aqueous humour. The fluid feeds the cornea and lens and keeps up the pressure that holds the eye's shape."
+    },
+    "vitreous body": {
+      "aliases": ["vitreous humour", "vitreous humor"],
+      "description": "The clear jelly that fills the back four-fifths of the eyeball. It holds the eye's round shape and lets light pass through to the retina."
+    },
+    "tarsal plate of upper eyelid": {
+      "description": "A firm plate of dense tissue that stiffens the upper eyelid. Glands inside it make the oily layer of the tears, which slows their drying."
+    },
+    "tarsal plate of lower eyelid": {
+      "description": "A smaller firm plate that stiffens the lower eyelid. Like the upper one, it holds the oil glands that help keep tears from drying."
+    },
+    "check ligament of lateral rectus": {
+      "description": "A band of tissue from the sheath of the lateral rectus to the outer wall of the eye socket. It stops the muscle turning the eye too far."
+    },
+    "check ligament of medial rectus": {
+      "description": "A band of tissue from the sheath of the medial rectus to the inner wall of the eye socket. It stops the muscle turning the eye too far."
+    },
+    "trochlea of superior oblique": {
+      "description": "A small loop of cartilage at the front of the eye socket's roof. The superior oblique's tendon runs through it like a rope over a pulley, which turns the direction of its pull."
+    },
+    "lacrimal gland": {
+      "aliases": ["tear gland"],
+      "description": "The tear gland, tucked under the upper outer rim of the eye socket. It makes the watery tears that each blink spreads over the eye."
+    },
+    "lacrimal lake": {
+      "description": "The small pool of tears at the inner corner of the eye. Tears collect here before they drain away."
+    },
+    "lacrimal canaliculus": {
+      "description": "The tiny channels that drain tears from the inner corner of the eyelids into the tear sac."
+    },
+    "lacrimal sac": {
+      "aliases": ["tear sac"],
+      "description": "The tear sac, in a groove of bone beside the nose. It collects tears from the eyelids and passes them down the nasolacrimal duct."
+    },
+    "nasolacrimal duct": {
+      "aliases": ["tear duct"],
+      "description": "The tear duct, which carries tears down through the bone into the nose. That is why your nose runs when you cry."
+    },
+    "auricle": {
+      "aliases": ["pinna", "outer ear", "ear"],
+      "description": "The outer ear, a curved flap of skin over cartilage. Its folds funnel sound into the ear canal and help you tell where a sound comes from."
+    },
+    "tympanic membrane": {
+      "aliases": ["eardrum"],
+      "description": "The eardrum, a thin membrane across the inner end of the ear canal. Sound makes it vibrate, and the malleus picks up the vibrations."
+    },
+    "auditory tube": {
+      "aliases": ["eustachian tube"],
+      "description": "The Eustachian tube, which links the middle ear to the back of the nose. It opens when you swallow or yawn, evening out the air pressure on both sides of the eardrum."
+    },
+    "cochlea": {
+      "description": "The snail-shaped hearing organ, coiled two and a half turns inside the temporal bone and filled with fluid. Hair cells along it turn sound vibrations into nerve signals, high pitches near its base and low ones near its tip."
+    },
+    "vestibule and semicircular canals": {
+      "aliases": ["semicircular canals", "vestibule", "balance organ", "inner ear"],
+      "description": "The balance organ: the vestibule senses gravity and moving in a straight line, and the three semicircular canals, set at right angles to each other, sense the head turning. Z-Anatomy models them as one part."
+    }
+  }
+}

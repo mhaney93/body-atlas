@@ -89,6 +89,8 @@ export const YIELDS = [
   ['nervous', /nerve|trunk|plexus|ganglia|ganglion/i, 'circulatory', /aorta|vena cava|pulmonary trunk|^(left|right) pulmonary artery$/i, 'nerves run beside the great vessels, not through them'],
   // BodyParts3D's spleen reaches into its left adrenal gland by up to 11 mm.
   ['endocrine', /^left adrenal gland$/i, 'lymphatic', /^spleen$/i, 'the left adrenal gland lies in front of the kidney, beside the spleen, not in it'],
+  // The fitted Z-Anatomy optic nerve runs on into BodyParts3D's eyeball.
+  ['nervous', /optic nerve/i, 'senses', /sclera$|choroid$|retina$|vitreous body$/i, 'the optic nerve ends at the back of the eyeball, where its fibres leave the retina'],
 ];
 
 const matches = ([la, pa, lb, pb], a, b) => la === a.layer && pa.test(a.part) && lb === b.layer && pb.test(b.part);
