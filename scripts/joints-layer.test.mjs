@@ -1,6 +1,7 @@
 // Checks the shipped Joints & connective tissue model against its layer data:
-// every mesh in public/models/joints.glb (and every part it borrows from the
-// skeletal model) must resolve to a name, a sub-group and a description.
+// every mesh in public/models/joints.glb must resolve to a name, a sub-group
+// and a description, and the discs and costal cartilages Skeletal owns must be
+// listed as not shown.
 import assert from 'node:assert/strict';
 import { after, before, test } from 'node:test';
 import { NodeIO } from '@gltf-transform/core';

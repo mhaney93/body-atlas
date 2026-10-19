@@ -2,10 +2,10 @@
 // in public/models/senses.glb and senses-ear.glb must resolve to a group and a
 // description, the eye, tear duct, ear and inner-ear parts must be there on
 // both sides, the parts inside each eyeball must sit in its sclera and the
-// Z-Anatomy ear parts by the ossicles of their side, the parts shared from
-// other layers must exist there, the parts the free models lack must be
-// listed as not shown, and nothing may lie outside the skin or inside bone
-// (check-placement.mjs).
+// Z-Anatomy ear parts by the ossicles of their side, the sense parts other
+// layers own and the parts the free models lack must be listed as not shown
+// (the former with where they live), and nothing may lie outside the skin or
+// inside bone (check-placement.mjs).
 import assert from 'node:assert/strict';
 import { after, before, test } from 'node:test';
 import { NodeIO } from '@gltf-transform/core';

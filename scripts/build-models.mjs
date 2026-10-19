@@ -431,8 +431,8 @@ function renalPelves(dir) {
 // Endocrine system: only the glands no other layer has. BodyParts3D has the
 // pineal body and the adrenal glands; the thyroid, the parathyroids and the
 // two lobes of the pituitary come from Z-Anatomy (endocrine-model.mjs). The
-// hypothalamus, thymus, pancreas and testes are shared from the layers that
-// own them at runtime (see "shared" in src/data/endocrine.json).
+// hypothalamus, thymus, pancreas and testes live in the layers that own them
+// (each part has one home; see "notShown" in src/data/endocrine.json).
 const ENDOCRINE = {
   file: 'endocrine.glb',
   groups: new Map([
@@ -455,8 +455,8 @@ const ENDOCRINE = {
 // outer ears as one element, cut apart at the midline. The middle and inner
 // ear come from Z-Anatomy (SENSES_EAR). The eye muscles, the optic,
 // inner-ear, olfactory and chorda tympani nerves, the ossicles, the tongue
-// and the nasal cavity are shared at runtime from the Muscular, Nervous,
-// Skeletal, Digestive and Respiratory layers (see "shared" in
+// and the nasal cavity live in the Muscular, Nervous, Skeletal, Digestive and
+// Respiratory layers (each part has one home; see "notShown" in
 // src/data/senses.json), not duplicated here.
 const SENSES = {
   file: 'senses.glb',
@@ -541,8 +541,8 @@ const ASSETS = [
     ratio: 0.2,
     error: 0.002,
   },
-  // Intervertebral discs and costal cartilages are shared from skeletal.glb
-  // at runtime (see "shared" in src/data/joints.json), not duplicated here.
+  // Intervertebral discs and costal cartilages live in skeletal.glb (see
+  // "notShown" in src/data/joints.json), not duplicated here.
   { file: 'joints.glb', elements: CONNECTIVE_TISSUE, load: () => parseRegisteredObjs('connective-tissue.obj.gz'), ratio: 0.25, error: 0.01 },
   // BodyParts3D muscles plus the ones it lacks from Z-Anatomy, with tendons
   // split off (see muscular-model.mjs). Borders stay put so a muscle and its
