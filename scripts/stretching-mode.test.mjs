@@ -195,3 +195,8 @@ test('the lit meshes are the lengthened side’s: the head turned left lights th
   const p4 = stretch('P4');
   assert.deepEqual(names(stretchedMeshes(group, p4, p4.variants[0], 'right')), ['Left adductor magnus', 'Right adductor magnus']);
 });
+
+test('an eye step shows the eyeballs with the bones and muscles; other steps leave them off', () => {
+  for (const v of stretch('E1').variants) assert.deepEqual(m.layersFor(stretch('E1'), v), ['skeletal', 'muscular', 'senses'], v.id);
+  assert.ok(!m.layersFor(stretch('F1'), stretch('F1').variants[0]).includes('senses'));
+});

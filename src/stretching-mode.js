@@ -23,6 +23,7 @@ import {
   describeMove,
   holdText,
   isSided,
+  parseMove,
   partsOf,
   runOrder,
   targetsOf,
@@ -47,11 +48,13 @@ const SAFETY = {
 };
 
 /**
- * The layers a step shows: the bones and muscles, and the layer whose parts
- * it works (the nerves for a glide, the joints for a joint move or rolling).
+ * The layers a step shows: the bones and muscles, the layer whose parts it
+ * works (the nerves for a glide, the joints for a joint move or rolling), and
+ * the eyeballs (Sense organs) when the eyes move.
  */
 export function layersFor(stretch, variant) {
-  return [...new Set(['skeletal', 'muscular', ...Object.keys(partsOf(stretch, variant))])];
+  const eyes = [...(variant.setup ?? []), ...variant.moves].some((code) => parseMove(code).joint === 'eye');
+  return [...new Set(['skeletal', 'muscular', ...Object.keys(partsOf(stretch, variant)), ...(eyes ? ['senses'] : [])])];
 }
 
 /** localStorage, or null where reading it throws (blocked site data, some private windows). */

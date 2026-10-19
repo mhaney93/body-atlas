@@ -76,10 +76,10 @@ export function moves(stretch, variant) {
  * @param {import('./viewer.js').Viewer} viewer
  * @param {HTMLElement} el the panel's section
  * @param {{ color: string }} layer the Muscular layer
- * @param {{ openMode?: (muscleKey: string, side?: 'left' | 'right') => void }} [host] `openMode` opens Stretching mode at
- *   the muscle's first stretch, on the muscle's side (none for a midline muscle)
+ * @param {{ openMode?: (muscleKey: string, side?: 'left' | 'right') => void, eyes?: object }} [host] `openMode` opens Stretching mode at
+ *   the muscle's first stretch, on the muscle's side (none for a midline muscle); `eyes` is the layer with the eyeballs (Sense organs)
  */
-export function stretchPanel(viewer, el, layer, { openMode } = {}) {
+export function stretchPanel(viewer, el, layer, { openMode, eyes } = {}) {
   let playing = null;
 
   function stop() {
@@ -99,6 +99,12 @@ export function stretchPanel(viewer, el, layer, { openMode } = {}) {
     playing = { ref };
     const { ops, cues } = demo(viewer, layer, stretch, variant, side);
     viewer.showPose(ops, cues);
+    // The eyes turn about their eyeballs, which the rig finds once the Sense organs load: load them (hidden) and start again.
+    if (eyes && ops.some((op) => op.seg.endsWith('-eye')) && !viewer.layers.get(eyes.id)?.group) {
+      viewer.preloadLayer(eyes).then(() => {
+        if (playing?.ref === ref) viewer.showPose(ops, cues);
+      });
+    }
     viewer.emphasize(stretchedMeshes(viewer.layers.get(layer.id)?.group, stretch, variant, side));
     button.textContent = button.dataset.label.replace('▶', '■ Stop:');
     const how = el.querySelector('.stretch-how');

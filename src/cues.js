@@ -1,22 +1,24 @@
 // Arrows for moves a pose can't show: the ribs in breathing, the pelvic
-// floor, the tongue, the face and the eyes, the palm and the foot's arch have
-// no bone of their own to turn (UNPOSED in src/pose.js). Each such move gets
-// straight arrows at the muscles that make it, pointing the way it goes;
+// floor, the tongue, the face and the eyelids, the palm and the foot's arch
+// have no bone of their own to turn (unposed in src/pose.js). Each such move
+// gets straight arrows at the muscles that make it, pointing the way it goes;
 // src/pose-view.js carries them along with whatever the pose moves and draws
-// them with the joint arrows. Pure, so the tests can check every move has one.
+// them with the joint arrows. The eyes' gaze is posed (each eyeball turns),
+// but a turn that small reads better as an arrow out in front of each eye
+// than as an arc. Pure, so the tests can check every move has one.
 import * as THREE from 'three';
-import { UNPOSED, vector } from './pose.js';
+import { vector } from './pose.js';
 import { isSided, parseMove } from './stretching.js';
 
 const EYE = ['superior rectus', 'inferior rectus', 'medial rectus', 'lateral rectus'];
-/** In front of the eyeball (m), where a gaze arrow starts. */
-const IN_FRONT_OF_EYE = 0.015;
+/** In front of the eye muscles' centre (m), where a gaze arrow starts: just past the cornea. */
+const IN_FRONT_OF_EYE = 0.03;
 
 const cue = (at, toward, seg, extra = {}) => ({ at, toward, seg, ...extra });
 const eye = (toward) => [cue(EYE, toward, 'head', { ahead: IN_FRONT_OF_EYE })];
 
 /**
- * For each move the rig can't pose, its arrows: at the muscles `at` (one
+ * For each move the rig can't pose, and the eyes' gaze, its arrows: at the muscles `at` (one
  * arrow per side, or one over both for a `midline` one), riding on segment
  * `seg`, pointing `toward` the sum of these directions. Directions are the
  * rig's (up, down, anterior, posterior; lateral and medial of the arrow's
@@ -72,7 +74,6 @@ export function variantCues(stretch, variant, side, rig, centerOf) {
   const out = [];
   for (const code of [...(variant.setup ?? []), ...variant.moves]) {
     const { joint, dir } = parseMove(code);
-    if (!UNPOSED.has(joint)) continue;
     for (const spec of CUES[`${joint}.${dir}`] ?? []) {
       for (const s of spec.midline ? [null] : sides) {
         const center = centerOf(spec.at, s);

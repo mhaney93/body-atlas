@@ -107,6 +107,7 @@ $('layer-list').after(stretching.element);
 /** "Stretch it" in a muscle's info panel (src/stretch-panel.js), with a way into Stretching mode. */
 const stretch = stretchPanel(viewer, $('info-stretch'), muscularLayer, {
   openMode: (key, side) => stretching.open(key, side).catch((err) => console.error(err)),
+  eyes: layers.find((l) => l.id === 'senses'),
 });
 
 $('info-close').addEventListener('click', () => viewer.select(null));

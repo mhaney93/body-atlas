@@ -222,7 +222,9 @@ export class Viewer {
     this.poseBones = poseBones;
     // Stretching poses (src/pose-view.js): the posable layers' parts follow one skeleton.
     this.poser = new Poser(scene, {
-      region: (layer, mesh) => partInfo(layer, mesh.userData.name ?? mesh.name, mesh.userData.group, undefined, mesh.userData.of).region,
+      // A part shared from another layer (the Sense organs' eye muscles) is where that layer says.
+      region: (layer, mesh) =>
+        partInfo(layer, mesh.userData.name ?? mesh.name, mesh.userData.group, this.layers.get(mesh.userData.sourceId)?.layer, mesh.userData.of).region,
       side: (mesh) => sideOf(mesh.userData.name ?? mesh.name),
     });
 

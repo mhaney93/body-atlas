@@ -22,6 +22,7 @@ let L;
 let rig;
 let bones;
 let muscles;
+let senses;
 const io = new NodeIO()
   .registerExtensions([EXTMeshoptCompression, KHRMeshQuantization])
   .registerDependencies({ 'meshopt.decoder': MeshoptDecoder });
@@ -64,7 +65,9 @@ before(async () => {
   await MeshoptDecoder.ready;
   bones = await meshes('skeletal.glb');
   muscles = await meshes('muscular.glb');
-  rig = R.buildRig((name) => bones.get(name)?.positions);
+  senses = await meshes('senses.glb');
+  // The eyeballs come from the Sense organs, as the viewer adds them once that layer loads.
+  rig = R.buildRig((name) => (bones.get(name) ?? senses.get(name))?.positions);
 });
 after(() => server?.close());
 
@@ -97,7 +100,8 @@ function bonePoser() {
 test('every bone belongs to a segment, and every segment the rig needs has bones', () => {
   assert.deepEqual([...bones.keys()].filter((name) => !R.segmentOfBone(name)), []);
   const owned = new Set([...bones.keys()].map(R.segmentOfBone));
-  const empty = R.SEGMENTS.filter((s) => s.family !== 'twist' && !owned.has(s.id)).map((s) => s.id);
+  // The forearm's twist and the eyes turn without bones of their own.
+  const empty = R.SEGMENTS.filter((s) => s.family !== 'twist' && s.family !== 'eye' && !owned.has(s.id)).map((s) => s.id);
   assert.deepEqual(empty, []);
 });
 
@@ -180,7 +184,7 @@ test('posed moves are real, with an angle, and no joint is posed past its normal
       const total = new Map();
       for (const code of [...(v.setup ?? []), ...v.moves]) {
         const { joint, dir } = S.parseMove(code);
-        if (P.UNPOSED.has(joint)) continue; // the face, eyes, ribs…: words only, no angle
+        if (P.unposed(code)) continue; // the face, eyelids, ribs…: words only, no angle
         if (!S.STRETCHING.joints[joint] || !S.OPPOSITE[dir]) bad.push(`${st.id}${v.id}: bad move ${code}`);
         const key = `${joint}.${dir}`;
         total.set(key, (total.get(key) ?? 0) + P.moveAngle(code));
@@ -540,12 +544,13 @@ test('every move no bone can show has arrows, at muscles that exist, pointing th
   const muscular = L.LAYERS.find((l) => l.id === 'muscular');
   const bad = [];
   for (const [code, specs] of Object.entries(C.CUES)) {
-    if (!P.UNPOSED.has(S.parseMove(code).joint)) bad.push(`${code}: has a bone to turn`);
+    // The eyes' gaze is posed and keeps its arrows; every other cue is for a move nothing turns.
+    if (!P.unposed(code) && S.parseMove(code).joint !== 'eye') bad.push(`${code}: has a bone to turn`);
     for (const spec of specs) for (const key of spec.at) if (!muscular.parts[key]) bad.push(`${code}: no muscle "${key}"`);
   }
   for (const st of S.STRETCHING.stretches)
     for (const v of st.variants) {
-      const unposed = [...(v.setup ?? []), ...v.moves].filter((c) => P.UNPOSED.has(S.parseMove(c).joint));
+      const unposed = [...(v.setup ?? []), ...v.moves].filter((c) => P.unposed(c));
       for (const code of unposed) if (!C.CUES[code.split(':')[0]]) bad.push(`${st.id}${v.id}: no arrow for ${code}`);
       for (const side of ['left', 'right']) {
         const cues = C.variantCues(st, v, side, rig, muscleCenter);
@@ -580,13 +585,18 @@ test('every move no bone can show has arrows, at muscles that exist, pointing th
 test('the arrows ride with the pose, the jaw opens through its chin and its glide gets an arrow', async () => {
   const C = await server.ssrLoadModule('/src/cues.js');
   const poser = bonePoser();
-  // Eyes only: no bone turns, yet the pose shows, with an arrow at each eye.
+  // The eyes' gaze: a straight arrow in front of each eye, and no arc at the eyes' turns.
   const e1 = S.STRETCHING.stretches.find((st) => st.id === 'E1');
   const eyeCues = C.variantCues(e1, e1.variants[0], 'left', rig, muscleCenter);
   poser.start(P.variantOps(e1, e1.variants[0], 'left'), { still: true, cues: eyeCues });
   assert.ok(poser.active);
   assert.equal(poser.arrows.children.filter((a) => a.userData.cue).length, 2);
+  assert.equal(poser.arrows.children.filter((a) => !a.userData.cue).length, 0);
   poser.stop();
+  // Closing the eyelids turns nothing: an arrow alone shows it.
+  const lids = e1.variants.find((v) => v.moves.includes('eye.lidclose'));
+  assert.deepEqual(P.variantOps(e1, lids, 'left'), []);
+  assert.ok(C.variantCues(e1, lids, 'left', rig, muscleCenter).length);
   // The flattened palm's arrows go where the bent elbow carries the hand.
   const h4 = S.STRETCHING.stretches.find((st) => st.id === 'H4');
   const ops = P.variantOps(h4, h4.variants[0], 'right');
@@ -605,4 +615,89 @@ test('the arrows ride with the pose, the jaw opens through its chin and its glid
   assert.ok(Math.abs(arc.userData.radius - seg('mandible').length) < 1e-9);
   assert.ok(poser.arrows.children.some((a) => a.userData.code === 'jaw.fwd' && a.userData.glide));
   poser.stop();
+});
+
+test('the eyes turn about their eyeballs, both looking one way, lengthening the muscles that pull the other way', () => {
+  // The viewer's order: a skeleton without the eyes, the muscles weighted by an earlier pose, then the Sense organs load.
+  const scene = new THREE.Scene();
+  const muscular = L.LAYERS.find((l) => l.id === 'muscular');
+  const sensesLayer = L.LAYERS.find((l) => l.id === 'senses');
+  assert.equal(sensesLayer.posable, 'soft');
+  const poser = new V.Poser(scene, {
+    region: (layer, mesh) => L.partInfo(layer, mesh.userData.name, mesh.userData.group, undefined, mesh.userData.of).region,
+    side: (mesh) => (/\bright\b/i.test(mesh.userData.name) ? 'right' : /\bleft\b/i.test(mesh.userData.name) ? 'left' : null),
+  });
+  const group = (map, keep) => {
+    const g = new THREE.Group();
+    for (const [name, m] of map) {
+      if (!keep(name)) continue;
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute('position', new THREE.BufferAttribute(m.positions, 3));
+      if (m.index.length) geometry.setIndex(m.index);
+      const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
+      mesh.userData = { name, ...m.extras };
+      g.add(mesh);
+    }
+    scene.add(g);
+    return g;
+  };
+  const skeletal = group(bones, () => true);
+  poser.setBones(skeletal);
+  poser.adopt({ posable: 'bones' }, skeletal);
+  assert.ok(!poser.rig.segments.get('left-eye').radius);
+  const eyeMuscles = group(muscles, (name) => /^(left|right) (medial|lateral) rectus$|^(left|right) common tendinous ring$/i.test(name));
+  poser.adopt(muscular, eyeMuscles);
+  poser.start(P.variantOps({ id: 'N', variants: [] }, { id: 'a', moves: ['head.flex:20'] }, 'left'), { still: true });
+  poser.stop();
+  const eyes = group(senses, (name) => /^(left|right) (sclera|cornea)$/i.test(name));
+  poser.adopt(sensesLayer, eyes);
+  for (const side of ['left', 'right']) {
+    const sclera = senses.get(R.eyeballMesh(side)).positions;
+    const eye = poser.rig.segments.get(`${side}-eye`);
+    assert.ok(new THREE.Box3().setFromArray(sclera).getCenter(new THREE.Vector3()).distanceTo(eye.pivot) < 0.002, `${side} eye centre`);
+    assert.ok(eye.radius > 0.01 && eye.radius < 0.015, `${side} eye radius ${eye.radius}`);
+  }
+
+  const mesh = (g, name) => g.children.find((m) => m.userData.name === name);
+  const points = (m) => {
+    const v = new THREE.Vector3();
+    return Array.from({ length: m.geometry.getAttribute('position').count }, (_, i) => m.getVertexPosition(i, v).applyMatrix4(m.matrixWorld).clone());
+  };
+  const centre = (m) => points(m).reduce((c, p) => c.add(p), new THREE.Vector3()).divideScalar(points(m).length);
+  const ring = (side) => centre(mesh(eyeMuscles, `${side === 'left' ? 'Left' : 'Right'} common tendinous ring`));
+  /** A muscle's length: from the tendinous ring at the back of the orbit to its farthest point, the insertion on the eyeball. */
+  const reach = (name, side) => Math.max(...points(mesh(eyeMuscles, name)).map((p) => p.distanceTo(ring(side))));
+  const names = ['Left lateral rectus', 'Left medial rectus', 'Right lateral rectus', 'Right medial rectus'];
+  const rest = Object.fromEntries(names.map((n) => [n, reach(n, n.split(' ')[0].toLowerCase())]));
+  const restCornea = { left: centre(mesh(eyes, 'Left cornea')), right: centre(mesh(eyes, 'Right cornea')) };
+  const restSclera = { left: centre(mesh(eyes, 'Left sclera')), right: centre(mesh(eyes, 'Right sclera')) };
+  const restRing = { left: ring('left'), right: ring('right') };
+
+  // Look to the right (the body's right is −x): "eye.in" for the left eye, written once for both.
+  const e1 = S.STRETCHING.stretches.find((st) => st.id === 'E1');
+  const look = e1.variants.find((v) => v.moves.includes('eye.in'));
+  const ops = P.variantOps(e1, look, 'left');
+  assert.deepEqual(ops.map((op) => `${op.seg} ${op.toward}`).sort(), ['left-eye medial', 'right-eye lateral']);
+  poser.start(ops, { still: true });
+  for (const side of ['left', 'right']) {
+    // Each cornea swings toward the body's right; the eyeball turns in place and the back of the orbit stays put.
+    const shift = centre(mesh(eyes, `${side === 'left' ? 'Left' : 'Right'} cornea`)).sub(restCornea[side]);
+    assert.ok(shift.x < -0.005, `${side} cornea moved ${shift.toArray()}`);
+    assert.ok(centre(mesh(eyes, `${side === 'left' ? 'Left' : 'Right'} sclera`)).distanceTo(restSclera[side]) < 0.001, `${side} eyeball stays centred`);
+    assert.ok(ring(side).distanceTo(restRing[side]) < 0.001, `${side} ring stays put`);
+  }
+  // The left eye turns in, so its lateral rectus lengthens and its medial rectus shortens; the right eye turns out, the other way round.
+  const now = Object.fromEntries(names.map((n) => [n, reach(n, n.split(' ')[0].toLowerCase())]));
+  assert.ok(now['Left lateral rectus'] > rest['Left lateral rectus'] + 0.001, `left lateral rectus ${rest['Left lateral rectus']} → ${now['Left lateral rectus']}`);
+  assert.ok(now['Left medial rectus'] < rest['Left medial rectus'] - 0.001, `left medial rectus ${rest['Left medial rectus']} → ${now['Left medial rectus']}`);
+  assert.ok(now['Right medial rectus'] > rest['Right medial rectus'] + 0.001, `right medial rectus ${rest['Right medial rectus']} → ${now['Right medial rectus']}`);
+  assert.ok(now['Right lateral rectus'] < rest['Right lateral rectus'] - 0.001, `right lateral rectus ${rest['Right lateral rectus']} → ${now['Right lateral rectus']}`);
+  // The eyeball follows its eye alone, so it is picked as a rigid mesh, with no vertex skinned on the CPU.
+  assert.deepEqual(mesh(eyes, 'Left sclera').segments, [R.SEGMENT_INDEX.get('left-eye')]);
+  assert.deepEqual(mesh(eyes, 'Right cornea').segments, [R.SEGMENT_INDEX.get('right-eye')]);
+  const cornea = centre(mesh(eyes, 'Left cornea'));
+  const hits = new THREE.Raycaster(cornea.clone().add(new THREE.Vector3(0, 0, 0.5)), new THREE.Vector3(0, 0, -1)).intersectObject(eyes, true);
+  assert.ok(hits.length && mesh(eyes, 'Left sclera').blended === null && mesh(eyes, 'Left cornea').blended === null);
+  poser.stop();
+  assert.ok(centre(mesh(eyes, 'Left cornea')).distanceTo(restCornea.left) < 1e-6);
 });

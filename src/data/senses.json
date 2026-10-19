@@ -3,6 +3,7 @@
   "name": "Sense organs",
   "color": "#f7a8ff",
   "asset": "models/senses.glb",
+  "posable": "soft",
   "extraAssets": ["models/senses-ear.glb"],
   "summary": "The eyes and ears turn light and sound into nerve signals for the brain. Each eye bends light through its cornea and lens onto the retina. Each ear funnels sound to the eardrum, three tiny bones pass it to the cochlea, which turns it into signals, and the vestibule and semicircular canals beside it sense balance. Many of these parts are tiny and buried in bone: zoom right in to see them.",
   "groupToggles": true,
@@ -90,36 +91,46 @@
   ],
   "parts": {
     "sclera": {
+      "region": "Eye",
       "aliases": ["white of the eye"],
       "description": "The tough white outer coat of the eyeball. It keeps the eye's shape and gives the eye muscles something to pull on."
     },
     "cornea": {
+      "region": "Eye",
       "description": "The clear dome at the front of the eye. It does most of the focusing, bending light as it enters before the lens fine-tunes it."
     },
     "choroid": {
+      "region": "Eye",
       "description": "A thin layer packed with blood vessels between the sclera and the retina. It feeds the outer retina, and its dark pigment soaks up stray light."
     },
     "ciliary body": {
+      "region": "Eye",
       "description": "The ring of tissue behind the iris that holds the lens. Its muscle changes the lens's shape to focus near or far, and it makes the clear fluid in the front of the eye."
     },
     "iris": {
+      "region": "Eye",
       "description": "The coloured ring around the pupil. Its muscles widen or narrow the pupil to let in more or less light."
     },
     "retina": {
+      "region": "Eye",
       "description": "The light-sensitive layer lining the back of the eye. Its rods and cones turn light into nerve signals, which leave the eye through the optic nerve."
     },
     "lens": {
+      "region": "Eye",
       "description": "The clear, flexible lens behind the iris. It changes shape to focus light sharply on the retina, and it stiffens with age, which is why many people need reading glasses after about 40."
     },
     "suspensory ligament of lens": {
+      "region": "Eye",
       "aliases": ["zonule", "ciliary zonule"],
       "description": "A ring of fine fibres (the zonule) that holds the lens from the ciliary body. When the ciliary muscle tightens, the fibres slacken and the lens rounds up to focus on near things."
     },
     "anterior chamber of eyeball": {
+      "region": "Eye",
       "aliases": ["aqueous humour", "aqueous humor"],
       "description": "The space between the cornea and the iris, filled with clear aqueous humour. The fluid feeds the cornea and lens and keeps up the pressure that holds the eye's shape."
     },
     "vitreous body": {
+      "region": "Eye",
       "aliases": ["vitreous humour", "vitreous humor"],
       "description": "The clear jelly that fills the back four-fifths of the eyeball. It holds the eye's round shape and lets light pass through to the retina."
     },
