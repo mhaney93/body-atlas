@@ -200,3 +200,47 @@ test('an eye step shows the eyeballs with the bones and muscles; other steps lea
   for (const v of stretch('E1').variants) assert.deepEqual(m.layersFor(stretch('E1'), v), ['skeletal', 'muscular', 'senses'], v.id);
   assert.ok(!m.layersFor(stretch('F1'), stretch('F1').variants[0]).includes('senses'));
 });
+
+test("an eye muscle's demo lends the Sense organs, and leaves them as the user has them once they take over", async () => {
+  const { layerLoan } = await server.ssrLoadModule('/src/stretch-panel.js');
+  let on = false;
+  let loaded = 0;
+  const calls = [];
+  const loan = layerLoan({
+    isOn: () => on,
+    setOn: async (v) => {
+      calls.push(v);
+      on = v;
+    },
+    load: async () => loaded++,
+  });
+  // Played and stopped untouched: the layer goes back off.
+  let eyes = loan.borrow();
+  await eyes.ready;
+  assert.equal(on, true);
+  eyes.restore();
+  assert.equal(on, false);
+  // Clicking an eyeball the demo showed selects it (keep) and then stops the demo: the eyeball stays.
+  eyes = loan.borrow();
+  await eyes.ready;
+  loan.keep();
+  eyes.restore();
+  assert.equal(on, true);
+  // Already on (even still loading): left on, and the demo still waits for the load.
+  calls.length = 0;
+  eyes = loan.borrow();
+  await eyes.ready;
+  eyes.restore();
+  assert.deepEqual(calls, []);
+  assert.equal(loaded, 1);
+  // Toggled off and on by the user mid-demo: still theirs.
+  on = false;
+  eyes = loan.borrow();
+  await eyes.ready;
+  loan.keep();
+  on = false;
+  loan.keep();
+  on = true;
+  eyes.restore();
+  assert.equal(on, true);
+});

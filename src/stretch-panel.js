@@ -73,13 +73,42 @@ export function moves(stretch, variant) {
 }
 
 /**
+ * Lends a layer to a demo (the eyeballs' Sense organs to an eye muscle's
+ * "Stretch it"): `borrow()` switches it on if it is off, resolving `ready`
+ * once it has loaded, and its `restore()` switches it back off, unless the
+ * user has taken it over meanwhile (`keep()`: they selected one of its parts
+ * or toggled it), in which case it stays as they have it.
+ * @param {{ isOn: () => boolean, setOn: (on: boolean) => Promise<unknown>, load: () => Promise<unknown> }} layer
+ */
+export function layerLoan({ isOn, setOn, load }) {
+  let loan = null;
+  return {
+    borrow() {
+      if (isOn()) return { ready: load(), restore() {} };
+      const mine = { kept: false };
+      loan = mine;
+      return {
+        ready: setOn(true),
+        restore() {
+          if (loan !== mine) return;
+          loan = null;
+          if (!mine.kept && isOn()) setOn(false);
+        },
+      };
+    },
+    keep() {
+      if (loan) loan.kept = true;
+    },
+  };
+}
+
+/**
  * @param {import('./viewer.js').Viewer} viewer
  * @param {HTMLElement} el the panel's section
  * @param {{ color: string }} layer the Muscular layer
- * @param {{ openMode?: (muscleKey: string, side?: 'left' | 'right') => void, showEyes?: () => { ready: Promise<unknown>, restore: () => void } | null }} [host]
+ * @param {{ openMode?: (muscleKey: string, side?: 'left' | 'right') => void, showEyes?: () => { ready: Promise<unknown>, restore: () => void } }} [host]
  *   `openMode` opens Stretching mode at the muscle's first stretch, on the muscle's side (none for a midline muscle);
- *   `showEyes` switches the eyeballs' layer (Sense organs) on, resolving `ready` once it is shown, with `restore` to
- *   switch it back off (null if it was already on)
+ *   `showEyes` shows the eyeballs' layer (Sense organs; a layerLoan's `borrow`), resolving `ready` once it has loaded
  */
 export function stretchPanel(viewer, el, layer, { openMode, showEyes } = {}) {
   let playing = null;
@@ -105,7 +134,7 @@ export function stretchPanel(viewer, el, layer, { openMode, showEyes } = {}) {
     // The eyes turn about their eyeballs, which the rig finds once the Sense organs load: show them and start again.
     if (showEyes && ops.some((op) => op.seg.endsWith('-eye'))) {
       playing.eyes = showEyes();
-      playing.eyes?.ready
+      playing.eyes.ready
         .then(() => {
           if (playing?.ref === ref) viewer.showPose(ops, cues);
         })

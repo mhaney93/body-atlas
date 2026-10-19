@@ -7,7 +7,7 @@ import { buildLayerControls } from './layer-controls.js';
 import { notShownPanel } from './not-shown.js';
 import { buildIndex } from './search.js';
 import { searchBox } from './search-ui.js';
-import { stretchPanel } from './stretch-panel.js';
+import { layerLoan, stretchPanel } from './stretch-panel.js';
 import { stretchingMode } from './stretching-mode.js';
 import { fadeNoteKeeper, searchSelector } from './search-select.js';
 import meshNames from './mesh-names.json';
@@ -38,6 +38,7 @@ const viewer = new Viewer($('stage'), {
       return;
     }
     const { layer, mesh } = selection;
+    if (layer.id === sensesLayer.id) eyesLoan.keep();
     // three.js sanitises node names (spaces → underscores); the original lives in extras.
     const source = layers.find((l) => l.id === mesh.userData.sourceId);
     const part = partInfo(layer, mesh.userData.name ?? mesh.name, mesh.userData.group, source, mesh.userData.of);
@@ -105,14 +106,17 @@ const stretching = stretchingMode(viewer, {
 });
 $('layer-list').after(stretching.element);
 
+/** The Sense organs, switched on for an eye muscle's "Stretch it" so the eyeballs show turning. */
+const sensesLayer = layers.find((l) => l.id === 'senses');
+const eyesLoan = layerLoan({
+  isOn: () => active.has(sensesLayer.id),
+  setOn: (on) => setLayer(sensesLayer, on),
+  load: () => viewer.preloadLayer(sensesLayer),
+});
 /** "Stretch it" in a muscle's info panel (src/stretch-panel.js), with a way into Stretching mode. */
 const stretch = stretchPanel(viewer, $('info-stretch'), muscularLayer, {
   openMode: (key, side) => stretching.open(key, side).catch((err) => console.error(err)),
-  showEyes() {
-    const senses = layerById('senses');
-    if (active.has(senses.id)) return null;
-    return { ready: setLayer(senses, true), restore: () => active.has(senses.id) && setLayer(senses, false) };
-  },
+  showEyes: () => eyesLoan.borrow(),
 });
 
 $('info-close').addEventListener('click', () => viewer.select(null));
@@ -317,7 +321,10 @@ for (const layer of layers) {
     stretching.layerSwitched(layer.id, on);
   };
   syncs.set(layer.id, sync);
-  button.addEventListener('click', () => setLayer(layer, !active.has(layer.id)));
+  button.addEventListener('click', () => {
+    if (layer.id === sensesLayer.id) eyesLoan.keep();
+    setLayer(layer, !active.has(layer.id));
+  });
   li.append(button, extras);
   $('layer-list').append(li);
 }
