@@ -76,14 +76,17 @@ export function moves(stretch, variant) {
  * @param {import('./viewer.js').Viewer} viewer
  * @param {HTMLElement} el the panel's section
  * @param {{ color: string }} layer the Muscular layer
- * @param {{ openMode?: (muscleKey: string, side?: 'left' | 'right') => void, eyes?: object }} [host] `openMode` opens Stretching mode at
- *   the muscle's first stretch, on the muscle's side (none for a midline muscle); `eyes` is the layer with the eyeballs (Sense organs)
+ * @param {{ openMode?: (muscleKey: string, side?: 'left' | 'right') => void, showEyes?: () => { ready: Promise<unknown>, restore: () => void } | null }} [host]
+ *   `openMode` opens Stretching mode at the muscle's first stretch, on the muscle's side (none for a midline muscle);
+ *   `showEyes` switches the eyeballs' layer (Sense organs) on, resolving `ready` once it is shown, with `restore` to
+ *   switch it back off (null if it was already on)
  */
-export function stretchPanel(viewer, el, layer, { openMode, eyes } = {}) {
+export function stretchPanel(viewer, el, layer, { openMode, showEyes } = {}) {
   let playing = null;
 
   function stop() {
     if (!playing) return;
+    playing.eyes?.restore();
     playing = null;
     viewer.stopPose();
     viewer.emphasize([]);
@@ -99,11 +102,14 @@ export function stretchPanel(viewer, el, layer, { openMode, eyes } = {}) {
     playing = { ref };
     const { ops, cues } = demo(viewer, layer, stretch, variant, side);
     viewer.showPose(ops, cues);
-    // The eyes turn about their eyeballs, which the rig finds once the Sense organs load: load them (hidden) and start again.
-    if (eyes && ops.some((op) => op.seg.endsWith('-eye')) && !viewer.layers.get(eyes.id)?.group) {
-      viewer.preloadLayer(eyes).then(() => {
-        if (playing?.ref === ref) viewer.showPose(ops, cues);
-      });
+    // The eyes turn about their eyeballs, which the rig finds once the Sense organs load: show them and start again.
+    if (showEyes && ops.some((op) => op.seg.endsWith('-eye'))) {
+      playing.eyes = showEyes();
+      playing.eyes?.ready
+        .then(() => {
+          if (playing?.ref === ref) viewer.showPose(ops, cues);
+        })
+        .catch((err) => console.error(err));
     }
     viewer.emphasize(stretchedMeshes(viewer.layers.get(layer.id)?.group, stretch, variant, side));
     button.textContent = button.dataset.label.replace('▶', '■ Stop:');

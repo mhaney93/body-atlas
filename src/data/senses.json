@@ -135,54 +135,69 @@
       "description": "The clear jelly that fills the back four-fifths of the eyeball. It holds the eye's round shape and lets light pass through to the retina."
     },
     "tarsal plate of upper eyelid": {
+      "region": "Orbit",
       "description": "A firm plate of dense tissue that stiffens the upper eyelid. Glands inside it make the oily layer of the tears, which slows their drying."
     },
     "tarsal plate of lower eyelid": {
+      "region": "Orbit",
       "description": "A smaller firm plate that stiffens the lower eyelid. Like the upper one, it holds the oil glands that help keep tears from drying."
     },
     "check ligament of lateral rectus": {
+      "region": "Orbit",
       "description": "A band of tissue from the sheath of the lateral rectus to the outer wall of the eye socket. It stops the muscle turning the eye too far."
     },
     "check ligament of medial rectus": {
+      "region": "Orbit",
       "description": "A band of tissue from the sheath of the medial rectus to the inner wall of the eye socket. It stops the muscle turning the eye too far."
     },
     "trochlea of superior oblique": {
+      "region": "Orbit",
       "description": "A small loop of cartilage at the front of the eye socket's roof. The superior oblique's tendon runs through it like a rope over a pulley, which turns the direction of its pull."
     },
     "lacrimal gland": {
+      "region": "Orbit",
       "aliases": ["tear gland"],
       "description": "The tear gland, tucked under the upper outer rim of the eye socket. It makes the watery tears that each blink spreads over the eye."
     },
     "lacrimal lake": {
+      "region": "Orbit",
       "description": "The small pool of tears at the inner corner of the eye. Tears collect here before they drain away."
     },
     "lacrimal canaliculus": {
+      "region": "Orbit",
       "description": "The tiny channels that drain tears from the inner corner of the eyelids into the tear sac."
     },
     "lacrimal sac": {
+      "region": "Orbit",
       "aliases": ["tear sac"],
       "description": "The tear sac, in a groove of bone beside the nose. It collects tears from the eyelids and passes them down the nasolacrimal duct."
     },
     "nasolacrimal duct": {
+      "region": "Orbit",
       "aliases": ["tear duct"],
       "description": "The tear duct, which carries tears down through the bone into the nose. That is why your nose runs when you cry."
     },
     "auricle": {
+      "region": "Ear",
       "aliases": ["pinna", "outer ear", "ear"],
       "description": "The outer ear, a curved flap of skin over cartilage. Its folds funnel sound into the ear canal and help you tell where a sound comes from."
     },
     "tympanic membrane": {
+      "region": "Ear",
       "aliases": ["eardrum"],
       "description": "The eardrum, a thin membrane across the inner end of the ear canal. Sound makes it vibrate, and the malleus picks up the vibrations."
     },
     "auditory tube": {
+      "region": "Ear",
       "aliases": ["eustachian tube"],
       "description": "The Eustachian tube, which links the middle ear to the back of the nose. It opens when you swallow or yawn, evening out the air pressure on both sides of the eardrum."
     },
     "cochlea": {
+      "region": "Ear",
       "description": "The snail-shaped hearing organ, coiled two and a half turns inside the temporal bone and filled with fluid. Hair cells along it turn sound vibrations into nerve signals, high pitches near its base and low ones near its tip."
     },
     "vestibule and semicircular canals": {
+      "region": "Ear",
       "aliases": ["semicircular canals", "vestibule", "balance organ", "inner ear"],
       "description": "The balance organ: the vestibule senses gravity and moving in a straight line, and the three semicircular canals, set at right angles to each other, sense the head turning. Z-Anatomy models them as one part."
     }

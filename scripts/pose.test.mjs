@@ -66,8 +66,9 @@ before(async () => {
   bones = await meshes('skeletal.glb');
   muscles = await meshes('muscular.glb');
   senses = await meshes('senses.glb');
+  rig = R.buildRig((name) => bones.get(name)?.positions);
   // The eyeballs come from the Sense organs, as the viewer adds them once that layer loads.
-  rig = R.buildRig((name) => (bones.get(name) ?? senses.get(name))?.positions);
+  for (const side of ['left', 'right']) R.setEye(rig, side, senses.get(R.eyeballMesh(side)).positions);
 });
 after(() => server?.close());
 
@@ -700,4 +701,25 @@ test('the eyes turn about their eyeballs, both looking one way, lengthening the 
   assert.ok(hits.length && mesh(eyes, 'Left sclera').blended === null && mesh(eyes, 'Left cornea').blended === null);
   poser.stop();
   assert.ok(centre(mesh(eyes, 'Left cornea')).distanceTo(restCornea.left) < 1e-6);
+});
+
+test('only the eyeballs turn with the eyes; every other Sense organs part stays fixed to the skull', async () => {
+  const sensesLayer = L.LAYERS.find((l) => l.id === 'senses');
+  const skeletal = L.LAYERS.find((l) => l.id === 'skeletal');
+  const head = [R.SEGMENT_INDEX.get('head')];
+  const ids = (set) => [...set].sort((a, b) => a - b).map((i) => R.SEGMENTS[i].id);
+  const bad = [];
+  for (const [name, m] of [...senses, ...(await meshes('senses-ear.glb'))]) {
+    const { region } = L.partInfo(sensesLayer, name, m.extras?.group);
+    const side = /\bright\b/i.test(name) ? 'right' : /\bleft\b/i.test(name) ? 'left' : null;
+    const want = region === 'Eye' ? ['head', `${side}-eye`] : ['head'];
+    const got = ids(R.candidateSegments(region, side));
+    if (got.join() !== want.join()) bad.push(`${name} (${region}): ${got}`);
+  }
+  // The ossicles, shared from the Skeletal layer, pose as Sense organs parts too.
+  for (const name of ['malleus', 'incus', 'stapes']) {
+    const got = ids(R.candidateSegments(L.partInfo(skeletal, name).region, null));
+    if (got.join() !== head.map((i) => R.SEGMENTS[i].id).join()) bad.push(`${name}: ${got}`);
+  }
+  assert.deepEqual(bad, []);
 });

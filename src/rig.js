@@ -166,6 +166,10 @@ export const REGION_FAMILIES = {
   'Lumbar plexus': ['pelvis', 'lumbar', 'thigh', 'shank'],
   'Sacral plexus': ['pelvis', 'lumbar', 'thigh', 'shank'],
   'Leg and foot': ['pelvis', 'thigh', 'shank', 'foot', 'toes'],
+  // Sense organs regions: only the eyeballs turn; the rest stays fixed to the skull.
+  Orbit: ['head'],
+  Ear: ['head'],
+  'Middle ear': ['head'],
 };
 
 // --- geometry helpers over flat [x, y, z, …] arrays -------------------------
@@ -381,12 +385,7 @@ export function buildRig(verts) {
     const length = dir.length();
     segments.set(def.id, { ...def, pivot, end, dir: dir.normalize(), length });
   }
-  const rig = { segments, frames };
-  for (const side of SIDES) {
-    const sclera = verts(eyeballMesh(side));
-    if (sclera?.length) setEye(rig, side, sclera);
-  }
-  return rig;
+  return { segments, frames };
 }
 
 /**
