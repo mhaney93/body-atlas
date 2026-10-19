@@ -12,6 +12,10 @@
 // instead of tearing. An edge that still cuts through a bone between two good
 // vertices is split, so its middle can move too. Vertices that share a
 // position (a muscle and its tendon along their seam) move and split as one.
+// That crumples a thin tube (a vessel lying on a rib), whose sides get
+// different moves, so a layer of vessels is first moved by a smooth field
+// instead (the `smooth` option, see moveSmoothly), and vertex by vertex only
+// where that leaves something wrong.
 import { allowedDepth, boneTolerance, SKIN_TOLERANCE } from './placement.mjs';
 
 // How far (mm) a moved vertex ends up beneath the skin, outside a bone it
@@ -35,6 +39,12 @@ const MIN_SPLIT = 3;
 // Rounds of moving vertices, and of splitting the edges that are still bad.
 const MOVES = 6;
 const SPLITS = 3;
+// The smooth field starts this much finer than the `smooth` option and halves
+// this many times, with this many rounds at each scale: wide pulls shift a
+// whole stretch of vessel first, and finer ones settle what is left nearer
+// its bad points.
+const SMOOTH_SCALES = 5;
+const SMOOTH_ROUNDS = 8;
 // Points along each edge are tested at most this far apart (mm), as in
 // check-placement.mjs.
 const STEP = 1.5;
@@ -94,9 +104,10 @@ class Heap {
  * @param {string} options.layer the parts' layer id (for passages.mjs)
  * @param {import('./placement.mjs').Body} options.body
  * @param {(part: string) => {name: string, solid: import('./solid.mjs').Solid}[]} [options.blockers] parts `part` must stay out of
+ * @param {number} [options.smooth] first move the parts by a field this wide (mm), so thin tubes shift whole (see moveSmoothly)
  * @returns {Map<string, number>} the largest move (mm) of each part that moved
  */
-export function settle(parts, { layer, body, blockers = () => [] }) {
+export function settle(parts, { layer, body, blockers = () => [], smooth }) {
   // Weld vertices by position so seams between meshes move as one.
   const ids = new Map();
   const pos = [];
@@ -137,6 +148,9 @@ export function settle(parts, { layer, body, blockers = () => [] }) {
   /**
    * The move that puts point `p` of the parts named in `own` right (zero if
    * it is fine). With `edge`, only a point near failing the check counts.
+   * With `smooth`, a point in a bone it has no opening into goes back only
+   * to within the tolerance, not right out of the bone: a vessel lying on a
+   * rib needs to move less, so it is less often pushed into the next bone.
    */
   const fix = (p, own, edge = false) => {
     let move = [0, 0, 0];
@@ -147,7 +161,7 @@ export function settle(parts, { layer, body, blockers = () => [] }) {
       const depth = allowed(own, hit.bone);
       if (hit.depth <= depth - (edge ? EDGE_MARGIN : MARGIN)) continue;
       // Out of the bone, or back to within its opening.
-      const target = depth > boneTolerance(layer) ? depth - 2 * MARGIN : -BONE_CLEARANCE;
+      const target = smooth || depth > boneTolerance(layer) ? depth - 2 * MARGIN : -BONE_CLEARANCE;
       longer(toward(p, hit.point, hit.depth - target));
     }
     for (const b of blockersOf(own)) {
@@ -270,8 +284,78 @@ export function settle(parts, { layer, body, blockers = () => [] }) {
     return touched;
   };
 
+  /**
+   * Moves the parts by a smooth displacement field rather than vertex by
+   * vertex: every bad point (a vertex, or a point along an edge as
+   * check-placement.mjs samples it) pulls the vertices of its own parts within
+   * `radius` mm of it toward its fix, weighted down with distance in space.
+   * A vertex takes the weighted average of its pulls, faded by the strongest
+   * one. A vessel is much narrower than the field, so its cross-section moves
+   * as one and it bends instead of crumpling. Returns the vertices still bad.
+   */
+  const moveSmoothly = () => {
+    let check = pos.map((_, id) => id);
+    for (let round = 0; round < SMOOTH_SCALES * SMOOTH_ROUNDS; round++) {
+      const radius = smooth / 2 ** Math.floor(round / SMOOTH_ROUNDS);
+      const cell = (p) => p.map((x) => Math.floor(x / radius));
+      // The bad points among (and on the edges of) what moved last round.
+      const looking = new Set(check);
+      const pulls = [];
+      for (const id of check) {
+        const m = fix(pos[id], names[id]);
+        if (len(m) > 0) pulls.push({ p: pos[id], m, own: names[id] });
+      }
+      const seen = new Set();
+      for (const t of tris)
+        for (let i = 0; i < t.length; i += 3)
+          for (let e = 0; e < 3; e++) {
+            const [a, b] = [t[i + e], t[i + ((e + 1) % 3)]];
+            const key = edgeKey(a, b);
+            if (seen.has(key) || (!looking.has(a) && !looking.has(b))) continue;
+            seen.add(key);
+            const own = new Set([...names[a]].filter((x) => names[b].has(x)));
+            const n = Math.ceil(len(sub(pos[b], pos[a])) / STEP);
+            if (!own.size) continue;
+            for (let s = 1; s < n; s++) {
+              const p = add(pos[a], scale(sub(pos[b], pos[a]), s / n));
+              const m = fix(p, own, true);
+              if (len(m) > 0) pulls.push({ p, m, own });
+            }
+          }
+      if (!pulls.length) return [];
+      const grid = new Map();
+      for (const pull of pulls) {
+        const key = cell(pull.p).join(',');
+        if (!grid.has(key)) grid.set(key, []);
+        grid.get(key).push(pull);
+      }
+      const moves = new Map();
+      pos.forEach((p, id) => {
+        const [x, y, z] = cell(p);
+        let sum = [0, 0, 0];
+        let total = 0;
+        let strongest = 0;
+        for (let dx = -1; dx <= 1; dx++)
+          for (let dy = -1; dy <= 1; dy++)
+            for (let dz = -1; dz <= 1; dz++)
+              for (const pull of grid.get(`${x + dx},${y + dy},${z + dz}`) ?? []) {
+                const d = len(sub(p, pull.p));
+                if (d >= radius || ![...pull.own].some((n) => names[id].has(n))) continue;
+                const w = (1 - (d / radius) ** 2) ** 2;
+                sum = add(sum, scale(pull.m, w));
+                total += w;
+                strongest = Math.max(strongest, w);
+              }
+        if (total > 0) moves.set(id, scale(sum, strongest / total));
+      });
+      for (const [id, m] of moves) pos[id] = add(pos[id], m);
+      check = [...moves.keys()];
+    }
+    return check.filter((id) => len(fix(pos[id], names[id])) > 0);
+  };
+
   // After the first round, look again only around what moved or was split.
-  let todo = pos.map((_, id) => id);
+  let todo = smooth ? moveSmoothly() : pos.map((_, id) => id);
   let near = null;
   for (let round = 0; round <= SPLITS; round++) {
     const changed = moveVertices(todo);
