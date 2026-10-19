@@ -7,7 +7,7 @@
 // stretch, hold, back out) with arrows at each moving joint; the glass skin
 // stays where it is, a ghost of the starting position.
 import * as THREE from 'three';
-import { buildRig, candidateSegments, indexBones, segmentOfBone, SEGMENTS, SEGMENT_INDEX, skinWeights } from './rig.js';
+import { buildRig, candidateSegments, eyeballMesh, indexBones, segmentOfBone, setEye, SEGMENTS, SEGMENT_INDEX, SIDES, skinWeights } from './rig.js';
 import { opAxis, opStart, opTurn, poseMatrices, vector } from './pose.js';
 
 const LOOP = { into: 1.6, hold: 2.4, out: 1.2, rest: 0.8 }; // seconds
@@ -214,11 +214,15 @@ export class Poser {
    * Swaps a freshly loaded layer's meshes for PoseMeshes bound to the
    * skeleton, before anything else holds them. A bones layer's meshes follow
    * their own segment; a soft layer's rest on the root until they are weighted.
+   * A layer with the eyeballs in it puts the eyes' segments there (#setEyes).
    */
   adopt(layer, group) {
     group.updateMatrixWorld(true);
     const swaps = [];
     group.traverse((o) => o.isMesh && swaps.push(o));
+    const eyeballs = new Map();
+    for (const mesh of swaps) for (const side of SIDES) if ((mesh.userData.name ?? mesh.name) === eyeballMesh(side)) eyeballs.set(side, worldPositions(mesh));
+    if (eyeballs.size) this.#setEyes(eyeballs);
     for (const mesh of swaps) {
       const geometry = mesh.geometry.getAttribute('skinIndex') ? mesh.geometry.clone() : mesh.geometry;
       const n = geometry.getAttribute('position').count;
@@ -245,6 +249,27 @@ export class Poser {
       posed.bind(this.skeleton, posed.matrixWorld);
       this.meshes.push({ layer, mesh: posed });
     }
+  }
+
+  /**
+   * Turns each eye about its eyeball's centre from now on (setEye, from the
+   * sclera's world positions by side). The eye's bone moves there at rest,
+   * and the parts that may follow an eye are weighted again by the next pose
+   * that moves it, even if an earlier pose weighted them without the eyes.
+   */
+  #setEyes(scleras) {
+    for (const [side, positions] of scleras) {
+      if (this.rig.segments.get(`${side}-eye`).radius) continue;
+      setEye(this.rig, side, positions);
+      const i = SEGMENT_INDEX.get(`${side}-eye`);
+      const { pivot } = this.rig.segments.get(`${side}-eye`);
+      // At rest every bone is a translation to its pivot.
+      this.skeleton.boneInverses[i].makeTranslation(-pivot.x, -pivot.y, -pivot.z);
+      for (const { layer, mesh } of this.meshes) {
+        if (layer.posable === 'soft' && candidateSegments(this.parts.region(layer, mesh), this.parts.side(mesh)).has(i)) mesh.weighted = false;
+      }
+    }
+    this.#apply(this.fraction);
   }
 
   /**
@@ -375,7 +400,8 @@ export class Poser {
 
   /**
    * One curved arrow per move and side (not per setup move), at its joint,
-   * sweeping as far as the pose turns it there, from where the turn starts.
+   * sweeping as far as the pose turns it there, from where the turn starts;
+   * none for a turn whose cue arrow shows it (the eyes' gaze).
    */
   #drawArrows(ops, full) {
     this.arrows.clear();
@@ -385,7 +411,7 @@ export class Poser {
       const key = `${op.code} ${op.side}`;
       // A joint shared over several segments (the spine's) turns by its whole angle, drawn once.
       const sweep = opTurn(op, this.rig) / (op.share ?? 1);
-      if (op.setup || sweep < 1 || seen.has(key)) continue;
+      if (op.setup || op.arc === false || sweep < 1 || seen.has(key)) continue;
       seen.add(key);
       const seg = this.rig.segments.get(op.seg);
       if (op.plane === 'glide') {

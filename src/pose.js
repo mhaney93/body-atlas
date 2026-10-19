@@ -5,13 +5,19 @@
 // to the models.
 import * as THREE from 'three';
 import { DOWN, LATERAL, POSTERIOR, UP, ANTERIOR } from './rig.js';
-import { STRETCHING, isSided, parseMove } from './stretching.js';
+import { MIRROR, STRETCHING, isSided, parseMove } from './stretching.js';
 
 const FINGERS = ['index', 'middle', 'ring', 'little'];
 const TOES = ['big', 'second', 'third', 'fourth', 'little'];
 
 /** Joints that are shown by highlighting and the card's words only: there is no bone to turn (ribs, face…). */
-export const UNPOSED = new Set(['ribs', 'palm', 'arch', 'hyoid', 'eye', 'face', 'tongue', 'pelvic-floor']);
+export const UNPOSED = new Set(['ribs', 'palm', 'arch', 'hyoid', 'face', 'tongue', 'pelvic-floor']);
+
+/** Whether a move is shown without turning anything: its joint has no bone, or the move turns no segment (closing the eyelids). */
+export function unposed(code) {
+  const { joint, dir } = parseMove(code);
+  return UNPOSED.has(joint) || DIRECTIONS[joint]?.[dir]?.length === 0;
+}
 
 /**
  * Angles (degrees; millimetres for the jaw's glides) for moves the joint's
@@ -29,6 +35,8 @@ export const DEFAULT_ANGLE = {
   'thumb-knuckle.ext': 10, 'thumb-tip.ext': 20,
   'toes.ext': 60, 'toes.flex': 35, 'toe-joints.flex': 45, 'toe-joints.ext': 0, 'toe-spread.spread': 10, 'toe-spread.squeeze': 5,
   'jaw.open': 25, 'jaw.close': 0, 'jaw.fwd': 6, 'jaw.back': 2, 'jaw.lati': 8, 'jaw.latc': 8,
+  // The eye's end points, short of its full range (about 45-50° to the side, 45° up, 55° down; Lee et al. 2019).
+  'eye.up': 30, 'eye.down': 35, 'eye.in': 35, 'eye.out': 35, 'eye.upin': 30, 'eye.upout': 30, 'eye.downin': 30, 'eye.downout': 30,
 };
 
 /**
@@ -58,6 +66,9 @@ const SPINE = (segs) => ({
   roti: segs.map(([seg, share]) => turn('anterior', 'lateral', 'transverse', { seg, share })),
   rotc: segs.map(([seg, share]) => turn('anterior', 'medial', 'transverse', { seg, share })),
 });
+/** A gaze: the eye turns about its centre so it looks up, down, in, out or between; the arrows in src/cues.js show it, not one at each turn. */
+const gaze = (...towards) =>
+  towards.map(([toward, plane]) => turn('anterior', toward, plane, { seg: 'eye', share: towards.length > 1 ? Math.SQRT1_2 : 1, arc: false }));
 const pair = (seg, specs) => Object.fromEntries(Object.entries(specs).map(([dir, s]) => [dir, [{ seg, ...s }]]));
 const each = (segs, spec) => segs.map((seg) => ({ seg, ...spec }));
 
@@ -72,6 +83,13 @@ export const DIRECTIONS = {
     back: [{ seg: 'mandible', glide: 'posterior', plane: 'glide' }],
     lati: [turn('anterior', 'lateral', 'transverse', { seg: 'mandible' })],
     latc: [turn('anterior', 'medial', 'transverse', { seg: 'mandible' })],
+  },
+  eye: {
+    up: gaze(['up', 'sagittal']), down: gaze(['down', 'sagittal']),
+    in: gaze(['medial', 'transverse']), out: gaze(['lateral', 'transverse']),
+    upin: gaze(['up', 'sagittal'], ['medial', 'transverse']), upout: gaze(['up', 'sagittal'], ['lateral', 'transverse']),
+    downin: gaze(['down', 'sagittal'], ['medial', 'transverse']), downout: gaze(['down', 'sagittal'], ['lateral', 'transverse']),
+    lidclose: [],
   },
   scapula: pair('girdle', {
     elev: turn('lateral', 'up', 'frontal'), dep: turn('lateral', 'down', 'frontal'),
@@ -150,14 +168,15 @@ export function moveAngle(code, data = STRETCHING) {
 }
 
 /** The side whose segments a sided move turns: limbs and the shoulder girdle have one; the midline doesn't. */
-const SIDED_SEGMENT = /^(girdle|upperarm|forearm|twist|hand|thumb\d|(index|middle|ring|little)\d|thigh|shank|foot|\w+toe\d)$/;
+const SIDED_SEGMENT = /^(eye|girdle|upperarm|forearm|twist|hand|thumb\d|(index|middle|ring|little)\d|thigh|shank|foot|\w+toe\d)$/;
 
 /**
  * The turns a variant makes on one side, as a list of
  * { seg, ref, toward, plane, angle } (or { seg, glide, angle } for the jaw):
  * its setup moves (holding the limb where the stretch is done) then its own
  * moves. A variant done once for both sides is posed as written (left side)
- * at the midline, and moves both limbs alike (the butterfly's two thighs).
+ * at the midline, and moves both limbs alike (the butterfly's two thighs);
+ * both eyes look the same way, so the right eye's in and out swap (MIRROR).
  */
 export function variantOps(stretch, variant, side, data = STRETCHING) {
   const sides = isSided(stretch, variant) ? [side] : ['left', 'right'];
@@ -166,14 +185,16 @@ export function variantOps(stretch, variant, side, data = STRETCHING) {
   for (const code of [...setup, ...variant.moves]) {
     const { joint, dir } = parseMove(code);
     if (UNPOSED.has(joint)) continue;
-    const specs = DIRECTIONS[joint]?.[dir];
-    if (!specs) throw new Error(`no pose for "${code}"`);
+    if (!DIRECTIONS[joint]?.[dir]) throw new Error(`no pose for "${code}"`);
     const total = moveAngle(code, data);
     // The forearm rests palm forward, already turned palm-up: pronation starts from there.
     const offset = joint === 'forearm' ? { pro: 1, sup: -1 }[dir] : 0;
-    for (const spec of specs) {
-      const limb = SIDED_SEGMENT.test(spec.seg);
-      for (const poseSide of limb ? sides : sides.slice(0, 1)) {
+    for (const poseSide of sides) {
+      // A one-time move is written for the left side; one that swaps between the sides (the eye's in and out) swaps on the right.
+      const mirrored = poseSide === 'right' && !isSided(stretch, variant) && MIRROR[`${joint}.${dir}`];
+      for (const spec of DIRECTIONS[joint][mirrored ? parseMove(mirrored).dir : dir]) {
+        const limb = SIDED_SEGMENT.test(spec.seg);
+        if (!limb && poseSide !== sides[0]) continue;
         const seg = limb ? `${poseSide}-${spec.seg}` : spec.seg;
         ops.push({ ...spec, seg, side: poseSide, code, total, angle: total * (spec.share ?? 1), restOffset: offset, setup: setup.has(code) });
       }

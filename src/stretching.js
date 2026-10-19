@@ -14,7 +14,7 @@ export const OPPOSITE = Object.fromEntries(
     ['flex', 'ext'], ['abd', 'add'], ['ir', 'er'], ['hzadd', 'hzabd'], ['pro', 'sup'], ['rd', 'ud'],
     ['elev', 'dep'], ['protr', 'retr'], ['uprot', 'dnrot'], ['sbi', 'sbc'], ['roti', 'rotc'], ['inv', 'ev'],
     ['df', 'pf'], ['open', 'close'], ['fwd', 'back'], ['lati', 'latc'], ['inh', 'exh'], ['opp', 'repos'],
-    ['spread', 'squeeze'], ['lift', 'drop'], ['cup', 'flat'],
+    ['spread', 'squeeze'], ['lift', 'drop'], ['cup', 'flat'], ['up', 'down'], ['in', 'out'], ['upin', 'downout'], ['upout', 'downin'],
   ].flatMap(([a, b]) => [[a, b], [b, a]]),
 );
 

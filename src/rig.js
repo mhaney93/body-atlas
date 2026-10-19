@@ -5,6 +5,10 @@
 // their shape (the femoral head, the elbow, a metacarpal head…). Soft parts
 // (muscles, tendons) get weights from the nearest bone, blended across each
 // joint, so a muscle that crosses a joint bends with it (see skinWeights).
+// Each eye is a segment too, turning about the centre of its eyeball (found
+// from the sclera, a Sense organs mesh, once that loads: setEye); the eyeball
+// follows it whole and the eye muscles blend from it back to the skull, so
+// they lengthen and shorten as the eye turns.
 // Pure: it reads world-space vertex arrays and runs in node for the tests.
 import * as THREE from 'three';
 
@@ -24,6 +28,16 @@ const PHALANX = ['proximal', 'middle', 'distal'];
 
 const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 
+/** The mesh (Sense organs layer) whose shape gives an eye's centre and radius. */
+export const eyeballMesh = (side) => `${cap(side)} sclera`;
+/**
+ * How far (m) out from the eyeball's surface an eye part still follows the
+ * eye: wholly up to EYE_BLEND[0] (the cornea bulges past the sclera's
+ * sphere), blending into the skull by EYE_BLEND[1] (the eye muscles' origins
+ * at the back and on the orbit's wall stay put).
+ */
+const EYE_BLEND = [0.003, 0.016];
+
 /**
  * Every segment, parents first: id, parent, side (null on the midline), the
  * family a region's candidate list names it by, and how far (m) its weights
@@ -42,6 +56,7 @@ export const SEGMENTS = (() => {
   for (const side of SIDES) {
     const s = (id) => `${side}-${id}`;
     const add = (id, parent, family, blend) => list.push({ id: s(id), parent, side, family, blend });
+    add('eye', 'head', 'eye', 0);
     add('girdle', 'thorax', 'girdle', 0.04);
     add('upperarm', s('girdle'), 'upperarm', 0.05);
     add('forearm', s('upperarm'), 'forearm', 0.035);
@@ -109,7 +124,7 @@ export function segmentOfBone(meshName) {
 export const REGION_FAMILIES = {
   Head: ['head'],
   Face: ['head', 'mandible'],
-  Eye: ['head'],
+  Eye: ['head', 'eye'],
   Jaw: ['head', 'mandible'],
   Tongue: ['head', 'mandible'],
   Throat: ['lower-neck', 'upper-neck', 'head'],
@@ -151,6 +166,10 @@ export const REGION_FAMILIES = {
   'Lumbar plexus': ['pelvis', 'lumbar', 'thigh', 'shank'],
   'Sacral plexus': ['pelvis', 'lumbar', 'thigh', 'shank'],
   'Leg and foot': ['pelvis', 'thigh', 'shank', 'foot', 'toes'],
+  // Sense organs regions: only the eyeballs turn; the rest stays fixed to the skull.
+  Orbit: ['head'],
+  Ear: ['head'],
+  'Middle ear': ['head'],
 };
 
 // --- geometry helpers over flat [x, y, z, …] arrays -------------------------
@@ -356,6 +375,8 @@ export function buildRig(verts) {
   }
   const hips = points.get('left-thigh').pivot.clone().add(points.get('right-thigh').pivot).multiplyScalar(0.5);
   set('pelvis', sacrum, hips);
+  // Until the eyeballs are known (setEye), each eye sits at the top of the skull: nothing follows it yet.
+  for (const side of SIDES) set(`${side}-eye`, skullTop.clone(), skullTop.clone().addScaledVector(ANTERIOR, 0.01));
 
   const segments = new Map();
   for (const def of SEGMENTS) {
@@ -365,6 +386,19 @@ export function buildRig(verts) {
     segments.set(def.id, { ...def, pivot, end, dir: dir.normalize(), length });
   }
   return { segments, frames };
+}
+
+/**
+ * Puts one eye's segment at its eyeball, from the sclera's world positions:
+ * it turns about the eyeball's centre and looks forward. Sets `radius` (the
+ * sclera's outer radius), which skinWeights needs to weight eye parts.
+ */
+export function setEye(rig, side, sclera) {
+  const center = fitSphere(sclera)?.center ?? centroid(sclera);
+  let radius = 0;
+  for (let i = 0; i < sclera.length; i += 3) radius = Math.max(radius, Math.hypot(sclera[i] - center.x, sclera[i + 1] - center.y, sclera[i + 2] - center.z));
+  const seg = rig.segments.get(`${side}-eye`);
+  Object.assign(seg, { pivot: center, end: center.clone().addScaledVector(ANTERIOR, radius), dir: ANTERIOR.clone(), length: radius, radius });
 }
 
 /** Each segment's bone index in the skeleton (its place in SEGMENTS). */
@@ -446,14 +480,15 @@ const smoothstep = (e0, e1, x) => {
 
 /**
  * The segments a soft part may follow: its region's families (REGION_FAMILIES;
- * any family for an unknown region), on its own side only when it has one.
+ * any family but the eye's for an unknown region), on its own side only when
+ * it has one.
  * @returns {Set<number>} segment indices
  */
 export function candidateSegments(region, side) {
   const families = REGION_FAMILIES[region];
   const out = new Set();
   SEGMENTS.forEach((s, i) => {
-    if (families && !families.includes(s.family)) return;
+    if (families ? !families.includes(s.family) : s.family === 'eye') return;
     if (side && s.side && s.side !== side) return;
     out.add(i);
   });
@@ -478,7 +513,9 @@ export function skinWeights(rig, index, positions, allowed) {
   const weights = new Float32Array(n * 4);
   const segs = SEGMENTS.map((d) => rig.segments.get(d.id));
   const allow = SEGMENTS.map((_, i) => allowed.has(i));
-  const children = SEGMENTS.map((d) => SEGMENTS.flatMap((c, i) => (c.parent === d.id && allowed.has(i) ? [i] : [])));
+  // The eyes have no bones: they are weighted by distance from the eyeball below, not as a joint.
+  const children = SEGMENTS.map((d) => SEGMENTS.flatMap((c, i) => (c.parent === d.id && c.family !== 'eye' && allowed.has(i) ? [i] : [])));
+  const eyes = SEGMENTS.flatMap((d, i) => (d.family === 'eye' && allowed.has(i) && segs[i].radius ? [i] : []));
   const v = new THREE.Vector3();
   const d = new THREE.Vector3();
   for (let i = 0; i < n; i++) {
@@ -507,6 +544,13 @@ export function skinWeights(rig, index, positions, allowed) {
           infl.set(child, (infl.get(child) ?? 0) + infl.get(s) * into);
           infl.set(s, infl.get(s) * (1 - into));
         }
+      }
+      // Near an eyeball, hand the weight over to its eye: wholly on it, fading out across the eye muscles.
+      for (const e of eyes) {
+        const into = 1 - smoothstep(EYE_BLEND[0], EYE_BLEND[1], v.distanceTo(segs[e].pivot) - segs[e].radius);
+        if (into <= 0) continue;
+        for (const [k, w] of infl) infl.set(k, w * (1 - into));
+        infl.set(e, (infl.get(e) ?? 0) + into);
       }
       // Along the forearm, hand the weight over to the twist segment toward the wrist.
       for (const [k, w] of [...infl]) {
