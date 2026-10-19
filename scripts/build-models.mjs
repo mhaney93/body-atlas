@@ -448,8 +448,82 @@ const ENDOCRINE = {
   ratio: 0.5,
 };
 
+// Sense organs. BodyParts3D has the eyes (the coats of each eyeball, its
+// lens, the lens's suspensory ligament, the anterior chamber and the vitreous
+// body), the tear glands and ducts, the eyelids' tarsal plates, the check
+// ligaments of the eye muscles, the superior oblique's trochlea, and both
+// outer ears as one element, cut apart at the midline. The middle and inner
+// ear come from Z-Anatomy (SENSES_EAR). The eye muscles, the optic and
+// inner-ear nerves and the ossicles are shared at runtime from the Muscular,
+// Nervous and Skeletal layers (see "shared" in src/data/senses.json), not
+// duplicated here.
+const SENSES = {
+  file: 'senses.glb',
+  groups: new Map([
+    ...['FJ1317', 'FJ1368', 'FJ1289', 'FJ1340'].map((id) => [id, 'coat']), // sclera, cornea
+    // Choroid (two pieces each), ciliary body, iris, retina.
+    ...['FJ1285', 'FJ1286', 'FJ1336', 'FJ1337', 'FJ1287', 'FJ1338', 'FJ1297', 'FJ1348', 'FJ1316', 'FJ1367'].map((id) => [id, 'uvea']),
+    // Lens and its suspensory ligament, anterior chamber, vitreous body.
+    ...['FJ1305', 'FJ1356', 'FJ1320', 'FJ1371', 'FJ1282', 'FJ1332', 'FJ1331', 'FJ1382'].map((id) => [id, 'lens']),
+    // Tarsal plates, check ligaments, trochleae of the superior obliques.
+    ...['FJ1324', 'FJ1328', 'FJ1375', 'FJ1379', 'FJ1284', 'FJ1292', 'FJ1334', 'FJ1335', 'FJ1329', 'FJ1380'].map((id) => [id, 'orbit']),
+    // Lacrimal gland, lake, canaliculus and sac, nasolacrimal duct.
+    ...['FJ1299', 'FJ1350', 'FJ1301', 'FJ1352', 'FJ1298', 'FJ1349', 'FJ1309', 'FJ1360', 'FJ1302', 'FJ1353'].map((id) => [id, 'lacrimal']),
+    ['FJ2811', 'outer'], // external ear
+  ]),
+  // The right sclera and choroid carry a few scraps of the left eye's.
+  pieces: { FJ1368: 0.01, FJ1337: 0.01 },
+  split: [{ element: 'FJ2811', axis: 0, below: 0, name: 'Right auricle' }],
+  mergeByName: true,
+  rename: (name) =>
+    ({ 'External ear': 'Left auricle' })[name] ??
+    name
+      .replace(/^Optic part of (left|right) retina$/, (_, side) => `${side[0].toUpperCase()}${side.slice(1)} retina`)
+      .replace(/ corona ciliaris$/, ' ciliary body'),
+  ratio: 0.25,
+  error: 0.002,
+};
+
+// The middle and inner ear, from Z-Anatomy (data-sources/z-anatomy/ear/,
+// exported by export-z-anatomy.py). Z-Anatomy adapted them, or may have, from
+// the University of Dundee's CC BY-NC-SA 4.0 "Anatomy of the Inner Ear", like
+// the ossicles, so they ship as their own file; the Sense organs layer lists
+// it under `extraAssets`. Its vestibule mesh includes the semicircular canals.
+const EAR_PARTS = [
+  ['Tympanic membrane', 'tympanic membrane', 'middle'],
+  ['Auditory tube', 'auditory tube', 'middle'],
+  ['Cochlea', 'cochlea', 'inner'],
+  ['Vestibule', 'vestibule and semicircular canals', 'inner'],
+];
+const SENSES_EAR = { file: 'senses-ear.glb', elements: [], load: () => earParts(join(Z_ANATOMY_DIR, 'ear')), ratio: 0.5 };
+
+/**
+ * The Z-Anatomy ear parts (mm), moved as the ossicles are: by the offset that
+ * puts the centre of each Z-Anatomy temporal bone on the BodyParts3D one's.
+ */
+function earParts(dir) {
+  return [['l', 'Left', 'FJ3281'], ['r', 'Right', 'FJ3386']].flatMap(([side, Side, bone]) => {
+    const zBone = parseObj(join(dir, `Temporal bone.${side}.obj`)).positions.map((v) => v * 1000);
+    const target = ANCHOR_RULES.center(parseObj(join(OBJ_DIR, `${bone}.obj`)).positions);
+    const offset = ANCHOR_RULES.center(zBone).map((c, k) => target[k] - c);
+    return EAR_PARTS.map(([zName, name, group]) => {
+      const obj = parseObj(join(dir, `${zName}.${side}.obj`));
+      return {
+        ...obj,
+        id: `ear/${zName}.${side}`,
+        name: `${Side} ${name}`,
+        source: 'z-anatomy',
+        group,
+        positions: obj.positions.map((v, i) => v * 1000 + offset[i % 3]),
+      };
+    });
+  });
+}
+
 const ASSETS = [
-  { file: 'skin.glb', elements: [SKIN], ratio: 0.35 },
+  // BodyParts3D models the outer ears apart from the skin; the shell needs
+  // them, so that the Sense organs layer's auricles lie under it too.
+  { file: 'skin.glb', elements: [SKIN, 'FJ2811'], merge: [{ name: 'Skin', elements: [SKIN, 'FJ2811'] }], ratio: 0.35 },
   { file: 'skeletal.glb', elements: range(3152, 3395), extras: ['coccyx.obj'], ratio: 0.5 },
   { file: 'skeletal-ossicles.glb', elements: [], extras: OSSICLES, ratio: 0.5 },
   // BodyParts3D models the carotid, vertebral and internal jugular vessels of
@@ -493,6 +567,8 @@ const ASSETS = [
   RESPIRATORY,
   LYMPHATIC,
   URINARY,
+  SENSES,
+  SENSES_EAR,
   // BodyParts3D has no spinal cord or peripheral nerves and only part of the
   // cortex, so the system comes from Z-Anatomy (see nervous-model.mjs), apart
   // from the deep brain structures BodyParts3D has (DEEP_BRAIN) and the small
@@ -840,20 +916,20 @@ const centerlineOf = (obj) => toOutputPath(centerlineMm(obj.positions, obj.indic
 
 /**
  * Applies an asset's `split` list: the triangles of `element` whose centroid
- * lies below the horizontal plane z = `below` (source mm) become a new part
- * called `name`.
+ * lies below the horizontal plane z = `below` (source mm), or below `below`
+ * along `axis` (0 = x, 1 = y), become a new part called `name`.
  */
 function applySplits(objs, splits = []) {
   const out = [...objs];
-  for (const { element, below, name } of splits) {
+  for (const { element, below, name, axis = 2 } of splits) {
     const obj = out.find((o) => o.id === element);
     if (!obj) continue;
     const keep = [];
     const cut = [];
     const { positions: p, indices } = obj;
     for (let i = 0; i < indices.length; i += 3) {
-      const z = (p[3 * indices[i] + 2] + p[3 * indices[i + 1] + 2] + p[3 * indices[i + 2] + 2]) / 3;
-      (z < below ? cut : keep).push(indices[i], indices[i + 1], indices[i + 2]);
+      const at = (p[3 * indices[i] + axis] + p[3 * indices[i + 1] + axis] + p[3 * indices[i + 2] + axis]) / 3;
+      (at < below ? cut : keep).push(indices[i], indices[i + 1], indices[i + 2]);
     }
     obj.indices = keep;
     out.push({ ...obj, id: `${element}-below-${below}`, name, fma: undefined, indices: cut });
@@ -892,7 +968,7 @@ function applyMerges(objs, merges = []) {
     const indices = [];
     for (const p of parts) {
       const base = positions.length / 3;
-      positions.push(...p.positions);
+      for (const v of p.positions) positions.push(v);
       for (const i of p.indices) indices.push(i + base);
     }
     const obj = { id: parts[0]?.id, ids: parts.flatMap((p) => p.ids ?? [p.id]), name, fma: undefined, positions, indices };
@@ -953,7 +1029,10 @@ for (const asset of ASSETS) {
   const elements = wanted.filter((id) => available.has(id));
 
   let objs = [
-    ...elements.map((id) => ({ ...parseObj(join(OBJ_DIR, `${id}.obj`)), group: asset.groups?.get(id) })),
+    ...elements.map((id) => {
+      const obj = parseObj(join(OBJ_DIR, `${id}.obj`));
+      return { ...(asset.pieces?.[id] ? dropScraps(obj, asset.pieces[id]) : obj), group: asset.groups?.get(id) };
+    }),
     ...(asset.extras ?? []).map(parseZAnatomyObj),
     ...(asset.load?.() ?? []),
   ];

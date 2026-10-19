@@ -33,6 +33,12 @@ export const PASSAGES = [
   ['respiratory', /^diaphragm$/i, /./, 'attachment at the bone surface', 3],
   ['digestive', /pharynx/i, /./, 'attachment at the bone surface', 3],
   ['reproductive', /^corpora cavernosa/i, /hip bone$/i, 'the crura of the penis attach along the ischiopubic rami', 3],
+  ['senses', /check ligament|trochlea of/i, /./, 'attachment at the bone surface', 3],
+  // BodyParts3D's ear sinks 3.7 mm into the temporal bone at its root.
+  ['senses', /auricle$/i, /temporal bone$/i, 'the auricular ligaments and cartilage of the outer ear attach on the temporal bone around the ear canal', 4],
+  // The inner ear is hollowed out of the temporal bone, and the middle ear and
+  // the start of the auditory tube are air spaces in it.
+  ['senses', /cochlea|vestibule|tympanic membrane|auditory tube/i, /temporal bone$/i, 'bony labyrinth, middle ear and bony part of the auditory tube', 9],
   ['digestive', /incisor|canine|premolar|molar/i, /^mandible$|maxilla$/i, 'dental alveoli (tooth sockets)', 9],
   ['digestive', /gum$/i, /^mandible$|maxilla$|palatine bone$|^vomer$/i, 'gums over the alveolar processes', 3],
   // The paranasal sinuses are air spaces hollowed out of these bones, and
@@ -90,6 +96,38 @@ export const RESIDUALS = [
   ['circulatory', /ophthalmic artery/i, /^frontal bone$|^sphenoid bone$/i, 'running from the optic canal along the roof of the orbit', 2.5],
   ['circulatory', /suprascapular|dorsal scapular/i, /scapula$/i, 'lying on the scapula under its muscles', 2],
 ];
+
+/**
+ * [layer, part, why, depth]: parts whose own surface is the skin's, so they
+ * may lie up to `depth` mm outside the skin shell, which was simplified from
+ * the same surface separately. Every other part keeps SKIN_TOLERANCE.
+ */
+export const ON_SKIN = [
+  ['senses', /auricle$/i, 'the outer ear is skin over cartilage, and the shell\'s ears are the same BodyParts3D mesh simplified on its own', 1],
+];
+
+/**
+ * [layer, part, why, depth]: what the build could not move back under the
+ * skin, bounded by how far it sticks out now. The build does not read it.
+ */
+export const SKIN_RESIDUALS = [
+  // Edges and a vertex across the sharp fold where the shell's outer ear
+  // meets the head, between vertices that are under the skin.
+  ['muscular', /temporoparietalis$/i, 'running over the temple into the fold where the outer ear joins the scalp', 1],
+  ['lymphatic', /pre-auricular nodes$/i, 'in front of the ear, in the fold where the outer ear joins the head', 1],
+];
+
+/** The SKIN_RESIDUALS entry for `part` of `layer`, as { why, depth }, if there is one. */
+export function skinResidual(layer, part) {
+  const found = SKIN_RESIDUALS.find(([l, p]) => l === layer && p.test(part));
+  return found && { why: found[2], depth: found[3] };
+}
+
+/** The ON_SKIN entry for `part` of `layer`, as { why, depth }, if there is one. */
+export function onSkin(layer, part) {
+  const found = ON_SKIN.find(([l, p]) => l === layer && p.test(part));
+  return found && { why: found[2], depth: found[3] };
+}
 
 /** The deepest RESIDUALS entry for `part` of `layer` in `bone`, as { why, depth }, if there is one. */
 export function residual(layer, part, bone) {

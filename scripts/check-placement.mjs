@@ -7,7 +7,7 @@
 //    opening runs;
 // 3. parts of different systems may touch, but not run deep into each other,
 //    except where one really lies inside the other (overlaps.mjs).
-// What the build could not fix is listed as known (RESIDUALS in passages.mjs,
+// What the build could not fix is listed as known (RESIDUALS and SKIN_RESIDUALS in passages.mjs,
 // KNOWN in overlaps.mjs), each with its reason and bounded by its depth now.
 // For rules 1 and 2 every triangle edge is sampled, so a straight edge that
 // cuts a corner is caught even when both of its ends are fine. Rule 3 tests
@@ -18,8 +18,8 @@
 // tolerances; --layer checks only that layer's parts (all three rules).
 import { join } from 'node:path';
 import { classify, ORGAN_LIMIT, ORGAN_TOLERANCE } from './overlaps.mjs';
-import { passage, residual } from './passages.mjs';
-import { allowedDepth, Body, BONE_TOLERANCE, layerAssets, readModel, REFERENCE_LAYER, SKIN_ASSET, SKIN_TOLERANCE } from './placement.mjs';
+import { onSkin, passage, residual, skinResidual } from './passages.mjs';
+import { allowedDepth, Body, BONE_TOLERANCE, layerAssets, readModel, REFERENCE_LAYER, SKIN_ASSET, SKIN_TOLERANCE, skinTolerance } from './placement.mjs';
 import { Solid } from './solid.mjs';
 
 const arg = (flag) => (process.argv.includes(flag) ? process.argv[process.argv.indexOf(flag) + 1] : undefined);
@@ -45,6 +45,11 @@ function samples({ positions, indices }) {
       out.push(q);
     }
   return out;
+}
+
+/** Whether a skin hit from measure() sticks out of the skin further than its part may. */
+export function outsideSkin({ layer, part, distance }) {
+  return distance > skinTolerance(layer, part);
 }
 
 /** Whether a bone hit from measure() is a part in solid bone rather than in a real opening. */
@@ -192,10 +197,21 @@ if (import.meta.main ?? process.argv[1] === import.meta.filename) {
   const { parts, skin, bone, organ } = await measure({ only: arg('--layer') });
   console.log(`Checked ${parts} parts.`);
 
-  const skinBad = skin.filter((h) => h.distance > SKIN_TOLERANCE);
-  console.log(`\n1. Outside the skin (> ${SKIN_TOLERANCE} mm): ${skinBad.length}`);
-  for (const h of all ? skin : skinBad)
-    console.log(`  ${h.distance.toFixed(1).padStart(5)} mm  ${h.layer}: ${h.part}  (${h.count} samples, worst at ${fmt(h.at)})`);
+  const skinBad = skin.filter(outsideSkin);
+  console.log(`\n1. Outside the skin (> ${SKIN_TOLERANCE} mm, or more than a part on the skin may): ${skinBad.length}`);
+  const skinLine = (h) => {
+    const allowed = onSkin(h.layer, h.part);
+    const known = skinResidual(h.layer, h.part);
+    return (
+      `  ${h.distance.toFixed(1).padStart(5)} mm  ${h.layer}: ${h.part}  (${h.count} samples, worst at ${fmt(h.at)})` +
+      (allowed ? `  [${h.distance > allowed.depth ? 'more than' : 'allowed'}: ${allowed.why}, ${allowed.depth} mm]` : '') +
+      (known ? `  [known: ${known.why}, ${known.depth} mm]` : '')
+    );
+  };
+  for (const h of all ? skin : skinBad) console.log(skinLine(h));
+  const skinAllowed = skin.filter((h) => !outsideSkin(h) && h.distance > SKIN_TOLERANCE);
+  console.log(`\n   On the skin or known (ON_SKIN, SKIN_RESIDUALS in passages.mjs, not failures): ${skinAllowed.length}`);
+  if (!all) for (const h of skinAllowed) console.log(skinLine(h));
 
   const boneBad = bone.filter(throughBone);
   console.log(`\n2. Through solid bone (> ${BONE_TOLERANCE} mm deep, or deeper than an allowed opening runs): ${boneBad.length}`);

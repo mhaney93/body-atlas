@@ -10,8 +10,7 @@ import { NodeIO } from '@gltf-transform/core';
 import { EXTMeshoptCompression, KHRMeshQuantization } from '@gltf-transform/extensions';
 import { MeshoptDecoder } from 'meshoptimizer';
 import { createServer } from 'vite';
-import { measure, throughBone } from './check-placement.mjs';
-import { SKIN_TOLERANCE } from './placement.mjs';
+import { measure, outsideSkin, throughBone } from './check-placement.mjs';
 
 let server;
 let layers;
@@ -105,6 +104,6 @@ test('the parts the free models lack are listed as not shown', () => {
 
 test('nothing lies outside the skin or inside solid bone', async () => {
   const { skin, bone } = await measure({ only: 'lymphatic', organs: false });
-  assert.deepEqual(skin.filter((h) => h.distance > SKIN_TOLERANCE).map((h) => `${h.part}: ${h.distance.toFixed(1)} mm out`), []);
+  assert.deepEqual(skin.filter(outsideSkin).map((h) => `${h.part}: ${h.distance.toFixed(1)} mm out`), []);
   assert.deepEqual(bone.filter(throughBone).map((h) => `${h.part} in ${h.bone}: ${h.depth.toFixed(1)} mm`), []);
 });

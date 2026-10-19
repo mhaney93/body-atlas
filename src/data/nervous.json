@@ -40,7 +40,8 @@
     { "name": "Small unnamed nerve branches", "reason": "too-small" },
     { "name": "Nerve endings and sensory receptors", "reason": "too-small", "note": "The optional nerve-ending haze hints at where they are densest; it is illustrative, not anatomy." },
     { "name": "Pituitary and pineal glands", "reason": "other-system", "layer": "endocrine" },
-    { "name": "Eyes and inner ears (retina, cochlea, semicircular canals)", "reason": "other-system", "system": "sense organs" }
+    { "name": "Eyes and inner ears (retina, cochlea, semicircular canals)", "reason": "other-system", "layer": "senses" },
+    { "name": "Right cochlear nerve", "reason": "not-added", "note": "Z-Anatomy has it, as a mesh without a side in its name that this layer's export skips." }
   ],
   "parts": {
     "frontal lobe": {

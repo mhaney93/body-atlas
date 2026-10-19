@@ -155,7 +155,10 @@ export class Solid {
               seen.add(t);
               const q = closestOnTriangle(p, this.tris, t * 9);
               const d = Math.hypot(q[0] - p[0], q[1] - p[1], q[2] - p[2]);
-              if (d < bestD) [best, bestD, tri] = [q, d, t];
+              // Ties (a point nearest an edge or vertex that triangles share)
+              // go to the lowest index, so the answer does not depend on the
+              // order the cells are visited in, which changes with the frame.
+              if (d < bestD - 1e-6 || (d <= bestD + 1e-6 && t < tri)) [best, bestD, tri] = [q, d, t];
             }
           }
       // Every triangle within r cells is seen, so a hit that close is final.
@@ -182,8 +185,13 @@ export class Envelope {
     this.voxel = voxel;
     const { tris, min, max } = this.solid;
     const pad = close + 3;
-    this.origin = min.map((v) => v - pad * voxel);
-    this.dims = max.map((v, k) => Math.ceil((v + pad * voxel - this.origin[k]) / voxel));
+    // The grid is centred on the mesh's bounding box, so a rotated copy of
+    // the mesh (the build's Z-up source frame, the check's Y-up output frame)
+    // is cut into the same voxels and classified the same way.
+    const mid = min.map((v, k) => (v + max[k]) / 2);
+    const half = max.map((v, k) => Math.ceil((v - mid[k]) / voxel) + pad);
+    this.origin = mid.map((v, k) => v - half[k] * voxel);
+    this.dims = half.map((h) => 2 * h);
     const [nx, ny, nz] = this.dims;
     // 0 = not reached, 1 = surface (thickened), 2 = outside.
     let grid = new Uint8Array(nx * ny * nz);

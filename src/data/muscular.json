@@ -353,7 +353,7 @@
     { "name": "Muscles of the perineum and the cremaster", "reason": "no-model", "note": "Such as the bulbospongiosus, ischiocavernosus and transverse perineal muscles." },
     { "name": "Subcostales, depressor supercilii and palmaris brevis", "reason": "no-model" },
     { "name": "Articularis genus", "reason": "not-added", "note": "A small muscle above the knee that Z-Anatomy has." },
-    { "name": "Muscles inside the eye", "reason": "other-system", "system": "sense organs", "note": "The ciliary muscle and the muscles of the iris." },
+    { "name": "Muscles inside the eye", "reason": "other-system", "layer": "senses", "note": "The ciliary muscle and the muscles of the iris, shown as part of the ciliary body and the iris." },
     { "name": "Arrector pili", "reason": "too-small", "note": "The tiny muscles that raise each hair." }
   ],
   "parts": {
