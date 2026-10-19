@@ -2,30 +2,56 @@
 // shape. The build moves vessels out of the bones they lie on (settle.mjs);
 // moved vertex by vertex, a vessel on a rib was pushed flat and crumpled
 // (the left superior intercostal vein became a folded sheet), so the
-// circulatory layer is settled by a smooth field instead. A crumpled mesh
-// folds back on itself: neighbouring triangles face apart, so this counts
-// the edges between two triangles whose normals differ by more than 90°.
+// circulatory layer is settled by a smooth field instead, in which a vessel
+// cutting through a bone's edge leaves the bone all on one side (the right
+// suprascapular vein, through the clavicle, crumpled as its sides were pulled
+// apart). A crumpled mesh folds back on itself: neighbouring triangles face
+// apart, so this counts the edges between two triangles whose normals differ
+// by more than 90°, on every vessel.
 import assert from 'node:assert/strict';
 import { before, test } from 'node:test';
 import { readModel } from './placement.mjs';
 
-// The most of a vessel's edges that may be folded (%). The unsettled vessels
-// below fold at up to 1% (simplification leaves a few); crumpled, they
-// folded at 6 to 22%.
-const VESSEL_FOLDS = 5;
+// The most of a vessel's edges that may be folded (%). Simplification leaves
+// a few folds, so most vessels fold at up to 3% unsettled; crumpled, they
+// folded at 4.4% (right subclavian vein) to 22% (left superior intercostal
+// vein).
+const VESSEL_FOLDS = 4;
 // The most of the whole model's edges that may be folded (%): about 0.85
 // unsettled, 1.9 when the vessels were crumpled.
 const MODEL_FOLDS = 1.2;
 
-// Vessels lying on bone, which the build moves the most.
-const VESSELS = [
-  'Azygos vein',
-  ...['Left', 'Right'].flatMap((side) =>
-    ['superior intercostal vein', 'axillary artery', 'subclavian vein', 'basilic vein', 'popliteal artery', 'great saphenous vein'].map(
-      (v) => `${side} ${v}`,
-    ),
-  ),
-];
+// Vessels whose own BodyParts3D mesh, simplified, already folds more than
+// VESSEL_FOLDS (long thin triangles along a thin vessel), each with the most
+// it may fold: its share before settling plus a point, rounded up to 0.5.
+const SIMPLIFIED = new Map([
+  ['Anterior division of right renal artery', 6],
+  ['Caudal pancreatic artery', 5.5],
+  ['Inferior phrenic vein', 7.5],
+  ['Left medial occipital artery', 7],
+  ['Left portal vein', 6],
+  ['Left posterior inferior cerebellar artery', 7],
+  ['Left posterior medial choroidal artery', 5.5],
+  ['Left renal vein', 6],
+  ['Left set of dorsal digital veins of foot', 7],
+  ['Left suprascapular artery', 4.5],
+  ['Paracentral branch of left callosomarginal artery', 7],
+  ['Paracentral branch of right callosomarginal artery', 6.5],
+  ['Posterior cecal artery', 7],
+  ['Posterior superior segmental hepatic artery', 7],
+  ['Precuneal branch of left pericallosal artery', 7.5],
+  ['Precuneal branch of right pericallosal artery', 7],
+  ['Right fourth common palmar digital artery', 5.5],
+  ['Right inferior phrenic artery', 6.5],
+  ['Right medial occipital artery', 8.5],
+  ['Right portal vein', 7.5],
+  ['Right posterior inferior cerebellar artery', 6.5],
+  ['Right set of dorsal digital veins of foot', 6.5],
+  ['Splenic artery', 8],
+  ['Superior phrenic vein', 13.5],
+  ['Temporo-occipital branch of left middle cerebral artery', 9],
+  ['Temporo-occipital branch of right middle cerebral artery', 8],
+]);
 
 let vessels;
 before(async () => {
@@ -67,15 +93,15 @@ function folds({ positions, indices }) {
   return { folded, shared };
 }
 
-test('vessels lying on bone are not crumpled', () => {
-  const crumpled = VESSELS.flatMap((name) => {
-    const mesh = vessels.find((m) => m.name === name);
-    assert.ok(mesh, `${name} is missing`);
+test('no vessel is crumpled', () => {
+  for (const name of SIMPLIFIED.keys()) assert.ok(vessels.some((m) => m.name === name), `${name} is missing`);
+  const crumpled = vessels.flatMap((mesh) => {
     const { folded, shared } = folds(mesh);
-    const share = (100 * folded) / shared;
-    return share > VESSEL_FOLDS ? [`${name}: ${share.toFixed(1)}%`] : [];
+    const share = shared ? (100 * folded) / shared : 0;
+    const most = SIMPLIFIED.get(mesh.name) ?? VESSEL_FOLDS;
+    return share > most ? [`${mesh.name}: ${share.toFixed(1)}% (at most ${most}%)`] : [];
   });
-  assert.deepEqual(crumpled, [], `edges folded (at most ${VESSEL_FOLDS}%)`);
+  assert.deepEqual(crumpled, [], 'edges folded');
 });
 
 test('the model as a whole is not crumpled', () => {
