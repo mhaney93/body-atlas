@@ -16,11 +16,10 @@ let server;
 let layers;
 let guideOrder;
 let index;
-let sharedEntry;
 
 before(async () => {
   server = await createServer({ server: { middlewareMode: true }, appType: 'custom', logLevel: 'silent' });
-  ({ LAYERS: layers, sharedEntry } = await server.ssrLoadModule('/src/layers.js'));
+  ({ LAYERS: layers } = await server.ssrLoadModule('/src/layers.js'));
   ({ guideOrder } = await server.ssrLoadModule('/src/guide.js'));
   const { buildIndex } = await server.ssrLoadModule('/src/search.js');
   const { partInfo } = await server.ssrLoadModule('/src/layers.js');
@@ -87,16 +86,8 @@ function glbPartCenters(path) {
   return parts;
 }
 
-const ownParts = (layer) => [layer.asset, ...(layer.extraAssets ?? [])].flatMap((a) => glbPartCenters(new URL(`public/${a}`, ROOT)));
-
-/** What Viewer.partCenters returns for a layer: its own meshes, then the ones it shares from other layers. */
-function layerParts(layer) {
-  const shared = (layer.shared ?? []).flatMap(({ layer: sourceId }) => sourceId);
-  const fromSources = [...new Set(shared)].flatMap((sourceId) =>
-    ownParts(layers.find((l) => l.id === sourceId)).filter((p) => sharedEntry(layer, sourceId, p.meshName)),
-  );
-  return [...ownParts(layer), ...fromSources];
-}
+/** What Viewer.partCenters returns for a layer: the meshes of its own models. */
+const layerParts = (layer) => [layer.asset, ...(layer.extraAssets ?? [])].flatMap((a) => glbPartCenters(new URL(`public/${a}`, ROOT)));
 
 const names = (parts) => parts.map((p) => p.meshName);
 
@@ -118,16 +109,11 @@ test("every layer's guide visits each clickable part exactly once", () => {
   for (const layer of layers) {
     const order = names(guideOrder(layerParts(layer)));
     assert.equal(new Set(order).size, order.length, `${layer.id}: a part is visited twice`);
-    // The search lists every clickable part, shared ones included (scripts/search.test.mjs).
+    // The search lists every clickable part (scripts/search.test.mjs).
     const clickable = index.filter((e) => e.kind === 'part' && e.layerId === layer.id).map((e) => e.meshName);
     assert.deepEqual([...order].sort(), [...clickable].sort(), `${layer.id}: guide and clickable parts differ`);
     assert.ok(order.length > 0, layer.id);
   }
-});
-
-test('shared parts are in the guide of the layer that borrows them', () => {
-  const endocrine = names(guideOrder(layerParts(layers.find((l) => l.id === 'endocrine'))));
-  for (const part of ['Hypothalamus', 'Pancreas']) assert.ok(endocrine.includes(part), part);
 });
 
 test('the guide order is deterministic whatever order the parts come in', () => {

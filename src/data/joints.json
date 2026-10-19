@@ -27,13 +27,6 @@
       "visible": false
     }
   },
-  "shared": [
-    {
-      "layer": "skeletal",
-      "match": "^(intervertebral disk|\\w+ costal cartilage$)",
-      "group": "cartilage"
-    }
-  ],
   "notShown": [
     { "name": "Articular (hyaline) cartilage", "reason": "no-model", "note": "The thin layer that caps the bone ends inside joints. Neither BodyParts3D nor Z-Anatomy models it." },
     { "name": "Bursae", "reason": "not-added", "note": "Small fluid-filled cushions near joints, such as the subacromial and prepatellar bursae. Z-Anatomy has them." },
@@ -41,6 +34,8 @@
     { "name": "Ligaments of the eye", "reason": "other-system", "layer": "senses", "note": "The suspensory ligament of the lens and the check ligaments." },
     { "name": "Ligaments of the ear bones", "reason": "no-model" },
     { "name": "Tendons", "reason": "other-system", "layer": "muscular" },
+    { "name": "Intervertebral discs", "aliases": ["spinal discs"], "reason": "other-system", "layer": "skeletal", "note": "The cartilage pads between the vertebrae are in Skeletal, with the spine." },
+    { "name": "Costal cartilages", "reason": "other-system", "layer": "skeletal", "note": "The cartilage bars that join the ribs to the breastbone are in Skeletal, with the ribs." },
     { "name": "Triradiate cartilage", "reason": "not-in-adult", "note": "A growth cartilage in the hip socket that has turned to bone in an adult." }
   ],
   "parts": {

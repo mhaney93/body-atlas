@@ -163,7 +163,7 @@
       "region": "Deep brain",
       "depth": 3,
       "color": "#ffa07a",
-      "description": "A small region under the thalamus that keeps the body's internal balance. It controls temperature, hunger, thirst and sleep cycles and directs the pituitary gland's hormones."
+      "description": "A small region under the thalamus that keeps the body's internal balance. It controls temperature, hunger, thirst and sleep cycles, directs the pituitary gland's hormones and makes oxytocin and antidiuretic hormone, which the posterior pituitary releases."
     },
     "mammillary body": {
       "region": "Deep brain",
@@ -303,7 +303,8 @@
     },
     "olfactory nerve (i)": {
       "region": "Cranial nerves",
-      "description": "Cranial nerve I, the nerve of smell. Fine filaments pass from the nose's lining through the roof of the nasal cavity to the olfactory bulb under the brain."
+      "aliases": ["olfactory bulb", "olfactory tract"],
+      "description": "Cranial nerve I, the nerve of smell, modelled as one part from the olfactory bulb above the nose back along the tract under the brain. Fine filaments from the nose's lining pass up through the skull into the bulb."
     },
     "optic nerve (ii)": {
       "region": "Cranial nerves",

@@ -4,7 +4,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import { EFFECTS } from './effects.js';
 import { KeyboardNav } from './keyboard-nav.js';
-import { partGroupId, partInfo, sharedEntry } from './layers.js';
+import { partGroupId, partInfo } from './layers.js';
 import { Poser } from './pose-view.js';
 import { sideOf } from './search.js';
 import { frameView } from './search-select.js';
@@ -129,11 +129,9 @@ const PRIME_GLOW = 0.85;
  * Materials for one highlight colour: `base`, `hover` and `selected`, plus
  * the emphasis roles (see setEmphasis): `prime` (brightest), `synergist`
  * (lit, dimmer) and `dim` (a faint ghost for parts outside the emphasis).
- * `opacity` < 1 makes them see-through; `onTop` draws a part shared from
- * another layer (see `shared` in the layer data) over that layer's own copy
- * of the same mesh.
+ * `opacity` < 1 makes them see-through.
  */
-function layerMaterials(hex, opacity = 1, cutaway = false, onTop = false) {
+function layerMaterials(hex, opacity = 1, cutaway = false) {
   const color = new THREE.Color(hex);
   const make = (emissive, intensity, alpha = opacity, tint = color) => {
     const material = new THREE.MeshStandardMaterial({
@@ -143,7 +141,6 @@ function layerMaterials(hex, opacity = 1, cutaway = false, onTop = false) {
       roughness: 0.55,
       metalness: 0.0,
       ...(alpha < 1 && { transparent: true, opacity: alpha, depthWrite: false }),
-      ...(onTop && { polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -4 }),
     });
     return cutaway ? withCutaway(material) : material;
   };
@@ -222,9 +219,7 @@ export class Viewer {
     this.poseBones = poseBones;
     // Stretching poses (src/pose-view.js): the posable layers' parts follow one skeleton.
     this.poser = new Poser(scene, {
-      // A part shared from another layer (the Sense organs' eye muscles) is where that layer says.
-      region: (layer, mesh) =>
-        partInfo(layer, mesh.userData.name ?? mesh.name, mesh.userData.group, this.layers.get(mesh.userData.sourceId)?.layer, mesh.userData.of).region,
+      region: (layer, mesh) => partInfo(layer, mesh.userData.name ?? mesh.name, mesh.userData.group, mesh.userData.of).region,
       side: (mesh) => sideOf(mesh.userData.name ?? mesh.name),
     });
 
@@ -303,8 +298,6 @@ export class Viewer {
 
   /**
    * Starts downloading a layer's asset (hidden) and returns a promise for it.
-   * A layer with `shared` entries also loads those layers and shows their
-   * matching meshes as its own too, reusing their geometry.
    */
   preloadLayer(layer) {
     let entry = this.layers.get(layer.id);
@@ -312,10 +305,10 @@ export class Viewer {
     // Materials are shared per colour: a part's own colour, else its sub-group's
     // (e.g. arteries and veins, tagged via the `group` node extra), else the layer's.
     const byColor = new Map();
-    const materialsFor = (color, opacity, cutaway, onTop) => {
-      const key = `${color}/${opacity ?? 1}/${cutaway}/${onTop}`;
+    const materialsFor = (color, opacity, cutaway) => {
+      const key = `${color}/${opacity ?? 1}/${cutaway}`;
       if (!byColor.has(key)) {
-        byColor.set(key, layerMaterials(color, opacity, cutaway, onTop));
+        byColor.set(key, layerMaterials(color, opacity, cutaway));
         this.primeMaterials.add(byColor.get(key).prime);
       }
       return byColor.get(key);
@@ -323,19 +316,14 @@ export class Viewer {
     entry = { layer, group: null, promise: null };
     // A layer may ship extra files (e.g. parts under a different license).
     const urls = [layer.asset, ...(layer.extraAssets ?? [])];
-    // Once each, though several entries may share from one layer (Sense organs from Nervous).
-    const sources = [...new Set((layer.shared ?? []).map((s) => s.source).filter(Boolean))];
     entry.promise = Promise.all([
       Promise.all(urls.map((url) => this.loader.loadAsync(url))),
-      ...sources.map((source) => this.preloadLayer(source)),
       // A soft posable layer needs the bones its parts follow.
       layer.posable === 'soft' && this.poseBones ? this.preloadLayer(this.poseBones) : null,
-    ]).then(([gltfs, ...sourceGroups]) => {
+    ]).then(([gltfs]) => {
       const group = new THREE.Group();
       group.add(...gltfs.map((gltf) => gltf.scene));
-      sources.forEach((source, i) => group.add(...this.#sharedCopies(layer, source.id, sourceGroups[i])));
       if (layer.posable === 'bones') this.poser.setBones(group);
-      // Shared parts pose with the layer that shows them (the Joints layer's copies of the discs).
       if (layer.posable && this.poser.skeleton) this.poser.adopt(layer, group);
       group.visible = false;
       group.updateMatrixWorld(true);
@@ -348,7 +336,7 @@ export class Viewer {
           o.userData.group ??= partGroupId(layer, name);
           const g = layer.groups?.[o.userData.group];
           const color = this.partColor(layer, name) ?? g?.color ?? layer.color;
-          o.userData.materials = materialsFor(color, g?.opacity, !o.userData.uncut, o.userData.sourceId !== undefined);
+          o.userData.materials = materialsFor(color, g?.opacity, !o.userData.uncut);
           o.material = o.userData.materials.base;
           o.userData.layerId = layer.id;
         }
@@ -362,22 +350,6 @@ export class Viewer {
     entry.promise.catch(() => this.layers.delete(layer.id));
     this.layers.set(layer.id, entry);
     return entry.promise;
-  }
-
-  /** Meshes of `sourceGroup` (layer `sourceId`) that `layer` shares, as new meshes on the same geometry. */
-  #sharedCopies(layer, sourceId, sourceGroup) {
-    const copies = [];
-    sourceGroup.updateMatrixWorld(true);
-    sourceGroup.traverse((o) => {
-      const entry = o.isMesh && sharedEntry(layer, sourceId, o.userData.name ?? o.name);
-      if (!entry) return;
-      const copy = new THREE.Mesh(o.geometry);
-      copy.name = o.name;
-      copy.userData = { name: o.userData.name, sourceId, group: entry.group };
-      o.matrixWorld.decompose(copy.position, copy.quaternion, copy.scale);
-      copies.push(copy);
-    });
-    return copies;
   }
 
   /** Shows or hides one of a layer's sub-groups (see `groups` in the layer data). */
@@ -523,20 +495,18 @@ export class Viewer {
     return this.groupShown.get(`${layer.id}/${groupId}`) ?? layer.groups?.[groupId]?.visible ?? true;
   }
 
-  /** The loaded mesh of a layer with this (original) name, its own before one shared from another layer. */
+  /** The loaded mesh of a layer with this (original) name. */
   findMesh(layerId, meshName) {
     let found = null;
     this.layers.get(layerId)?.group?.traverse((o) => {
-      if (!o.isMesh || o.userData.haze || (o.userData.name ?? o.name) !== meshName) return;
-      if (!found || (found.userData.sourceId && !o.userData.sourceId)) found = o;
+      if (!found && o.isMesh && !o.userData.haze && (o.userData.name ?? o.name) === meshName) found = o;
     });
     return found;
   }
 
   /**
-   * Every clickable part of a loaded layer (its own meshes and the ones it
-   * shares from another layer) as { meshName, center }, `center` being the
-   * middle of its bounding box in world space; [] before the layer loads.
+   * Every clickable part of a loaded layer as { meshName, center }, `center`
+   * being the middle of its bounding box in world space; [] before the layer loads.
    */
   partCenters(layerId) {
     const parts = [];
@@ -740,9 +710,6 @@ export class Viewer {
     // While a layer has an emphasis (setEmphasis), its faded parts let clicks
     // through to any part behind them that is lit.
     if (hits.some((h) => h.object.userData.role !== 'dim')) hits = hits.filter((h) => h.object.userData.role !== 'dim');
-    // A part shared from another layer wins over that layer's own copy of it.
-    const twin = hits[0] && hits.find((h) => h.distance - hits[0].distance < 1e-5 && h.object.userData.sourceId);
-    if (twin) hits.unshift(twin);
     // A see-through part (e.g. the heart wall) yields only to an opaque part
     // inside it (e.g. a valve), i.e. one hit before the ray leaves it.
     const [nearest] = hits;

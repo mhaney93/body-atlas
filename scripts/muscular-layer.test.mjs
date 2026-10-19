@@ -54,7 +54,7 @@ test('tendons are their own paler parts, each tied to its muscle or described it
   const bad = [];
   for (const n of tendons) {
     if (n.of && !names.has(n.of)) bad.push(`${n.name}: its muscle "${n.of}" is not in the model`);
-    const part = layers.partInfo(layer, n.name, n.group, undefined, n.of);
+    const part = layers.partInfo(layer, n.name, n.group, n.of);
     if (!part.description || !part.region || !part.depth) bad.push(`${n.name}: no description, region or depth`);
   }
   assert.deepEqual(bad, []);

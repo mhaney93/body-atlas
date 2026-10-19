@@ -1,8 +1,8 @@
 // Checks the shipped Endocrine model against its layer data: every mesh in
 // public/models/endocrine.glb must resolve to a group and a description, the
 // glands no other layer has must be there on the right sides, the glands
-// other layers own must be shared from them rather than copied, the parts the
-// free models lack must be listed as not shown, and nothing may lie outside
+// other layers own must be listed as not shown with where they live, as must
+// the parts the free models lack, and nothing may lie outside
 // the skin, inside bone or in another system's part (check-placement.mjs).
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -32,14 +32,6 @@ const centreX = ({ positions }) => {
   return sum / (positions.length / 3);
 };
 
-/** The other layers' meshes the Endocrine layer shares, as [layer id, mesh name]. */
-function sharedMeshes() {
-  const meshNames = JSON.parse(readFileSync(MESH_NAMES_FILE, 'utf8'));
-  return endocrine().shared.flatMap(({ layer }) =>
-    meshNames[layer].filter((name) => layers.sharedEntry(endocrine(), layer, name)).map((name) => [layer, name]),
-  );
-}
-
 test('every endocrine.glb mesh has a group and a 1-2 sentence description', () => {
   const missing = [];
   for (const [name, { extras }] of parts) {
@@ -62,24 +54,22 @@ test('the pituitary lobes, pineal, thyroid, parathyroids and adrenals are there,
   assert.deepEqual(wrong, []);
 });
 
-test('the hypothalamus, thymus, pancreas and testes are shared from their layers, with their hormones described', () => {
-  const shared = sharedMeshes();
-  assert.deepEqual(shared.map(([layer, name]) => `${layer}/${name}`).sort(), [
-    'digestive/Pancreas',
-    'lymphatic/Left lobe of thymus',
-    'lymphatic/Right lobe of thymus',
-    'nervous/Hypothalamus',
-    'reproductive/Left testis',
-    'reproductive/Right testis',
-  ]);
-  for (const [layer, name] of shared) {
-    assert.ok(!parts.has(name), `${name} is copied into endocrine.glb`);
-    const source = layers.LAYERS.find((l) => l.id === layer);
-    const part = layers.partInfo(endocrine(), name, layers.sharedEntry(endocrine(), layer, name).group, source);
-    assert.ok(part.group && part.region, name);
-    assert.ok(/hormone|insulin|testosterone|thymosin/i.test(part.description) && sentences(part.description) <= 2, name);
+test('the hypothalamus, thymus, pancreas and testes live in their own layers, and the Not shown list says where', () => {
+  const meshNames = JSON.parse(readFileSync(MESH_NAMES_FILE, 'utf8'));
+  const homes = [
+    ['Hypothalamus', 'nervous', 'Hypothalamus'],
+    ['Thymus', 'lymphatic', 'Left lobe of thymus'],
+    ['Pancreas', 'digestive', 'Pancreas'],
+    ['Testes', 'reproductive', 'Left testis'],
+  ];
+  for (const [name, layer, mesh] of homes) {
+    const entry = endocrine().notShown.find((e) => e.name === name);
+    assert.equal(entry?.layer, layer, name);
+    assert.match(entry.note, /hormone|insulin|testosterone|thymosin/i, name);
+    assert.ok(meshNames[layer].includes(mesh) && !parts.has(mesh), `${mesh} in ${layer} only`);
   }
-  const groups = new Set([...[...parts.values()].map((p) => p.extras.group), ...endocrine().shared.map((s) => s.group)]);
+  // Every group has a gland of its own.
+  const groups = new Set([...parts.values()].map((p) => p.extras.group));
   assert.deepEqual([...groups].sort(), Object.keys(endocrine().groups).sort());
 });
 

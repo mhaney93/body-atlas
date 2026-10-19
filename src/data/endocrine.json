@@ -3,22 +3,15 @@
   "name": "Endocrine",
   "color": "#4dd9ff",
   "asset": "models/endocrine.glb",
-  "summary": "The endocrine glands release hormones, chemical messengers that travel in the blood and steer growth, metabolism, stress responses, blood sugar, salt and water balance, sleep and reproduction. The hypothalamus in the brain directs the pituitary gland, which in turn directs several of the others.",
+  "summary": "The endocrine glands release hormones, chemical messengers that travel in the blood and steer growth, metabolism, stress responses, blood sugar, salt and water balance, sleep and reproduction. The hypothalamus in the brain directs the pituitary gland, which in turn directs several of the others. The hypothalamus, thymus, pancreas and testes also make hormones, but each lives in its own system; the Not shown list says which.",
   "groups": {
-    "brain": { "label": "Hypothalamus, pituitary & pineal", "color": "#a6ecff" },
+    "brain": { "label": "Pituitary & pineal", "color": "#a6ecff" },
     "neck": { "label": "Thyroid & parathyroids", "color": "#4dd9ff" },
-    "trunk": { "label": "Thymus, adrenals & pancreas", "color": "#3f9dff" },
-    "testes": { "label": "Testes", "color": "#7ef0d2" }
+    "trunk": { "label": "Adrenals", "color": "#3f9dff" }
   },
   "groupToggles": true,
-  "shared": [
-    { "layer": "nervous", "match": "^hypothalamus$", "group": "brain" },
-    { "layer": "lymphatic", "match": "^lobe of thymus$", "group": "trunk" },
-    { "layer": "digestive", "match": "^pancreas$", "group": "trunk" },
-    { "layer": "reproductive", "match": "^testis$", "group": "testes" }
-  ],
   "notShown": [
-    { "name": "Hypothalamic nuclei", "reason": "no-model", "note": "The clusters of nerve cells inside the hypothalamus that make its hormones, such as the paraventricular and supraoptic nuclei. Neither source model separates them, so the hypothalamus is one part." },
+    { "name": "Hypothalamic nuclei", "reason": "no-model", "note": "The clusters of nerve cells inside the hypothalamus that make its hormones, such as the paraventricular and supraoptic nuclei. Neither source model separates them, so the Nervous layer shows the hypothalamus as one part." },
     { "name": "Pituitary stalk", "aliases": ["infundibulum"], "reason": "no-model", "note": "The thin stalk that hangs the pituitary gland from the hypothalamus and carries its nerve fibres and blood vessels. Neither source model has it as a mesh." },
     { "name": "Intermediate lobe of the pituitary", "aliases": ["pars intermedia"], "reason": "no-model", "note": "A thin band between the anterior and posterior lobes, very small in adults. Z-Anatomy labels it but has no mesh for it." },
     { "name": "Adrenal cortex and medulla", "reason": "no-model", "note": "Each adrenal gland has an outer cortex, which makes cortisol, aldosterone and some sex hormones, and an inner medulla, which makes adrenaline and noradrenaline. The models show each gland as one part." },
@@ -28,15 +21,15 @@
     { "name": "Ovaries", "reason": "no-model", "note": "The female glands that make oestrogen and progesterone. The models are of one adult male body, so they have none." },
     { "name": "Hormone-making cells of the stomach and gut", "reason": "too-small", "note": "Cells scattered through the lining of the stomach and intestines that release hormones such as gastrin, ghrelin, secretin and GLP-1. The stomach and intestines are shown in the Digestive layer." },
     { "name": "Fat tissue", "reason": "no-model", "note": "Body fat releases leptin, which signals how much energy the body has stored. Neither source model has fat as a part." },
+    { "name": "Hypothalamus", "reason": "other-system", "layer": "nervous", "note": "It directs the pituitary gland and makes oxytocin and antidiuretic hormone, which the posterior pituitary releases; it is in Nervous." },
+    { "name": "Thymus", "reason": "other-system", "layer": "lymphatic", "note": "Its hormones, such as thymosin, help T cells mature; it is in Lymphatic." },
+    { "name": "Pancreas", "reason": "other-system", "layer": "digestive", "note": "Its islets make insulin, which lowers blood sugar, and glucagon, which raises it; it is in Digestive." },
+    { "name": "Testes", "reason": "other-system", "layer": "reproductive", "note": "They make testosterone as well as sperm; they are in Reproductive." },
     { "name": "Kidneys", "reason": "other-system", "layer": "urinary", "note": "Besides making urine, they release renin, which helps control blood pressure, erythropoietin, which drives red blood cell production, and the active form of vitamin D." },
     { "name": "Heart", "reason": "other-system", "layer": "circulatory", "note": "Its atria release natriuretic peptides when stretched, which make the kidneys pass more salt and water." },
     { "name": "Liver", "reason": "other-system", "layer": "digestive", "note": "It makes IGF-1, which carries out much of growth hormone's effect, and hepcidin, which controls iron levels." }
   ],
   "parts": {
-    "hypothalamus": {
-      "region": "Brain",
-      "description": "The control centre of the hormone system, under the thalamus. It makes hormones that tell the pituitary gland what to release, and makes oxytocin and antidiuretic hormone, which the posterior pituitary stores and releases."
-    },
     "anterior pituitary": {
       "region": "Skull base",
       "aliases": ["adenohypophysis", "pituitary gland", "hypophysis"],
@@ -67,23 +60,10 @@
       "aliases": ["parathyroid"],
       "description": "One of four rice-grain-sized glands on the back of the thyroid, the lower pair. They make parathyroid hormone, which raises blood calcium by drawing it from bone and helping the kidneys and gut hold on to it."
     },
-    "lobe of thymus": {
-      "region": "Chest",
-      "description": "One of the two lobes of the thymus, behind the breastbone. Its hormones, such as thymosin, help T cells mature; it is largest in childhood and is mostly replaced by fat in adults."
-    },
     "adrenal gland": {
       "region": "Abdomen",
       "aliases": ["suprarenal gland"],
       "description": "A small gland on top of each kidney. Its outer layer makes cortisol, the stress and blood sugar hormone, and aldosterone, which keeps salt in the body; its core makes adrenaline and noradrenaline for the fight-or-flight response."
-    },
-    "pancreas": {
-      "region": "Abdomen",
-      "description": "Besides digestive juice, it makes insulin, which lowers blood sugar, and glucagon, which raises it. Those hormones come from about a million tiny islets of cells scattered through the gland."
-    },
-    "testis": {
-      "region": "Scrotum",
-      "aliases": ["testicle", "testes"],
-      "description": "Besides sperm, each testis makes testosterone, which drives male development, muscle and bone growth, and sperm production. The pituitary's hormones control how much it makes."
     }
   }
 }
