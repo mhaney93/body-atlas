@@ -46,6 +46,11 @@ const SPLITS = 3;
 // its bad points.
 const SMOOTH_SCALES = 5;
 const SMOOTH_ROUNDS = 8;
+// A pull is turned to agree with the pulls around it (see agree) only if
+// that way leads out of its bone within EXIT_REACH mm, tested EXIT_STEP mm
+// apart.
+const EXIT_STEP = 0.5;
+const EXIT_REACH = 12;
 // Points along each edge are tested at most this far apart (mm), as in
 // check-placement.mjs.
 const STEP = 1.5;
@@ -54,6 +59,7 @@ const add = (a, b) => [a[0] + b[0], a[1] + b[1], a[2] + b[2]];
 const sub = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
 const scale = (a, s) => [a[0] * s, a[1] * s, a[2] * s];
 const len = (a) => Math.hypot(a[0], a[1], a[2]);
+const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 const toward = (from, to, distance) => scale(sub(to, from), distance / (len(sub(to, from)) || 1));
 const edgeKey = (a, b) => Math.min(a, b) * 4294967296 + Math.max(a, b);
 
@@ -162,18 +168,19 @@ export function settle(parts, { layer, body, blockers = () => [], smooth }) {
    * With `smooth`, a point in a bone it has no opening into goes back only
    * to within the tolerance, not right out of the bone: a vessel lying on a
    * rib needs to move less, so it is less often pushed into the next bone.
+   * Also gives the bone that set the move, if a bone did.
    */
-  const fix = (p, own, edge = false) => {
+  const fixFrom = (p, own, edge = false) => {
     let move = [0, 0, 0];
-    const longer = (m) => {
-      if (len(m) > len(move)) move = m;
+    let from = null;
+    const longer = (m, bone = null) => {
+      if (len(m) > len(move)) [move, from] = [m, bone];
     };
     for (const hit of body.bonesAt(p)) {
       const depth = allowed(own, hit.bone);
       if (hit.depth <= depth - (edge ? EDGE_MARGIN : MARGIN)) continue;
       // Out of the bone, or back to within its opening.
-      const target = smooth || depth > boneTolerance(layer) ? depth - 2 * MARGIN : -BONE_CLEARANCE;
-      longer(toward(p, hit.point, hit.depth - target));
+      longer(toward(p, hit.point, hit.depth - target(depth)), hit.bone);
     }
     for (const b of blockersOf(own)) {
       if (!b.solid.nearBox(p) || !b.solid.contains(p)) continue;
@@ -183,8 +190,11 @@ export function settle(parts, { layer, body, blockers = () => [], smooth }) {
     const q = add(p, move);
     const out = body.outside(q);
     if (out > skinLimit(own, edge)) move = add(move, toward(q, body.skin.depth(q).point, out + SKIN_CLEARANCE));
-    return move;
+    return { move, bone: from };
   };
+  const fix = (p, own, edge = false) => fixFrom(p, own, edge).move;
+  /** How deep (mm) a moved point ends up in a bone it may go `depth` into (negative: outside it). */
+  const target = (depth) => (smooth || depth > boneTolerance(layer) ? depth - 2 * MARGIN : -BONE_CLEARANCE);
 
   const adjacency = () => {
     const adj = pos.map(() => []);
@@ -296,6 +306,53 @@ export function settle(parts, { layer, body, blockers = () => [], smooth }) {
   };
 
   /**
+   * Turns the pulls out of a bone that go against the pulls around them.
+   * Each point is pulled to the bone surface nearest it, so a vessel cutting
+   * through a bone's edge (the right suprascapular vein through the
+   * clavicle) was pulled up on one side and down on the other: the pulls
+   * cancelled, then pulled its sides apart, and it crumpled. A pull out of a
+   * bone that points against the pulls out of the same bone within `smooth`
+   * mm (weighted as in the field) is turned their way instead, so the
+   * vessel leaves the bone all on one side. `past` keeps the
+   * pulls of earlier rounds too, so the way does not flip from round to
+   * round as the points still in the bone change.
+   */
+  const agree = (pulls, past) => {
+    const cell = (p) => p.map((x) => Math.floor(x / smooth));
+    const now = pulls.filter((pull) => pull.bone);
+    for (const pull of now) {
+      const key = cell(pull.p).join(',');
+      if (!past.has(key)) past.set(key, []);
+      past.get(key).push({ ...pull });
+    }
+    const turned = [];
+    for (const pull of now) {
+      const [x, y, z] = cell(pull.p);
+      let way = [0, 0, 0];
+      for (let dx = -1; dx <= 1; dx++)
+        for (let dy = -1; dy <= 1; dy++)
+          for (let dz = -1; dz <= 1; dz++)
+            for (const other of past.get(`${x + dx},${y + dy},${z + dz}`) ?? []) {
+              const d = len(sub(pull.p, other.p));
+              if (other.bone !== pull.bone || d >= smooth || ![...other.own].some((n) => pull.own.has(n))) continue;
+              way = add(way, scale(other.m, (1 - (d / smooth) ** 2) ** 2));
+            }
+      if (dot(way, pull.m) >= 0) continue;
+      // Only where that way leads out through the bone within EXIT_REACH mm
+      // (the vessel crosses an edge of it), and no further than the pull
+      // went: pulled far through a thick bone, a vessel was dragged along it.
+      const unit = scale(way, 1 / len(way));
+      const limit = target(allowed(pull.own, pull.bone));
+      for (let s = EXIT_STEP; s <= EXIT_REACH; s += EXIT_STEP)
+        if (body.bonesAt(add(pull.p, scale(unit, s))).every((hit) => hit.bone !== pull.bone || hit.depth <= limit)) {
+          turned.push([pull, scale(unit, Math.min(s, len(pull.m)))]);
+          break;
+        }
+    }
+    for (const [pull, m] of turned) pull.m = m;
+  };
+
+  /**
    * Moves the parts by a smooth displacement field rather than vertex by
    * vertex: every bad point (a vertex, or a point along an edge as
    * check-placement.mjs samples it) pulls the vertices of its own parts within
@@ -306,6 +363,7 @@ export function settle(parts, { layer, body, blockers = () => [], smooth }) {
    */
   const moveSmoothly = () => {
     let check = pos.map((_, id) => id);
+    const past = new Map();
     for (let round = 0; round < SMOOTH_SCALES * SMOOTH_ROUNDS; round++) {
       const radius = smooth / 2 ** Math.floor(round / SMOOTH_ROUNDS);
       const cell = (p) => p.map((x) => Math.floor(x / radius));
@@ -313,8 +371,8 @@ export function settle(parts, { layer, body, blockers = () => [], smooth }) {
       const looking = new Set(check);
       const pulls = [];
       for (const id of check) {
-        const m = fix(pos[id], names[id]);
-        if (len(m) > 0) pulls.push({ p: pos[id], m, own: names[id] });
+        const { move: m, bone } = fixFrom(pos[id], names[id]);
+        if (len(m) > 0) pulls.push({ p: pos[id], m, own: names[id], bone });
       }
       const seen = new Set();
       for (const t of tris)
@@ -329,11 +387,12 @@ export function settle(parts, { layer, body, blockers = () => [], smooth }) {
             if (!own.size) continue;
             for (let s = 1; s < n; s++) {
               const p = add(pos[a], scale(sub(pos[b], pos[a]), s / n));
-              const m = fix(p, own, true);
-              if (len(m) > 0) pulls.push({ p, m, own });
+              const { move: m, bone } = fixFrom(p, own, true);
+              if (len(m) > 0) pulls.push({ p, m, own, bone });
             }
           }
       if (!pulls.length) return [];
+      agree(pulls, past);
       const grid = new Map();
       for (const pull of pulls) {
         const key = cell(pull.p).join(',');
