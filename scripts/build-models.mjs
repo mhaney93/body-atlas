@@ -528,13 +528,15 @@ const ASSETS = [
   { file: 'skeletal-ossicles.glb', elements: [], extras: OSSICLES, ratio: 0.5 },
   // BodyParts3D models the carotid, vertebral and internal jugular vessels of
   // the neck in pieces; the stretches it lacks are bridged from Z-Anatomy
-  // (see circulatory-model.mjs).
+  // (see circulatory-model.mjs). The vessels are thin tubes, settled by a
+  // smooth field (`smooth`, mm; see settle.mjs) so they keep their shape.
   {
     file: 'circulatory.glb',
     groups: circulatoryGroups(),
     mergeByName: true,
     fit: (objs) =>
       bridgeNeckVessels(objs, join(Z_ANATOMY_DIR, 'circulatory'), join(Z_ANATOMY_DIR, 'nervous', 'landmarks.json'), skeletalBones(), body()),
+    smooth: 40,
     ratio: 0.2,
     error: 0.002,
   },
@@ -1096,7 +1098,7 @@ for (const asset of ASSETS) {
     const moved =
       layer === REFERENCE_LAYER
         ? settle(parts, { layer, body: skinOnly() })
-        : settle(parts, { layer, body: body(), blockers: (part) => blockersFor(layer, part) });
+        : settle(parts, { layer, body: body(), blockers: (part) => blockersFor(layer, part), smooth: asset.smooth });
     // An asset's own placement among its parts (`place`), after the settling.
     for (const [name, d] of asset.place?.(parts) ?? []) moved.set(name, Math.max(moved.get(name) ?? 0, d));
     // Rewrite only the vertices that moved or were added, so an untouched

@@ -70,6 +70,7 @@ export const KNOWN = [
   ['lymphatic', /precaval nodes|lateral caval nodes|pre-aortic nodes|lateral aortic nodes|pancreatic nodes/i, 'digestive', /^pancreas$/i, 'the nodes around the aorta and vena cava, pressed into the pancreas in front of them', 9],
   ['lymphatic', /pararectal nodes|postvesical nodes/i, 'digestive', /^rectum$/i, 'the nodes beside the rectum, pressed into it', 7.5],
   ['lymphatic', /lateral aortic nodes|ileocolic nodes/i, 'circulatory', /inferior vena cava/i, 'nodes pressed into the vena cava they lie on', 8.5],
+  ['lymphatic', /^left medial external iliac nodes$/i, 'circulatory', /^left common iliac vein$/i, 'nodes pressed into the iliac vein they lie along', 6.5],
 ];
 
 /**
