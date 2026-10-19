@@ -453,10 +453,11 @@ const ENDOCRINE = {
 // body), the tear glands and ducts, the eyelids' tarsal plates, the check
 // ligaments of the eye muscles, the superior oblique's trochlea, and both
 // outer ears as one element, cut apart at the midline. The middle and inner
-// ear come from Z-Anatomy (SENSES_EAR). The eye muscles, the optic and
-// inner-ear nerves and the ossicles are shared at runtime from the Muscular,
-// Nervous and Skeletal layers (see "shared" in src/data/senses.json), not
-// duplicated here.
+// ear come from Z-Anatomy (SENSES_EAR). The eye muscles, the optic,
+// inner-ear, olfactory and chorda tympani nerves, the ossicles, the tongue
+// and the nasal cavity are shared at runtime from the Muscular, Nervous,
+// Skeletal, Digestive and Respiratory layers (see "shared" in
+// src/data/senses.json), not duplicated here.
 const SENSES = {
   file: 'senses.glb',
   groups: new Map([

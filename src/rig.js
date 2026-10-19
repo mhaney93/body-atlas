@@ -170,6 +170,7 @@ export const REGION_FAMILIES = {
   Orbit: ['head'],
   Ear: ['head'],
   'Middle ear': ['head'],
+  Nose: ['head'],
 };
 
 // --- geometry helpers over flat [x, y, z, …] arrays -------------------------
