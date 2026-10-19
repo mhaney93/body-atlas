@@ -323,7 +323,8 @@ export class Viewer {
     entry = { layer, group: null, promise: null };
     // A layer may ship extra files (e.g. parts under a different license).
     const urls = [layer.asset, ...(layer.extraAssets ?? [])];
-    const sources = (layer.shared ?? []).map((s) => s.source).filter(Boolean);
+    // Once each, though several entries may share from one layer (Sense organs from Nervous).
+    const sources = [...new Set((layer.shared ?? []).map((s) => s.source).filter(Boolean))];
     entry.promise = Promise.all([
       Promise.all(urls.map((url) => this.loader.loadAsync(url))),
       ...sources.map((source) => this.preloadLayer(source)),
