@@ -323,7 +323,7 @@ test('soft parts follow their nearest bone, blending across the joints they cros
   const muscular = L.LAYERS.find((l) => l.id === 'muscular');
   const share = (name) => {
     const m = muscles.get(name);
-    const region = L.partInfo(muscular, name, m.extras.group, undefined, m.extras.of).region;
+    const region = L.partInfo(muscular, name, m.extras.group, m.extras.of).region;
     const { indices, weights } = R.skinWeights(rig, index, m.positions, R.candidateSegments(region, 'right'));
     const out = {};
     for (let i = 0; i < indices.length; i++) out[R.SEGMENTS[indices[i]].id] = (out[R.SEGMENTS[indices[i]].id] ?? 0) + weights[i] / (indices.length / 4);
@@ -356,7 +356,7 @@ test('a posed model moves, bends at the joint and is picked where it is drawn', 
   };
   const muscular = L.LAYERS.find((l) => l.id === 'muscular');
   const poser = new V.Poser(scene, {
-    region: (layer, mesh) => L.partInfo(layer, mesh.userData.name, mesh.userData.group, undefined, mesh.userData.of).region,
+    region: (layer, mesh) => L.partInfo(layer, mesh.userData.name, mesh.userData.group, mesh.userData.of).region,
     side: (mesh) => (/\bright\b/i.test(mesh.userData.name) ? 'right' : /\bleft\b/i.test(mesh.userData.name) ? 'left' : null),
   });
   const skeletal = group(bones, () => true);
@@ -428,7 +428,7 @@ test('cue arrows start from the rest-pose centre of a muscle, whether or not a p
   const SP = await server.ssrLoadModule('/src/stretch-panel.js');
   const scene = new THREE.Scene();
   const poser = new V.Poser(scene, {
-    region: (layer, mesh) => L.partInfo(layer, mesh.userData.name, mesh.userData.group, undefined, mesh.userData.of).region,
+    region: (layer, mesh) => L.partInfo(layer, mesh.userData.name, mesh.userData.group, mesh.userData.of).region,
     side: (mesh) => (/\bright\b/i.test(mesh.userData.name) ? 'right' : /\bleft\b/i.test(mesh.userData.name) ? 'left' : null),
   });
   const skeletal = new THREE.Group();
@@ -625,7 +625,7 @@ test('the eyes turn about their eyeballs, both looking one way, lengthening the 
   const sensesLayer = L.LAYERS.find((l) => l.id === 'senses');
   assert.equal(sensesLayer.posable, 'soft');
   const poser = new V.Poser(scene, {
-    region: (layer, mesh) => L.partInfo(layer, mesh.userData.name, mesh.userData.group, undefined, mesh.userData.of).region,
+    region: (layer, mesh) => L.partInfo(layer, mesh.userData.name, mesh.userData.group, mesh.userData.of).region,
     side: (mesh) => (/\bright\b/i.test(mesh.userData.name) ? 'right' : /\bleft\b/i.test(mesh.userData.name) ? 'left' : null),
   });
   const group = (map, keep) => {
@@ -716,7 +716,7 @@ test('only the eyeballs turn with the eyes; every other Sense organs part stays 
     const got = ids(R.candidateSegments(region, side));
     if (got.join() !== want.join()) bad.push(`${name} (${region}): ${got}`);
   }
-  // The ossicles, shared from the Skeletal layer, pose as Sense organs parts too.
+  // The ossicles (Skeletal) stay fixed to the skull too.
   for (const name of ['malleus', 'incus', 'stapes']) {
     const got = ids(R.candidateSegments(L.partInfo(skeletal, name).region, null));
     if (got.join() !== head.map((i) => R.SEGMENTS[i].id).join()) bad.push(`${name}: ${got}`);

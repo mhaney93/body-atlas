@@ -56,16 +56,13 @@ test('ligaments live in Joints, not in the skeletal model, and tendons stay out'
   assert.ok(!joint.some((n) => /tendon/i.test(n) && !/ligament|sheath|retinacul/i.test(n)), 'a tendon is in joints.glb');
 });
 
-test('intervertebral discs and costal cartilages are shared from Skeletal, not duplicated', async () => {
+test('intervertebral discs and costal cartilages live in Skeletal, and the Not shown list says so', async () => {
   const bones = await meshNames('skeletal.glb');
-  const joint = new Set(await meshNames('joints.glb'));
-  const shared = bones.filter((n) => layers.sharedEntry(joints(), 'skeletal', n));
-  assert.ok(shared.some((n) => /intervertebral disk/i.test(n)), 'no discs shared');
-  assert.ok(shared.some((n) => /costal cartilage/i.test(n)), 'no costal cartilages shared');
-  assert.deepEqual(shared.filter((n) => !/intervertebral disk|costal cartilage/i.test(n)), [], 'a bone is shared');
-  for (const n of shared) {
-    assert.ok(!joint.has(n), `${n} duplicated in joints.glb`);
-    const part = layers.partInfo(joints(), n, layers.sharedEntry(joints(), 'skeletal', n).group, skeletal());
-    assert.ok(part.description, `${n} has no description when picked in Joints`);
+  const joint = await meshNames('joints.glb');
+  assert.ok(bones.some((n) => /intervertebral disk/i.test(n)), 'no discs in skeletal.glb');
+  assert.ok(bones.some((n) => /costal cartilage/i.test(n)), 'no costal cartilages in skeletal.glb');
+  assert.deepEqual(joint.filter((n) => /intervertebral disk|costal cartilage/i.test(n)), [], 'duplicated in joints.glb');
+  for (const name of ['Intervertebral discs', 'Costal cartilages']) {
+    assert.equal(joints().notShown.find((e) => e.name === name)?.layer, 'skeletal', name);
   }
 });

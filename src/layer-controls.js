@@ -38,7 +38,7 @@ export function buildLayerControls(layer, viewer, host) {
 
   if (depthLevels?.length) {
     const depthOf = (mesh) =>
-      (mesh.userData.depth ??= partInfo(layer, meshName(mesh), mesh.userData.group, undefined, mesh.userData.of).depth ?? 0);
+      (mesh.userData.depth ??= partInfo(layer, meshName(mesh), mesh.userData.group, mesh.userData.of).depth ?? 0);
     const wrap = document.createElement('div');
     wrap.className = 'control';
     wrap.innerHTML = `

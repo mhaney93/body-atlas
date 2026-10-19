@@ -5,7 +5,7 @@
   "asset": "models/senses.glb",
   "posable": "soft",
   "extraAssets": ["models/senses-ear.glb"],
-  "summary": "The sense organs turn light, sound, taste, smell and touch into nerve signals for the brain. Each eye bends light through its cornea and lens onto the retina. Each ear funnels sound to the eardrum, three tiny bones pass it to the cochlea, which turns it into signals, and the vestibule and semicircular canals beside it sense balance. Taste buds on the tongue sense taste, and a patch of lining in the roof of the nose senses smell, passing it up the olfactory nerves. Touch has no organ of its own: its receptors are spread through the skin (the glass shell), so this layer has no part for it. Many of these parts are tiny and buried in bone: zoom right in to see them.",
+  "summary": "The sense organs turn light, sound, taste, smell and touch into nerve signals for the brain. Each eye bends light through its cornea and lens onto the retina. Each ear funnels sound to the eardrum, three tiny bones pass it to the cochlea, which turns it into signals, and the vestibule and semicircular canals beside it sense balance. Taste buds on the tongue sense taste, and a patch of lining in the roof of the nose senses smell, passing it up the olfactory nerves. Touch has no organ of its own: its receptors are spread through the skin (the glass shell), so this layer has no part for it. The eye muscles, ear bones, sense nerves, tongue and nose each live in one other system; the Not shown list says which. Many of these parts are tiny and buried in bone: zoom right in to see them.",
   "groupToggles": true,
   "groups": {
     "coat": {
@@ -23,16 +23,12 @@
       "opacity": 0.55
     },
     "orbit": {
-      "label": "Eye muscles, eyelids & ligaments",
+      "label": "Eyelids & ligaments",
       "color": "#ff8a9a"
     },
     "lacrimal": {
       "label": "Tear glands & ducts",
       "color": "#5cc8ff"
-    },
-    "nerves": {
-      "label": "Nerves of sight & hearing",
-      "color": "#ffd84d"
     },
     "outer": {
       "label": "Outer ear",
@@ -40,60 +36,14 @@
       "opacity": 0.35
     },
     "middle": {
-      "label": "Eardrum, ear bones & ear tube",
+      "label": "Eardrum & ear tube",
       "color": "#ffe9b0"
     },
     "inner": {
       "label": "Inner ear",
       "color": "#7dffb0"
-    },
-    "taste": {
-      "label": "Tongue & taste nerve",
-      "color": "#ff6f91"
-    },
-    "smell": {
-      "label": "Nose & smell nerves",
-      "color": "#c9a0ff",
-      "opacity": 0.4
     }
   },
-  "shared": [
-    {
-      "layer": "skeletal",
-      "match": "^(malleus|incus|stapes)$",
-      "group": "middle"
-    },
-    {
-      "layer": "muscular",
-      "match": "^((superior|inferior|medial|lateral) rectus|(superior|inferior) oblique|(tendon of )?levator palpebrae superioris|common tendinous ring|palpebral part of orbicularis oculi)$",
-      "group": "orbit"
-    },
-    {
-      "layer": "nervous",
-      "match": "^(optic nerve \\(ii\\)|cochlear nerve|vestibular nerve|vestibulocochlear nerve \\(viii\\))$",
-      "group": "nerves"
-    },
-    {
-      "layer": "digestive",
-      "match": "^tongue$",
-      "group": "taste"
-    },
-    {
-      "layer": "respiratory",
-      "match": "^nasal cavity$",
-      "group": "smell"
-    },
-    {
-      "layer": "nervous",
-      "match": "^olfactory nerve \\(i\\)$",
-      "group": "smell"
-    },
-    {
-      "layer": "nervous",
-      "match": "^chorda tympani$",
-      "group": "taste"
-    }
-  ],
   "notShown": [
     { "name": "Conjunctiva", "reason": "no-model", "note": "The thin, clear membrane over the white of the eye and the inside of the eyelids." },
     { "name": "Macula, fovea and optic disc", "reason": "no-model", "note": "The spot of sharpest vision and the blind spot where the optic nerve leaves. BodyParts3D models the retina as one layer without them." },
@@ -113,11 +63,17 @@
     { "name": "Ligaments and joints of the ear bones", "reason": "no-model" },
     { "name": "Cochlear duct, utricle, saccule and semicircular ducts", "aliases": ["membranous labyrinth"], "reason": "no-model", "note": "The fluid-filled membranous tubes and sacs inside the bony cochlea, vestibule and canals that are shown. Z-Anatomy names them but has no meshes for them." },
     { "name": "Hair cells and the organ of Corti", "reason": "too-small", "note": "The sensing cells inside the cochlea and the balance organs." },
-    { "name": "Right cochlear nerve", "reason": "not-added", "note": "Z-Anatomy has it, as a mesh without a side in its name that the Nervous layer's export skips; the right vestibular and vestibulocochlear nerves are shown." },
-    { "name": "Olfactory epithelium (smell)", "aliases": ["olfactory region", "smell receptors"], "reason": "no-model", "note": "The patch of lining in the roof of the nose that senses smell. Neither free model marks it apart from the rest of the nasal cavity, which is shown whole." },
-    { "name": "Taste buds and papillae", "aliases": ["taste buds"], "reason": "too-small", "note": "The bumps on the tongue and the thousands of taste buds in them. The tongue is shown as one part." },
-    { "name": "Olfactory bulb and tract as separate parts", "reason": "no-model", "note": "Z-Anatomy models each olfactory nerve as one part running from the bulb above the nose back along the tract under the brain; it is shown whole." },
-    { "name": "Facial and glossopharyngeal nerves", "reason": "other-system", "layer": "nervous", "note": "Taste from the back of the tongue travels in the glossopharyngeal nerve, and from the front in the chorda tympani (shown here) and on in the facial nerve. Both nerves do much more than taste." },
+    { "name": "Olfactory epithelium (smell)", "aliases": ["olfactory region", "smell receptors"], "reason": "no-model", "note": "The patch of lining in the roof of the nose that senses smell. Neither free model marks it apart from the rest of the nasal cavity, which the Respiratory layer shows whole." },
+    { "name": "Taste buds and papillae", "aliases": ["taste buds"], "reason": "too-small", "note": "The bumps on the tongue and the thousands of taste buds in them. The Digestive layer shows the tongue as one part." },
+    { "name": "Facial and glossopharyngeal nerves", "reason": "other-system", "layer": "nervous", "note": "Taste from the back of the tongue travels in the glossopharyngeal nerve, and from the front in the chorda tympani and on in the facial nerve. Both nerves do much more than taste." },
+    { "name": "Eye muscles", "aliases": ["extraocular muscles", "levator palpebrae superioris"], "reason": "other-system", "layer": "muscular", "note": "Sight: the six muscles that turn each eye, the levator that lifts the upper eyelid, the common tendinous ring and the eyelid part of orbicularis oculi are in Muscular." },
+    { "name": "Optic nerves", "reason": "other-system", "layer": "nervous", "note": "Sight: the nerves that carry signals from each retina to the brain are in Nervous." },
+    { "name": "Ear bones (malleus, incus and stapes)", "aliases": ["ossicles"], "reason": "other-system", "layer": "skeletal", "note": "Hearing: the three tiny bones that pass the eardrum's vibrations to the inner ear are in Skeletal." },
+    { "name": "Vestibulocochlear, cochlear and vestibular nerves", "reason": "other-system", "layer": "nervous", "note": "Hearing and balance: the nerves that carry signals from the inner ear to the brain are in Nervous." },
+    { "name": "Tongue", "reason": "other-system", "layer": "digestive", "note": "Taste: the tongue, which carries the taste buds, is in Digestive." },
+    { "name": "Chorda tympani", "reason": "other-system", "layer": "nervous", "note": "Taste: the nerve that carries taste from the front two-thirds of the tongue is in Nervous." },
+    { "name": "Nasal cavity", "reason": "other-system", "layer": "respiratory", "note": "Smell: the nasal cavity, whose roof senses smell, is in Respiratory." },
+    { "name": "Olfactory nerves", "reason": "other-system", "layer": "nervous", "note": "Smell: the nerves of smell, each modelled as one part from the olfactory bulb back along the tract, are in Nervous." },
     { "name": "Touch, pain and temperature receptors", "aliases": ["touch"], "reason": "too-small", "note": "The sense of touch has no organ of its own: its receptors are spread through the skin, shown as the glass shell. The Nervous layer's illustrative nerve-ending haze hints at where they are densest." }
   ],
   "parts": {
@@ -226,19 +182,6 @@
     "cochlea": {
       "region": "Ear",
       "description": "The snail-shaped hearing organ, coiled two and a half turns inside the temporal bone and filled with fluid. Hair cells along it turn sound vibrations into nerve signals, high pitches near its base and low ones near its tip."
-    },
-    "tongue": {
-      "region": "Tongue",
-      "description": "The organ of taste: its thousands of taste buds sense sweet, salty, sour, bitter and savoury (umami). The rest of a food's flavour is smell, from the nose."
-    },
-    "nasal cavity": {
-      "region": "Nose",
-      "description": "The air passage inside the nose. Smell is sensed by a small patch of lining in its roof, whose receptors send signals up through the skull to the olfactory bulb."
-    },
-    "olfactory nerve (i)": {
-      "region": "Cranial nerves",
-      "aliases": ["olfactory bulb", "olfactory tract"],
-      "description": "Cranial nerve I, the nerve of smell, modelled from the olfactory bulb above the nose back along the tract under the brain. Fine filaments from the nose's lining pass up through the skull into the bulb."
     },
     "vestibule and semicircular canals": {
       "region": "Ear",

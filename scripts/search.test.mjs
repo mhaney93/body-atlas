@@ -74,20 +74,17 @@ test('edit distance counts swaps as one typo', () => {
 test('every mesh and every not-shown entry is in the index', () => {
   const meshNames = JSON.parse(readFileSync(MESH_NAMES_FILE, 'utf8'));
   for (const layer of layers.LAYERS) {
-    const parts = index.filter((e) => e.kind === 'part' && e.layerId === layer.id && !e.sharedFrom).map((e) => e.meshName);
+    const parts = index.filter((e) => e.kind === 'part' && e.layerId === layer.id).map((e) => e.meshName);
     assert.deepEqual(parts, meshNames[layer.id], layer.id);
     const missing = index.filter((e) => e.kind === 'notShown' && e.layerId === layer.id).map((e) => e.name);
     assert.deepEqual(missing, layer.notShown.map((e) => e.name), layer.id);
   }
 });
 
-test('a part shared from another layer is found under both layers', () => {
-  const pancreas = index.filter((e) => e.meshName === 'Pancreas').map(label);
-  assert.deepEqual(pancreas.sort(), ['part/digestive/Pancreas', 'part/endocrine/Pancreas']);
-  const shared = index.find((e) => e.layerId === 'endocrine' && e.meshName === 'Left lobe of thymus');
-  assert.equal(shared.sharedFrom, 'lymphatic');
-  assert.equal(shared.region, 'Chest');
-  assert.ok(index.some((e) => e.layerId === 'joints' && e.sharedFrom === 'skeletal' && /intervertebral disk/i.test(e.meshName)));
+test('a part is found as a part only in its own layer; a layer that leaves it out points there', () => {
+  assert.deepEqual(index.filter((e) => e.kind === 'part' && e.meshName === 'Pancreas').map(label), ['part/digestive/Pancreas']);
+  const pointer = index.find((e) => e.kind === 'notShown' && e.layerId === 'endocrine' && e.name === 'Pancreas');
+  assert.equal(pointer.shownIn, 'digestive');
 });
 
 test('"femur" offers both femurs, left then right, before anything else', () => {

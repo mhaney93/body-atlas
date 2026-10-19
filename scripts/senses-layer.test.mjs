@@ -113,31 +113,26 @@ test('each eardrum and inner ear sits by the ossicles of its side', () => {
   }
 });
 
-test('the parts shared from other layers exist there', async () => {
+test('the sense parts other systems own are listed as not shown, pointing at their homes', async () => {
   const meshNames = (await import('../src/mesh-names.json', { with: { type: 'json' } })).default;
-  // Ossicles; 6 eye muscles, levator, common ring, palpebral orbicularis oculi (+2 levator tendons);
-  // optic, vestibular and VIII nerves (+ left cochlear), olfactory nerves and chorda tympani; tongue; nasal cavity.
-  const want = { skeletal: 6, muscular: 2 * 9 + 2, nervous: 7 + 2 + 2, digestive: 1, respiratory: 1 };
-  for (const id of new Set(senses().shared.map((e) => e.layer))) {
-    const matched = meshNames[id].filter((n) => layers.sharedEntry(senses(), id, n));
-    assert.equal(matched.length, want[id], `${id}: ${matched.join(', ')}`);
+  // [not-shown entry, its home layer, a mesh it stands for there]
+  const homes = [
+    ['Eye muscles', 'muscular', 'Left superior rectus'],
+    ['Optic nerves', 'nervous', 'Left optic nerve (II)'],
+    ['Ear bones (malleus, incus and stapes)', 'skeletal', 'Left stapes'],
+    ['Vestibulocochlear, cochlear and vestibular nerves', 'nervous', 'Left cochlear nerve'],
+    ['Tongue', 'digestive', 'Tongue'],
+    ['Chorda tympani', 'nervous', 'Left chorda tympani'],
+    ['Nasal cavity', 'respiratory', 'Nasal cavity'],
+    ['Olfactory nerves', 'nervous', 'Left olfactory nerve (I)'],
+  ];
+  for (const [name, layer, mesh] of homes) {
+    const entry = senses().notShown.find((e) => e.name === name);
+    assert.equal(entry?.layer, layer, name);
+    assert.equal(entry.reason, 'other-system', name);
+    assert.ok(meshNames[layer].includes(mesh), `${mesh} in ${layer}`);
+    assert.ok(!meshNames.senses.includes(mesh), `${mesh} also in senses`);
   }
-  for (const entry of senses().shared) assert.ok(senses().groups[entry.group], entry.group);
-});
-
-test('taste and smell are shown by the tongue, nasal cavity, olfactory nerves and chorda tympani', async () => {
-  const meshNames = (await import('../src/mesh-names.json', { with: { type: 'json' } })).default;
-  const groupOf = (id, name) => layers.sharedEntry(senses(), id, name)?.group;
-  assert.equal(groupOf('digestive', 'Tongue'), 'taste');
-  assert.equal(groupOf('respiratory', 'Nasal cavity'), 'smell');
-  for (const Side of ['Left', 'Right']) {
-    assert.ok(meshNames.nervous.includes(`${Side} olfactory nerve (I)`), `${Side} olfactory nerve`);
-    assert.equal(groupOf('nervous', `${Side} olfactory nerve (I)`), 'smell');
-    assert.equal(groupOf('nervous', `${Side} chorda tympani`), 'taste');
-  }
-  // The sense-organ descriptions win over the source layers' ones.
-  assert.match(layers.partInfo(senses(), 'Tongue').description, /taste/i);
-  assert.match(layers.partInfo(senses(), 'Nasal cavity').description, /smell/i);
 });
 
 test('the parts the free models lack are listed as not shown', () => {

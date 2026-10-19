@@ -37,18 +37,6 @@ export function partGroupId(layer, meshName) {
 }
 
 /**
- * The entry of `layer.shared` that claims a mesh of the layer `sourceId`, if
- * any. `shared` lets a layer also show parts that live in another layer's
- * model (e.g. the intervertebral discs, which are in the skeletal model)
- * without shipping the mesh twice: `{ layer: "<id>", match: "<regex on the
- * canonical name>", group? }`.
- */
-export function sharedEntry(layer, sourceId, meshName) {
-  const name = canonical(meshName);
-  return layer.shared?.find((s) => s.layer === sourceId && new RegExp(s.match).test(name));
-}
-
-/**
  * The label on parts whose part entry sets `approximate: true`: parts placed
  * from a population-average atlas rather than modelled on this body, so their
  * position is good only to a few millimetres.
@@ -61,13 +49,12 @@ export const APPROXIMATE_LABEL = 'Position approximate (population-average atlas
  * heart's chambers) are keyed by their full lowercase name, which wins over the
  * side-less one. `group` is the layer's sub-group (see `groups` in the layer
  * data) that the model assigns the mesh to, else the one its part entry names;
- * its `description` stands in for a part without one. A part shared from
- * another layer (`source`, see sharedEntry) falls back to that layer's part
- * info. `of` names the part a mesh belongs to (e.g. a muscle's tendon, via the
- * `of` node extra), whose region, flow and depth it shares unless it has its own.
+ * its `description` stands in for a part without one. `of` names the part a
+ * mesh belongs to (e.g. a muscle's tendon, via the `of` node extra), whose
+ * region, flow and depth it shares unless it has its own.
  */
-export function partInfo(layer, meshName, groupId, source, of) {
-  const part = partEntry(layer, meshName) ?? (source && partEntry(source, meshName));
+export function partInfo(layer, meshName, groupId, of) {
+  const part = partEntry(layer, meshName);
   const owner = of ? partEntry(layer, of) : undefined;
   const group = layer.groups?.[groupId ?? part?.group];
   return {

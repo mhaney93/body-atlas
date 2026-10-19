@@ -20,10 +20,6 @@ const layers = LAYERS.map((layer) => ({
   asset: asset(layer.asset),
   extraAssets: layer.extraAssets?.map(asset),
 }));
-// Point each shared-part entry at the layer object it borrows from.
-for (const layer of layers) {
-  layer.shared = layer.shared?.map((s) => ({ ...s, source: layers.find((l) => l.id === s.layer) }));
-}
 
 const info = $('info');
 const viewer = new Viewer($('stage'), {
@@ -40,8 +36,7 @@ const viewer = new Viewer($('stage'), {
     const { layer, mesh } = selection;
     if (layer.id === sensesLayer.id) eyesLoan.keep();
     // three.js sanitises node names (spaces → underscores); the original lives in extras.
-    const source = layers.find((l) => l.id === mesh.userData.sourceId);
-    const part = partInfo(layer, mesh.userData.name ?? mesh.name, mesh.userData.group, source, mesh.userData.of);
+    const part = partInfo(layer, mesh.userData.name ?? mesh.name, mesh.userData.group, mesh.userData.of);
     $('info-kicker').textContent = part.region ? `${layer.name} · ${part.region}` : layer.name;
     $('info-kicker').style.color = part.color ?? layer.color;
     $('info-name').textContent = part.name;
