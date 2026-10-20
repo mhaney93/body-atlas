@@ -176,19 +176,36 @@ export function isSided(stretch, variant) {
 }
 
 /**
- * A variant's moves as one side's muscles see them. A sided variant is done on
- * the chosen side, so its moves are that side's; a variant done once for both
- * sides ("turn the head to the left") is written for the left side, and the
- * right side gets the mirror.
+ * Whether a sided stretch turns a midline part one way, then the other (the
+ * head to the left, then to the right): the Left/Right toggle picks the way,
+ * its moves are written for the side it turns toward, and the other side's
+ * muscles see the mirror.
  */
-export function movesFor(stretch, variant, side) {
-  if (side === 'left' || isSided(stretch, variant)) return variant.moves;
-  return variant.moves.map((code) => {
+export function isMirrored(stretch, variant) {
+  return isSided(stretch, variant) && (stretch.mirrored ?? false);
+}
+
+/** Moves as the other side's muscles see them: "neck.roti" → "neck.rotc". */
+function mirrorMoves(moves) {
+  return moves.map((code) => {
     const { joint, dir } = parseMove(code);
     const move = `${joint}.${dir}`;
     const mirrored = MIRROR[move] ?? (MIRROR[dir] && `${joint}.${MIRROR[dir]}`);
     return mirrored ? code.replace(move, mirrored) : code;
   });
+}
+
+/**
+ * A variant's moves as one side's muscles see them. A sided variant is done on
+ * the chosen side, so its moves are that side's; a variant done once for both
+ * sides ("turn the head to the left") is written for the left side, and the
+ * right side gets the mirror. A mirrored one is done both ways, so each side
+ * sees its moves and their mirror.
+ */
+export function movesFor(stretch, variant, side) {
+  if (isMirrored(stretch, variant)) return [...variant.moves, ...mirrorMoves(variant.moves)];
+  if (side === 'left' || isSided(stretch, variant)) return variant.moves;
+  return mirrorMoves(variant.moves);
 }
 
 /** Is `action` reversed on each side by one of the `shown` variants? */
@@ -240,15 +257,19 @@ export function isStretched(key, seen, data = STRETCHING) {
  * The sides on which a variant, done on `side`, lengthens the muscle `key`
  * (one of its targets). A one-side stretch lengthens that side's. One done
  * once for both sides lengthens a side's muscle where that side's moves
- * (movesFor) reverse one of its actions: both sides for the butterfly, but
- * only the right splenius when the head turns left. A lengthen-only muscle,
+ * (movesFor) reverse one of its actions: both sides for the butterfly. A
+ * mirrored one turns toward `side` and lengthens likewise: only the right
+ * splenius when the head turns left. A lengthen-only muscle,
  * which has no actions to reverse, is lengthened on both.
  */
 export function stretchedSides(key, stretch, variant, side, data = STRETCHING) {
-  if (isSided(stretch, variant)) return [side];
+  const mirrored = isMirrored(stretch, variant);
+  if (isSided(stretch, variant) && !mirrored) return [side];
   const actions = data.muscles[key]?.actions;
   if (!actions?.length) return ['left', 'right'];
-  return ['left', 'right'].filter((s) => actions.some((action) => reverses(action, movesFor(stretch, variant, s))));
+  // A mirrored stretch turns toward `side`: that side's muscles see its moves, the other side's their mirror.
+  const seen = (s) => (!mirrored ? movesFor(stretch, variant, s) : s === side ? variant.moves : mirrorMoves(variant.moves));
+  return ['left', 'right'].filter((s) => actions.some((action) => reverses(action, seen(s))));
 }
 
 /**
