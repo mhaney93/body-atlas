@@ -86,6 +86,20 @@ test('a stretch lights the muscles it lengthens on the side it lengthens them', 
   assert.deepEqual(s.stretchedSides(key, tg1, tg1.variants[0], 'left'), ['left', 'right']);
 });
 
+test('opened from a muscle, each of its steps opens on the side that lengthens it', () => {
+  // The right splenius capitis: its one-side N2 on its own side, the mirrored neck turn to the left (that lengthens it).
+  const focus = { key: 'splenius capitis', own: 'right' };
+  const items = s.runOrder();
+  const [n2, n8] = ['N2', 'N8'].map((id) => items.find((item) => item.stretch.id === id));
+  assert.equal(m.focusSide(n2, focus, 'left'), 'right');
+  assert.equal(m.focusSide(n8, focus, 'right'), 'left');
+  assert.deepEqual(s.stretchedSides('splenius capitis', n8.stretch, n8.variant, m.focusSide(n8, focus, 'right')), ['right']);
+  // Another muscle's step, or no muscle: the side stays as chosen.
+  const p1 = items.find((item) => item.stretch.id === 'P1');
+  assert.equal(m.focusSide(p1, focus, 'left'), 'left');
+  assert.equal(m.focusSide(n8, null, 'right'), 'right');
+});
+
 test('coverage counts every muscle the run can stretch, by section, and lists the rest with reasons', () => {
   const none = s.coverage(new Set());
   const all = (optIn) => new Set(s.runOrder({ optIn }).map(({ ref }) => ref));

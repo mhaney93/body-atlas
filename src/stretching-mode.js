@@ -117,6 +117,17 @@ export function completedSteps(done, items = runOrder({ optIn: true })) {
   return new Set(items.filter((item) => entriesOf(item).every((e) => done.has(e))).map(({ ref }) => ref));
 }
 
+/**
+ * The side to show a step on while the mode was opened from a muscle (`focus`:
+ * its key and own side): for each of that muscle's stretches, the side that
+ * lengthens it (stretchSide); for other steps, or with no focus, `side` as it is.
+ */
+export function focusSide(item, focus, side, data = STRETCHING) {
+  const refs = new Set((focus && data.muscles[focus.key]?.stretches) ?? []);
+  if (!refs.has(item.ref) && !refs.has(item.stretch.id)) return side;
+  return stretchSide(focus.key, item.stretch, item.variant, focus.own, data);
+}
+
 /** "abdominal part of pectoralis major" → "Abdominal part of pectoralis major". */
 const sentence = (key) => key.charAt(0).toUpperCase() + key.slice(1);
 
@@ -168,17 +179,25 @@ export function stretchingMode(viewer, { muscular, layer, showLayers, restoreLay
   const emphasisBefore = new Map();
   /** Counts steps shown, so a step whose layers finish loading after the next one started is dropped. */
   let showing = 0;
+  /** The muscle the mode was opened from ({ key, own }), so each of its steps opens on the side that lengthens it. */
+  let focus = null;
 
   const stepper = new Stepper({
     onStep(item, index) {
       if (index === last + 1 && last >= 0) progress.done.add(doneEntry(stepper.items[last], progress.side));
       last = index;
       progress.ref = item.ref;
+      const side = focusSide(item, focus, progress.side);
+      if (side !== progress.side) {
+        progress.side = side;
+        bar.querySelector('.stepper-title').textContent = barTitle(item);
+      }
       show(item);
       save();
     },
     onStop() {
       last = -1;
+      focus = null;
       showing++;
       viewer.stopPose();
       for (const [id, role] of emphasisBefore) viewer.setEmphasis(id, role);
@@ -239,13 +258,13 @@ export function stretchingMode(viewer, { muscular, layer, showLayers, restoreLay
     await showLayers(withSkeleton(['skeletal', muscular.id]));
     viewer.select(null);
     let ref = progress.ref;
+    focus = muscleKey && side ? { key: muscleKey, own: side } : null;
     if (muscleKey) {
       const refs = new Set(STRETCHING.muscles[muscleKey]?.stretches ?? []);
       const mine = ({ stretch, ref: r }) => refs.has(r) || refs.has(stretch.id);
       // A muscle whose only stretches are opt-in (the face's) switches that section on.
       const first = runOrder({ optIn: progress.optIn }).find(mine) ?? runOrder({ optIn: true }).find(mine);
       if (first?.stretch.optIn && !progress.optIn.includes(first.stretch.optIn)) progress.optIn = [...progress.optIn, first.stretch.optIn];
-      if (first && side) progress.side = stretchSide(muscleKey, first.stretch, first.variant, side);
       ref = first?.ref ?? ref;
     }
     const items = runOrder({ optIn: progress.optIn });
