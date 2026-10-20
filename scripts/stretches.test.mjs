@@ -151,23 +151,42 @@ test('sided is a boolean, and holds leave "each side" to it', () => {
 });
 
 test('a pose done once for both sides is mirrored for the right side', () => {
-  const n8 = s.STRETCHING.stretches.find((st) => st.id === 'N8');
-  const [left] = n8.variants;
-  assert.equal(s.isSided(n8, left), false);
-  assert.deepEqual(s.movesFor(n8, left, 'left'), ['neck.roti:50', 'head.roti:30']);
-  assert.deepEqual(s.movesFor(n8, left, 'right'), ['neck.rotc:50', 'head.rotc:30']);
+  const n1 = { id: 'N', variants: [] };
+  const left = { id: 'a', moves: ['neck.roti:50', 'head.roti:30'] };
+  assert.deepEqual(s.movesFor(n1, left, 'left'), ['neck.roti:50', 'head.roti:30']);
+  assert.deepEqual(s.movesFor(n1, left, 'right'), ['neck.rotc:50', 'head.rotc:30']);
   const p4 = s.STRETCHING.stretches.find((st) => st.id === 'P4');
   assert.deepEqual(s.movesFor(p4, p4.variants[0], 'right'), p4.variants[0].moves);
   const tg1 = s.STRETCHING.stretches.find((st) => st.id === 'TG1');
   for (const side of ['left', 'right']) assert.deepEqual(s.movesFor(tg1, tg1.variants[0], side), ['tongue.out']);
   const e1 = s.STRETCHING.stretches.find((st) => st.id === 'E1');
   assert.deepEqual(s.movesFor(e1, e1.variants.find((v) => v.id === 'c'), 'right'), ['eye.out']);
-  // Turning only to the left stretches the left semispinalis capitis's rotation, not the right one's.
-  const key = 'semispinalis capitis';
-  assert.equal(s.isStretched(key, new Set(['N2', 'N8a'])), false);
-  assert.equal(s.isStretched(key, new Set(['N2', 'N8a', 'N8b'])), true);
-  const data = { ...s.STRETCHING, muscles: { [key]: { ...s.STRETCHING.muscles[key], stretches: ['N2', 'N8a'] } } };
-  assert.deepEqual(s.unreversedActions(key, data), ['neck.rotc']);
+});
+
+test('a turn one way then the other is one mirrored step, not a left and a right variant', () => {
+  const n8 = s.STRETCHING.stretches.find((st) => st.id === 'N8');
+  const [turn] = n8.variants;
+  assert.equal(n8.variants.length, 1);
+  assert.ok(s.isSided(n8, turn) && s.isMirrored(n8, turn));
+  // Done both ways, each side's muscles see the turn to their own side and away from it.
+  for (const side of ['left', 'right'])
+    assert.deepEqual(s.movesFor(n8, turn, side), ['neck.roti:50', 'head.roti:30', 'neck.rotc:50', 'head.rotc:30']);
+  assert.ok(s.isStretched('semispinalis capitis', new Set(['N2', 'N8'])));
+  assert.equal(s.isStretched('semispinalis capitis', new Set(['N2'])), false);
+  assert.deepEqual(['J3', 'T4'].map((id) => s.STRETCHING.stretches.find((st) => st.id === id)).map((st) => s.isMirrored(st, st.variants[0])), [true, true]);
+  // mirrored only means something on a sided stretch.
+  const bad = [];
+  // The eye range is one walk round eight end points, and both eyes look the same way (a sided move turns one eye).
+  const WALKS = new Set(['E1']);
+  for (const st of s.STRETCHING.stretches) {
+    if ('mirrored' in st && (st.mirrored !== true || !st.variants.every((v) => s.isSided(st, v)))) bad.push(`${st.id}: mirrored needs a sided stretch`);
+    // Two variants that are each other's mirror (to the left, to the right) belong in one mirrored step.
+    for (const v of st.variants)
+      for (const w of st.variants)
+        if (!WALKS.has(st.id) && v.id < w.id && !s.isSided(st, v) && !s.isSided(st, w) && s.movesFor(st, v, 'right').join() === w.moves.join() && v.moves.join() !== w.moves.join())
+          bad.push(`${st.id}${v.id}/${w.id}: left and right variants of one move; make it sided and mirrored`);
+  }
+  assert.deepEqual(bad, []);
 });
 
 test('joint ranges are whole degrees for directions the joint has', () => {

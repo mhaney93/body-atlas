@@ -200,6 +200,23 @@ test('posed moves are real, with an angle, and no joint is posed past its normal
   assert.deepEqual(bad, []);
 });
 
+test('a mirrored stretch turns toward the side chosen, and the two sides mirror each other', () => {
+  // The segment whose front shows the turn: the face, the chest, the chin.
+  const FRONT = { N8: 'head', T4: 'thorax', J3: 'mandible' };
+  const mirrored = S.STRETCHING.stretches.filter((st) => st.mirrored);
+  assert.deepEqual(mirrored.map((st) => st.id).sort(), Object.keys(FRONT).sort());
+  for (const st of mirrored) {
+    const id = FRONT[st.id];
+    const front = seg(id).pivot.clone().addScaledVector(R.ANTERIOR, 0.1);
+    const posed = (side) => P.posedPoint(P.poseMatrices(rig, P.variantOps(st, st.variants[0], side), 1), id, front);
+    const left = posed('left');
+    const right = posed('right');
+    assert.ok(left.x - front.x > 0.01, `${st.id}: the left turn moves ${id} ${left.x - front.x} toward the left`);
+    assert.ok(front.x - right.x > 0.01, `${st.id}: the right turn moves ${id} ${front.x - right.x} toward the right`);
+    assert.ok(mirror(left).distanceTo(right) < 0.01, `${st.id}: ${left.toArray()} vs ${right.toArray()}`);
+  }
+});
+
 test('a stretch done with both limbs at once poses both sides alike', () => {
   const bad = [];
   let checked = 0;

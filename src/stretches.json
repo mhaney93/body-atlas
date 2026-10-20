@@ -374,23 +374,17 @@
       "kind": "stretch",
       "position": "seated",
       "how": "Turn the head as far as is comfortable to the left, then to the right.",
+      "sided": true,
+      "mirrored": true,
       "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
           "id": "a",
-          "label": "turn the head to the left",
+          "label": "turn the head to the side",
           "moves": [
             "neck.roti:50",
             "head.roti:30"
-          ]
-        },
-        {
-          "id": "b",
-          "label": "turn the head to the right",
-          "moves": [
-            "neck.rotc:50",
-            "head.rotc:30"
           ]
         }
       ]
@@ -464,21 +458,16 @@
       "kind": "stretch",
       "position": "seated",
       "how": "Teeth slightly apart (a pencil between the front teeth helps); slide the jaw to the left, then to the right.",
+      "sided": true,
+      "mirrored": true,
       "hold": "5 s x 6",
       "contractRelax": true,
       "variants": [
         {
           "id": "a",
-          "label": "jaw slides to the left",
+          "label": "jaw slides to the side",
           "moves": [
             "jaw.lati"
-          ]
-        },
-        {
-          "id": "b",
-          "label": "jaw slides to the right",
-          "moves": [
-            "jaw.latc"
           ]
         }
       ]
@@ -797,21 +786,16 @@
       "kind": "stretch",
       "position": "seated",
       "how": "Sit tall (or lie with knees bent and let them fall to one side) and turn the chest to the left, then to the right.",
+      "sided": true,
+      "mirrored": true,
       "hold": "30 s x 2",
       "contractRelax": true,
       "variants": [
         {
           "id": "a",
-          "label": "turn the chest to the left",
+          "label": "turn the chest to the side",
           "moves": [
             "trunk.roti"
-          ]
-        },
-        {
-          "id": "b",
-          "label": "turn the chest to the right",
-          "moves": [
-            "trunk.rotc"
           ]
         }
       ]

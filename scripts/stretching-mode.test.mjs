@@ -63,17 +63,41 @@ test('a stretch lights the muscles it lengthens on the side it lengthens them', 
   const p4 = stretch('P4');
   assert.ok(s.STRETCHING.muscles['adductor magnus'].actions.length && s.targetsOf(p4, p4.variants[0]).includes('adductor magnus'));
   assert.deepEqual(s.stretchedSides('adductor magnus', p4, p4.variants[0], 'left'), ['left', 'right']);
-  // Turning the head to the left lengthens the right splenius capitis (it turns the head to its own side), not the left.
+  // Turning the head to the left lengthens the right splenius capitis (it turns the head to its own side), not the left;
+  // turning it to the right, the left one.
   const n8 = stretch('N8');
-  const [toLeft, toRight] = n8.variants;
-  assert.ok(s.targetsOf(n8, toLeft).includes('splenius capitis'));
-  assert.deepEqual(s.stretchedSides('splenius capitis', n8, toLeft, 'left'), ['right']);
-  assert.deepEqual(s.stretchedSides('splenius capitis', n8, toLeft, 'right'), ['right']);
-  assert.deepEqual(s.stretchedSides('splenius capitis', n8, toRight, 'left'), ['left']);
+  const [turn] = n8.variants;
+  assert.ok(s.targetsOf(n8, turn).includes('splenius capitis'));
+  assert.deepEqual(s.stretchedSides('splenius capitis', n8, turn, 'left'), ['right']);
+  assert.deepEqual(s.stretchedSides('splenius capitis', n8, turn, 'right'), ['left']);
+  // The semispinalis capitis turns the head away from its side: the turn to the left lengthens the left one.
+  assert.deepEqual(s.stretchedSides('semispinalis capitis', n8, turn, 'left'), ['left']);
+  // Stretching a muscle of one side turns the head the way that lengthens it; a one-side stretch is done on its own side.
+  assert.equal(s.stretchSide('splenius capitis', n8, turn, 'right'), 'left');
+  assert.equal(s.stretchSide('splenius capitis', n8, turn, 'left'), 'right');
+  assert.equal(s.stretchSide('semispinalis capitis', n8, turn, 'right'), 'right');
+  assert.equal(s.stretchSide('semitendinosus', stretch('P1'), stretch('P1').variants[0], 'right'), 'right');
+  for (const own of ['left', 'right']) {
+    assert.deepEqual(s.stretchedSides('splenius capitis', n8, turn, s.stretchSide('splenius capitis', n8, turn, own)), [own]);
+  }
   // A lengthen-only muscle has no actions to reverse: both sides.
   const tg1 = stretch('TG1');
   const key = s.targetsOf(tg1, tg1.variants[0])[0];
   assert.deepEqual(s.stretchedSides(key, tg1, tg1.variants[0], 'left'), ['left', 'right']);
+});
+
+test('opened from a muscle, each of its steps opens on the side that lengthens it', () => {
+  // The right splenius capitis: its one-side N2 on its own side, the mirrored neck turn to the left (that lengthens it).
+  const focus = { key: 'splenius capitis', own: 'right' };
+  const items = s.runOrder();
+  const [n2, n8] = ['N2', 'N8'].map((id) => items.find((item) => item.stretch.id === id));
+  assert.equal(m.focusSide(n2, focus, 'left'), 'right');
+  assert.equal(m.focusSide(n8, focus, 'right'), 'left');
+  assert.deepEqual(s.stretchedSides('splenius capitis', n8.stretch, n8.variant, m.focusSide(n8, focus, 'right')), ['right']);
+  // Another muscle's step, or no muscle: the side stays as chosen.
+  const p1 = items.find((item) => item.stretch.id === 'P1');
+  assert.equal(m.focusSide(p1, focus, 'left'), 'left');
+  assert.equal(m.focusSide(n8, null, 'right'), 'right');
 });
 
 test('coverage counts every muscle the run can stretch, by section, and lists the rest with reasons', () => {
@@ -190,8 +214,9 @@ test('the lit meshes are the lengthened side’s: the head turned left lights th
   }
   const names = (meshes) => meshes.map((o) => o.userData.name).sort();
   const n8 = stretch('N8');
-  // From either side's card, the turn to the left lights the right splenius.
-  for (const side of ['left', 'right']) assert.deepEqual(names(stretchedMeshes(group, n8, n8.variants[0], side)), ['Right splenius capitis']);
+  // The turn to the left lights the right splenius; the turn to the right, the left one.
+  assert.deepEqual(names(stretchedMeshes(group, n8, n8.variants[0], 'left')), ['Right splenius capitis']);
+  assert.deepEqual(names(stretchedMeshes(group, n8, n8.variants[0], 'right')), ['Left splenius capitis']);
   const p4 = stretch('P4');
   assert.deepEqual(names(stretchedMeshes(group, p4, p4.variants[0], 'right')), ['Left adductor magnus', 'Right adductor magnus']);
 });
