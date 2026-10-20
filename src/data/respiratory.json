@@ -3,7 +3,7 @@
   "name": "Respiratory",
   "color": "#ff8fb1",
   "asset": "models/respiratory.glb",
-  "summary": "The respiratory system brings air into the body and lets oxygen pass into the blood while carbon dioxide passes out. Air flows through the nose, pharynx and larynx, down the trachea and branching bronchi, into the lungs. The diaphragm powers each breath.",
+  "summary": "The respiratory system brings air into the body and lets oxygen pass into the blood while carbon dioxide passes out. Air flows through the nose, pharynx and larynx, down the trachea and branching bronchi, into the lungs. The diaphragm, in the Muscular layer, powers each breath.",
   "groups": {
     "upper": {
       "label": "Nose, sinuses & pharynx",
@@ -21,11 +21,6 @@
       "label": "Lung lobes",
       "color": "#ffa8c5",
       "opacity": 0.35
-    },
-    "diaphragm": {
-      "label": "Diaphragm",
-      "color": "#c77dff",
-      "opacity": 0.5
     }
   },
   "effects": [
@@ -46,6 +41,7 @@
     { "name": "Bronchioles and alveoli", "reason": "too-small", "note": "The airways below the segmental bronchi and the hundreds of millions of air sacs. The optional air-sac haze hints at them; it is illustrative, not anatomy." },
     { "name": "Nasal conchae", "reason": "other-system", "layer": "skeletal", "note": "The inferior concha is its own bone; the middle and superior conchae are part of the ethmoid bone." },
     { "name": "Vocal and other laryngeal ligaments", "reason": "other-system", "layer": "joints" },
+    { "name": "Diaphragm", "reason": "other-system", "layer": "muscular", "note": "The main muscle of breathing: it flattens to draw air into the lungs; it is in Muscular." },
     { "name": "Muscles of the larynx and the intercostal muscles", "reason": "other-system", "layer": "muscular" },
     { "name": "Phrenic nerve", "reason": "no-model", "note": "The nerve that drives the diaphragm. Neither source model has it." },
     { "name": "Tonsils and adenoids", "reason": "other-system", "layer": "lymphatic", "note": "The Lymphatic layer shows the palatine tonsils; neither source model has the adenoids." }
@@ -242,11 +238,6 @@
       "region": "Lungs",
       "group": "lungs",
       "description": "The lower lobe of the left lung, below and behind the oblique fissure. It sits on the diaphragm and fills the back of the lower left chest."
-    },
-    "diaphragm": {
-      "region": "Breathing muscle",
-      "group": "diaphragm",
-      "description": "The dome-shaped sheet of muscle between the chest and abdomen, and the main muscle of breathing. As it contracts it flattens, enlarging the chest and drawing air into the lungs."
     }
   }
 }

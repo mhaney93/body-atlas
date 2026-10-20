@@ -27,6 +27,10 @@ const EXTRA_MUSCLES = [
   'FJ1549', 'FJ1549M', 'FJ1550', 'FJ1550M', 'FJ1552', 'FJ1552M', 'FJ1553', 'FJ1553M', // short neck and back muscles
 ];
 const TENDONS = ['FJ1291', 'FJ1342', 'FJ1343', 'FJ1405', 'FJ1405M', 'FJ1581'];
+// Muscles filed under another system, which ships them instead: the external
+// anal sphincter is in digestive.glb (FJ1450 and its mirror duplicate its
+// two halves, FJ2548 and FJ2543).
+const ELSEWHERE = ['FJ1450', 'FJ1450M', 'FJ2543', 'FJ2548'];
 
 // BodyParts3D names made specific: the dataset calls this pair just
 // "spinalis", but they lie in the neck, above spinalis thoracis (+X is the
@@ -79,6 +83,7 @@ function muscleElements(metaDir) {
     const [, concept, id] = line.split('\t');
     if (MUSCLE_CONCEPTS.includes(concept)) ids.add(id.trim());
   }
+  for (const id of ELSEWHERE) ids.delete(id);
   return ids;
 }
 

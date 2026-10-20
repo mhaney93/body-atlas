@@ -49,7 +49,7 @@ npm run preview   # serve dist/ locally
 | `src/rig.js`, `src/pose.js`, `src/pose-view.js`, `src/cues.js` | Posing the models into a stretch (see "Stretch poses" below): the skeleton built from the bones and the skin weights of soft parts, the joint moves turned into segment turns, the skinned meshes, loop and arrows in the viewer, and the arrows for moves no bone shows |
 | `src/stretch-panel.js` | "Stretch it" in a muscle's info panel: its stretches, each playing its pose, or why it can't be stretched, and the way into Stretching mode |
 | `src/stretching-mode.js` | Stretching mode: every stretch head to toe on the shared stepper, the stretch card, the coverage panel and progress strip, and progress saved in the browser |
-| `src/data/respiratory.json` | Respiratory layer: airway, bronchial tree, lung lobe and diaphragm descriptions in five sub-groups, and the air-sac haze |
+| `src/data/respiratory.json` | Respiratory layer: airway, bronchial tree and lung lobe descriptions in four sub-groups, and the air-sac haze |
 | `src/data/lymphatic.json` | Lymphatic layer: the spleen, thymus, palatine tonsils and every lymph node group, in seven sub-groups by body region, and the "Follow the lymph" tour |
 | `src/data/reproductive.json` | Reproductive (male) layer: the testes, epididymides, sperm ducts, seminal vesicles, prostate and penis, in four sub-groups |
 | `src/data/urinary.json` | Urinary layer: the kidneys, renal pelves, ureters, bladder and urethra in five sub-groups, and the "Follow the urine" tour |
@@ -297,13 +297,14 @@ The layer has two optional decorative effects, each badged "Illustrative" in the
 
 ### Respiratory coverage
 
-The Respiratory layer follows the air from the nose to the lungs, in five colour-coded groups:
+The Respiratory layer follows the air from the nose to the lungs, in four colour-coded groups:
 
 - **Nose, sinuses & pharynx**: the nasal cavity, the major alar, lateral nasal and septal cartilages of the nose, the frontal and sphenoidal sinuses and the anterior, middle and posterior ethmoidal cells of each side, and the nasopharynx, oropharynx and laryngopharynx. The maxillary sinuses are not modeled by either source.
 - **Larynx**: the thyroid and cricoid cartilages, the epiglottis, the arytenoid, corniculate and cuneiform cartilages of each side and the conus elasticus. The vocal ligaments and the other laryngeal ligaments are in the Joints layer.
 - **Trachea & bronchial tree**: the trachea, both main bronchi and the segmental bronchial trees, ten per lung as BodyParts3D models them, each one clickable.
 - **Lung lobes** (see-through so the airways show inside): the superior, middle and inferior lobes of the right lung and the superior and inferior lobes of the left.
-- **Diaphragm**, the main muscle of breathing.
+
+The diaphragm, the main muscle of breathing, is in the Muscular layer; the Respiratory layer's "Not shown" list says so.
 
 The optional **Air-sac haze** is a decorative effect, not anatomy: softly glowing specks inside the lung lobes that brighten and dim on a slow breathing rhythm, a hint of the hundreds of millions of alveoli too small to model. The filter panel labels it "Illustrative".
 

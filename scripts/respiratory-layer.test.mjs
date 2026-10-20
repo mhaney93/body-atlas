@@ -2,8 +2,8 @@
 // public/models/respiratory.glb must resolve to a group and a description,
 // the requested airway parts must all be there, the air-sac haze must name
 // existing parts, and the Z-Anatomy parts must sit where the BodyParts3D
-// skeleton says they should (lungs inside the rib cage, nasal cavity and
-// sinuses inside the skull).
+// skeleton says they should (lungs inside the rib cage and resting on the
+// Muscular layer's diaphragm, nasal cavity and sinuses inside the skull).
 import assert from 'node:assert/strict';
 import { after, before, test } from 'node:test';
 import { NodeIO } from '@gltf-transform/core';
@@ -15,6 +15,7 @@ let server;
 let layers;
 let parts;
 let bones;
+let muscles;
 const io = new NodeIO()
   .registerExtensions([EXTMeshoptCompression, KHRMeshQuantization])
   .registerDependencies({ 'meshopt.decoder': MeshoptDecoder });
@@ -72,6 +73,7 @@ before(async () => {
   await MeshoptDecoder.ready;
   parts = await readModel('respiratory.glb');
   bones = await readModel('skeletal.glb');
+  muscles = await readModel('muscular.glb');
 });
 after(() => server?.close());
 
@@ -87,7 +89,7 @@ test('every respiratory.glb mesh has a group and a 1-2 sentence description', ()
   assert.deepEqual(missing, []);
 });
 
-test('the airway, the bronchial tree, five lung lobes and the diaphragm are there', () => {
+test('the airway, the bronchial tree and five lung lobes are there, and the diaphragm is left to Muscular', () => {
   const want = [
     'Nasal cavity', 'Frontal sinus', 'Sphenoidal sinus', 'Left anterior ethmoidal cells', 'Right posterior ethmoidal cells',
     'Nasopharynx', 'Oropharynx', 'Laryngopharynx',
@@ -95,10 +97,11 @@ test('the airway, the bronchial tree, five lung lobes and the diaphragm are ther
     'Trachea', 'Left main bronchus', 'Right main bronchus',
     'Superior lobe of right lung', 'Middle lobe of right lung', 'Inferior lobe of right lung',
     'Superior lobe of left lung', 'Inferior lobe of left lung',
-    'Diaphragm',
   ];
   const names = [...parts.keys()];
   assert.deepEqual(want.filter((n) => !names.includes(n)), []);
+  assert.ok(!names.includes('Diaphragm'));
+  assert.ok(respiratory().notShown.some((n) => n.name === 'Diaphragm' && n.layer === 'muscular'));
   assert.equal(names.filter((n) => /lobe of (left|right) lung$/.test(n)).length, 5);
   assert.ok(names.filter((n) => /bronchial tree$/.test(n)).length >= 18, 'segmental bronchial trees');
 });
@@ -123,6 +126,6 @@ test('the Z-Anatomy parts sit inside the BodyParts3D skeleton', () => {
   assertInside('Nasal cavity', parts.get('Nasal cavity'), boundsOf(new Map([['skull', skull], ['nose', nose]]), () => true), 0.005);
   // The lungs reach up to the trachea's fork and down to the diaphragm.
   const lungs = boundsOf(parts, (n) => /lobe of (left|right) lung$/.test(n));
-  const diaphragm = parts.get('Diaphragm');
+  const diaphragm = muscles.get('Diaphragm');
   assert.ok(lungs.min[1] < diaphragm.max[1] && lungs.min[1] > diaphragm.min[1] - 0.02, 'lung bases rest on the diaphragm');
 });
