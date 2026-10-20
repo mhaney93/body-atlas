@@ -7,7 +7,7 @@ import * as THREE from 'three';
 import { CUES, variantCues } from './cues.js';
 import { variantOps } from './pose.js';
 import { sideOf } from './search.js';
-import { STRETCHING, stretchedSides, targetsOf, variantRef, variantsOf } from './stretching.js';
+import { STRETCHING, stretchSide, stretchedSides, targetsOf, variantRef, variantsOf } from './stretching.js';
 
 /** The stretching entry of a Muscular mesh (a tendon uses its muscle's). */
 export function stretchEntry(mesh) {
@@ -188,7 +188,6 @@ export function stretchPanel(viewer, el, layer, { openMode, showEyes } = {}) {
         el.append(p);
       }
       const own = sideOf(mesh.userData.of ?? mesh.userData.name ?? mesh.name);
-      const side = own ?? 'left';
       const list = document.createElement('ul');
       list.className = 'stretch-list';
       for (const { stretch, variant } of entry.stretches.flatMap((ref) => variantsOf(ref))) {
@@ -201,6 +200,7 @@ export function stretchPanel(viewer, el, layer, { openMode, showEyes } = {}) {
           button.dataset.ref = variantRef(stretch, variant);
           button.dataset.label = `▶ ${name}`;
           button.textContent = button.dataset.label;
+          const side = stretchSide(key, stretch, variant, own) ?? 'left';
           button.addEventListener('click', () => play(stretch, variant, side, button));
           item.append(button);
         } else {

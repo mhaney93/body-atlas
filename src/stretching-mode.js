@@ -26,6 +26,7 @@ import {
   parseMove,
   partsOf,
   runOrder,
+  stretchSide,
   targetsOf,
   variantRef,
 } from './stretching.js';
@@ -244,6 +245,7 @@ export function stretchingMode(viewer, { muscular, layer, showLayers, restoreLay
       // A muscle whose only stretches are opt-in (the face's) switches that section on.
       const first = runOrder({ optIn: progress.optIn }).find(mine) ?? runOrder({ optIn: true }).find(mine);
       if (first?.stretch.optIn && !progress.optIn.includes(first.stretch.optIn)) progress.optIn = [...progress.optIn, first.stretch.optIn];
+      if (first && side) progress.side = stretchSide(muscleKey, first.stretch, first.variant, side);
       ref = first?.ref ?? ref;
     }
     const items = runOrder({ optIn: progress.optIn });

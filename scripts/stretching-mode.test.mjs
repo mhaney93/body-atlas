@@ -72,6 +72,14 @@ test('a stretch lights the muscles it lengthens on the side it lengthens them', 
   assert.deepEqual(s.stretchedSides('splenius capitis', n8, turn, 'right'), ['left']);
   // The semispinalis capitis turns the head away from its side: the turn to the left lengthens the left one.
   assert.deepEqual(s.stretchedSides('semispinalis capitis', n8, turn, 'left'), ['left']);
+  // Stretching a muscle of one side turns the head the way that lengthens it; a one-side stretch is done on its own side.
+  assert.equal(s.stretchSide('splenius capitis', n8, turn, 'right'), 'left');
+  assert.equal(s.stretchSide('splenius capitis', n8, turn, 'left'), 'right');
+  assert.equal(s.stretchSide('semispinalis capitis', n8, turn, 'right'), 'right');
+  assert.equal(s.stretchSide('semitendinosus', stretch('P1'), stretch('P1').variants[0], 'right'), 'right');
+  for (const own of ['left', 'right']) {
+    assert.deepEqual(s.stretchedSides('splenius capitis', n8, turn, s.stretchSide('splenius capitis', n8, turn, own)), [own]);
+  }
   // A lengthen-only muscle has no actions to reverse: both sides.
   const tg1 = stretch('TG1');
   const key = s.targetsOf(tg1, tg1.variants[0])[0];

@@ -273,6 +273,16 @@ export function stretchedSides(key, stretch, variant, side, data = STRETCHING) {
 }
 
 /**
+ * The side to do a variant on to stretch the `own`-side muscle `key`: its own
+ * side, except a mirrored one turns toward the side that lengthens it (the
+ * head turned left for the right splenius). Undefined `own` stays undefined.
+ */
+export function stretchSide(key, stretch, variant, own, data = STRETCHING) {
+  if (!own || !isMirrored(stretch, variant)) return own;
+  return ['left', 'right'].find((s) => stretchedSides(key, stretch, variant, s, data).includes(own)) ?? own;
+}
+
+/**
  * Stretching mode's progress, once the variants in `seen` (refs) are done:
  * muscles stretched out of those the run can stretch (opt-in sections as in
  * runOrder), how many more the opt-in sections would add, each section's
